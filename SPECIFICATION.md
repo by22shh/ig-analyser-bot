@@ -46,6 +46,47 @@
 3. Затем заменить моки реальными adapters по одному: Apify, image fetch/vision, final report, PDF, FaceCheck.
 4. Только после этого включать credits capture/refund и admin инструменты.
 
+### 1.2. Functional parity with the source site
+
+Целевой Telegram-бот должен повторить весь содержательный функционал сайта, но не обязан повторять его визуальный web-интерфейс один-в-один. Иными словами: возможности, данные, отчеты, режимы анализа и AI-чат должны быть сохранены; dashboard, графики, PDF и управление отчетом должны быть адаптированы под Telegram, серверный PDF и, при необходимости, будущий Mini App.
+
+Feature parity target:
+
+| Функция сайта | Должна быть в боте | Как переносится в Telegram |
+| --- | --- | --- |
+| Анализ по Instagram username / ссылке | Да | `/analyze`, прямой ввод `@username` или URL, wizard выбора режима |
+| Очистка username из `@name` и `instagram.com/name` | Да | `normalizeInstagramUsername` с unit tests |
+| Поиск по фото | Да | `/photo`, загрузка фото/document, FaceCheck adapter, список кандидатов кнопками |
+| Выбор найденного username после photo search | Да | Inline-кнопки `Анализировать`, `Открыть Instagram`, `Не тот человек` |
+| Standard profile analysis | Да | Первый end-to-end режим MVP |
+| Debt/collector mode сайта | Частично, с изменением | Не переносится как "коллекторский прессинг"; заменяется на role-gated `OSINT / Compliance` без давления, доксинга и контакта с третьими лицами |
+| HR candidate analysis | Да | Feature flag, target position, disclaimer, отчет как гипотезы для проверки |
+| Influencer audit | Да | Второй режим после standard или отдельный feature flag |
+| Apify-сбор публичных Instagram-постов | Да | Server-side Apify adapter, jobs, retries, snapshots в БД |
+| Анализ до 30 последних постов | Да | `ANALYSIS_POST_LIMIT`, по умолчанию 30 |
+| Vision-анализ изображений пачками | Да | Worker pipeline, batch size 5, model config |
+| Финальный LLM-отчет с `[[SECTION]]` | Да | Prompt registry, parser, validation required sections |
+| Источники-ссылки на посты | Да | Source map в report sections, ссылки в Telegram/PDF/Markdown |
+| Метрики: avg likes, comments, ER, frequency | Да | Telegram summary + report metrics |
+| График лайков/комментариев | Да, но не как web chart в MVP | В MVP таблица/summary; в PDF можно рендерить chart image; Mini App может вернуть интерактивный график |
+| Digital footprint: locations, music, related profiles, pinned posts | Да | Отдельная секция Telegram/PDF |
+| Digital Circle / близкие связи | Да | Перенос алгоритма scoring из сайта, top 8 связей |
+| Копирование секций | Да, в другой форме | Пользователь получает секцию отдельным сообщением/document; Telegram-клиент сам позволяет копировать текст |
+| White-label PDF settings | Да, но не обязательно в первом MVP | Server-side PDF, title/logo settings для pro/admin или v1.1 |
+| `window.print()` PDF сайта | Нет как механизм | Заменяется server-side HTML-to-PDF через Playwright |
+| AI Chat по готовому отчету | Да | `Чат по отчету`, quick questions, сохранение chat history |
+| Recent searches из localStorage | Да, в улучшенной форме | `/history` в PostgreSQL, не localStorage |
+| RU/EN language switcher | Да | Onboarding/settings, locale middleware |
+| Ошибки private profile / credits / retry | Да | Error mapping, refunds/retries, progress messages |
+| Cyber UI, анимации, sticky dashboard | Нет как обязательная parity | Telegram UX + PDF/Markdown; visual parity возможна только в Mini App |
+
+Parity definition:
+
+1. Если пользователь мог получить определенный аналитический результат на сайте, бот должен уметь выдать тот же тип результата.
+2. Если функция сайта была чисто визуальной, бот может заменить ее Telegram-native или PDF-native представлением.
+3. Если функция сайта была рискованной с точки зрения безопасности или права, бот должен сохранить законную аналитическую ценность, но изменить формулировки, доступ и guardrails.
+4. Если функция сайта была client-only, бот должен перенести ее на backend: БД вместо localStorage, server-side secrets вместо Vite-injected keys, workers вместо долгих browser requests.
+
 ## 2. Цели продукта
 
 ### 2.1. Пользовательские цели

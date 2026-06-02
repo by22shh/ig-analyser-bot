@@ -1,10 +1,10 @@
 # Финансовая модель ZRETI Telegram Bot
 
-Версия: 0.1.
+Версия: 0.2.
 
 Дата: 2026-06-03.
 
-Цель документа: зафиксировать стартовую модель монетизации, pricing, unit economics, YooKassa fees, credit ledger и метрики прибыльности для Telegram-бота.
+Цель документа: зафиксировать стартовую модель монетизации, pricing, unit economics, YooKassa fees, credit ledger, метрики прибыльности и no-loss guardrails для Telegram-бота.
 
 ## 1. Ключевая модель
 
@@ -27,6 +27,46 @@ MVP продает предоплаченные пакеты кредитов ч
 - автоплатежей;
 - кредитования пользователя;
 - списания реальных денег за каждый анализ.
+
+### 1.1. Executive verdict: будем ли терять?
+
+Короткий ответ: при текущей иллюстративной себестоимости `C_standard = 55 RUB` мы не теряем деньги в узком variable-cost смысле, но Pro/Agency/Scale не проходят строгий защитный стандарт, который уже используется в соседнем проекте `ai-assistant-bot`.
+
+Разница:
+
+- Абсолютный no-loss: себестоимость одного анализа ниже net revenue за списанные credits.
+- Здоровая платная экономика: net revenue покрывает себестоимость минимум в `3x`, чтобы выдержать рост цен провайдеров, возвраты, ошибки, поддержку, курс, налоговые и платежные отклонения.
+
+С текущими пакетами и консервативным платежным резервом `20%`:
+
+| Package | RUB / credit | Net guardrail RUB / credit | Max provider cost without variable loss | Max provider cost for 3x safety | Status at `C_standard = 55 RUB` |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Start | 230.00 | 184.00 | 184.00 | 61.33 | Safe |
+| Pro | 199.00 | 159.20 | 159.20 | 53.07 | Too cheap for 3x |
+| Agency | 183.00 | 146.40 | 146.40 | 48.80 | Too cheap for 3x |
+| Scale | 159.00 | 127.20 | 127.20 | 42.40 | Too cheap for 3x |
+
+Решение для launch:
+
+- Start можно оставлять публичным при `C_standard p75 <= 61 RUB`.
+- Pro можно включать только если `C_standard p75 <= 53 RUB` или поднять цену минимум до `2,063 RUB` за 10 credits.
+- Agency можно включать только если `C_standard p75 <= 48 RUB` или поднять цену минимум до `6,188 RUB` за 30 credits.
+- Scale нельзя включать публично при `C_standard = 55 RUB`; нужно либо `C_standard p75 <= 42 RUB`, либо цена минимум `20,625 RUB` за 100 credits, либо ручная продажа/договор.
+
+Практический вывод: на старте лучше продавать Start, а Pro/Agency/Scale держать скрытыми/feature-gated до измерения реальной p75 себестоимости минимум на 50-100 отчетах.
+
+### 1.2. Принципы, взятые из `ai-assistant-bot`
+
+Из соседнего бота нужно перенести не конкретные цены, а практики финансовой безопасности:
+
+- `ECON_TARGET_REVENUE_MULTIPLE = 3`: выручка после резервов должна быть минимум в 3 раза выше variable provider cost.
+- `ECON_PAYMENT_FEE_RESERVE = 0.20`: для guardrails используется 20% резерв, даже если фактическая YooKassa-комиссия ниже.
+- `ECON_USD_TO_RUB_BUFFER = 90`: USD-расходы провайдеров считаются по буферному курсу, а не по оптимистичному текущему.
+- Все дорогие операции имеют caps: посты, изображения, токены, output tokens, timeout, размер файлов.
+- Есть отдельный `audit-economics`/`audit-prices`, который падает в CI при price drift, превышении caps или недостаточном credit price.
+- Free/admin/referral credits считаются acquisition spend, а не revenue-backed usage.
+- Списание credits атомарное, возврат credits идет только по неуспешной операции или unused paid balance.
+- Webhook YooKassa никогда не считается источником истины сам по себе: backend повторно получает payment/refund через API и только потом начисляет credits.
 
 ## 2. Credit units
 
@@ -65,6 +105,7 @@ Pricing rules:
 - Все цены в RUB.
 - Пакеты должны быть конфигурацией, не hard-code.
 - Scale нельзя включать публично, пока фактическая себестоимость standard report не подтверждена.
+- Pro/Agency/Scale нельзя включать публично, если они снижают `P_credit_guardrail_net_floor` ниже текущей p75 себестоимости с `3x` покрытием.
 - Enterprise/custom можно продавать вручную через договор/счет.
 
 ## 4. YooKassa fee assumptions
@@ -89,6 +130,51 @@ r_yk_effective = (2.8% + 1.0%) * 1.20 = 4.56%
 - Это расчетная модель, не юридически финальный тариф.
 - Перед запуском заменить ставки на условия подписанного договора YooKassa.
 - Если чеки делаются не через YooKassa, `r_receipt` может быть другим или равным 0, но появится стоимость сторонней кассы.
+- Публичная страница YooKassa может быть акцией/спецусловием по датам; финальный источник истины - договор и личный кабинет мерчанта.
+
+## 4.1. Conservative guardrail reserves
+
+Для бухгалтерского отчета можно считать точные комиссии YooKassa. Для pricing guardrails нужно использовать более жесткие переменные:
+
+```text
+ECON_USD_TO_RUB_BUFFER = 90
+ECON_PAYMENT_FEE_RESERVE = 20%
+ECON_TARGET_REVENUE_MULTIPLE = 3
+ECON_COST_BASIS = p75_or_worst_case
+```
+
+Formula:
+
+```text
+P_credit_gross_floor =
+  min(public_package_price_rub / public_package_credits)
+
+P_credit_guardrail_net_floor =
+  P_credit_gross_floor * (1 - ECON_PAYMENT_FEE_RESERVE)
+
+net_revenue_for_operation =
+  charged_credits * P_credit_guardrail_net_floor
+
+required_net_revenue =
+  provider_cost_rub_p75_or_worst_case * ECON_TARGET_REVENUE_MULTIPLE
+
+safe =
+  net_revenue_for_operation >= required_net_revenue
+```
+
+Required credit units:
+
+```text
+required_credit_units =
+  ceil(
+    provider_cost_rub_p75_or_worst_case
+    * ECON_TARGET_REVENUE_MULTIPLE
+    / P_credit_guardrail_net_floor
+    * 100
+  )
+```
+
+If a mode costs less than `required_credit_units`, we either raise the credit cost, hide the mode, reduce provider cost/caps, or raise package prices.
 
 ## 5. Provider cost variables
 
@@ -123,6 +209,22 @@ C_hr = C_standard + C_reasoning_delta
 C_photo_search = C_facecheck + C_storage + C_support
 C_chat_message = C_chat
 ```
+
+Required cost caps:
+
+| Cost dimension | MVP cap | Why it matters |
+| --- | ---: | --- |
+| Instagram posts | 30 | Prevents Apify/vision/report context from growing with large profiles |
+| Vision batch size | 5 | Keeps image analysis predictable and retryable |
+| Images analyzed | 30 | Matches post cap and bounds image download/vision spend |
+| Image download size | 8 MB per image | Prevents traffic and processing spikes |
+| Final report input tokens | model-specific fixed budget | Prevents long profile data from expanding LLM spend |
+| Final report output tokens | model-specific fixed budget | Prevents verbose reports from exceeding modeled cost |
+| Report chat input/output | model-specific fixed budget | Makes post-report chat chargeable and auditable |
+| FaceCheck search | timeout + max cost per search | Photo search must not become an uncapped external spend |
+| PDF rendering | timeout + max artifact size | Prevents worker blockage and storage surprises |
+
+Every cap must be represented in configuration and in `audit-economics`.
 
 ## 6. Margin formulas
 
@@ -170,6 +272,31 @@ r_yk_effective = 4.56%
 | Agency | 5,490 | 5,239.66 | 1,650 | 3,589.66 | 65.4% |
 | Scale | 15,900 | 15,174.96 | 5,500 | 9,674.96 | 60.8% |
 
+Same packages under strict guardrail:
+
+```text
+ECON_PAYMENT_FEE_RESERVE = 20%
+ECON_TARGET_REVENUE_MULTIPLE = 3
+C_standard = 55 RUB
+required_gross_rub_per_credit = 55 * 3 / (1 - 0.20) = 206.25 RUB
+```
+
+| Package | Gross RUB / credit | Net guardrail RUB / credit | Net/provider multiple | 3x result |
+| --- | ---: | ---: | ---: | --- |
+| Start | 230.00 | 184.00 | 3.35x | Pass |
+| Pro | 199.00 | 159.20 | 2.89x | Fail |
+| Agency | 183.00 | 146.40 | 2.66x | Fail |
+| Scale | 159.00 | 127.20 | 2.31x | Fail |
+
+To keep `C_standard = 55 RUB` and pass the `3x` rule, minimum package prices are:
+
+| Package | Current price | Minimum strict price | Recommended action |
+| --- | ---: | ---: | --- |
+| Start, 3 credits | 690 | 619 | Keep |
+| Pro, 10 credits | 1,990 | 2,063 | Raise to 2,090+ or enable only after cost reduction |
+| Agency, 30 credits | 5,490 | 6,188 | Raise to 6,190+ or keep hidden |
+| Scale, 100 credits | 15,900 | 20,625 | Keep hidden / negotiated / reprice to 20,900+ |
+
 If `C_standard = 80 RUB`:
 
 ```text
@@ -179,6 +306,7 @@ P_credit_min = 80 / (1 - 0.0456 - 0.60) = 225.73 RUB
 Interpretation:
 
 - При себестоимости 80 RUB пакет Pro уже слишком дешев для 60% target margin.
+- При себестоимости 55 RUB пакет Pro уже слишком дешев для strict `3x` guardrail, хотя по мягкой 60% margin-модели выглядит допустимым.
 - Нужно либо повысить цену, либо увеличить credit cost режима, либо снизить provider cost.
 
 ## 8. Break-even
@@ -211,6 +339,8 @@ avg_package = Pro
 avg_package_contribution = 1,349 RUB
 break_even_packages = 60,000 / 1,349 = 45 Pro packages/month
 ```
+
+This break-even example is valid only if Pro is allowed by `audit-economics`. If Pro is hidden at launch, use Start contribution or the actually enabled package mix.
 
 ## 9. Refund economics
 
@@ -266,6 +396,30 @@ Accounting note:
 - Gross margin by package.
 - Failed paid jobs.
 - Refund loss.
+- Net/provider multiple by mode and package.
+- Count of jobs below target multiple.
+
+## 11.1. `audit-economics` command
+
+Implementation repository must include:
+
+```text
+pnpm audit-economics
+```
+
+Checks:
+
+- Reads active package catalog and finds the minimum public RUB/credit.
+- Applies `ECON_PAYMENT_FEE_RESERVE`, not only the exact YooKassa fee.
+- Uses `ECON_USD_TO_RUB_BUFFER` for USD-denominated provider costs.
+- Loads modeled prices for Apify, OpenRouter/LLM, FaceCheck, storage/PDF and support reserve.
+- Verifies that runtime caps do not exceed modeled caps.
+- Verifies that every public mode's configured `credit_units` covers p75/worst-case provider cost by `ECON_TARGET_REVENUE_MULTIPLE`.
+- Fails if a newly enabled package makes the revenue floor too low.
+- Fails if a required provider cost variable is missing.
+- Prints a table with provider cost, charged credits, net revenue and multiple for every mode.
+
+This command must run in CI before deploy and manually before any package or provider-price change.
 
 ## 12. Decision gates
 
@@ -275,12 +429,14 @@ Before public paid launch:
 2. Fiscal receipt setup confirmed.
 3. User email collection flow approved.
 4. Provider costs measured on at least 50 real standard reports.
-5. `C_standard p75` is below launch pricing cost ceiling.
-6. Duplicate payment webhook tested.
-7. Refund flow tested.
-8. Finance export tested.
-9. Support policy for failed analyses and refunds written.
-10. Terms/payment policy text approved.
+5. `C_standard p75` is below launch pricing cost ceiling for every public package.
+6. `audit-economics` passes with production package catalog.
+7. Pro/Agency/Scale are hidden or repriced if they fail strict guardrail.
+8. Duplicate payment webhook tested.
+9. Refund flow tested.
+10. Finance export tested.
+11. Support policy for failed analyses and refunds written.
+12. Terms/payment policy text approved.
 
 ## 13. Sources
 
@@ -293,3 +449,9 @@ YooKassa official materials used for this model:
 - Incoming webhooks: `https://yookassa.ru/developers/using-api/webhooks`
 - Refunds: `https://yookassa.ru/developers/payment-acceptance/after-the-payment/refunds`
 - YooKassa receipts / 54-FZ: `https://yookassa.ru/developers/payment-acceptance/receipts/54fz/yoomoney/basics`
+
+Checked on 2026-06-03:
+
+- Public YooKassa fees page shows `2.8% + 1% per receipt` for several payment methods under the "Чеки от YooKassa" condition, plus VAT on commission; the page also describes offer/date and contract conditions, so production values must come from the signed merchant contract.
+- YooKassa API payment process documents merchant auth, `Idempotence-Key`, `amount`, `capture`, redirect confirmation and `confirmation_url`.
+- YooKassa webhook docs list `payment.succeeded`, `payment.canceled`, `payment.waiting_for_capture` and `refund.succeeded`; the bot must still reconcile status server-to-server before crediting.

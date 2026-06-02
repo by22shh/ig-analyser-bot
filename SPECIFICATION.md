@@ -1,6 +1,6 @@
 # Спецификация Telegram-бота ZRETI
 
-Версия: 0.3.
+Версия: 0.4.
 
 Дата: 2026-06-03.
 
@@ -39,6 +39,7 @@
 9. Историю сайта не мигрировать в MVP: бот начинает со своей БД.
 10. PDF является обязательным для MVP, но Markdown export можно сделать раньше как fallback для первых тестов.
 11. Финансовая модель MVP: prepaid credits/packages, не постоплата. Рекуррентные подписки и автоплатежи не входят в первый платежный релиз.
+12. Платный публичный запуск запрещен, пока `audit-economics` не подтверждает, что каждый платный режим покрывает worst-case/p75 себестоимость провайдеров минимум в `3x` после консервативного платежного резерва.
 
 Стартовый engineering cut:
 
@@ -46,6 +47,7 @@
 2. Затем сделать mocked analysis pipeline, чтобы весь UX прошел от `/start` до "отчет готов" без внешних API.
 3. Затем заменить моки реальными adapters по одному: Apify, image fetch/vision, final report, PDF, FaceCheck.
 4. Только после этого включать credits capture/refund и admin инструменты.
+5. Перед включением реальных платежей добавить economics guardrails: лимиты токенов/постов/изображений, учет `api_usage_events`, расчет себестоимости и CI-проверку pricing.
 
 ### 1.2. Functional parity with the source site
 
@@ -1933,7 +1935,8 @@ Credit packages v0.1:
 Rules:
 
 - Packages are configuration/data, not hard-coded.
-- The cheapest public package must not push gross margin below target.
+- The cheapest public package must not push gross margin below target or below the strict provider-cost multiple.
+- Public availability of Pro/Agency/Scale must be feature-gated until measured provider costs pass `audit-economics`.
 - Enterprise/custom packages may use invoice/manual contract instead of bot checkout.
 - Promotional grants must be marked as `grant`, not `purchase`, for clean financial reporting.
 
@@ -1945,6 +1948,7 @@ YooKassa fee assumptions for financial model:
 - Effective fee for conservative planning: `r_yk_effective = (r_acquiring + r_receipt) * (1 + r_commission_vat)`.
 - With defaults above: `(2.8% + 1.0%) * 1.20 = 4.56%` of gross payment.
 - These rates must be config values and verified against the signed YooKassa contract before launch.
+- Exact YooKassa fees are for accounting/reporting. Pricing guardrails must use a separate conservative reserve: `ECON_PAYMENT_FEE_RESERVE = 20%` by default.
 
 YooKassa net revenue formula:
 
@@ -2018,12 +2022,60 @@ gross_margin_per_credit = P_credit_net - C_standard_per_credit
 gross_margin_percent = gross_margin_per_credit / P_credit_gross
 ```
 
-Target:
+Soft margin targets:
 
 - Standard analysis gross margin: >= 60%.
 - HR/Influencer gross margin: >= 60%.
 - Photo search gross margin: >= 50%.
 - Overall blended gross margin: >= 65% after the first 2 months of beta.
+
+Strict no-loss guardrail copied from the proven economics pattern in `/Users/Bayramov_N/Desktop/Other/ai-assistant-bot`:
+
+```text
+ECON_USD_TO_RUB_BUFFER = 90
+ECON_PAYMENT_FEE_RESERVE = 20%
+ECON_TARGET_REVENUE_MULTIPLE = 3
+
+P_credit_guardrail_net_floor =
+  min(public_package_price_rub / public_package_credits)
+  * (1 - ECON_PAYMENT_FEE_RESERVE)
+
+net_revenue_for_operation =
+  charged_credits * P_credit_guardrail_net_floor
+
+required_net_revenue =
+  provider_cost_rub_p75_or_worst_case * ECON_TARGET_REVENUE_MULTIPLE
+
+operation_is_safe =
+  net_revenue_for_operation >= required_net_revenue
+```
+
+Meaning:
+
+- Exact payment commission can be 4.56% in the current planning model, but pricing must survive a 20% payment/refund/tax/rounding reserve.
+- Provider cost must be measured on p75 or worst-case capped usage, not on an optimistic average.
+- Free/admin/referral credits are acquisition spend and must not be mixed with paid-unit revenue.
+- If one public package has a very low RUB/credit price, it becomes the revenue floor for the whole economy.
+
+Credit-cost formula for implementation:
+
+```text
+required_credit_units =
+  ceil(
+    provider_cost_rub_p75_or_worst_case
+    * ECON_TARGET_REVENUE_MULTIPLE
+    / P_credit_guardrail_net_floor
+    * 100
+  )
+```
+
+The result should be rounded up to an allowed unit step, for example 5 or 10 units. A mode cannot be publicly enabled if its configured `credit_units` are below `required_credit_units`.
+
+No-loss threshold vs healthy-economics threshold:
+
+- Absolute variable break-even: provider cost is below net revenue for the charged credits.
+- Healthy paid launch: provider cost is below one third of net revenue for the charged credits.
+- A package can be cash-positive and still unsafe for launch if it fails the `3x` guardrail.
 
 Minimum price formula:
 
@@ -2055,7 +2107,43 @@ Illustrative package contribution with `C_standard = 55 RUB`:
 | Agency, 30 credits | 5,490 | 5,239.66 | 1,650 | 3,589.66 | 65.4% |
 | Scale, 100 credits | 15,900 | 15,174.96 | 5,500 | 9,674.96 | 60.8% |
 
-These numbers are planning assumptions. Actual provider costs must be recalculated from real API usage before public pricing is finalized.
+Strict guardrail check with `C_standard = 55 RUB`, `ECON_PAYMENT_FEE_RESERVE = 20%`, `ECON_TARGET_REVENUE_MULTIPLE = 3`:
+
+| Package | Gross RUB / credit | Guardrail net RUB / credit | Absolute break-even cost | Max provider cost for 3x | Status at 55 RUB |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Start | 230.00 | 184.00 | 184.00 | 61.33 | Pass |
+| Pro | 199.00 | 159.20 | 159.20 | 53.07 | Fail / reprice or reduce cost |
+| Agency | 183.00 | 146.40 | 146.40 | 48.80 | Fail / reprice or reduce cost |
+| Scale | 159.00 | 127.20 | 127.20 | 42.40 | Fail / keep hidden |
+
+Verdict for current package catalog:
+
+- With `C_standard = 55 RUB`, the current packages are not loss-making in the narrow variable-cost sense because 55 RUB is below the conservative net per credit even for Scale.
+- They are not safe for public scaling under the stricter `3x` guardrail: Pro/Agency/Scale are too discounted unless real `C_standard p75` is reduced below their ceilings.
+- Public launch recommendation: show Start first; keep Pro/Agency behind admin/feature flag until real p75 cost is measured or prices are raised; keep Scale hidden/negotiated until `C_standard p75 <= 42 RUB` or package price is repriced.
+- If keeping `C_standard = 55 RUB`, minimum package prices under the `3x` guardrail are approximately: Start `619 RUB`, Pro `2,063 RUB`, Agency `6,188 RUB`, Scale `20,625 RUB`. Round upward, not downward.
+
+These numbers are planning assumptions. Actual provider costs must be recalculated from real API usage before public pricing is finalized and then checked continuously in CI.
+
+### 16.4.1. Required caps for economics safety
+
+The bot must cap every variable-cost dimension before charging real users:
+
+```text
+ANALYSIS_POST_LIMIT = 30
+VISION_BATCH_SIZE = 5
+ANALYSIS_MAX_IMAGES_ANALYZED = 30
+ANALYSIS_MAX_IMAGE_DOWNLOAD_MB = 8
+LLM_FINAL_INPUT_TOKEN_BUDGET = configured per model
+LLM_FINAL_OUTPUT_TOKEN_BUDGET = configured per model
+LLM_CHAT_INPUT_TOKEN_BUDGET = configured per model
+LLM_CHAT_OUTPUT_TOKEN_BUDGET = configured per model
+FACECHECK_TIMEOUT_SECONDS = configured
+FACECHECK_MAX_COST_RUB = configured or measured
+PDF_RENDER_TIMEOUT_SECONDS = configured
+```
+
+`audit-economics` must fail if runtime settings exceed the budget constants used in the cost model.
 
 ### 16.5. Fixed costs and break-even
 
@@ -2358,6 +2446,7 @@ Required:
 - DigitalCircle scoring;
 - credit reservation/capture/refund;
 - YooKassa fee calculation;
+- economics formulas: net RUB/credit floor, required credit units, provider-cost multiple;
 - payment order state transitions;
 - payment webhook idempotency;
 - error mapping.
@@ -2375,6 +2464,7 @@ Required:
 - YooKassa mocked `payment.succeeded` webhook -> credits granted exactly once;
 - YooKassa duplicate webhook -> no duplicate credits;
 - YooKassa mocked refund -> credits adjusted;
+- mocked provider usage events -> job-level cost and margin are computed;
 - PDF generation smoke.
 
 ### 21.3. E2E tests
@@ -2398,6 +2488,23 @@ Scenarios:
 - 20 concurrent analysis jobs;
 - provider latency simulation;
 - queue recovery after worker restart.
+
+### 21.5. Economics audit
+
+Required command:
+
+```text
+pnpm audit-economics
+```
+
+The command must fail CI/deploy when:
+
+- live or configured provider prices drift above modeled prices;
+- runtime caps exceed modeled token/post/image/timeout budgets;
+- a mode's configured `credit_units` do not cover provider `p75` or worst-case capped cost by `ECON_TARGET_REVENUE_MULTIPLE`;
+- a public package reduces the net RUB/credit floor below the active mode assumptions;
+- FaceCheck, Apify, OpenRouter or PDF/storage costs are missing from the model;
+- free/admin grants are accidentally counted as paid revenue.
 
 ## 22. Development roadmap
 
@@ -2505,8 +2612,9 @@ Deliverables:
 - receipt email collection and receipt payload preparation;
 - refund flow for unused credits;
 - job cost capture/refund;
+- economics module and `audit-economics` command;
 - rate limits;
-- provider usage metrics.
+- provider usage metrics;
 - finance exports.
 
 Acceptance:
@@ -2515,6 +2623,7 @@ Acceptance:
 - user can buy credits through YooKassa in test mode;
 - `payment.succeeded` grants credits once;
 - duplicate payment webhook does not duplicate credits;
+- `audit-economics` passes for enabled public packages and modes;
 - finance export shows gross payments, YooKassa fees, provider costs and margin.
 
 ### Phase 7 - Hardening
@@ -2570,6 +2679,7 @@ src/
   modules/
     users/
     billing/
+    economics/
     payments/
     analysis/
     instagram/
@@ -2598,6 +2708,8 @@ src/
     migrations/
   tests/
     fixtures/
+  scripts/
+    audit-economics.ts
 ```
 
 Rules:
@@ -2605,6 +2717,7 @@ Rules:
 - Telegram handlers must stay thin: parse input, update conversation state, enqueue work, render messages.
 - Provider-specific code must live only in adapters: no Apify/OpenRouter/FaceCheck calls from handlers.
 - Business decisions about billing, safety and report state must live in services, not in callback-query handlers.
+- Pricing and provider-cost assumptions must live in the economics module and be tested/audited, not scattered across handlers or package config.
 - All user-facing text must go through locale/message helpers, even in MVP.
 - Prompts must be versioned files from day one.
 
@@ -2621,17 +2734,18 @@ These tickets are the recommended start order:
 7. Implement username normalization with unit tests.
 8. Implement analysis wizard with mode selection and confirmation.
 9. Implement credit account creation and admin grant command.
-10. Implement BullMQ queues and mocked `analysis.worker`.
-11. Implement progress message creation/editing.
-12. Implement mocked completed report and section browsing.
-13. Implement message chunking and HTML escaping tests.
-14. Implement report persistence and `/history`.
-15. Implement Markdown export as a simple artifact.
-16. Implement Apify adapter behind interface with mocked integration test.
-17. Implement real Apify fetch for one public username in staging/dev.
-18. Implement report parser and required-section validation.
-19. Implement OpenRouter final report adapter with provider timeout/retry.
-20. Implement PDF export after Telegram report delivery is already stable.
+10. Implement initial economics module with package catalog, net RUB/credit floor and required-unit calculations.
+11. Implement BullMQ queues and mocked `analysis.worker`.
+12. Implement progress message creation/editing.
+13. Implement mocked completed report and section browsing.
+14. Implement message chunking and HTML escaping tests.
+15. Implement report persistence and `/history`.
+16. Implement Markdown export as a simple artifact.
+17. Implement Apify adapter behind interface with mocked integration test.
+18. Implement real Apify fetch for one public username in staging/dev.
+19. Implement report parser and required-section validation.
+20. Implement OpenRouter final report adapter with provider timeout/retry.
+21. Implement PDF export after Telegram report delivery is already stable.
 
 The first sprint should not include FaceCheck, HR, OSINT, real payments or Mini App work. Those depend on a stable core pipeline.
 
@@ -2655,7 +2769,8 @@ MVP is done when all conditions below are true:
 14. Basic admin view shows active/failed jobs and usage.
 15. Unit and integration tests cover normalization, chunking, report parser, credit reservation and provider error mapping.
 16. Logs contain no secrets or raw base64.
-17. Production checklist items that apply to MVP staging are completed.
+17. `audit-economics` passes for the enabled payment packages and public modes.
+18. Production checklist items that apply to MVP staging are completed.
 
 ### 22.4. Decisions that can remain open during Phase 0-2
 
@@ -2688,6 +2803,8 @@ Before launch:
 - YooKassa test payments verified end-to-end.
 - YooKassa production webhook configured and tested.
 - YooKassa IP allowlist/status reconciliation configured.
+- `audit-economics` passes with production package catalog and enabled public modes.
+- Pro/Agency/Scale are disabled or repriced if measured `C_standard p75` is above their guardrail ceilings.
 - Receipt/fiscalization scenario approved by accountant/legal counsel.
 - Receipt email collection tested.
 - Refund flow tested on YooKassa test payment.
@@ -2713,13 +2830,13 @@ Before launch:
 1. Какой финальный бренд бота: `ZRETI`, `ZRETI AI`, другое имя?
 2. Нужен ли Telegram Mini App в первой версии или достаточно чистого бота?
 3. Какие режимы включать публично в MVP: только standard/influencer/HR или также compliance OSINT?
-4. Подтверждаем ли launch-пакеты: Start 690 ₽, Pro 1 990 ₽, Agency 5 490 ₽, Scale 15 900 ₽?
+4. Подтверждаем ли launch-пакеты после strict guardrail: Start 690 ₽, Pro 1 990 ₽, Agency 5 490 ₽, Scale 15 900 ₽, или Pro/Agency/Scale повышаем/скрываем?
 5. Нужно ли хранить отчеты 30 дней или дольше?
 6. Нужен ли white-label PDF для всех или только pro/admin?
 7. Нужно ли синхронизировать историю с существующим сайтом?
 8. Какие страны/юрисдикции являются целевыми для privacy/compliance?
 9. Нужен ли ручной review для risky modes?
-10. Какие provider limits и бюджет на один отчет считаются допустимыми?
+10. Какие provider limits, p75/p95 себестоимость и бюджет на один отчет считаются допустимыми?
 11. Какая фактическая комиссия ЮKassa по подписанному договору и выбранному способу чеков?
 12. Используем ли "Чеки от YooKassa" или свою/стороннюю онлайн-кассу?
 13. Какие fiscal receipt item/tax/payment subject/payment mode codes использовать для credit packages?

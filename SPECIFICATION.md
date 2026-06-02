@@ -1,8 +1,8 @@
 # Спецификация Telegram-бота ZRETI
 
-Версия: 0.1.
+Версия: 0.2.
 
-Дата: 2026-06-02.
+Дата: 2026-06-03.
 
 Основание: глубокий разбор проекта `/Users/Bayramov_N/Desktop/Other/ig-analyser-site`.
 
@@ -19,6 +19,32 @@
 - роли, лимиты, тарифы, аудит и защита от злоупотреблений.
 
 Главное архитектурное отличие от сайта: бот должен быть backend-first системой. Веб-сайт мог держать состояние в браузере и ждать долгие запросы, а Telegram-бот обязан быстро отвечать на webhook/update, выносить анализ в очередь, сохранять состояние и отправлять прогресс пользователю отдельными сообщениями.
+
+### 1.1. Development readiness verdict
+
+Эта спецификация достаточна, чтобы спокойно начинать разработку Phase 0 и Phase 1: репозиторий, инфраструктуру, БД, Telegram webhook, onboarding, меню, wizard анализа, очередь, моковый worker и первые тесты.
+
+Она пока не является финальным launch contract для публичного релиза. До production/beta нужно закрыть open questions из раздела 24, особенно pricing, публичную доступность HR/OSINT-режимов, retention, юрисдикции privacy/compliance и финальный платежный способ.
+
+Чтобы команда могла начинать без ожидания ответов на все бизнес-вопросы, для разработки фиксируются стартовые решения:
+
+1. Интерфейс MVP: чистый Telegram-бот без обязательного Mini App.
+2. Стек MVP: TypeScript, Node.js 20+, `grammy`, Fastify, Prisma, PostgreSQL, Redis, BullMQ, S3-compatible storage, Playwright для PDF.
+3. Первый end-to-end режим: `standard`.
+4. Второй режим после standard: `influencer`.
+5. `hr` включать только за feature flag и с отдельным disclaimer.
+6. `osint_compliance` не показывать публично в MVP; доступ только admin/compliance role и только после отдельного подтверждения lawful basis.
+7. Billing в ранней разработке: credit ledger + admin grants. Telegram Stars/платежи добавлять после стабильного анализа.
+8. Провайдеры сначала подключаются через интерфейсы и моки; реальные Apify/OpenRouter/FaceCheck включаются после прохождения локальных integration tests.
+9. Историю сайта не мигрировать в MVP: бот начинает со своей БД.
+10. PDF является обязательным для MVP, но Markdown export можно сделать раньше как fallback для первых тестов.
+
+Стартовый engineering cut:
+
+1. Сначала построить shell: config, logger, DB schema, migrations, Telegram webhook, Redis queue.
+2. Затем сделать mocked analysis pipeline, чтобы весь UX прошел от `/start` до "отчет готов" без внешних API.
+3. Затем заменить моки реальными adapters по одному: Apify, image fetch/vision, final report, PDF, FaceCheck.
+4. Только после этого включать credits capture/refund и admin инструменты.
 
 ## 2. Цели продукта
 
@@ -1345,9 +1371,12 @@ Important constraints:
 
 - text messages have a 4096-character limit after entity parsing;
 - captions have 1024-character limit after entity parsing;
-- `getFile` download links are time-limited;
-- cloud Bot API download limit is relevant for user uploads;
-- PDF should be sent via `sendDocument`;
+- `getFile` returns a `file_path`; the download URL is guaranteed for at least 1 hour, then a new `getFile` call is needed;
+- cloud Bot API `getFile` download limit is 20 MB, so bot-side photo validation must reject larger user uploads unless a local Bot API server is intentionally used;
+- bots can currently send documents up to 50 MB via `sendDocument`; generated PDFs should stay well below this limit;
+- sending documents by URL currently works only for PDF and ZIP, so MVP should upload generated PDF as multipart or reuse `telegram_file_id`;
+- Telegram Stars invoices require currency `XTR`; for Stars, `provider_token` is passed as an empty string and `prices` must contain exactly one item;
+- PDF should be sent via `sendDocument`, not as a long text message;
 - webhook must return 2XX quickly to avoid Telegram retries.
 
 ### 13.2. Apify
@@ -1910,6 +1939,151 @@ Acceptance:
 
 - bot can run with real users under controlled beta.
 
+### 22.1. Recommended repository structure for implementation
+
+The first code iteration should use a structure close to this:
+
+```text
+src/
+  app.ts
+  server.ts
+  config/
+    env.ts
+    logger.ts
+  telegram/
+    bot.ts
+    webhook.ts
+    middleware/
+      user-context.ts
+      locale.ts
+      rate-limit.ts
+    handlers/
+      start.ts
+      menu.ts
+      analyze.ts
+      photo.ts
+      history.ts
+      credits.ts
+      settings.ts
+      admin.ts
+    keyboards/
+      main-menu.ts
+      analysis-mode.ts
+      report-actions.ts
+    formatters/
+      html.ts
+      chunks.ts
+      messages.ts
+  modules/
+    users/
+    billing/
+    analysis/
+    instagram/
+    vision/
+    llm/
+    photo-search/
+    reports/
+    chat/
+    admin/
+    observability/
+  jobs/
+    queues.ts
+    workers/
+      analysis.worker.ts
+      photo-search.worker.ts
+      exports.worker.ts
+  prompts/
+    vision.detail.v1.ts
+    report.standard.v1.ts
+    report.hr.v1.ts
+    report.influencer.v1.ts
+    report.osint-compliance.v1.ts
+    chat.report.v1.ts
+  db/
+    client.ts
+    migrations/
+  tests/
+    fixtures/
+```
+
+Rules:
+
+- Telegram handlers must stay thin: parse input, update conversation state, enqueue work, render messages.
+- Provider-specific code must live only in adapters: no Apify/OpenRouter/FaceCheck calls from handlers.
+- Business decisions about billing, safety and report state must live in services, not in callback-query handlers.
+- All user-facing text must go through locale/message helpers, even in MVP.
+- Prompts must be versioned files from day one.
+
+### 22.2. First sprint backlog
+
+These tickets are the recommended start order:
+
+1. Scaffold TypeScript project with lint, format, test runner and Docker Compose for PostgreSQL/Redis.
+2. Add env validation for Telegram, DB, Redis, providers, admin IDs and feature flags.
+3. Add Prisma/Drizzle schema for `users`, `user_settings`, `analysis_jobs`, `reports`, `report_sections`, `credit_accounts`, `credit_transactions`, `audit_logs`.
+4. Implement structured logger and request/job correlation IDs.
+5. Implement Telegram webhook with secret validation and duplicate `update_id` protection.
+6. Implement `/start`, language selection, consent acceptance and main menu.
+7. Implement username normalization with unit tests.
+8. Implement analysis wizard with mode selection and confirmation.
+9. Implement credit account creation and admin grant command.
+10. Implement BullMQ queues and mocked `analysis.worker`.
+11. Implement progress message creation/editing.
+12. Implement mocked completed report and section browsing.
+13. Implement message chunking and HTML escaping tests.
+14. Implement report persistence and `/history`.
+15. Implement Markdown export as a simple artifact.
+16. Implement Apify adapter behind interface with mocked integration test.
+17. Implement real Apify fetch for one public username in staging/dev.
+18. Implement report parser and required-section validation.
+19. Implement OpenRouter final report adapter with provider timeout/retry.
+20. Implement PDF export after Telegram report delivery is already stable.
+
+The first sprint should not include FaceCheck, HR, OSINT, real payments or Mini App work. Those depend on a stable core pipeline.
+
+### 22.3. MVP definition of done
+
+MVP is done when all conditions below are true:
+
+1. A new user can complete onboarding and accept rules.
+2. Admin can grant credits.
+3. User can start a standard analysis by username.
+4. The bot creates a queued job and returns from webhook quickly.
+5. Worker fetches a public Instagram profile via Apify.
+6. Worker generates a report through the LLM provider.
+7. Report sections are parsed, stored and browsable in Telegram.
+8. Long sections are safely chunked and escaped.
+9. User receives a PDF or Markdown fallback artifact.
+10. User can open report history.
+11. Private/not-found profile errors do not consume credits.
+12. LLM/provider failures can be retried without duplicate charge.
+13. `/delete_me` removes or anonymizes user-owned data according to retention policy.
+14. Basic admin view shows active/failed jobs and usage.
+15. Unit and integration tests cover normalization, chunking, report parser, credit reservation and provider error mapping.
+16. Logs contain no secrets or raw base64.
+17. Production checklist items that apply to MVP staging are completed.
+
+### 22.4. Decisions that can remain open during Phase 0-2
+
+These questions do not block foundation work:
+
+- final public brand name;
+- final pricing;
+- Telegram Stars vs external payments;
+- Mini App design;
+- white-label PDF availability;
+- long-term report retention;
+- synchronization with the existing website.
+
+These questions block public launch:
+
+- legal/compliance text;
+- which modes are public;
+- jurisdiction-specific privacy requirements;
+- policy for HR and photo search;
+- provider budgets and rate limits;
+- support process for abuse reports and data deletion requests.
+
 ## 23. Production checklist
 
 Before launch:
@@ -1953,7 +2127,8 @@ Telegram Bot API constraints used in this spec:
 - webhook receives HTTPS POST updates and retries non-2XX responses;
 - `sendMessage` text limit is 1-4096 characters after entities parsing;
 - captions are limited to 1024 characters after entities parsing;
-- files can be retrieved with `getFile` through a time-limited download URL;
-- documents/PDFs should be sent via `sendDocument`;
-- Telegram Stars can be used through invoice/payment flows.
-
+- files can be retrieved with `getFile` through a download URL that is guaranteed for at least 1 hour;
+- cloud Bot API file download limit is 20 MB;
+- bots can currently send documents up to 50 MB via `sendDocument`;
+- generated PDFs should be sent via `sendDocument`;
+- Telegram Stars can be used through invoice/payment flows with currency `XTR`.

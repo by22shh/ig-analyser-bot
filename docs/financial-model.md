@@ -1,22 +1,22 @@
 # Финансовая модель ZRETI Telegram Bot
 
-Версия: 0.2.
+Версия: 0.3.
 
 Дата: 2026-06-03.
 
-Цель документа: зафиксировать стартовую модель монетизации, pricing, unit economics, YooKassa fees, credit ledger, метрики прибыльности и no-loss guardrails для Telegram-бота.
+Цель документа: зафиксировать стартовую модель монетизации, pricing, unit economics, YooKassa fees, Telegram Stars, credit ledger, метрики прибыльности и no-loss guardrails для Telegram-бота.
 
 ## 1. Ключевая модель
 
-MVP продает предоплаченные пакеты кредитов через YooKassa.
+MVP продает предоплаченные пакеты кредитов через Telegram Stars и, где разрешено, через YooKassa.
 
 Пользовательский поток:
 
 1. Пользователь выбирает пакет кредитов в `/credits`.
-2. Бот создает заказ и платеж YooKassa.
-3. Пользователь оплачивает по ссылке YooKassa.
-4. YooKassa отправляет webhook.
-5. Backend сверяет статус платежа server-to-server.
+2. Пользователь выбирает Stars или RUB-канал.
+3. Для Stars бот отправляет `sendInvoice(currency=XTR)`.
+4. Для YooKassa бот создает платеж и отправляет payment link.
+5. Backend подтверждает оплату через `successful_payment` или server-to-server YooKassa reconciliation.
 6. Backend начисляет credits.
 7. Credits списываются за анализы и дополнительные AI-вопросы.
 
@@ -46,14 +46,23 @@ MVP продает предоплаченные пакеты кредитов ч
 | Agency | 183.00 | 146.40 | 146.40 | 48.80 | Too cheap for 3x |
 | Scale | 159.00 | 127.20 | 127.20 | 42.40 | Too cheap for 3x |
 
+С новым Stars-каталогом `230 XTR/credit` и conservative floor `0.01 USD/XTR`, `90 RUB/USD`, `20%` reserve:
+
+| Package | XTR / credit | Net RUB-equivalent / credit | Max provider cost for 3x safety | Status at `C_standard = 55 RUB` |
+| --- | ---: | ---: | ---: | --- |
+| Start | 230 | 165.60 | 55.20 | Safe, but tight |
+| Pro | 230 | 165.60 | 55.20 | Safe, but tight |
+| Agency | 230 | 165.60 | 55.20 | Safe, but tight |
+
 Решение для launch:
 
-- Start можно оставлять публичным при `C_standard p75 <= 61 RUB`.
+- Stars Start можно оставлять публичным при `C_standard p75 <= 55 RUB`, если payout floor подтвержден.
+- YooKassa Start можно оставлять публичным при `C_standard p75 <= 61 RUB`.
 - Pro можно включать только если `C_standard p75 <= 53 RUB` или поднять цену минимум до `2,063 RUB` за 10 credits.
 - Agency можно включать только если `C_standard p75 <= 48 RUB` или поднять цену минимум до `6,188 RUB` за 30 credits.
 - Scale нельзя включать публично при `C_standard = 55 RUB`; нужно либо `C_standard p75 <= 42 RUB`, либо цена минимум `20,625 RUB` за 100 credits, либо ручная продажа/договор.
 
-Практический вывод: на старте лучше продавать Start, а Pro/Agency/Scale держать скрытыми/feature-gated до измерения реальной p75 себестоимости минимум на 50-100 отчетах.
+Практический вывод: на старте лучше продавать Stars Start и/или YooKassa Start, а discounted YooKassa Pro/Agency/Scale держать скрытыми/feature-gated до измерения реальной p75 себестоимости минимум на 50-100 отчетах. Stars Pro/Agency можно включать только без bulk-discount: `230 XTR/credit` или выше.
 
 ### 1.2. Принципы, взятые из `ai-assistant-bot`
 
@@ -62,6 +71,7 @@ MVP продает предоплаченные пакеты кредитов ч
 - `ECON_TARGET_REVENUE_MULTIPLE = 3`: выручка после резервов должна быть минимум в 3 раза выше variable provider cost.
 - `ECON_PAYMENT_FEE_RESERVE = 0.20`: для guardrails используется 20% резерв, даже если фактическая YooKassa-комиссия ниже.
 - `ECON_USD_TO_RUB_BUFFER = 90`: USD-расходы провайдеров считаются по буферному курсу, а не по оптимистичному текущему.
+- `ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR = 0.01` и `ECON_STARS_PAYOUT_RESERVE = 0.20`: Stars считаются по консервативному RUB-equivalent floor.
 - Все дорогие операции имеют caps: посты, изображения, токены, output tokens, timeout, размер файлов.
 - Есть отдельный `audit-economics`/`audit-prices`, который падает в CI при price drift, превышении caps или недостаточном credit price.
 - Free/admin/referral credits считаются acquisition spend, а не revenue-backed usage.
@@ -90,22 +100,42 @@ MVP продает предоплаченные пакеты кредитов ч
 
 ## 3. Launch packages
 
-Рекомендуемые пакеты v0.1:
+Рекомендуемые пакеты v0.2:
 
-| Package | Credits | Price RUB | RUB / credit | Notes |
-| --- | ---: | ---: | ---: | --- |
-| Trial | 1 | 0 | 0 | Только admin grant |
-| Start | 3 | 690 | 230 | Первый платеж |
-| Pro | 10 | 1,990 | 199 | Базовый пакет |
-| Agency | 30 | 5,490 | 183 | Малые команды |
-| Scale | 100 | 15,900 | 159 | Агентства, только если себестоимость стабильна |
+| Package | Credits | Notes |
+| --- | ---: | --- |
+| Trial | 1 | Только admin grant |
+| Start | 3 | Первый платеж |
+| Pro | 10 | Базовый пакет |
+| Agency | 30 | Малые команды |
+| Scale | 100 | Агентства, только если себестоимость стабильна |
+
+YooKassa RUB prices:
+
+| Package | Price RUB | RUB / credit | Notes |
+| --- | ---: | ---: | --- |
+| Start | 690 | 230 | Public if `audit-economics` passes |
+| Pro | 1,990 | 199 | Hidden/reprice until p75 cost is proven |
+| Agency | 5,490 | 183 | Hidden/reprice until p75 cost is proven |
+| Scale | 15,900 | 159 | Negotiated/hidden |
+
+Telegram Stars prices:
+
+| Package | Price XTR | XTR / credit | Notes |
+| --- | ---: | ---: | --- |
+| Start | 690 | 230 | Public after Stars payout floor confirmation |
+| Pro | 2,300 | 230 | Public only if `audit-economics` passes |
+| Agency | 6,900 | 230 | Public only if `audit-economics` passes |
+| Scale | 23,000 | 230 | Hidden; check Bot API amount limits before enabling |
 
 Pricing rules:
 
-- Все цены в RUB.
+- YooKassa prices are in RUB.
+- Stars prices are in `XTR` and must be modeled separately from RUB.
 - Пакеты должны быть конфигурацией, не hard-code.
 - Scale нельзя включать публично, пока фактическая себестоимость standard report не подтверждена.
 - Pro/Agency/Scale нельзя включать публично, если они снижают `P_credit_guardrail_net_floor` ниже текущей p75 себестоимости с `3x` покрытием.
+- Stars bulk discounts запрещены до подтверждения payout floor и налоговой модели.
 - Enterprise/custom можно продавать вручную через договор/счет.
 
 ## 4. YooKassa fee assumptions
@@ -132,13 +162,54 @@ r_yk_effective = (2.8% + 1.0%) * 1.20 = 4.56%
 - Если чеки делаются не через YooKassa, `r_receipt` может быть другим или равным 0, но появится стоимость сторонней кассы.
 - Публичная страница YooKassa может быть акцией/спецусловием по датам; финальный источник истины - договор и личный кабинет мерчанта.
 
-## 4.1. Conservative guardrail reserves
+## 4.1. Telegram Stars assumptions
+
+Стартовые переменные:
+
+```text
+ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR = 0.01
+ECON_STARS_PAYOUT_RESERVE = 20%
+ECON_USD_TO_RUB_BUFFER = 90
+```
+
+RUB-equivalent formula:
+
+```text
+stars_gross_rub_equivalent =
+  stars_amount
+  * ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR
+  * ECON_USD_TO_RUB_BUFFER
+
+stars_net_rub_equivalent =
+  stars_gross_rub_equivalent
+  * (1 - ECON_STARS_PAYOUT_RESERVE)
+```
+
+Example:
+
+```text
+Start Stars = 690 XTR
+stars_net_rub_equivalent = 690 * 0.01 * 90 * 0.80 = 496.80 RUB
+net_per_credit = 496.80 / 3 = 165.60 RUB
+provider multiple at C_standard=55 = 165.60 / 55 = 3.01x
+```
+
+Важно:
+
+- Stars are not treated as RUB cash at purchase time; they are tracked as platform balance/reward value until settlement.
+- Actual payout/reward economics must be confirmed in Telegram account data and accounting review.
+- If payout floor is lower than `0.01 USD/XTR`, all Stars prices must be repriced upward or disabled.
+- Stars refunds are made through Telegram Bot API `refundStarPayment`, not through YooKassa.
+
+## 4.2. Conservative guardrail reserves
 
 Для бухгалтерского отчета можно считать точные комиссии YooKassa. Для pricing guardrails нужно использовать более жесткие переменные:
 
 ```text
 ECON_USD_TO_RUB_BUFFER = 90
 ECON_PAYMENT_FEE_RESERVE = 20%
+ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR = 0.01
+ECON_STARS_PAYOUT_RESERVE = 20%
 ECON_TARGET_REVENUE_MULTIPLE = 3
 ECON_COST_BASIS = p75_or_worst_case
 ```
@@ -146,11 +217,18 @@ ECON_COST_BASIS = p75_or_worst_case
 Formula:
 
 ```text
-P_credit_gross_floor =
+P_credit_card_net_floor =
   min(public_package_price_rub / public_package_credits)
+  * (1 - ECON_PAYMENT_FEE_RESERVE)
+
+P_credit_stars_net_floor =
+  min(public_package_stars / public_package_credits)
+  * ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR
+  * ECON_USD_TO_RUB_BUFFER
+  * (1 - ECON_STARS_PAYOUT_RESERVE)
 
 P_credit_guardrail_net_floor =
-  P_credit_gross_floor * (1 - ECON_PAYMENT_FEE_RESERVE)
+  min(P_credit_card_net_floor, P_credit_stars_net_floor)
 
 net_revenue_for_operation =
   charged_credits * P_credit_guardrail_net_floor
@@ -272,6 +350,23 @@ r_yk_effective = 4.56%
 | Agency | 5,490 | 5,239.66 | 1,650 | 3,589.66 | 65.4% |
 | Scale | 15,900 | 15,174.96 | 5,500 | 9,674.96 | 60.8% |
 
+Stars contribution model:
+
+```text
+C_standard = 55 RUB
+ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR = 0.01
+ECON_USD_TO_RUB_BUFFER = 90
+ECON_STARS_PAYOUT_RESERVE = 20%
+```
+
+| Package | Stars | Net RUB-equivalent | Provider cost | Contribution equivalent | Net/provider multiple |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Start | 690 | 496.80 | 165 | 331.80 | 3.01x |
+| Pro | 2,300 | 1,656.00 | 550 | 1,106.00 | 3.01x |
+| Agency | 6,900 | 4,968.00 | 1,650 | 3,318.00 | 3.01x |
+
+Stars are intentionally priced without bulk discount in v0.2. At `C_standard = 55 RUB`, `230 XTR/credit` is just above the strict `3x` threshold. If real `C_standard p75` is higher than 55 RUB, Stars prices must increase or affected packages must be disabled.
+
 Same packages under strict guardrail:
 
 ```text
@@ -350,6 +445,8 @@ Rules:
 - Partial refund возможен только для unused portion и только если способ оплаты поддерживает частичный возврат.
 - Если credits использованы, refund становится manual support flow.
 - Комиссия YooKassa за успешный платеж при возврате не возвращается, поэтому refund создает `refund_loss`.
+- Stars refund делается через `refundStarPayment` и требует сохраненного `telegram_payment_charge_id`.
+- Stars refund должен уменьшать credit balance только через ledger, а не прямым изменением баланса.
 
 Refund loss:
 
@@ -366,10 +463,13 @@ Product analytics:
 
 ```text
 cash_collected = successful YooKassa payments
+stars_collected = successful Telegram Stars payments in XTR
+stars_net_rub_equivalent = conservative payout-floor RUB equivalent
 net_cash_after_yookassa = cash_collected - yookassa_fees
 deferred_credit_liability = unused paid credits
 recognized_revenue = consumed paid credits
 refunds = successful refunds
+stars_refunds = successful Telegram Stars refunds
 refund_loss = unrecovered fees + spent provider costs
 ```
 
@@ -382,7 +482,9 @@ Accounting note:
 Обязательные метрики:
 
 - Gross payments.
+- Stars payments.
 - Net after YooKassa.
+- Stars net RUB-equivalent floor.
 - YooKassa fees.
 - Successful payments count.
 - Payment conversion.
@@ -410,7 +512,9 @@ pnpm audit-economics
 Checks:
 
 - Reads active package catalog and finds the minimum public RUB/credit.
+- Reads active Stars catalog and finds the minimum public RUB-equivalent/credit.
 - Applies `ECON_PAYMENT_FEE_RESERVE`, not only the exact YooKassa fee.
+- Applies `ECON_STARS_PAYOUT_RESERVE`, not optimistic Stars proceeds.
 - Uses `ECON_USD_TO_RUB_BUFFER` for USD-denominated provider costs.
 - Loads modeled prices for Apify, OpenRouter/LLM, FaceCheck, storage/PDF and support reserve.
 - Verifies that runtime caps do not exceed modeled caps.
@@ -425,20 +529,29 @@ This command must run in CI before deploy and manually before any package or pro
 
 Before public paid launch:
 
-1. YooKassa contract rates confirmed.
-2. Fiscal receipt setup confirmed.
-3. User email collection flow approved.
-4. Provider costs measured on at least 50 real standard reports.
-5. `C_standard p75` is below launch pricing cost ceiling for every public package.
-6. `audit-economics` passes with production package catalog.
-7. Pro/Agency/Scale are hidden or repriced if they fail strict guardrail.
-8. Duplicate payment webhook tested.
-9. Refund flow tested.
-10. Finance export tested.
-11. Support policy for failed analyses and refunds written.
-12. Terms/payment policy text approved.
+1. Telegram Stars test payment and `successful_payment` flow verified.
+2. Telegram Stars payout/reward floor confirmed or conservative fallback approved.
+3. Telegram Stars refund flow verified with `refundStarPayment`.
+4. YooKassa contract rates confirmed.
+5. Fiscal receipt setup confirmed.
+6. User email collection flow approved for YooKassa.
+7. Provider costs measured on at least 50 real standard reports.
+8. `C_standard p75` is below launch pricing cost ceiling for every public package and channel.
+9. `audit-economics` passes with production package catalog.
+10. Pro/Agency/Scale are hidden or repriced if they fail strict guardrail.
+11. Duplicate Stars `successful_payment` and YooKassa webhook tested.
+12. Refund flow tested.
+13. Finance export tested.
+14. Support policy for failed analyses and refunds written.
+15. Terms/payment policy text approved.
 
 ## 13. Sources
+
+Telegram Stars official materials used for this model:
+
+- Telegram Bot Payments API for Digital Goods and Services: `https://core.telegram.org/bots/payments-stars`
+- Telegram Bot API Payments section: `https://core.telegram.org/bots/api#payments`
+- Telegram Bot API `refundStarPayment`, `getMyStarBalance`, `getStarTransactions`: `https://core.telegram.org/bots/api#refundstarpayment`
 
 YooKassa official materials used for this model:
 
@@ -452,6 +565,7 @@ YooKassa official materials used for this model:
 
 Checked on 2026-06-03:
 
+- Telegram Stars docs state that digital goods/services in bots and mini apps use `XTR`; the flow is `sendInvoice` -> `pre_checkout_query` -> `successful_payment`; `provider_token` is empty for Stars; refunds use `refundStarPayment`.
 - Public YooKassa fees page shows `2.8% + 1% per receipt` for several payment methods under the "Чеки от YooKassa" condition, plus VAT on commission; the page also describes offer/date and contract conditions, so production values must come from the signed merchant contract.
 - YooKassa API payment process documents merchant auth, `Idempotence-Key`, `amount`, `capture`, redirect confirmation and `confirmation_url`.
 - YooKassa webhook docs list `payment.succeeded`, `payment.canceled`, `payment.waiting_for_capture` and `refund.succeeded`; the bot must still reconcile status server-to-server before crediting.

@@ -1,6 +1,6 @@
 # Спецификация Telegram-бота ZRETI
 
-Версия: 0.4.
+Версия: 0.5.
 
 Дата: 2026-06-03.
 
@@ -34,12 +34,13 @@
 4. Второй режим после standard: `influencer`.
 5. `hr` включать только за feature flag и с отдельным disclaimer.
 6. `osint_compliance` не показывать публично в MVP; доступ только admin/compliance role и только после отдельного подтверждения lawful basis.
-7. Billing в ранней разработке: credit ledger + admin grants; затем ЮKassa как основной платежный агрегатор для RUB-покупок credit packages. Telegram Stars оставить отдельным optional-каналом, не основным.
+7. Billing в ранней разработке: credit ledger + admin grants; затем два платежных канала: Telegram Stars для Telegram-native покупок цифровых credits и YooKassa для RUB/external/manual checkout-сценариев после legal/accounting review.
 8. Провайдеры сначала подключаются через интерфейсы и моки; реальные Apify/OpenRouter/FaceCheck включаются после прохождения локальных integration tests.
 9. Историю сайта не мигрировать в MVP: бот начинает со своей БД.
 10. PDF является обязательным для MVP, но Markdown export можно сделать раньше как fallback для первых тестов.
 11. Финансовая модель MVP: prepaid credits/packages, не постоплата. Рекуррентные подписки и автоплатежи не входят в первый платежный релиз.
 12. Платный публичный запуск запрещен, пока `audit-economics` не подтверждает, что каждый платный режим покрывает worst-case/p75 себестоимость провайдеров минимум в `3x` после консервативного платежного резерва.
+13. Если покупка цифровых credits происходит внутри Telegram UX, по умолчанию показывать Stars; YooKassa показывать только как разрешенный внешний/договорной канал, чтобы не нарушать Telegram/App Store/Google Play правила для digital goods.
 
 Стартовый engineering cut:
 
@@ -578,16 +579,19 @@ Backend:
 - plans;
 - transactions;
 - YooKassa orders/payments/refunds;
-- Telegram Stars/payment provider as optional future channel;
+- Telegram Stars orders/invoices/refunds;
 - admin grants.
 
 `payments`
 
 - YooKassa API client;
+- Telegram Stars Bot API invoice/refund client;
 - payment package catalog;
 - order creation;
 - payment confirmation URL flow;
+- Telegram invoice flow;
 - YooKassa webhook endpoint;
+- Telegram `pre_checkout_query` and `successful_payment` handlers;
 - payment status reconciliation;
 - refunds;
 - fiscal receipt data preparation;
@@ -1145,22 +1149,47 @@ Credit precision:
 - `title text`;
 - `description text`;
 - `credits_units int`;
-- `price_minor int`;
-- `currency text default 'RUB'`;
+- `is_active boolean`;
+- `sort_order int`;
+- `metadata jsonb`;
+- `created_at`;
+- `updated_at`.
+
+### 11.6. credit_package_prices
+
+- `id uuid pk`;
+- `package_id uuid fk`;
+- `provider text`: `yookassa`, `telegram_stars`, `manual`;
+- `currency text`: `RUB`, `XTR`;
+- `amount_minor int`;
+- `is_public boolean`;
 - `is_active boolean`;
 - `sort_order int`;
 - `yookassa_description text`;
+- `stars_title text nullable`;
+- `stars_description text nullable`;
 - `receipt_subject text`;
 - `receipt_vat_code int nullable`;
 - `metadata jsonb`;
 - `created_at`;
 - `updated_at`.
 
-### 11.6. payment_orders
+Unique indexes:
+
+- `(package_id, provider, currency)` for active public prices.
+
+Rules:
+
+- For YooKassa `amount_minor` is kopecks.
+- For Telegram Stars `amount_minor` is the integer number of Stars because `XTR` has no fractional display in Bot API usage.
+- A package can be active while one provider price is disabled.
+
+### 11.7. payment_orders
 
 - `id uuid pk`;
 - `user_id uuid fk`;
 - `package_id uuid fk`;
+- `package_price_id uuid nullable fk`;
 - `status text`: `draft`, `pending_payment`, `paid`, `canceled`, `expired`, `refunded`, `partially_refunded`;
 - `amount_minor int`;
 - `currency text`;
@@ -1177,7 +1206,7 @@ Credit precision:
 - `created_at`;
 - `updated_at`.
 
-### 11.7. payment_events
+### 11.8. payment_events
 
 - `id uuid pk`;
 - `provider text`;
@@ -1194,7 +1223,7 @@ Unique indexes:
 
 - `(provider, event_type, provider_object_id)`.
 
-### 11.8. yookassa_payments
+### 11.9. yookassa_payments
 
 - `id uuid pk`;
 - `payment_order_id uuid unique fk`;
@@ -1215,7 +1244,33 @@ Unique indexes:
 - `created_at`;
 - `updated_at`.
 
-### 11.9. payment_refunds
+### 11.10. telegram_star_payments
+
+- `id uuid pk`;
+- `payment_order_id uuid unique fk`;
+- `telegram_user_id bigint`;
+- `telegram_chat_id bigint`;
+- `invoice_payload text unique`;
+- `invoice_message_id bigint nullable`;
+- `pre_checkout_query_id text unique nullable`;
+- `telegram_payment_charge_id text unique nullable`;
+- `provider_payment_charge_id text nullable`;
+- `status text`: `invoice_sent`, `pre_checkout_approved`, `paid`, `refunded`, `failed`;
+- `stars_amount int`;
+- `currency text default 'XTR'`;
+- `successful_payment jsonb nullable`;
+- `raw_pre_checkout_query jsonb nullable`;
+- `raw_successful_payment jsonb nullable`;
+- `created_at`;
+- `updated_at`.
+
+Rules:
+
+- Credits are granted only after `successful_payment`, never after `pre_checkout_query`.
+- `invoice_payload` must bind user, package, price and order ID.
+- `telegram_payment_charge_id` is required for Stars refunds.
+
+### 11.11. payment_refunds
 
 - `id uuid pk`;
 - `payment_order_id uuid fk`;
@@ -1231,7 +1286,7 @@ Unique indexes:
 - `created_at`;
 - `updated_at`;
 
-### 11.10. fiscal_receipts
+### 11.12. fiscal_receipts
 
 - `id uuid pk`;
 - `payment_order_id uuid fk`;
@@ -1249,7 +1304,7 @@ Unique indexes:
 - `created_at`;
 - `updated_at`.
 
-### 11.11. analysis_jobs
+### 11.13. analysis_jobs
 
 - `id uuid pk`;
 - `user_id uuid fk`;
@@ -1282,7 +1337,7 @@ Indexes:
 - `(target_username)`;
 - `(idempotency_key)`.
 
-### 11.12. instagram_profile_snapshots
+### 11.14. instagram_profile_snapshots
 
 - `id uuid pk`;
 - `analysis_job_id uuid unique fk`;
@@ -1301,7 +1356,7 @@ Indexes:
 - `raw_debug jsonb nullable`;
 - `created_at`.
 
-### 11.13. instagram_post_snapshots
+### 11.15. instagram_post_snapshots
 
 - `id uuid pk`;
 - `profile_snapshot_id uuid fk`;
@@ -1332,7 +1387,7 @@ Indexes:
 - `(post_id)`;
 - `(timestamp desc)`.
 
-### 11.14. vision_analysis_items
+### 11.16. vision_analysis_items
 
 - `id uuid pk`;
 - `analysis_job_id uuid fk`;
@@ -1345,7 +1400,7 @@ Indexes:
 - `error_code text`;
 - `created_at`.
 
-### 11.15. reports
+### 11.17. reports
 
 - `id uuid pk`;
 - `analysis_job_id uuid unique fk`;
@@ -1361,7 +1416,7 @@ Indexes:
 - `updated_at`;
 - `expires_at`.
 
-### 11.16. report_sections
+### 11.18. report_sections
 
 - `id uuid pk`;
 - `report_id uuid fk`;
@@ -1376,7 +1431,7 @@ Indexes:
 
 - `(report_id, position)`.
 
-### 11.17. report_artifacts
+### 11.19. report_artifacts
 
 - `id uuid pk`;
 - `report_id uuid fk`;
@@ -1388,7 +1443,7 @@ Indexes:
 - `size_bytes int`;
 - `created_at`.
 
-### 11.18. photo_search_jobs
+### 11.20. photo_search_jobs
 
 - `id uuid pk`;
 - `user_id uuid fk`;
@@ -1401,7 +1456,7 @@ Indexes:
 - `created_at`;
 - `finished_at`.
 
-### 11.19. photo_search_matches
+### 11.21. photo_search_matches
 
 - `id uuid pk`;
 - `photo_search_job_id uuid fk`;
@@ -1413,7 +1468,7 @@ Indexes:
 - `raw_score numeric`;
 - `created_at`.
 
-### 11.20. report_chat_sessions
+### 11.22. report_chat_sessions
 
 - `id uuid pk`;
 - `report_id uuid fk`;
@@ -1422,7 +1477,7 @@ Indexes:
 - `created_at`;
 - `updated_at`.
 
-### 11.21. report_chat_messages
+### 11.23. report_chat_messages
 
 - `id uuid pk`;
 - `session_id uuid fk`;
@@ -1433,7 +1488,7 @@ Indexes:
 - `tokens_out int nullable`;
 - `created_at`.
 
-### 11.22. api_usage_events
+### 11.24. api_usage_events
 
 - `id uuid pk`;
 - `user_id uuid nullable`;
@@ -1449,7 +1504,7 @@ Indexes:
 - `error_code text`;
 - `created_at`.
 
-### 11.23. audit_logs
+### 11.25. audit_logs
 
 - `id uuid pk`;
 - `actor_user_id uuid nullable`;
@@ -1582,6 +1637,115 @@ Rules:
 - `payment.canceled` does not grant credits;
 - `refund.succeeded` writes refund transaction and adjusts credits according to refund policy.
 
+### 12.6. PaymentService.createTelegramStarsInvoice
+
+```ts
+type CreateTelegramStarsInvoiceInput = {
+  userId: string;
+  telegramUserId: number;
+  chatId: number;
+  packageCode: string;
+  locale: "ru" | "en";
+  idempotencyKey: string;
+};
+
+type CreateTelegramStarsInvoiceResult = {
+  orderId: string;
+  status: "pending_payment";
+  currency: "XTR";
+  starsAmount: number;
+  creditsUnits: number;
+  invoicePayload: string;
+  telegramInvoiceMessageId: number;
+};
+```
+
+Rules:
+
+- create `payment_orders(provider=telegram_stars, currency=XTR)` first;
+- resolve price from `credit_package_prices(provider=telegram_stars, currency=XTR)`;
+- call `sendInvoice` with `currency = XTR`, empty `provider_token`, exactly one `LabeledPrice`, and payload bound to order/user/package/price;
+- do not request email/name/phone/shipping in Stars invoices because these fields are ignored for Stars;
+- do not grant credits until `successful_payment` is received.
+
+### 12.7. PaymentService.handleTelegramPreCheckout
+
+```ts
+type TelegramPreCheckoutInput = {
+  preCheckoutQueryId: string;
+  telegramUserId: number;
+  currency: "XTR" | string;
+  totalAmount: number;
+  invoicePayload: string;
+  raw: unknown;
+};
+
+type TelegramPreCheckoutResult = {
+  ok: boolean;
+  errorMessage?: string;
+  orderId?: string;
+};
+```
+
+Rules:
+
+- answer every `pre_checkout_query` within 10 seconds;
+- validate invoice payload, order status, user binding, `currency = XTR`, active package price and exact `total_amount`;
+- approve only `pending_payment` orders that have not expired and have not been paid;
+- on mismatch, answer with a user-readable error and do not mutate credits.
+
+### 12.8. PaymentService.handleTelegramSuccessfulPayment
+
+```ts
+type TelegramSuccessfulPaymentInput = {
+  telegramUserId: number;
+  chatId: number;
+  messageId: number;
+  currency: "XTR" | string;
+  totalAmount: number;
+  invoicePayload: string;
+  telegramPaymentChargeId: string;
+  providerPaymentChargeId?: string;
+  raw: unknown;
+};
+
+type TelegramSuccessfulPaymentResult = {
+  processed: boolean;
+  orderId?: string;
+  creditsUnitsGranted?: number;
+};
+```
+
+Rules:
+
+- `successful_payment` is the source of truth for granting Stars-paid credits;
+- validate payload, charge ID uniqueness, user binding, currency and amount before crediting;
+- mark the order `paid`, persist `telegram_payment_charge_id`, write `payment_events` and grant `credit_transactions(type=purchase)` exactly once;
+- duplicate updates with the same `telegram_payment_charge_id` must be idempotent.
+
+### 12.9. PaymentService.refundTelegramStarsPayment
+
+```ts
+type RefundTelegramStarsPaymentInput = {
+  paymentOrderId: string;
+  adminUserId?: string;
+  reason: string;
+};
+
+type RefundTelegramStarsPaymentResult = {
+  refundId: string;
+  status: "succeeded" | "failed";
+};
+```
+
+Rules:
+
+- automatic refund is allowed only for unused Stars-paid credits;
+- call Bot API `refundStarPayment` with `user_id` and `telegram_payment_charge_id`;
+- write `payment_refunds(provider=telegram_stars, currency=XTR)`;
+- decrement credits through the ledger only after the refund call succeeds;
+- include Stars refunds in finance exports separately from YooKassa refunds.
+
 ## 13. External integrations
 
 ### 13.1. Telegram Bot API
@@ -1597,7 +1761,10 @@ Use:
 - `getFile`;
 - `sendDocument`;
 - `sendPhoto` only for small previews;
-- `sendInvoice` only if Telegram Stars or Telegram-native YooKassa provider flow is enabled later.
+- `sendInvoice` for Telegram Stars credit packages;
+- `answerPreCheckoutQuery`;
+- `refundStarPayment`;
+- `getMyStarBalance` and `getStarTransactions` for admin reconciliation when needed.
 
 Important constraints:
 
@@ -1608,12 +1775,75 @@ Important constraints:
 - bots can currently send documents up to 50 MB via `sendDocument`; generated PDFs should stay well below this limit;
 - sending documents by URL currently works only for PDF and ZIP, so MVP should upload generated PDF as multipart or reuse `telegram_file_id`;
 - Telegram Stars invoices require currency `XTR`; for Stars, `provider_token` is passed as an empty string and `prices` must contain exactly one item;
+- Bot API must receive `answerPreCheckoutQuery` within 10 seconds;
+- do not deliver credits after pre-checkout alone; wait for `successful_payment`;
 - PDF should be sent via `sendDocument`, not as a long text message;
 - webhook must return 2XX quickly to avoid Telegram retries.
 
-### 13.2. YooKassa
+### 13.2. Telegram Stars
 
-YooKassa is the primary fiat/RUB payment aggregator for MVP credit purchases.
+Telegram Stars is the Telegram-native payment channel for digital credit packages.
+
+Supported Stars UX:
+
+1. User opens `/credits`.
+2. Bot shows packages with two payment options when enabled: `Оплатить Stars` and `Оплатить RUB`.
+3. User selects Stars.
+4. Backend creates `payment_orders(provider=telegram_stars, currency=XTR)` and `telegram_star_payments(invoice_payload=...)`.
+5. Bot sends `sendInvoice`:
+   - `currency = XTR`;
+   - `provider_token = ""`;
+   - exactly one `LabeledPrice`;
+   - `payload = invoice_payload`;
+   - no shipping/name/phone/email requirements.
+6. Telegram sends `pre_checkout_query`.
+7. Backend validates order/user/amount/currency and answers `answerPreCheckoutQuery`.
+8. Telegram sends `successful_payment`.
+9. Backend persists `telegram_payment_charge_id`, marks order paid and grants credits once.
+10. Bot sends success message and current balance.
+
+When to show Stars:
+
+- default option for Telegram-native purchase of digital credits;
+- especially important for mobile Telegram users because Telegram states digital goods/services inside bots and mini apps must use Stars;
+- no receipt email collection in the invoice flow, because Stars invoices do not collect personal payment details.
+
+When to show YooKassa instead:
+
+- external web checkout outside Telegram-native digital-goods flow;
+- manual/enterprise invoice;
+- legal/accounting-approved fiat flow where Telegram platform rules are not violated.
+
+Required Telegram update handling:
+
+- `pre_checkout_query`: validate and approve/reject quickly;
+- `message.successful_payment`: final payment confirmation and credit grant;
+- duplicate `successful_payment` updates: idempotent no-op after first grant.
+
+Refunds:
+
+- use Bot API `refundStarPayment`;
+- require stored `telegram_payment_charge_id`;
+- automatic refund only for unused Stars-paid credits;
+- store refund in `payment_refunds(provider=telegram_stars, currency=XTR)`;
+- include Stars refund/revenue effects separately from YooKassa in finance reports.
+
+Stars reconciliation:
+
+- store every successful Stars charge locally;
+- optionally poll `getStarTransactions` for admin reconciliation;
+- optionally show `getMyStarBalance` in admin diagnostics;
+- never infer a user credit purchase only from bot Stars balance, because balance movements can include non-purchase transactions.
+
+Stars limitations and open accounting items:
+
+- Stars are not RUB cash at the moment of user purchase; they are platform balance/reward value.
+- `ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR` and `ECON_STARS_PAYOUT_RESERVE` must be configured before Stars becomes public.
+- Tax/accounting treatment of Stars revenue and refunds must be confirmed separately from YooKassa fiscalization.
+
+### 13.3. YooKassa
+
+YooKassa is the fiat/RUB payment aggregator for external/manual credit purchases.
 
 Supported payment UX in MVP:
 
@@ -1637,17 +1867,16 @@ Supported payment UX in MVP:
 8. Backend receives YooKassa webhook, verifies it, reconciles payment status and grants credits.
 9. Bot sends user a payment success/failure message.
 
-Why this is preferred for MVP:
+Why this remains useful:
 
 - It keeps card/payment data outside our system.
-- It works without building a Telegram Mini App.
 - It gives direct access to YooKassa payment/refund webhooks and reconciliation.
-- It avoids coupling the first paid release to Telegram Stars.
+- It supports RUB accounting/fiscalization workflows that Stars does not model as a standard RUB acquiring transaction.
+- It can be used for enterprise/custom/manual checkout flows after Telegram platform compliance review.
 
 Optional future UX:
 
 - Telegram-native invoice via BotFather/YooKassa provider, if the configured provider token and fiscal scenario are confirmed.
-- Telegram Stars for digital goods, separate from YooKassa.
 - Saved payment methods/recurrent payments only after explicit legal/accounting review.
 
 Required YooKassa webhook events:
@@ -1704,7 +1933,7 @@ Security:
 - Webhook endpoint must use HTTPS.
 - Payment success must be reconciled server-to-server, not trusted from `return_url`.
 
-### 13.3. Apify
+### 13.4. Apify
 
 Use cases:
 
@@ -1720,7 +1949,7 @@ Resilience:
 - provider error mapping;
 - usage logging.
 
-### 13.4. OpenRouter / LLM provider
+### 13.5. OpenRouter / LLM provider
 
 Use cases:
 
@@ -1738,7 +1967,7 @@ Requirements:
 - response validation;
 - usage/cost logging.
 
-### 13.5. FaceCheck
+### 13.6. FaceCheck
 
 Use cases:
 
@@ -1753,7 +1982,7 @@ Requirements:
 - do not expose raw FaceCheck response unless needed;
 - log only necessary metadata.
 
-### 13.6. Object storage
+### 13.7. Object storage
 
 Use cases:
 
@@ -1893,7 +2122,7 @@ Photo search:
 
 Billing model:
 
-- Users buy prepaid credit packages in RUB through YooKassa.
+- Users buy prepaid credit packages through Telegram Stars (`XTR`) and, where allowed, RUB through YooKassa.
 - Internal credits are consumed by analysis jobs and post-report chat.
 - Credits are stored as integer `credit_units`; `1 credit = 100 credit_units`.
 - Purchased but unused credits are an internal liability until consumed or expired/refunded.
@@ -1911,32 +2140,56 @@ Recommended MVP mode costs:
 - PDF/Markdown export: included in completed analysis.
 - Re-analysis of the same profile: full price by default, because provider costs repeat.
 
-### 16.2. YooKassa payment model
+### 16.2. Payment package catalog
 
-MVP payment type:
+MVP payment types:
 
-- one-time credit package purchase;
-- `capture = true`;
-- currency `RUB`;
-- confirmation scenario `redirect`;
+- Telegram Stars one-time credit package purchase;
+- YooKassa one-time RUB credit package purchase where allowed;
+- YooKassa `capture = true`;
+- YooKassa currency `RUB`;
+- YooKassa confirmation scenario `redirect`;
+- Stars currency `XTR`;
 - no recurring/autopay in MVP;
-- no two-stage capture in MVP, but DB supports `waiting_for_capture` for future.
+- no two-stage capture in MVP, but DB supports `waiting_for_capture` for future YooKassa flows;
+- Stars subscriptions are not in MVP.
 
-Credit packages v0.1:
+Canonical credit packages v0.2:
 
-| Package | Credits | Price RUB | Gross RUB / credit | Target user |
-| --- | ---: | ---: | ---: | --- |
-| Trial | 1 | 0 | 0 | Manual/admin grant only |
-| Start | 3 | 690 | 230 | First paid users |
-| Pro | 10 | 1,990 | 199 | Regular users |
-| Agency | 30 | 5,490 | 183 | Small teams |
-| Scale | 100 | 15,900 | 159 | Agencies / negotiated |
+| Package | Credits | Target user |
+| --- | ---: | --- |
+| Trial | 1 | Manual/admin grant only |
+| Start | 3 | First paid users |
+| Pro | 10 | Regular users |
+| Agency | 30 | Small teams |
+| Scale | 100 | Agencies / negotiated |
+
+YooKassa RUB prices v0.2:
+
+| Package | Price RUB | Gross RUB / credit | Public status |
+| --- | ---: | ---: | --- |
+| Start | 690 | 230 | Public if `audit-economics` passes |
+| Pro | 1,990 | 199 | Hidden/reprice until p75 cost is proven |
+| Agency | 5,490 | 183 | Hidden/reprice until p75 cost is proven |
+| Scale | 15,900 | 159 | Hidden/negotiated |
+
+Telegram Stars prices v0.2:
+
+| Package | Price XTR | XTR / credit | Public status |
+| --- | ---: | ---: | --- |
+| Start | 690 | 230 | Public if Stars payout floor is confirmed |
+| Pro | 2,300 | 230 | Public only if `audit-economics` passes |
+| Agency | 6,900 | 230 | Public only if `audit-economics` passes |
+| Scale | 23,000 | 230 | Hidden/negotiated; check Bot API amount limits before enabling |
+
+The initial Stars catalog deliberately avoids bulk discounts until real Stars payout/reward settlement and tax treatment are confirmed.
 
 Rules:
 
 - Packages are configuration/data, not hard-coded.
 - The cheapest public package must not push gross margin below target or below the strict provider-cost multiple.
 - Public availability of Pro/Agency/Scale must be feature-gated until measured provider costs pass `audit-economics`.
+- Public Stars prices must not create a weaker net RUB/credit floor than the RUB catalog.
 - Enterprise/custom packages may use invoice/manual contract instead of bot checkout.
 - Promotional grants must be marked as `grant`, not `purchase`, for clean financial reporting.
 
@@ -1966,6 +2219,39 @@ r_yk_effective = 4.56%
 yookassa_fee = 90.74 RUB
 net_after_yookassa = 1,899.26 RUB
 ```
+
+Telegram Stars economic assumptions:
+
+- Stars are accounted separately from RUB cash payments.
+- `ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR = 0.01` planning floor until actual Telegram reward/withdrawal economics are confirmed.
+- `ECON_STARS_PAYOUT_RESERVE = 20%` default reserve for payout spread, withdrawal friction, volatility, disputes and accounting uncertainty.
+- `ECON_USD_TO_RUB_BUFFER = 90` converts Stars payout floor into conservative RUB-equivalent planning value.
+
+Stars RUB-equivalent net formula for guardrails:
+
+```text
+stars_gross_rub_equivalent =
+  stars_amount
+  * ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR
+  * ECON_USD_TO_RUB_BUFFER
+
+stars_net_rub_equivalent =
+  stars_gross_rub_equivalent
+  * (1 - ECON_STARS_PAYOUT_RESERVE)
+```
+
+Example for Start package:
+
+```text
+stars_amount = 690 XTR
+floor = 0.01 USD/XTR
+FX buffer = 90 RUB/USD
+reserve = 20%
+stars_net_rub_equivalent = 690 * 0.01 * 90 * 0.80 = 496.80 RUB
+net_rub_equivalent_per_credit = 496.80 / 3 = 165.60 RUB
+```
+
+At `C_standard = 55 RUB`, this gives `165.60 / 55 = 3.01x`, barely passing the strict guardrail. Therefore Stars prices must not be discounted below `230 XTR/credit` unless provider p75 cost decreases or the payout floor improves.
 
 ### 16.3. Variable provider cost model
 
@@ -2034,11 +2320,22 @@ Strict no-loss guardrail copied from the proven economics pattern in `/Users/Bay
 ```text
 ECON_USD_TO_RUB_BUFFER = 90
 ECON_PAYMENT_FEE_RESERVE = 20%
+ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR = 0.01
+ECON_STARS_PAYOUT_RESERVE = 20%
 ECON_TARGET_REVENUE_MULTIPLE = 3
 
-P_credit_guardrail_net_floor =
+P_credit_card_net_floor =
   min(public_package_price_rub / public_package_credits)
   * (1 - ECON_PAYMENT_FEE_RESERVE)
+
+P_credit_stars_net_floor =
+  min(public_package_stars / public_package_credits)
+  * ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR
+  * ECON_USD_TO_RUB_BUFFER
+  * (1 - ECON_STARS_PAYOUT_RESERVE)
+
+P_credit_guardrail_net_floor =
+  min(P_credit_card_net_floor, P_credit_stars_net_floor)
 
 net_revenue_for_operation =
   charged_credits * P_credit_guardrail_net_floor
@@ -2053,9 +2350,10 @@ operation_is_safe =
 Meaning:
 
 - Exact payment commission can be 4.56% in the current planning model, but pricing must survive a 20% payment/refund/tax/rounding reserve.
+- Stars payout is not treated as RUB cash until converted/reconciled; the model uses a conservative RUB-equivalent floor.
 - Provider cost must be measured on p75 or worst-case capped usage, not on an optimistic average.
 - Free/admin/referral credits are acquisition spend and must not be mixed with paid-unit revenue.
-- If one public package has a very low RUB/credit price, it becomes the revenue floor for the whole economy.
+- If one public package or payment channel has a very low net RUB-equivalent/credit price, it becomes the revenue floor for the whole economy.
 
 Credit-cost formula for implementation:
 
@@ -2116,11 +2414,19 @@ Strict guardrail check with `C_standard = 55 RUB`, `ECON_PAYMENT_FEE_RESERVE = 2
 | Agency | 183.00 | 146.40 | 146.40 | 48.80 | Fail / reprice or reduce cost |
 | Scale | 159.00 | 127.20 | 127.20 | 42.40 | Fail / keep hidden |
 
+Stars guardrail check with `230 XTR/credit`, `ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR = 0.01`, `ECON_USD_TO_RUB_BUFFER = 90`, `ECON_STARS_PAYOUT_RESERVE = 20%`:
+
+| Package | XTR / credit | Guardrail net RUB-equivalent / credit | Max provider cost for 3x | Status at 55 RUB |
+| --- | ---: | ---: | ---: | --- |
+| Start | 230 | 165.60 | 55.20 | Pass, but tight |
+| Pro | 230 | 165.60 | 55.20 | Pass, but tight |
+| Agency | 230 | 165.60 | 55.20 | Pass, but tight |
+
 Verdict for current package catalog:
 
 - With `C_standard = 55 RUB`, the current packages are not loss-making in the narrow variable-cost sense because 55 RUB is below the conservative net per credit even for Scale.
 - They are not safe for public scaling under the stricter `3x` guardrail: Pro/Agency/Scale are too discounted unless real `C_standard p75` is reduced below their ceilings.
-- Public launch recommendation: show Start first; keep Pro/Agency behind admin/feature flag until real p75 cost is measured or prices are raised; keep Scale hidden/negotiated until `C_standard p75 <= 42 RUB` or package price is repriced.
+- Public launch recommendation: show Stars Start first, optionally Stars Pro/Agency at `230 XTR/credit` after payout confirmation; keep discounted YooKassa Pro/Agency behind admin/feature flag until real p75 cost is measured or prices are raised; keep Scale hidden/negotiated until `C_standard p75 <= 42 RUB` or package price is repriced.
 - If keeping `C_standard = 55 RUB`, minimum package prices under the `3x` guardrail are approximately: Start `619 RUB`, Pro `2,063 RUB`, Agency `6,188 RUB`, Scale `20,625 RUB`. Round upward, not downward.
 
 These numbers are planning assumptions. Actual provider costs must be recalculated from real API usage before public pricing is finalized and then checked continuously in CI.
@@ -2193,21 +2499,45 @@ Operational targets for beta:
 
 ### 16.7. Payment and refund flow
 
-Purchase flow:
+Stars purchase flow:
 
 1. User selects a credit package.
-2. If receipts require email and user has no email, bot asks for email.
-3. Backend creates `payment_order`.
-4. Backend creates YooKassa payment.
-5. Bot sends payment button.
-6. YooKassa webhook `payment.succeeded` is received.
-7. Backend fetches current payment status from YooKassa.
-8. Backend marks order `paid`.
-9. Backend creates `credit_transaction(type=purchase)`.
-10. Backend increments user credit balance.
-11. Bot notifies user.
+2. User chooses `Оплатить Stars`.
+3. Backend creates `payment_order(provider=telegram_stars, currency=XTR)`.
+4. Backend sends Telegram `sendInvoice`.
+5. Telegram sends `pre_checkout_query`.
+6. Backend validates payload/order/amount/currency and answers `answerPreCheckoutQuery`.
+7. Telegram sends `successful_payment`.
+8. Backend validates `telegram_payment_charge_id` uniqueness.
+9. Backend marks order `paid`.
+10. Backend creates `credit_transaction(type=purchase, provider=telegram_stars)`.
+11. Backend increments user credit balance.
+12. Bot notifies user.
 
-Refund flow:
+YooKassa purchase flow:
+
+1. User selects a credit package.
+2. User chooses `Оплатить RUB`, if this channel is enabled for the current policy.
+3. If receipts require email and user has no email, bot asks for email.
+4. Backend creates `payment_order`.
+5. Backend creates YooKassa payment.
+6. Bot sends payment button.
+7. YooKassa webhook `payment.succeeded` is received.
+8. Backend fetches current payment status from YooKassa.
+9. Backend marks order `paid`.
+10. Backend creates `credit_transaction(type=purchase)`.
+11. Backend increments user credit balance.
+12. Bot notifies user.
+
+Stars refund flow:
+
+1. Refund request can be automatic only for fully unused Stars-paid credits.
+2. Backend calls `refundStarPayment`.
+3. Backend writes `payment_refunds(provider=telegram_stars)`.
+4. Backend writes `credit_transactions(type=refund)` and adjusts credit balance.
+5. Finance export records Stars refund separately from YooKassa refund.
+
+YooKassa refund flow:
 
 1. Refund request can be automatic only for fully unused purchased credits.
 2. If credits are partially used, refund is manual/admin and may be partial.
@@ -2225,11 +2555,14 @@ Chargeback/dispute policy:
 
 For product analytics:
 
-- `cash_collected`: successful YooKassa payments.
+- `cash_collected`: successful YooKassa RUB payments.
+- `stars_collected`: successful Telegram Stars payments in XTR.
+- `stars_net_rub_equivalent`: conservative RUB-equivalent planning value of Stars proceeds.
 - `net_cash_after_yookassa`: cash after payment/receipt commissions.
 - `deferred_credit_liability`: unused paid credit value.
 - `recognized_revenue`: paid credits consumed by completed analyses/chat.
 - `refunds`: successful YooKassa refunds.
+- `stars_refunds`: successful Telegram Stars refunds.
 - `refund_loss`: non-returned payment commission and provider costs already spent.
 
 Accounting note:
@@ -2257,7 +2590,10 @@ Global:
 Admin/finance exports:
 
 - payments by day/package/status;
+- payments by provider/currency;
 - YooKassa fees by day;
+- Stars collected/refunded by day;
+- Stars conservative RUB-equivalent value by day;
 - refunds by day/reason;
 - credit liability balance;
 - recognized revenue by mode;
@@ -2275,13 +2611,16 @@ Admin MVP:
 - view failed jobs;
 - view payment orders;
 - view YooKassa payment/refund statuses;
+- view Telegram Stars payment/refund statuses;
 - manually reconcile payment by provider payment ID;
+- manually reconcile Telegram Stars by `telegram_payment_charge_id`;
 - retry failed job;
 - cancel job;
 - grant credits;
 - revoke credits;
 - create manual credit adjustment with reason;
 - initiate refund for unused purchased credits;
+- initiate Telegram Stars refund for unused Stars-paid credits;
 - inspect user history;
 - export usage CSV;
 - export finance CSV;
@@ -2325,9 +2664,11 @@ Business:
 - analyses/day by mode;
 - conversion photo->analysis;
 - conversion package_view->payment_created->payment_succeeded;
+- conversion package_view->stars_invoice_sent->successful_payment;
 - credits purchased/spent;
 - credit liability balance;
 - refunds count and amount;
+- Stars collected/refunded;
 - active users.
 
 Technical:
@@ -2341,6 +2682,8 @@ Technical:
 - PDF generation failures;
 - Telegram send failures.
 - YooKassa webhook latency/failures;
+- Telegram Stars pre-checkout failures;
+- Telegram Stars successful-payment processing failures;
 - payment reconciliation failures.
 
 Cost:
@@ -2351,6 +2694,7 @@ Cost:
 - storage size;
 - cost per completed report;
 - YooKassa fees;
+- Stars RUB-equivalent revenue floor;
 - gross margin by mode/package.
 
 ### 18.3. Alerts
@@ -2446,8 +2790,10 @@ Required:
 - DigitalCircle scoring;
 - credit reservation/capture/refund;
 - YooKassa fee calculation;
+- Telegram Stars pricing and RUB-equivalent guardrail calculation;
 - economics formulas: net RUB/credit floor, required credit units, provider-cost multiple;
 - payment order state transitions;
+- Telegram invoice payload validation;
 - payment webhook idempotency;
 - error mapping.
 
@@ -2460,6 +2806,11 @@ Required:
 - Apify mocked response -> profile snapshot;
 - LLM mocked report -> parsed sections;
 - FaceCheck mocked response -> matches;
+- Telegram Stars mocked invoice creation -> order pending;
+- Telegram Stars mocked `pre_checkout_query` -> approved only for matching pending order;
+- Telegram Stars mocked `successful_payment` -> credits granted exactly once;
+- Telegram Stars duplicate `successful_payment` -> no duplicate credits;
+- Telegram Stars mocked refund -> credits adjusted;
 - YooKassa mocked payment creation -> order pending;
 - YooKassa mocked `payment.succeeded` webhook -> credits granted exactly once;
 - YooKassa duplicate webhook -> no duplicate credits;
@@ -2606,6 +2957,10 @@ Deliverables:
 
 - credit ledger;
 - admin grants;
+- Telegram Stars package catalog;
+- Telegram Stars invoice creation;
+- Telegram Stars pre-checkout handling;
+- Telegram Stars successful-payment reconciliation;
 - YooKassa payment package catalog;
 - YooKassa payment creation;
 - YooKassa webhook reconciliation;
@@ -2620,11 +2975,14 @@ Deliverables:
 Acceptance:
 
 - free/pro/admin flows are enforceable;
+- user can buy credits through Telegram Stars in test mode;
 - user can buy credits through YooKassa in test mode;
+- `successful_payment` grants Stars-paid credits once;
 - `payment.succeeded` grants credits once;
+- duplicate Stars successful-payment update does not duplicate credits;
 - duplicate payment webhook does not duplicate credits;
 - `audit-economics` passes for enabled public packages and modes;
-- finance export shows gross payments, YooKassa fees, provider costs and margin.
+- finance export shows Stars, RUB payments, YooKassa fees, provider costs and margin.
 
 ### Phase 7 - Hardening
 
@@ -2778,7 +3136,7 @@ These questions do not block foundation work:
 
 - final public brand name;
 - final launch pricing after real provider-cost measurement;
-- Telegram Stars as optional secondary channel;
+- final Telegram Stars payout/accounting assumptions;
 - Mini App design;
 - white-label PDF availability;
 - long-term report retention;
@@ -2799,6 +3157,10 @@ Before launch:
 
 - Bot token stored in secret manager.
 - Webhook secret enabled.
+- Telegram Stars test environment/payment flow verified.
+- Telegram Stars production invoice flow verified with small package.
+- Telegram Stars refund flow tested with `refundStarPayment`.
+- Telegram Stars payout/reward assumptions confirmed or conservative floor approved.
 - YooKassa shop ID and secret key stored in secret manager.
 - YooKassa test payments verified end-to-end.
 - YooKassa production webhook configured and tested.
@@ -2837,12 +3199,14 @@ Before launch:
 8. Какие страны/юрисдикции являются целевыми для privacy/compliance?
 9. Нужен ли ручной review для risky modes?
 10. Какие provider limits, p75/p95 себестоимость и бюджет на один отчет считаются допустимыми?
-11. Какая фактическая комиссия ЮKassa по подписанному договору и выбранному способу чеков?
-12. Используем ли "Чеки от YooKassa" или свою/стороннюю онлайн-кассу?
-13. Какие fiscal receipt item/tax/payment subject/payment mode codes использовать для credit packages?
-14. Какой срок действия у купленных кредитов: бессрочно, 6 месяцев, 12 месяцев?
-15. Какая политика возврата: только unused credits, частично unused, goodwill refunds?
-16. Нужно ли продавать подписки/автоплатежи позже или только prepaid packages?
+11. Какой фактический Stars payout/reward floor использовать вместо стартового `0.01 USD/XTR`?
+12. Какая налоговая/бухгалтерская модель для Stars: момент признания, документы, reward conversion, refunds?
+13. Какая фактическая комиссия ЮKassa по подписанному договору и выбранному способу чеков?
+14. Используем ли "Чеки от YooKassa" или свою/стороннюю онлайн-кассу?
+15. Какие fiscal receipt item/tax/payment subject/payment mode codes использовать для credit packages?
+16. Какой срок действия у купленных кредитов: бессрочно, 6 месяцев, 12 месяцев?
+17. Какая политика возврата: только unused credits, частично unused, goodwill refunds?
+18. Нужно ли продавать Stars-subscriptions, fiat subscriptions/autopay позже или только prepaid packages?
 
 ## 25. Sources and constraints
 
@@ -2858,6 +3222,11 @@ Telegram Bot API constraints used in this spec:
 - bots can currently send documents up to 50 MB via `sendDocument`;
 - generated PDFs should be sent via `sendDocument`;
 - Telegram Stars can be used through invoice/payment flows with currency `XTR`.
+- For digital goods/services sold inside Telegram bots/mini apps, Telegram documents Stars as the required payment currency.
+- Stars invoices use `provider_token = ""`, `currency = XTR`, and exactly one price item.
+- Stars purchase flow requires `pre_checkout_query` approval, then `successful_payment`; credits must be delivered only after `successful_payment`.
+- Stars refunds use `refundStarPayment` and require `telegram_payment_charge_id`.
+- `getMyStarBalance` and `getStarTransactions` can support admin reconciliation, but local successful-payment records remain the credit-grant source of truth.
 
 YooKassa constraints used in this spec:
 

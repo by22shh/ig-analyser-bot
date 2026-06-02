@@ -10,6 +10,7 @@
 
 - [SPECIFICATION.md](./SPECIFICATION.md) - основная спецификация продукта, архитектуры, UX, данных, интеграций и плана разработки.
 - [docs/source-project-analysis.md](./docs/source-project-analysis.md) - детальный разбор текущего React/Vite-сайта, на котором основана спецификация.
+- [docs/financial-model.md](./docs/financial-model.md) - финансовая модель: YooKassa, credit packages, unit economics, margin targets, refunds и break-even.
 
 ## Предлагаемый стек
 
@@ -21,6 +22,7 @@
 - Apify для сбора публичных данных Instagram.
 - OpenRouter-compatible LLM API для vision/reasoning/chat.
 - FaceCheck через серверный адаптер для поиска Instagram по фото.
+- YooKassa как основной платежный агрегатор для RUB-покупок credit packages.
 
 ## Принципиальные решения
 

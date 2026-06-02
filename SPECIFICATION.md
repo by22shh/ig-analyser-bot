@@ -1,6 +1,6 @@
 # Спецификация Telegram-бота ZRETI
 
-Версия: 0.2.
+Версия: 0.3.
 
 Дата: 2026-06-03.
 
@@ -34,10 +34,11 @@
 4. Второй режим после standard: `influencer`.
 5. `hr` включать только за feature flag и с отдельным disclaimer.
 6. `osint_compliance` не показывать публично в MVP; доступ только admin/compliance role и только после отдельного подтверждения lawful basis.
-7. Billing в ранней разработке: credit ledger + admin grants. Telegram Stars/платежи добавлять после стабильного анализа.
+7. Billing в ранней разработке: credit ledger + admin grants; затем ЮKassa как основной платежный агрегатор для RUB-покупок credit packages. Telegram Stars оставить отдельным optional-каналом, не основным.
 8. Провайдеры сначала подключаются через интерфейсы и моки; реальные Apify/OpenRouter/FaceCheck включаются после прохождения локальных integration tests.
 9. Историю сайта не мигрировать в MVP: бот начинает со своей БД.
 10. PDF является обязательным для MVP, но Markdown export можно сделать раньше как fallback для первых тестов.
+11. Финансовая модель MVP: prepaid credits/packages, не постоплата. Рекуррентные подписки и автоплатежи не входят в первый платежный релиз.
 
 Стартовый engineering cut:
 
@@ -574,8 +575,21 @@ Backend:
 - credits;
 - plans;
 - transactions;
-- Telegram Stars/payment provider;
+- YooKassa orders/payments/refunds;
+- Telegram Stars/payment provider as optional future channel;
 - admin grants.
+
+`payments`
+
+- YooKassa API client;
+- payment package catalog;
+- order creation;
+- payment confirmation URL flow;
+- YooKassa webhook endpoint;
+- payment status reconciliation;
+- refunds;
+- fiscal receipt data preparation;
+- payment audit logs.
 
 `analysis`
 
@@ -651,8 +665,10 @@ MVP production:
 
 1. Web/API process:
    - receives Telegram webhook;
+   - receives YooKassa webhooks;
    - handles commands/callbacks;
    - enqueues jobs;
+   - creates YooKassa payments and returns confirmation links;
    - serves report files if needed.
 2. Worker process:
    - executes Apify/FaceCheck/OpenRouter jobs;
@@ -1094,12 +1110,18 @@ Roles:
 
 - `id uuid pk`;
 - `user_id uuid unique fk`;
-- `balance int not null default 0`;
-- `reserved int not null default 0`;
+- `balance_units int not null default 0`;
+- `reserved_units int not null default 0`;
 - `plan text`;
 - `plan_expires_at timestamptz`;
 - `created_at`;
 - `updated_at`.
+
+Credit precision:
+
+- Store credits in integer minor units, not floats.
+- `1 credit = 100 credit_units`.
+- Example: standard analysis cost `100`, HR cost `200`, chat message cost `5`.
 
 ### 11.4. credit_transactions
 
@@ -1107,14 +1129,125 @@ Roles:
 - `user_id uuid fk`;
 - `analysis_job_id uuid nullable`;
 - `type text`: `grant`, `purchase`, `reserve`, `capture`, `refund`, `admin_adjustment`;
-- `amount int`;
-- `balance_after int`;
+- `amount_units int`;
+- `balance_after_units int`;
 - `provider text`;
 - `provider_payment_id text`;
 - `metadata jsonb`;
 - `created_at`.
 
-### 11.5. analysis_jobs
+### 11.5. credit_packages
+
+- `id uuid pk`;
+- `code text unique`;
+- `title text`;
+- `description text`;
+- `credits_units int`;
+- `price_minor int`;
+- `currency text default 'RUB'`;
+- `is_active boolean`;
+- `sort_order int`;
+- `yookassa_description text`;
+- `receipt_subject text`;
+- `receipt_vat_code int nullable`;
+- `metadata jsonb`;
+- `created_at`;
+- `updated_at`.
+
+### 11.6. payment_orders
+
+- `id uuid pk`;
+- `user_id uuid fk`;
+- `package_id uuid fk`;
+- `status text`: `draft`, `pending_payment`, `paid`, `canceled`, `expired`, `refunded`, `partially_refunded`;
+- `amount_minor int`;
+- `currency text`;
+- `credits_units int`;
+- `provider text default 'yookassa'`;
+- `provider_payment_id text unique nullable`;
+- `confirmation_url text nullable`;
+- `idempotency_key text unique`;
+- `user_email text nullable`;
+- `telegram_chat_id bigint`;
+- `telegram_invoice_message_id bigint nullable`;
+- `paid_at timestamptz nullable`;
+- `expires_at timestamptz nullable`;
+- `created_at`;
+- `updated_at`.
+
+### 11.7. payment_events
+
+- `id uuid pk`;
+- `provider text`;
+- `event_type text`;
+- `provider_object_id text`;
+- `payment_order_id uuid nullable fk`;
+- `payload jsonb`;
+- `received_at timestamptz`;
+- `processed_at timestamptz nullable`;
+- `processing_status text`: `received`, `processed`, `ignored`, `failed`;
+- `error_code text nullable`;
+
+Unique indexes:
+
+- `(provider, event_type, provider_object_id)`.
+
+### 11.8. yookassa_payments
+
+- `id uuid pk`;
+- `payment_order_id uuid unique fk`;
+- `yookassa_payment_id text unique`;
+- `status text`;
+- `paid boolean`;
+- `amount_minor int`;
+- `currency text`;
+- `income_amount_minor int nullable`;
+- `payment_method_type text nullable`;
+- `refundable boolean`;
+- `test boolean`;
+- `metadata jsonb`;
+- `created_at_provider timestamptz nullable`;
+- `captured_at timestamptz nullable`;
+- `expires_at timestamptz nullable`;
+- `raw jsonb nullable`;
+- `created_at`;
+- `updated_at`.
+
+### 11.9. payment_refunds
+
+- `id uuid pk`;
+- `payment_order_id uuid fk`;
+- `provider text default 'yookassa'`;
+- `provider_refund_id text unique nullable`;
+- `status text`: `pending`, `succeeded`, `canceled`, `failed`;
+- `amount_minor int`;
+- `currency text`;
+- `reason text`;
+- `idempotency_key text unique`;
+- `admin_user_id uuid nullable`;
+- `raw jsonb nullable`;
+- `created_at`;
+- `updated_at`;
+
+### 11.10. fiscal_receipts
+
+- `id uuid pk`;
+- `payment_order_id uuid fk`;
+- `provider text default 'yookassa'`;
+- `type text`: `payment`, `refund`;
+- `status text`: `pending`, `succeeded`, `canceled`, `failed`, `unknown`;
+- `provider_receipt_id text nullable`;
+- `customer_email text`;
+- `amount_minor int`;
+- `currency text`;
+- `tax_system_code int nullable`;
+- `vat_code int nullable`;
+- `payload jsonb`;
+- `raw jsonb nullable`;
+- `created_at`;
+- `updated_at`.
+
+### 11.11. analysis_jobs
 
 - `id uuid pk`;
 - `user_id uuid fk`;
@@ -1130,7 +1263,7 @@ Roles:
 - `progress_percent numeric`;
 - `telegram_chat_id bigint`;
 - `telegram_progress_message_id bigint nullable`;
-- `cost_credits int`;
+- `cost_credit_units int`;
 - `reserved_transaction_id uuid`;
 - `error_code text`;
 - `error_message text`;
@@ -1147,7 +1280,7 @@ Indexes:
 - `(target_username)`;
 - `(idempotency_key)`.
 
-### 11.6. instagram_profile_snapshots
+### 11.12. instagram_profile_snapshots
 
 - `id uuid pk`;
 - `analysis_job_id uuid unique fk`;
@@ -1166,7 +1299,7 @@ Indexes:
 - `raw_debug jsonb nullable`;
 - `created_at`.
 
-### 11.7. instagram_post_snapshots
+### 11.13. instagram_post_snapshots
 
 - `id uuid pk`;
 - `profile_snapshot_id uuid fk`;
@@ -1197,7 +1330,7 @@ Indexes:
 - `(post_id)`;
 - `(timestamp desc)`.
 
-### 11.8. vision_analysis_items
+### 11.14. vision_analysis_items
 
 - `id uuid pk`;
 - `analysis_job_id uuid fk`;
@@ -1210,7 +1343,7 @@ Indexes:
 - `error_code text`;
 - `created_at`.
 
-### 11.9. reports
+### 11.15. reports
 
 - `id uuid pk`;
 - `analysis_job_id uuid unique fk`;
@@ -1226,7 +1359,7 @@ Indexes:
 - `updated_at`;
 - `expires_at`.
 
-### 11.10. report_sections
+### 11.16. report_sections
 
 - `id uuid pk`;
 - `report_id uuid fk`;
@@ -1241,7 +1374,7 @@ Indexes:
 
 - `(report_id, position)`.
 
-### 11.11. report_artifacts
+### 11.17. report_artifacts
 
 - `id uuid pk`;
 - `report_id uuid fk`;
@@ -1253,7 +1386,7 @@ Indexes:
 - `size_bytes int`;
 - `created_at`.
 
-### 11.12. photo_search_jobs
+### 11.18. photo_search_jobs
 
 - `id uuid pk`;
 - `user_id uuid fk`;
@@ -1266,7 +1399,7 @@ Indexes:
 - `created_at`;
 - `finished_at`.
 
-### 11.13. photo_search_matches
+### 11.19. photo_search_matches
 
 - `id uuid pk`;
 - `photo_search_job_id uuid fk`;
@@ -1278,7 +1411,7 @@ Indexes:
 - `raw_score numeric`;
 - `created_at`.
 
-### 11.14. report_chat_sessions
+### 11.20. report_chat_sessions
 
 - `id uuid pk`;
 - `report_id uuid fk`;
@@ -1287,7 +1420,7 @@ Indexes:
 - `created_at`;
 - `updated_at`.
 
-### 11.15. report_chat_messages
+### 11.21. report_chat_messages
 
 - `id uuid pk`;
 - `session_id uuid fk`;
@@ -1298,7 +1431,7 @@ Indexes:
 - `tokens_out int nullable`;
 - `created_at`.
 
-### 11.16. api_usage_events
+### 11.22. api_usage_events
 
 - `id uuid pk`;
 - `user_id uuid nullable`;
@@ -1314,7 +1447,7 @@ Indexes:
 - `error_code text`;
 - `created_at`.
 
-### 11.17. audit_logs
+### 11.23. audit_logs
 
 - `id uuid pk`;
 - `actor_user_id uuid nullable`;
@@ -1351,7 +1484,7 @@ type StartAnalysisResult = {
   jobId: string;
   status: "queued";
   estimatedDurationSec: number;
-  costCredits: number;
+  costCreditUnits: number;
 };
 ```
 
@@ -1391,6 +1524,62 @@ type PhotoSearchResult = {
 };
 ```
 
+### 12.4. PaymentService.createYooKassaOrder
+
+```ts
+type CreateYooKassaOrderInput = {
+  userId: string;
+  chatId: number;
+  packageCode: string;
+  userEmail?: string;
+  locale: "ru" | "en";
+  idempotencyKey: string;
+};
+
+type CreateYooKassaOrderResult = {
+  orderId: string;
+  providerPaymentId: string;
+  status: "pending_payment";
+  amountMinor: number;
+  currency: "RUB";
+  creditsUnits: number;
+  confirmationUrl: string;
+};
+```
+
+Rules:
+
+- create internal order first, then call YooKassa;
+- use the internal order ID/idempotency key as YooKassa `Idempotence-Key`;
+- persist provider payment ID and confirmation URL;
+- do not grant credits until `payment.succeeded` is reconciled.
+
+### 12.5. PaymentService.handleYooKassaWebhook
+
+```ts
+type YooKassaWebhookInput = {
+  event: "payment.succeeded" | "payment.canceled" | "refund.succeeded" | string;
+  object: unknown;
+  headers: Record<string, string>;
+  remoteIp?: string;
+};
+
+type YooKassaWebhookResult = {
+  accepted: boolean;
+  processed: boolean;
+  orderId?: string;
+};
+```
+
+Rules:
+
+- respond HTTP 200 after accepting a valid notification;
+- fetch current payment/refund from YooKassa before mutating credits;
+- repeated notifications must be safe;
+- `payment.succeeded` grants credits exactly once;
+- `payment.canceled` does not grant credits;
+- `refund.succeeded` writes refund transaction and adjusts credits according to refund policy.
+
 ## 13. External integrations
 
 ### 13.1. Telegram Bot API
@@ -1406,7 +1595,7 @@ Use:
 - `getFile`;
 - `sendDocument`;
 - `sendPhoto` only for small previews;
-- `sendInvoice` if using Telegram Stars/payments.
+- `sendInvoice` only if Telegram Stars or Telegram-native YooKassa provider flow is enabled later.
 
 Important constraints:
 
@@ -1420,7 +1609,100 @@ Important constraints:
 - PDF should be sent via `sendDocument`, not as a long text message;
 - webhook must return 2XX quickly to avoid Telegram retries.
 
-### 13.2. Apify
+### 13.2. YooKassa
+
+YooKassa is the primary fiat/RUB payment aggregator for MVP credit purchases.
+
+Supported payment UX in MVP:
+
+1. User opens `/credits`.
+2. Bot shows credit packages.
+3. User selects a package.
+4. Backend creates an internal `payment_orders` record.
+5. Backend creates a YooKassa payment via API with:
+   - HTTP Basic Auth: `shop_id:secret_key`;
+   - `Idempotence-Key`;
+   - `amount.value`;
+   - `amount.currency = RUB`;
+   - `capture = true` for one-stage payment;
+   - `confirmation.type = redirect`;
+   - `confirmation.return_url`;
+   - `description`;
+   - `metadata.order_id`, `metadata.user_id`, `metadata.package_id`;
+   - `receipt` if fiscalization through YooKassa is enabled.
+6. Backend sends Telegram message with inline button `Оплатить` pointing to YooKassa `confirmation_url`.
+7. YooKassa redirects user after payment to `return_url`; this page may simply tell the user to return to Telegram.
+8. Backend receives YooKassa webhook, verifies it, reconciles payment status and grants credits.
+9. Bot sends user a payment success/failure message.
+
+Why this is preferred for MVP:
+
+- It keeps card/payment data outside our system.
+- It works without building a Telegram Mini App.
+- It gives direct access to YooKassa payment/refund webhooks and reconciliation.
+- It avoids coupling the first paid release to Telegram Stars.
+
+Optional future UX:
+
+- Telegram-native invoice via BotFather/YooKassa provider, if the configured provider token and fiscal scenario are confirmed.
+- Telegram Stars for digital goods, separate from YooKassa.
+- Saved payment methods/recurrent payments only after explicit legal/accounting review.
+
+Required YooKassa webhook events:
+
+- `payment.succeeded`;
+- `payment.canceled`;
+- `refund.succeeded`.
+
+Webhook handling:
+
+- endpoint: `POST /webhooks/yookassa`;
+- answer HTTP 200 quickly after validation/enqueue;
+- use idempotent processing by YooKassa object ID and event type;
+- verify authenticity by checking the current payment/refund status through YooKassa API and/or allowlisting YooKassa IP ranges;
+- never grant credits solely from an unchecked inbound JSON body;
+- store raw webhook payload in `payment_events` with secret-safe redaction;
+- retry-safe: repeated webhooks must not grant credits twice.
+
+Payment statuses:
+
+- `pending`: payment created, user has not finished confirmation;
+- `succeeded`: payment finished, grant credits once;
+- `canceled`: payment failed/expired/canceled, do not grant credits;
+- `waiting_for_capture`: not expected in one-stage MVP, but must be represented in schema for future two-stage payments.
+
+Refunds:
+
+- refunds are possible only for successful payments;
+- refund can be full or partial if the payment method supports it;
+- refund idempotency is required;
+- automatic refund policy applies only to unused credits;
+- if credits were already consumed, refund becomes manual support/admin flow;
+- YooKassa payment commission for the successful payment is not returned on refund, so refund losses must be included in finance reporting.
+
+Fiscalization / receipts:
+
+- If "Чеки от YooKassa" or another online-cashbox solution is enabled, the payment creation request must include receipt data.
+- The bot must collect user email before paid purchase if receipt delivery requires email.
+- Credit packages should be treated as digital service/prepayment packages; final tax/payment subject codes must be confirmed with accountant/legal counsel.
+- Store receipt status and YooKassa receipt IDs if available.
+
+Idempotency:
+
+- internal order ID generated before calling YooKassa;
+- YooKassa `Idempotence-Key = payment_order.id` or a deterministic key per payment attempt;
+- separate idempotency key for refund attempts;
+- unique DB constraints on `provider_payment_id`, `provider_refund_id`, and `(provider_event_id/event_type)` where available.
+
+Security:
+
+- `YOOKASSA_SECRET_KEY` must never appear in logs.
+- Admins cannot view full payment credentials.
+- Store only payment metadata, not card data.
+- Webhook endpoint must use HTTPS.
+- Payment success must be reconciled server-to-server, not trusted from `return_url`.
+
+### 13.3. Apify
 
 Use cases:
 
@@ -1436,7 +1718,7 @@ Resilience:
 - provider error mapping;
 - usage logging.
 
-### 13.3. OpenRouter / LLM provider
+### 13.4. OpenRouter / LLM provider
 
 Use cases:
 
@@ -1454,7 +1736,7 @@ Requirements:
 - response validation;
 - usage/cost logging.
 
-### 13.4. FaceCheck
+### 13.5. FaceCheck
 
 Use cases:
 
@@ -1469,7 +1751,7 @@ Requirements:
 - do not expose raw FaceCheck response unless needed;
 - log only necessary metadata.
 
-### 13.5. Object storage
+### 13.6. Object storage
 
 Use cases:
 
@@ -1607,27 +1889,267 @@ Photo search:
 
 ### 16.1. Credit model
 
-Recommended MVP credit costs:
+Billing model:
 
-- Standard username analysis: 1 credit.
-- HR analysis: 2 credits.
-- Influencer audit: 2 credits.
-- Photo search: 1 credit.
-- Photo search + selected analysis: photo credit + analysis credit.
-- Compliance OSINT: 3+ credits and role-gated.
-- Chat messages: included up to daily limit, then 0.1 credit/message or plan-based.
+- Users buy prepaid credit packages in RUB through YooKassa.
+- Internal credits are consumed by analysis jobs and post-report chat.
+- Credits are stored as integer `credit_units`; `1 credit = 100 credit_units`.
+- Purchased but unused credits are an internal liability until consumed or expired/refunded.
+- Real money is never charged per failed analysis attempt; credits are reserved before work and captured only when the paid unit succeeds according to policy.
 
-These are product defaults, not final pricing.
+Recommended MVP mode costs:
 
-### 16.2. Reservation flow
+- Standard username analysis: `100 units` / 1 credit.
+- HR analysis: `200 units` / 2 credits.
+- Influencer audit: `200 units` / 2 credits.
+- Photo search: `100 units` / 1 credit.
+- Photo search + selected analysis: photo search cost + selected analysis cost.
+- Compliance OSINT: `300+ units` / 3+ credits and role-gated.
+- Chat after report: included first N messages per report; then `5 units` / 0.05 credit per message or plan-based.
+- PDF/Markdown export: included in completed analysis.
+- Re-analysis of the same profile: full price by default, because provider costs repeat.
 
-1. Before job starts, reserve credits.
-2. If profile fetch fails because private/not found, refund or do not capture.
-3. If LLM report fails after profile fetch, allow retry without extra charge.
-4. If job completes, capture reserved credits.
+### 16.2. YooKassa payment model
+
+MVP payment type:
+
+- one-time credit package purchase;
+- `capture = true`;
+- currency `RUB`;
+- confirmation scenario `redirect`;
+- no recurring/autopay in MVP;
+- no two-stage capture in MVP, but DB supports `waiting_for_capture` for future.
+
+Credit packages v0.1:
+
+| Package | Credits | Price RUB | Gross RUB / credit | Target user |
+| --- | ---: | ---: | ---: | --- |
+| Trial | 1 | 0 | 0 | Manual/admin grant only |
+| Start | 3 | 690 | 230 | First paid users |
+| Pro | 10 | 1,990 | 199 | Regular users |
+| Agency | 30 | 5,490 | 183 | Small teams |
+| Scale | 100 | 15,900 | 159 | Agencies / negotiated |
+
+Rules:
+
+- Packages are configuration/data, not hard-coded.
+- The cheapest public package must not push gross margin below target.
+- Enterprise/custom packages may use invoice/manual contract instead of bot checkout.
+- Promotional grants must be marked as `grant`, not `purchase`, for clean financial reporting.
+
+YooKassa fee assumptions for financial model:
+
+- `r_acquiring = 2.8%` for the Telegram/YooKassa payment methods shown in YooKassa materials (cards, YooMoney, SberPay).
+- `r_receipt = 1.0%` if "Чеки от YooKassa" is used under the tariff shown on the fees page.
+- `r_commission_vat = 20%` VAT on YooKassa commission if applicable under the contract.
+- Effective fee for conservative planning: `r_yk_effective = (r_acquiring + r_receipt) * (1 + r_commission_vat)`.
+- With defaults above: `(2.8% + 1.0%) * 1.20 = 4.56%` of gross payment.
+- These rates must be config values and verified against the signed YooKassa contract before launch.
+
+YooKassa net revenue formula:
+
+```text
+gross_payment = package_price_rub
+yookassa_fee = gross_payment * r_yk_effective
+net_after_yookassa = gross_payment - yookassa_fee
+```
+
+Example for Pro package:
+
+```text
+gross_payment = 1,990 RUB
+r_yk_effective = 4.56%
+yookassa_fee = 90.74 RUB
+net_after_yookassa = 1,899.26 RUB
+```
+
+### 16.3. Variable provider cost model
+
+Variable cost per operation must be measured and stored in `api_usage_events`.
+
+Cost variables:
+
+```text
+C_apify_profile = cost of one Apify profile run
+C_image_fetch = image proxy/traffic/processing cost
+C_vision_batch = LLM vision batch cost
+C_reasoning = final report LLM cost
+C_facecheck = one photo search cost
+C_chat = one report-chat answer cost
+C_pdf = PDF rendering/storage cost
+C_storage = report/artifact storage cost
+C_support = allocated support/refund risk per paid unit
+```
+
+Mode cost formulas:
+
+```text
+C_standard =
+  C_apify_profile
+  + C_image_fetch
+  + C_vision_batches
+  + C_reasoning
+  + C_pdf
+  + C_storage
+  + C_support
+
+C_influencer = C_standard + C_reasoning_delta
+C_hr = C_standard + C_reasoning_delta
+C_photo_search = C_facecheck + C_storage + C_support
+C_chat_message = C_chat
+```
+
+Cost tracking requirements:
+
+- Store provider, operation, model, tokens, latency and estimated cost.
+- Store package-level gross/net revenue.
+- Store job-level cost estimate.
+- Compute margin by mode and package weekly.
+- If actual `C_standard` exceeds the cost ceiling for two consecutive weeks, raise credit cost or reduce provider spend.
+
+### 16.4. Unit economics and margin targets
+
+Definitions:
+
+```text
+P_credit_gross = package_price_rub / package_credits
+P_credit_net = P_credit_gross * (1 - r_yk_effective)
+gross_margin_per_credit = P_credit_net - C_standard_per_credit
+gross_margin_percent = gross_margin_per_credit / P_credit_gross
+```
+
+Target:
+
+- Standard analysis gross margin: >= 60%.
+- HR/Influencer gross margin: >= 60%.
+- Photo search gross margin: >= 50%.
+- Overall blended gross margin: >= 65% after the first 2 months of beta.
+
+Minimum price formula:
+
+```text
+P_credit_min = C_standard / (1 - r_yk_effective - target_margin)
+```
+
+Example:
+
+```text
+C_standard = 55 RUB
+r_yk_effective = 4.56%
+target_margin = 60%
+P_credit_min = 55 / (1 - 0.0456 - 0.60) = 155.19 RUB
+```
+
+Interpretation:
+
+- If actual standard report cost is 55 RUB, public packages should keep gross price per credit above ~155 RUB.
+- The `Scale` package at 159 RUB/credit is safe only while actual standard cost stays near or below this assumption.
+- If actual cost becomes 80 RUB, minimum price rises to ~225.73 RUB/credit; discount packages must be disabled or repriced.
+
+Illustrative package contribution with `C_standard = 55 RUB`:
+
+| Package | Gross | Net after YooKassa | Assumed provider cost | Contribution | Contribution margin |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Start, 3 credits | 690 | 658.54 | 165 | 493.54 | 71.5% |
+| Pro, 10 credits | 1,990 | 1,899.26 | 550 | 1,349.26 | 67.8% |
+| Agency, 30 credits | 5,490 | 5,239.66 | 1,650 | 3,589.66 | 65.4% |
+| Scale, 100 credits | 15,900 | 15,174.96 | 5,500 | 9,674.96 | 60.8% |
+
+These numbers are planning assumptions. Actual provider costs must be recalculated from real API usage before public pricing is finalized.
+
+### 16.5. Fixed costs and break-even
+
+Monthly fixed costs:
+
+```text
+F_hosting = app/worker hosting
+F_db = managed PostgreSQL
+F_redis = managed Redis
+F_storage = baseline object storage
+F_monitoring = logging/errors/metrics
+F_accounting = fiscal/accounting/admin overhead
+F_support = user support allocation
+F_misc = domains, backups, security tools
+F_total = sum(F_*)
+```
+
+Break-even formula:
+
+```text
+break_even_packages = F_total / avg_package_contribution
+```
+
+Illustrative scenario:
+
+```text
+F_total = 60,000 RUB/month
+avg_package = Pro
+avg_package_contribution = 1,349 RUB
+break_even_packages = 60,000 / 1,349 = 45 Pro packages/month
+```
+
+Operational targets for beta:
+
+- Month 1: validate cost per report and payment conversion, not profit.
+- Month 2: reach >= 100 paid packages or >= 200 completed paid analyses.
+- Month 3: blended gross margin >= 65%, provider failure refund rate < 5%.
+
+### 16.6. Reservation flow for analysis credits
+
+1. Before job starts, reserve credit units.
+2. If profile fetch fails because private/not found, release reserve.
+3. If LLM report fails after profile fetch, keep job retryable without extra charge.
+4. If job completes, capture reserved credit units.
 5. If user cancels before provider work starts, release reserve.
+6. If user cancels after provider work starts, cancellation policy decides whether reserve is captured or partially released.
 
-### 16.3. Rate limits
+### 16.7. Payment and refund flow
+
+Purchase flow:
+
+1. User selects a credit package.
+2. If receipts require email and user has no email, bot asks for email.
+3. Backend creates `payment_order`.
+4. Backend creates YooKassa payment.
+5. Bot sends payment button.
+6. YooKassa webhook `payment.succeeded` is received.
+7. Backend fetches current payment status from YooKassa.
+8. Backend marks order `paid`.
+9. Backend creates `credit_transaction(type=purchase)`.
+10. Backend increments user credit balance.
+11. Bot notifies user.
+
+Refund flow:
+
+1. Refund request can be automatic only for fully unused purchased credits.
+2. If credits are partially used, refund is manual/admin and may be partial.
+3. Backend creates YooKassa refund with idempotency key.
+4. YooKassa webhook `refund.succeeded` is reconciled.
+5. Backend writes `payment_refunds`, `credit_transactions(type=refund)`, and adjusts credit balance.
+6. Because YooKassa does not return the original successful-payment commission on refund, finance reporting must show refund loss separately.
+
+Chargeback/dispute policy:
+
+- If provider reports a dispute/chargeback through account operations, admin may freeze user account and credit balance.
+- Add manual adjustment transactions rather than mutating historical ledger rows.
+
+### 16.8. Revenue recognition
+
+For product analytics:
+
+- `cash_collected`: successful YooKassa payments.
+- `net_cash_after_yookassa`: cash after payment/receipt commissions.
+- `deferred_credit_liability`: unused paid credit value.
+- `recognized_revenue`: paid credits consumed by completed analyses/chat.
+- `refunds`: successful YooKassa refunds.
+- `refund_loss`: non-returned payment commission and provider costs already spent.
+
+Accounting note:
+
+- Final revenue recognition, VAT/tax treatment, receipt item codes and expiration policy must be approved by accountant/legal counsel.
+- The system must export payment, refund and credit ledger data for monthly reconciliation.
+
+### 16.9. Rate limits
 
 Per user:
 
@@ -1642,19 +2164,19 @@ Global:
 - max concurrent report generations;
 - provider circuit breakers.
 
-### 16.4. Payments
+### 16.10. Financial reports
 
-Options:
+Admin/finance exports:
 
-- Telegram Stars via invoices;
-- external payment provider;
-- admin grants for early testing.
-
-MVP recommendation:
-
-- implement credit ledger first;
-- add manual/admin grants;
-- add Telegram Stars once core bot works.
+- payments by day/package/status;
+- YooKassa fees by day;
+- refunds by day/reason;
+- credit liability balance;
+- recognized revenue by mode;
+- provider cost by operation/mode;
+- gross margin by package and mode;
+- failed jobs with provider cost already incurred;
+- abuse/manual adjustments.
 
 ## 17. Admin features
 
@@ -1663,12 +2185,18 @@ Admin MVP:
 - view total users;
 - view active jobs;
 - view failed jobs;
+- view payment orders;
+- view YooKassa payment/refund statuses;
+- manually reconcile payment by provider payment ID;
 - retry failed job;
 - cancel job;
 - grant credits;
 - revoke credits;
+- create manual credit adjustment with reason;
+- initiate refund for unused purchased credits;
 - inspect user history;
 - export usage CSV;
+- export finance CSV;
 - view provider errors.
 
 Admin safety:
@@ -1708,7 +2236,10 @@ Business:
 - signups/day;
 - analyses/day by mode;
 - conversion photo->analysis;
+- conversion package_view->payment_created->payment_succeeded;
 - credits purchased/spent;
+- credit liability balance;
+- refunds count and amount;
 - active users.
 
 Technical:
@@ -1721,6 +2252,8 @@ Technical:
 - LLM success rate;
 - PDF generation failures;
 - Telegram send failures.
+- YooKassa webhook latency/failures;
+- payment reconciliation failures.
 
 Cost:
 
@@ -1728,7 +2261,9 @@ Cost:
 - Apify runs;
 - FaceCheck calls;
 - storage size;
-- cost per completed report.
+- cost per completed report;
+- YooKassa fees;
+- gross margin by mode/package.
 
 ### 18.3. Alerts
 
@@ -1822,6 +2357,9 @@ Required:
 - report section parser;
 - DigitalCircle scoring;
 - credit reservation/capture/refund;
+- YooKassa fee calculation;
+- payment order state transitions;
+- payment webhook idempotency;
 - error mapping.
 
 ### 21.2. Integration tests
@@ -1833,6 +2371,10 @@ Required:
 - Apify mocked response -> profile snapshot;
 - LLM mocked report -> parsed sections;
 - FaceCheck mocked response -> matches;
+- YooKassa mocked payment creation -> order pending;
+- YooKassa mocked `payment.succeeded` webhook -> credits granted exactly once;
+- YooKassa duplicate webhook -> no duplicate credits;
+- YooKassa mocked refund -> credits adjusted;
 - PDF generation smoke.
 
 ### 21.3. E2E tests
@@ -1957,13 +2499,23 @@ Deliverables:
 
 - credit ledger;
 - admin grants;
+- YooKassa payment package catalog;
+- YooKassa payment creation;
+- YooKassa webhook reconciliation;
+- receipt email collection and receipt payload preparation;
+- refund flow for unused credits;
 - job cost capture/refund;
 - rate limits;
 - provider usage metrics.
+- finance exports.
 
 Acceptance:
 
-- free/pro/admin flows are enforceable.
+- free/pro/admin flows are enforceable;
+- user can buy credits through YooKassa in test mode;
+- `payment.succeeded` grants credits once;
+- duplicate payment webhook does not duplicate credits;
+- finance export shows gross payments, YooKassa fees, provider costs and margin.
 
 ### Phase 7 - Hardening
 
@@ -2018,6 +2570,7 @@ src/
   modules/
     users/
     billing/
+    payments/
     analysis/
     instagram/
     vision/
@@ -2109,8 +2662,8 @@ MVP is done when all conditions below are true:
 These questions do not block foundation work:
 
 - final public brand name;
-- final pricing;
-- Telegram Stars vs external payments;
+- final launch pricing after real provider-cost measurement;
+- Telegram Stars as optional secondary channel;
 - Mini App design;
 - white-label PDF availability;
 - long-term report retention;
@@ -2131,6 +2684,14 @@ Before launch:
 
 - Bot token stored in secret manager.
 - Webhook secret enabled.
+- YooKassa shop ID and secret key stored in secret manager.
+- YooKassa test payments verified end-to-end.
+- YooKassa production webhook configured and tested.
+- YooKassa IP allowlist/status reconciliation configured.
+- Receipt/fiscalization scenario approved by accountant/legal counsel.
+- Receipt email collection tested.
+- Refund flow tested on YooKassa test payment.
+- Payment duplicate webhook/idempotency tested.
 - Database backups configured.
 - Redis persistence/managed Redis configured.
 - Object storage lifecycle rules configured.
@@ -2141,6 +2702,7 @@ Before launch:
 - `/delete_me` tested.
 - Failed job retry tested.
 - Credit refund tested.
+- Credit purchase and finance export tested.
 - PDF generation tested on long reports.
 - Telegram message splitting tested.
 - Provider outage simulation tested.
@@ -2151,13 +2713,19 @@ Before launch:
 1. Какой финальный бренд бота: `ZRETI`, `ZRETI AI`, другое имя?
 2. Нужен ли Telegram Mini App в первой версии или достаточно чистого бота?
 3. Какие режимы включать публично в MVP: только standard/influencer/HR или также compliance OSINT?
-4. Какой pricing: credits, subscription, Telegram Stars, external invoices?
+4. Подтверждаем ли launch-пакеты: Start 690 ₽, Pro 1 990 ₽, Agency 5 490 ₽, Scale 15 900 ₽?
 5. Нужно ли хранить отчеты 30 дней или дольше?
 6. Нужен ли white-label PDF для всех или только pro/admin?
 7. Нужно ли синхронизировать историю с существующим сайтом?
 8. Какие страны/юрисдикции являются целевыми для privacy/compliance?
 9. Нужен ли ручной review для risky modes?
 10. Какие provider limits и бюджет на один отчет считаются допустимыми?
+11. Какая фактическая комиссия ЮKassa по подписанному договору и выбранному способу чеков?
+12. Используем ли "Чеки от YooKassa" или свою/стороннюю онлайн-кассу?
+13. Какие fiscal receipt item/tax/payment subject/payment mode codes использовать для credit packages?
+14. Какой срок действия у купленных кредитов: бессрочно, 6 месяцев, 12 месяцев?
+15. Какая политика возврата: только unused credits, частично unused, goodwill refunds?
+16. Нужно ли продавать подписки/автоплатежи позже или только prepaid packages?
 
 ## 25. Sources and constraints
 
@@ -2173,3 +2741,14 @@ Telegram Bot API constraints used in this spec:
 - bots can currently send documents up to 50 MB via `sendDocument`;
 - generated PDFs should be sent via `sendDocument`;
 - Telegram Stars can be used through invoice/payment flows with currency `XTR`.
+
+YooKassa constraints used in this spec:
+
+- YooKassa supports Telegram bot payments and payment methods such as bank cards, YooMoney wallet and SberPay for the Telegram scenario.
+- YooKassa API payment creation uses merchant authentication, `Idempotence-Key`, `amount`, `capture`, `confirmation`, `return_url`, `description` and optional `metadata`.
+- Redirect/smart payment returns a `confirmation_url`; user payment completion must be confirmed by YooKassa webhook or server-side status fetch.
+- YooKassa webhook events include payment and refund statuses; webhook receipt must be acknowledged with HTTP 200, and non-200 responses are retried.
+- Webhook authenticity should be checked by status lookup and/or YooKassa IP ranges.
+- Refunds can be full or partial for successful payments, but the original successful-payment commission is not returned.
+- If using YooKassa receipts/54-FZ flow, receipt data and customer email must be collected and sent according to the selected fiscalization setup.
+- Public fee assumptions in this spec are planning defaults only and must be replaced by the signed merchant contract terms before launch.

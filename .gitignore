@@ -30,9 +30,12 @@ artifacts/
 exports/
 reports/
 uploads/
+.data/
 
 # OS / editor
 .DS_Store
 .idea/
 .vscode/
 
+# Agent tooling
+.serena/

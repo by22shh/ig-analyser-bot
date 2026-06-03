@@ -1,0 +1,195 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`message snapshots > renders paywall and insufficient credits 1`] = `
+"🧪 <b>Тестовый режим оплаты</b>
+
+💎 <b>Пополнение кредитов</b>
+
+Выберите способ оплаты. Основной способ в Telegram — Stars."
+`;
+
+exports[`message snapshots > renders paywall and insufficient credits 2`] = `
+[
+  [
+    {
+      "callback_data": "pay:stars",
+      "text": "⭐ Telegram Stars",
+    },
+  ],
+  [
+    {
+      "callback_data": "pay:yk",
+      "text": "💳 Банковская карта / СБП",
+    },
+  ],
+  [
+    {
+      "callback_data": "m:main",
+      "text": "🏠 В меню",
+    },
+  ],
+]
+`;
+
+exports[`message snapshots > renders paywall and insufficient credits 3`] = `
+[
+  [
+    {
+      "callback_data": "buy:xtr:start",
+      "text": "Start — 3💎 за 690 ⭐",
+    },
+  ],
+  [
+    {
+      "callback_data": "buy:xtr:pro",
+      "text": "Pro — 10💎 за 2300 ⭐",
+    },
+  ],
+  [
+    {
+      "callback_data": "buy:xtr:agency",
+      "text": "Agency — 30💎 за 6900 ⭐",
+    },
+  ],
+  [
+    {
+      "callback_data": "pay",
+      "text": "⬅️ Назад",
+    },
+    {
+      "callback_data": "m:main",
+      "text": "🏠 В меню",
+    },
+  ],
+]
+`;
+
+exports[`message snapshots > renders paywall and insufficient credits 4`] = `
+"💎 <b>Не хватает кредитов</b>
+
+Стоимость действия: <b>2</b> 💎
+Доступно: <b>0.5</b> 💎
+
+Пополните баланс или выберите действие дешевле."
+`;
+
+exports[`message snapshots > renders profile 1`] = `
+"👤 <b>Профиль:</b> Nikita
+🆔 Telegram ID: <code>123</code>
+🌐 Язык: <b>ru</b>
+
+💎 <b>Кредиты: 1</b>
+• куплено: 0
+• выдано/промо: 1
+
+📚 Отчетов: <b>2</b>
+⏳ Активных задач: <b>1</b>
+🧹 Хранение отчетов: <b>30 дн.</b>"
+`;
+
+exports[`message snapshots > renders report actions 1`] = `
+[
+  [
+    {
+      "callback_data": "r:sections:report-id",
+      "text": "📚 Секции",
+    },
+    {
+      "callback_data": "r:pdf:report-id",
+      "text": "📄 PDF",
+    },
+  ],
+  [
+    {
+      "callback_data": "r:md:report-id",
+      "text": "📝 Markdown",
+    },
+    {
+      "callback_data": "r:chat:report-id",
+      "text": "💬 Задать вопрос",
+    },
+  ],
+  [
+    {
+      "callback_data": "r:src:report-id",
+      "text": "🔗 Источники",
+    },
+  ],
+  [
+    {
+      "callback_data": "r:open:report-id:repeat",
+      "text": "🔁 Повторить анализ",
+    },
+    {
+      "callback_data": "m:main",
+      "text": "🏠 В меню",
+    },
+  ],
+]
+`;
+
+exports[`message snapshots > renders start payload 1`] = `
+"👁 <b>ZRETI</b> — стратегический анализ публичного Instagram-профиля.
+
+💎 Кредиты: <b>3</b>
+• куплено: 3
+• выдано/промо: 0
+🌐 Язык отчета: <b>ru</b>
+
+<b>Что можно сделать:</b>
+• анализ публичного профиля по username или ссылке
+• PDF/Markdown-отчет и чат по готовому отчету
+
+Выберите действие ниже."
+`;
+
+exports[`message snapshots > renders start payload 2`] = `
+[
+  [
+    {
+      "callback_data": "a:start",
+      "text": "🔎 Анализ профиля",
+    },
+  ],
+  [
+    {
+      "callback_data": "h:list",
+      "text": "🗂 История",
+    },
+    {
+      "callback_data": "u:profile",
+      "text": "👤 Профиль",
+    },
+  ],
+  [
+    {
+      "callback_data": "pay",
+      "text": "💎 Пополнить кредиты",
+    },
+    {
+      "callback_data": "u:settings",
+      "text": "⚙️ Настройки",
+    },
+  ],
+  [
+    {
+      "callback_data": "cap",
+      "text": "✨ Что я умею",
+    },
+    {
+      "text": "📢 Группа",
+      "url": "https://t.me/homie_tech",
+    },
+    {
+      "callback_data": "help",
+      "text": "🛟 Поддержка",
+    },
+  ],
+  [
+    {
+      "callback_data": "adm",
+      "text": "🛠 Admin",
+    },
+  ],
+]
+`;

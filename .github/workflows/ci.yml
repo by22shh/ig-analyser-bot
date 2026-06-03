@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://zreti:zreti@localhost:5432/zreti_bot
+      DIRECT_URL: postgresql://zreti:zreti@localhost:5432/zreti_bot
+      REDIS_URL: redis://localhost:6379/0
+      TELEGRAM_BOT_TOKEN: "000:test"
+      ECON_STANDARD_REPORT_COST_P75_RUB: "55"
+      ECON_PHOTO_SEARCH_COST_P75_RUB: "20"
+      ECON_CHAT_MESSAGE_COST_P75_RUB: "2"
+      ECON_APIFY_PROFILE_COST_RUB: "12"
+      ECON_FACECHECK_SEARCH_COST_RUB: "15"
+      ECON_SUPPORT_RESERVE_RUB: "5"
+      LLM_FINAL_INPUT_TOKEN_BUDGET: "24000"
+      LLM_FINAL_OUTPUT_TOKEN_BUDGET: "4096"
+      LLM_CHAT_INPUT_TOKEN_BUDGET: "12000"
+      LLM_CHAT_OUTPUT_TOKEN_BUDGET: "2048"
+      FACECHECK_MAX_COST_RUB: "15"
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: zreti_bot
+          POSTGRES_USER: zreti
+          POSTGRES_PASSWORD: zreti
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U zreti -d zreti_bot"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile=false
+      - run: pnpm prisma:migrate
+      - run: pnpm run ci

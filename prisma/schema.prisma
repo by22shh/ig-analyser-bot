@@ -1,0 +1,595 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                String    @id @default(uuid()) @db.Uuid
+  telegramId        BigInt    @unique
+  telegramUsername  String?
+  firstName         String?
+  lastName          String?
+  language          String    @default("ru")
+  role              String    @default("user")
+  status            String    @default("active")
+  timezone          String?
+  consentVersion    String?
+  consentAcceptedAt DateTime?
+  email             String?
+  referralCode      String?   @unique
+  referredByUserId  String?   @db.Uuid
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  settings              UserSettings?
+  creditAccount         CreditAccount?
+  creditTransactions    CreditTransaction[]
+  paymentOrders         PaymentOrder[]
+  analysisJobs          AnalysisJob[]
+  reports               Report[]
+  photoSearchJobs       PhotoSearchJob[]
+  reportChatSessions    ReportChatSession[]
+  sentAuditLogs         AuditLog[]           @relation("AuditActor")
+  targetAuditLogs       AuditLog[]           @relation("AuditTarget")
+  telegramWizardState   TelegramWizardState?
+  telegramUpdates       TelegramUpdate[]
+
+  @@index([status, createdAt])
+  @@map("users")
+}
+
+model UserSettings {
+  userId                String  @id @db.Uuid
+  defaultReportLanguage String  @default("ru")
+  defaultExportFormat   String  @default("pdf")
+  protectContent        Boolean @default(false)
+  reportRetentionDays   Int     @default(30)
+  notifyOnCompletion    Boolean @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_settings")
+}
+
+model CreditAccount {
+  id            String    @id @default(uuid()) @db.Uuid
+  userId        String    @unique @db.Uuid
+  balanceUnits  Int       @default(0)
+  reservedUnits Int       @default(0)
+  plan          String?
+  planExpiresAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("credit_accounts")
+}
+
+model CreditTransaction {
+  id                String   @id @default(uuid()) @db.Uuid
+  userId            String   @db.Uuid
+  analysisJobId     String?  @db.Uuid
+  type              String
+  amountUnits       Int
+  balanceAfterUnits Int
+  provider          String?
+  providerPaymentId String?
+  metadata          Json?
+  createdAt         DateTime @default(now())
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  analysisJob AnalysisJob? @relation(fields: [analysisJobId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([analysisJobId])
+  @@index([provider, providerPaymentId])
+  @@map("credit_transactions")
+}
+
+model CreditPackage {
+  id           String   @id @default(uuid()) @db.Uuid
+  code         String   @unique
+  title        String
+  description  String?
+  creditsUnits Int
+  isActive     Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  metadata     Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  prices CreditPackagePrice[]
+  orders PaymentOrder[]
+
+  @@map("credit_packages")
+}
+
+model CreditPackagePrice {
+  id                  String   @id @default(uuid()) @db.Uuid
+  packageId           String   @db.Uuid
+  provider            String
+  currency            String
+  amountMinor         Int
+  isPublic            Boolean  @default(false)
+  isActive            Boolean  @default(true)
+  sortOrder           Int      @default(0)
+  yookassaDescription String?
+  starsTitle          String?
+  starsDescription    String?
+  receiptSubject      String?
+  receiptVatCode      Int?
+  metadata            Json?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  package CreditPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  orders  PaymentOrder[]
+
+  @@unique([packageId, provider, currency])
+  @@index([provider, currency, isActive, isPublic])
+  @@map("credit_package_prices")
+}
+
+model PaymentOrder {
+  id                       String    @id @default(uuid()) @db.Uuid
+  userId                   String    @db.Uuid
+  packageId                String    @db.Uuid
+  packagePriceId           String?   @db.Uuid
+  status                   String
+  amountMinor              Int
+  currency                 String
+  creditsUnits             Int
+  provider                 String
+  providerPaymentId        String?   @unique
+  confirmationUrl          String?
+  idempotencyKey           String    @unique
+  userEmail                String?
+  telegramChatId           BigInt?
+  telegramInvoiceMessageId BigInt?
+  paidAt                   DateTime?
+  expiresAt                DateTime?
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+
+  user                 User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  package              CreditPackage        @relation(fields: [packageId], references: [id])
+  packagePrice         CreditPackagePrice?  @relation(fields: [packagePriceId], references: [id])
+  events               PaymentEvent[]
+  yookassaPayment      YooKassaPayment?
+  telegramStarPayment  TelegramStarPayment?
+  refunds              PaymentRefund[]
+  receipts             FiscalReceipt[]
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@map("payment_orders")
+}
+
+model PaymentEvent {
+  id               String    @id @default(uuid()) @db.Uuid
+  provider         String
+  eventType        String
+  providerObjectId String
+  paymentOrderId   String?   @db.Uuid
+  payload          Json?
+  receivedAt       DateTime  @default(now())
+  processedAt      DateTime?
+  processingStatus String    @default("received")
+  errorCode        String?
+
+  paymentOrder PaymentOrder? @relation(fields: [paymentOrderId], references: [id], onDelete: SetNull)
+
+  @@unique([provider, eventType, providerObjectId])
+  @@index([processingStatus, receivedAt])
+  @@map("payment_events")
+}
+
+model YooKassaPayment {
+  id                    String    @id @default(uuid()) @db.Uuid
+  paymentOrderId        String    @unique @db.Uuid
+  yookassaPaymentId     String    @unique
+  status                String
+  paid                  Boolean   @default(false)
+  amountMinor           Int
+  currency              String
+  incomeAmountMinor     Int?
+  paymentMethodType     String?
+  refundable            Boolean   @default(false)
+  test                  Boolean   @default(true)
+  metadata              Json?
+  createdAtProvider     DateTime?
+  capturedAt            DateTime?
+  expiresAt             DateTime?
+  raw                   Json?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  paymentOrder PaymentOrder @relation(fields: [paymentOrderId], references: [id], onDelete: Cascade)
+
+  @@map("yookassa_payments")
+}
+
+model TelegramStarPayment {
+  id                        String    @id @default(uuid()) @db.Uuid
+  paymentOrderId            String    @unique @db.Uuid
+  telegramUserId            BigInt
+  telegramChatId            BigInt
+  invoicePayload            String    @unique
+  invoiceMessageId          BigInt?
+  preCheckoutQueryId        String?   @unique
+  telegramPaymentChargeId   String?   @unique
+  providerPaymentChargeId   String?
+  status                    String
+  starsAmount               Int
+  currency                  String    @default("XTR")
+  successfulPayment         Json?
+  rawPreCheckoutQuery       Json?
+  rawSuccessfulPayment      Json?
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
+
+  paymentOrder PaymentOrder @relation(fields: [paymentOrderId], references: [id], onDelete: Cascade)
+
+  @@index([telegramUserId, createdAt])
+  @@map("telegram_star_payments")
+}
+
+model PaymentRefund {
+  id               String   @id @default(uuid()) @db.Uuid
+  paymentOrderId   String   @db.Uuid
+  provider         String
+  providerRefundId String?  @unique
+  status           String
+  amountMinor      Int
+  currency         String
+  reason           String
+  idempotencyKey   String   @unique
+  adminUserId      String?  @db.Uuid
+  raw              Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  paymentOrder PaymentOrder @relation(fields: [paymentOrderId], references: [id], onDelete: Cascade)
+
+  @@index([provider, status, createdAt])
+  @@map("payment_refunds")
+}
+
+model FiscalReceipt {
+  id                String   @id @default(uuid()) @db.Uuid
+  paymentOrderId    String   @db.Uuid
+  provider          String
+  type              String
+  status            String
+  providerReceiptId String?
+  customerEmail     String?
+  amountMinor       Int
+  currency          String
+  taxSystemCode     Int?
+  vatCode           Int?
+  payload           Json?
+  raw               Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  paymentOrder PaymentOrder @relation(fields: [paymentOrderId], references: [id], onDelete: Cascade)
+
+  @@map("fiscal_receipts")
+}
+
+model AnalysisJob {
+  id                        String    @id @default(uuid()) @db.Uuid
+  userId                    String    @db.Uuid
+  mode                      String
+  inputType                 String
+  targetUsername            String
+  language                  String    @default("ru")
+  targetPosition            String?
+  goal                      String?
+  status                    String
+  stage                     String?
+  progressCurrent           Int       @default(0)
+  progressTotal             Int       @default(0)
+  progressPercent           Decimal   @default(0)
+  telegramChatId            BigInt
+  telegramProgressMessageId BigInt?
+  costCreditUnits           Int
+  reservedTransactionId     String?   @db.Uuid
+  errorCode                 String?
+  errorMessage              String?
+  idempotencyKey            String    @unique
+  createdAt                 DateTime  @default(now())
+  startedAt                 DateTime?
+  finishedAt                DateTime?
+  updatedAt                 DateTime  @updatedAt
+
+  user                    User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creditTransactions      CreditTransaction[]
+  instagramProfile        InstagramProfileSnapshot?
+  visionAnalysisItems     VisionAnalysisItem[]
+  report                  Report?
+  apiUsageEvents          ApiUsageEvent[]
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@index([targetUsername])
+  @@map("analysis_jobs")
+}
+
+model InstagramProfileSnapshot {
+  id                String   @id @default(uuid()) @db.Uuid
+  analysisJobId     String   @unique @db.Uuid
+  username          String
+  fullName          String?
+  biography         String?
+  followersCount    Int      @default(0)
+  followsCount      Int      @default(0)
+  postsCount        Int      @default(0)
+  profilePicUrl     String?
+  externalUrl       String?
+  isVerified        Boolean  @default(false)
+  relatedProfiles   Json?
+  provider          String
+  providerDatasetId String?
+  rawDebug          Json?
+  createdAt         DateTime @default(now())
+
+  analysisJob AnalysisJob              @relation(fields: [analysisJobId], references: [id], onDelete: Cascade)
+  posts       InstagramPostSnapshot[]
+
+  @@index([username])
+  @@map("instagram_profile_snapshots")
+}
+
+model InstagramPostSnapshot {
+  id                String    @id @default(uuid()) @db.Uuid
+  profileSnapshotId String    @db.Uuid
+  postId            String
+  type              String
+  caption           String?
+  hashtags          String[]
+  mentions          String[]
+  likesCount        Int       @default(0)
+  commentsCount     Int       @default(0)
+  latestComments    Json?
+  timestamp         DateTime?
+  displayUrl        String?
+  url               String?
+  videoViewCount    Int?
+  videoDuration     Decimal?
+  location          Json?
+  isPinned          Boolean   @default(false)
+  productType       String?
+  musicInfo         Json?
+  childPosts        String[]
+  taggedUsers       String[]
+  sortOrder         Int       @default(0)
+
+  profileSnapshot     InstagramProfileSnapshot @relation(fields: [profileSnapshotId], references: [id], onDelete: Cascade)
+  visionAnalysisItems VisionAnalysisItem[]
+
+  @@index([profileSnapshotId, sortOrder])
+  @@index([postId])
+  @@index([timestamp])
+  @@map("instagram_post_snapshots")
+}
+
+model VisionAnalysisItem {
+  id             String   @id @default(uuid()) @db.Uuid
+  analysisJobId  String   @db.Uuid
+  postSnapshotId String?  @db.Uuid
+  postId         String
+  status         String
+  description    String?
+  model          String
+  promptVersion  String
+  errorCode      String?
+  createdAt      DateTime @default(now())
+
+  analysisJob  AnalysisJob             @relation(fields: [analysisJobId], references: [id], onDelete: Cascade)
+  postSnapshot InstagramPostSnapshot?  @relation(fields: [postSnapshotId], references: [id], onDelete: SetNull)
+
+  @@index([analysisJobId, postId])
+  @@map("vision_analysis_items")
+}
+
+model Report {
+  id            String   @id @default(uuid()) @db.Uuid
+  analysisJobId String   @unique @db.Uuid
+  userId        String   @db.Uuid
+  mode          String
+  language      String
+  rawText       String
+  summary       Json?
+  metrics       Json?
+  sourceMap     Json?
+  model         String
+  promptVersion String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  expiresAt     DateTime?
+
+  analysisJob      AnalysisJob          @relation(fields: [analysisJobId], references: [id], onDelete: Cascade)
+  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sections         ReportSection[]
+  artifacts        ReportArtifact[]
+  chatSessions     ReportChatSession[]
+
+  @@index([userId, createdAt])
+  @@index([expiresAt])
+  @@map("reports")
+}
+
+model ReportSection {
+  id        String   @id @default(uuid()) @db.Uuid
+  reportId  String   @db.Uuid
+  position  Int
+  title     String
+  content   String
+  kind      String?
+  sources   Json?
+  createdAt DateTime @default(now())
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@unique([reportId, position])
+  @@map("report_sections")
+}
+
+model ReportArtifact {
+  id             String    @id @default(uuid()) @db.Uuid
+  reportId       String    @db.Uuid
+  type           String
+  storageKey     String
+  publicUrl      String?
+  expiresAt      DateTime?
+  telegramFileId String?
+  sizeBytes      Int?
+  createdAt      DateTime  @default(now())
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId, type])
+  @@index([expiresAt])
+  @@map("report_artifacts")
+}
+
+model PhotoSearchJob {
+  id                   String    @id @default(uuid()) @db.Uuid
+  userId               String    @db.Uuid
+  telegramFileId       String
+  telegramFileUniqueId String?
+  inputMimeType        String?
+  inputSizeBytes       Int?
+  status               String
+  errorCode            String?
+  createdAt            DateTime  @default(now())
+  finishedAt           DateTime?
+
+  user    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matches PhotoSearchMatch[]
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@map("photo_search_jobs")
+}
+
+model PhotoSearchMatch {
+  id               String   @id @default(uuid()) @db.Uuid
+  photoSearchJobId String   @db.Uuid
+  username         String
+  profileUrl       String
+  confidence       Decimal
+  source           String?
+  sourceUrl        String?
+  rawScore         Decimal?
+  createdAt        DateTime @default(now())
+
+  photoSearchJob PhotoSearchJob @relation(fields: [photoSearchJobId], references: [id], onDelete: Cascade)
+
+  @@index([photoSearchJobId])
+  @@map("photo_search_matches")
+}
+
+model ReportChatSession {
+  id        String   @id @default(uuid()) @db.Uuid
+  reportId  String   @db.Uuid
+  userId    String   @db.Uuid
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  report   Report              @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  user     User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages ReportChatMessage[]
+
+  @@index([userId, updatedAt])
+  @@map("report_chat_sessions")
+}
+
+model ReportChatMessage {
+  id        String   @id @default(uuid()) @db.Uuid
+  sessionId String   @db.Uuid
+  role      String
+  content   String
+  model     String?
+  tokensIn  Int?
+  tokensOut Int?
+  createdAt DateTime @default(now())
+
+  session ReportChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, createdAt])
+  @@map("report_chat_messages")
+}
+
+model ApiUsageEvent {
+  id             String   @id @default(uuid()) @db.Uuid
+  userId         String?  @db.Uuid
+  analysisJobId  String?  @db.Uuid
+  provider       String
+  operation      String
+  model          String?
+  status         String
+  latencyMs      Int?
+  costEstimateRub Decimal?
+  tokensIn       Int?
+  tokensOut      Int?
+  errorCode      String?
+  createdAt      DateTime @default(now())
+
+  analysisJob AnalysisJob? @relation(fields: [analysisJobId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([analysisJobId, provider, operation])
+  @@index([provider, operation, createdAt])
+  @@map("api_usage_events")
+}
+
+model AuditLog {
+  id            String   @id @default(uuid()) @db.Uuid
+  actorUserId   String?  @db.Uuid
+  targetUserId  String?  @db.Uuid
+  action        String
+  entityType    String
+  entityId      String?  @db.Uuid
+  metadata      Json?
+  ipHash        String?
+  createdAt     DateTime @default(now())
+
+  actorUser  User? @relation("AuditActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  targetUser User? @relation("AuditTarget", fields: [targetUserId], references: [id], onDelete: SetNull)
+
+  @@index([actorUserId, createdAt])
+  @@index([targetUserId, createdAt])
+  @@index([action, createdAt])
+  @@map("audit_logs")
+}
+
+model TelegramUpdate {
+  updateId  BigInt   @id
+  userId    String?  @db.Uuid
+  processedAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("telegram_updates")
+}
+
+model TelegramWizardState {
+  userId    String   @id @db.Uuid
+  state     String
+  payload   Json?
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("telegram_wizard_states")
+}

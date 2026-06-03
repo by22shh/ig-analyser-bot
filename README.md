@@ -1,43 +1,92 @@
 # ZRETI Telegram Bot
 
-Отдельный репозиторий для разработки Telegram-бота на основе существующего проекта `ig-analyser-site`.
+Production-ready MVP implementation of the ZRETI Telegram bot based on `ig-analyser-site`.
 
-Текущий статус: подготовлена продуктовая и техническая спецификация, код бота еще не реализован.
+The bot is backend-first: Telegram handlers are thin, long work is queued in BullMQ, state lives in PostgreSQL, provider-specific code sits behind adapters, and local mock mode works without external secrets.
 
-После повторного ревью спецификация считается достаточной для старта Phase 0/Phase 1 разработки: инфраструктура, Telegram webhook, onboarding, wizard анализа, очередь, моковый worker и первые тесты. Для публичного релиза еще нужно закрыть бизнес- и compliance-вопросы из раздела `Open questions`.
+## What Is Implemented
 
-## Документы
+- Telegram UX with `grammy`: `/start`, `/menu`, `/analyze`, `/photo`, `/history`, `/credits`, `/balance`, `/buy`, `/topup`, `/settings`, `/help`, `/cancel`, `/reset`, `/delete_me`, admin shell.
+- Public Instagram username normalization and analysis wizard.
+- BullMQ workers for analysis and photo search.
+- Mock and real adapters for Apify, OpenRouter, FaceCheck, YooKassa, storage and PDF.
+- Report generation pipeline: profile snapshots, metrics, Digital Circle, parsed sections, Telegram summary, Markdown/HTML/PDF artifacts, report chat.
+- Credits ledger with transactional reserve/capture/release/grant.
+- Telegram Stars invoices, pre-checkout validation, successful-payment idempotent grants and Stars refund method.
+- YooKassa payment creation and webhook reconciliation with idempotent grants.
+- Prisma schema and initial migration for users, settings, payments, ledger, reports, jobs, artifacts, usage events and audit logs.
+- RU/EN locale helpers, HTML escaping, chunking and snapshot tests for core UX screens.
+- `pnpm audit-economics` guardrail for provider costs, runtime caps, Stars/YooKassa floors and public mode pricing.
+- Dockerfiles, Docker Compose and GitHub Actions CI.
 
-- [SPECIFICATION.md](./SPECIFICATION.md) - основная спецификация продукта, архитектуры, UX, данных, интеграций и плана разработки.
-- [docs/source-project-analysis.md](./docs/source-project-analysis.md) - детальный разбор текущего React/Vite-сайта, на котором основана спецификация.
-- [docs/financial-model.md](./docs/financial-model.md) - финансовая модель: Telegram Stars, YooKassa, credit packages, unit economics, no-loss guardrails, margin targets, refunds и break-even.
-- [docs/sibling-bot-ux-reference.md](./docs/sibling-bot-ux-reference.md) - UX-паттерны sibling-бота `ai-assistant-bot`, которые нужно сохранить для единого формата группы ботов.
-- [docs/implementation-master-prompt.md](./docs/implementation-master-prompt.md) - готовый master prompt для coding agent, который должен реализовать бота по спецификациям до production-ready MVP.
+## Local Start
 
-## Предлагаемый стек
+```bash
+pnpm install
+docker compose up -d
+cp .env.example .env
+pnpm prisma:migrate
+pnpm prisma:generate
+pnpm dev
+pnpm dev:worker
+```
 
-- TypeScript + Node.js.
-- Telegram framework: `grammy` или NestJS-модуль вокруг `grammy`.
-- PostgreSQL для пользователей, заданий, отчетов и биллинга.
-- Redis + BullMQ для долгих задач анализа.
-- S3/R2-compatible storage для PDF, HTML-экспортов, временных фото и артефактов.
-- Apify для сбора публичных данных Instagram.
-- OpenRouter-compatible LLM API для vision/reasoning/chat.
-- FaceCheck через серверный адаптер для поиска Instagram по фото.
-- Telegram Stars как Telegram-native канал покупки цифровых credit packages.
-- YooKassa как RUB-агрегатор для external/manual credit package checkout после compliance review.
-- `audit-economics` как обязательная CI-проверка перед включением платных пакетов и реальных провайдеров.
+Without `APIFY_TOKEN`, `OPENROUTER_API_KEY`, `FACECHECK_API_TOKEN`, `YOOKASSA_SHOP_ID` and `YOOKASSA_SECRET_KEY`, providers run in mock mode. This lets the end-to-end UX complete locally without secrets.
 
-## Принципиальные решения
+For Neon, use the pooled connection string as `DATABASE_URL` and the direct connection string as `DIRECT_URL`. Redis is still required separately for BullMQ workers; both `redis://` and TLS `rediss://` URLs are supported.
 
-- Все ключи и внешние интеграции должны жить только на сервере.
-- Публичный paid launch блокируется, пока экономика не проходит строгий guardrail: net revenue после консервативного платежного резерва должен покрывать p75/worst-case provider cost минимум в 3 раза.
-- Stars и YooKassa считаются разными payment providers: XTR начисляется через `successful_payment`, RUB через YooKassa webhook/reconciliation.
-- Формат сообщений, меню, профиль, credits/paywall и базовые пользовательские сценарии должны быть максимально похожи на `ai-assistant-bot`, если это не конфликтует с ZRETI-аналитикой и compliance.
-- Анализ запускается асинхронно через очередь, потому что текущий сайт уже показывает долгий pipeline: Apify polling, vision-анализ пачками и финальный reasoning-запрос.
-- Telegram-выдача строится вокруг короткого summary, секций отчета, PDF/HTML-экспорта и чата по готовому отчету.
-- Рискованные OSINT-сценарии из сайта должны быть переработаны в compliance-safe режимы с согласием, аудитом, лимитами и запретом на преследование, доксинг и давление на третьих лиц.
+For Telegram local development, set:
 
-## Финансовый статус пакетов
+```bash
+TELEGRAM_BOT_TOKEN=...
+TELEGRAM_USE_LONG_POLLING=true
+```
 
-При иллюстративной себестоимости standard report `55 ₽` текущие RUB-пакеты не выглядят убыточными по variable cost, но discounted Pro/Agency/Scale не проходят строгий `3x` guardrail после 20% платежного резерва. Stars-пакеты стартуют без bulk-discount: `230 XTR/credit`, что barely проходит `3x` при текущем payout floor. Рекомендация для старта: публично показывать Stars Start и/или YooKassa Start, а discounted RUB Pro/Agency/Scale скрыть, поднять цены или включить только после измерения реального `C_standard p75`.
+Production should use webhook mode:
+
+```bash
+TELEGRAM_WEBHOOK_URL=https://your-domain.example/telegram/webhook
+TELEGRAM_WEBHOOK_SECRET=...
+```
+
+For Fly.io + Neon deployment, use [docs/deployment/fly-neon.md](./docs/deployment/fly-neon.md). The Fly config runs `web` and `worker` as separate process groups and runs Prisma migrations through the release command before each release.
+
+## Verification
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+ECON_STANDARD_REPORT_COST_P75_RUB=55 \
+ECON_PHOTO_SEARCH_COST_P75_RUB=20 \
+ECON_CHAT_MESSAGE_COST_P75_RUB=2 \
+ECON_APIFY_PROFILE_COST_RUB=12 \
+ECON_FACECHECK_SEARCH_COST_RUB=15 \
+ECON_SUPPORT_RESERVE_RUB=5 \
+FACECHECK_MAX_COST_RUB=15 \
+pnpm audit-economics
+```
+
+`pnpm audit-economics` intentionally fails when required provider cost variables are missing.
+Use `pnpm run ci` to run the full local CI script with the same economics variables.
+
+## Provider Modes
+
+- Apify: real when `APIFY_TOKEN` is set, otherwise mock profile data.
+- OpenRouter: real when `OPENROUTER_API_KEY` is set, otherwise mock vision/report/chat.
+- FaceCheck: real when `FACECHECK_API_TOKEN` is set and `FACECHECK_TESTING_MODE=false`, otherwise mock candidates.
+- YooKassa: real when shop credentials are set, otherwise mock checkout URL.
+- Storage: S3-compatible when S3 env vars are set, otherwise local `.data/artifacts`.
+
+## Documents
+
+- [SPECIFICATION.md](./SPECIFICATION.md)
+- [docs/source-project-analysis.md](./docs/source-project-analysis.md)
+- [docs/financial-model.md](./docs/financial-model.md)
+- [docs/sibling-bot-ux-reference.md](./docs/sibling-bot-ux-reference.md)
+- [docs/development/local-run.md](./docs/development/local-run.md)
+- [docs/deployment/fly-neon.md](./docs/deployment/fly-neon.md)
+
+## Safety
+
+ZRETI analyzes public data only. HR mode is feature-flagged, OSINT/compliance is role-gated, photo search requires user confirmation, and risky outputs are phrased as hypotheses/signals/checks. The bot refuses harassment, doxing, pressure tactics, privacy bypass and private-profile analysis.

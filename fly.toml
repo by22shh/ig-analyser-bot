@@ -1,0 +1,75 @@
+# Fly.io app config for ZRETI Telegram Bot.
+# Change `app` to your real Fly app name after `fly launch` or before first deploy.
+app = "zreti-telegram-bot"
+primary_region = "fra"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[deploy]
+  release_command = "pnpm prisma:migrate"
+
+[processes]
+  web = "node dist/server.js"
+  worker = "node dist/worker.js"
+
+[env]
+  APP_ENV = "production"
+  PORT = "3000"
+  TELEGRAM_USE_LONG_POLLING = "false"
+  TELEGRAM_API_ROOT = "https://api.telegram.org"
+  CHANNEL_URL = "https://t.me/homie_tech"
+  SUPPORT_URL = "https://t.me/homie_tech"
+  TOS_URL = "https://teletype.in/@homiebot/policy"
+  PRIVACY_URL = "https://telegram.org/privacy-tpa"
+  TELEGRAM_STARS_DEFAULT_CURRENCY = "XTR"
+  FEATURE_TELEGRAM_STARS = "true"
+  FEATURE_YOOKASSA_PAYMENTS = "true"
+  FEATURE_INFLUENCER_MODE = "true"
+  FEATURE_HR_MODE = "false"
+  FEATURE_OSINT_COMPLIANCE_MODE = "false"
+  FEATURE_PHOTO_SEARCH = "false"
+  REPORT_RETENTION_DAYS = "30"
+  ANALYSIS_POST_LIMIT = "30"
+  VISION_BATCH_SIZE = "5"
+  ANALYSIS_MAX_IMAGES_ANALYZED = "30"
+  ANALYSIS_MAX_IMAGE_DOWNLOAD_MB = "8"
+  LLM_FINAL_INPUT_TOKEN_BUDGET = "24000"
+  LLM_FINAL_OUTPUT_TOKEN_BUDGET = "4096"
+  LLM_CHAT_INPUT_TOKEN_BUDGET = "12000"
+  LLM_CHAT_OUTPUT_TOKEN_BUDGET = "2048"
+  PDF_RENDER_TIMEOUT_SECONDS = "60"
+  FACECHECK_TIMEOUT_SECONDS = "90"
+  ECON_USD_TO_RUB_BUFFER = "90"
+  ECON_PAYMENT_FEE_RESERVE = "0.20"
+  ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR = "0.01"
+  ECON_STARS_PAYOUT_RESERVE = "0.20"
+  ECON_TARGET_REVENUE_MULTIPLE = "3"
+  ECON_COST_BASIS = "p75"
+
+[http_service]
+  processes = ["web"]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "10s"
+    method = "GET"
+    path = "/health"
+
+[[vm]]
+  processes = ["web"]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
+
+[[vm]]
+  processes = ["worker"]
+  memory = "1024mb"
+  cpu_kind = "shared"
+  cpus = 1

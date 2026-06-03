@@ -57,8 +57,11 @@
 - источники и source map;
 - метрики, Digital Footprint, Digital Circle;
 - Telegram summary, секции, PDF/Markdown export;
+- HTML export for future dashboard/Mini App and shareable artifacts;
 - чат по готовому отчету;
 - история отчетов;
+- RU/EN localization;
+- retention settings and deletion jobs;
 - credits ledger;
 - Telegram Stars;
 - YooKassa;
@@ -87,6 +90,8 @@
 - test runner: Vitest;
 - lint/format: ESLint + Prettier;
 - runtime env validation: Zod or equivalent.
+- Dockerfile / production process definitions for server and worker.
+- CI workflow or documented CI command set that runs lint, typecheck, tests and `audit-economics`.
 
 Если выбираешь альтернативу внутри допустимых вариантов, зафиксируй причину в README/dev docs. Не меняй стек без крайней необходимости.
 
@@ -114,6 +119,8 @@
 13. Любое начисление credits после платежа idempotent exactly once.
 14. Любая внешняя стоимость пишется в `api_usage_events`.
 15. Реальные providers включаются через env/feature flags, mock mode должен работать всегда.
+16. Все money/credits mutations должны выполняться транзакционно. При списании credits используй row-level locking или эквивалентную защиту от гонок.
+17. `idempotency_key`, provider IDs и event IDs должны иметь DB unique constraints, не только application-level checks.
 
 ## 4. UX должен быть похож на ai-assistant-bot
 
@@ -126,6 +133,7 @@
 - Главное меню inline-keyboard based.
 - `Назад`, `Отменить`, `В меню` есть во всех wizard-сценариях.
 - `/balance`, `/credits`, `/buy`, `/topup`, `/cancel`, `/reset`.
+- `/settings` для языка, report format и retention.
 - Profile screen похож на sibling bot: name, ID, settings, credits, referral/share if enabled.
 - Paywall Stars-first.
 - Если включены Stars + YooKassa, сначала method picker.
@@ -155,6 +163,8 @@
 - photo search results показываются как possible matches, not identity certainty;
 - sensitive outputs формулируются как hypotheses/signals/checks;
 - `/delete_me` удаляет/анонимизирует данные по retention policy;
+- uploaded photos deleted after photo search completes or within configured TTL;
+- report retention defaults to `.env.example` value and can be changed only within allowed policy;
 - audit trail для risky modes.
 
 Если требование UX конфликтует с compliance, compliance важнее.
@@ -230,8 +240,11 @@ Implement YooKassa:
 - idempotent credit grant on `payment.succeeded`;
 - `payment.canceled` no grant;
 - refund flow for unused credits;
+- chargeback/dispute admin flow: freeze account/balance and write manual adjustment, never mutate historical ledger rows;
 - duplicate webhook no double credit;
 - raw event persisted with redaction;
+- YooKassa IP allowlist/status reconciliation where configured;
+- 54-FZ receipt payload preparation and receipt status storage when receipts are enabled;
 - YooKassa fees in finance exports.
 
 ## 8. Data model
@@ -268,6 +281,8 @@ Use integer minor units for credits: `1 credit = 100 credit_units`.
 
 Use unique constraints for payment/provider IDs and event idempotency.
 
+Add migrations, seed data for initial package catalog, and repeatable local reset/dev seed commands.
+
 ## 9. Analysis pipeline
 
 Implement pipeline:
@@ -285,9 +300,10 @@ Implement pipeline:
 11. Compute metrics and Digital Circle.
 12. Persist report/sections/source map.
 13. Generate Markdown export.
-14. Generate PDF via Playwright worker.
-15. Capture credits only when policy says operation succeeded.
-16. Notify user with summary and action buttons.
+14. Generate HTML export.
+15. Generate PDF via Playwright worker.
+16. Capture credits only when policy says operation succeeded.
+17. Notify user with summary and action buttons.
 
 Default caps:
 
@@ -315,6 +331,8 @@ Full report:
 
 - sections from spec;
 - sources;
+- source map;
+- HTML export;
 - PDF;
 - Markdown fallback;
 - report chat.
@@ -443,6 +461,7 @@ Work in phases, but continue until the full MVP is complete.
 - TypeScript config;
 - lint/format/test;
 - Docker Compose PostgreSQL/Redis;
+- Dockerfile for app image;
 - env validation;
 - logger;
 - Prisma schema/migrations;
@@ -466,9 +485,11 @@ Work in phases, but continue until the full MVP is complete.
 - `/buy`;
 - `/topup`;
 - `/help`;
+- `/settings`;
 - `/cancel`;
 - `/reset`;
 - consent;
+- RU/EN locale coverage for all implemented screens;
 - sibling-like snapshots.
 
 ### Phase 2 - Credits/economics
@@ -490,6 +511,7 @@ Work in phases, but continue until the full MVP is complete.
 - mocked report;
 - history;
 - report browsing;
+- `/settings` for language/report format/retention;
 - Markdown export.
 
 ### Phase 4 - Real analysis adapters
@@ -509,6 +531,9 @@ Work in phases, but continue until the full MVP is complete.
 - report chat;
 - quick questions;
 - chat limits and costs.
+- HTML export template.
+- PDF template.
+- artifact lifecycle/retention.
 
 ### Phase 6 - Photo search
 
@@ -534,6 +559,11 @@ Work in phases, but continue until the full MVP is complete.
 - audit logs;
 - retention jobs;
 - delete_me;
+- settings screen;
+- RU/EN localization completeness check;
+- Dockerfile/server-worker production run commands;
+- CI workflow or equivalent documented automation;
+- backup/restore notes;
 - observability;
 - rate limits;
 - load tests;
@@ -559,7 +589,9 @@ Minimum test coverage areas:
 - chunking <= 4096;
 - HTML escaping;
 - report parser;
+- required report sections validation for standard/HR/influencer/OSINT modes;
 - Digital Circle scoring;
+- Digital Footprint extraction;
 - credit reserve/capture/refund;
 - ledger invariants;
 - economics formulas;
@@ -581,8 +613,11 @@ pnpm test:integration
 pnpm test:e2e
 pnpm audit-economics
 pnpm prisma:migrate
+pnpm prisma:seed
 pnpm dev
 pnpm worker
+pnpm build
+pnpm start
 ```
 
 If you cannot run a test because external credentials are missing, the test must be either mock-based or explicitly skipped only for live-provider mode. The default local test suite must pass without external credentials.
@@ -606,21 +641,24 @@ Do not declare completion until all are true:
 13. LLM adapter can run in staging when key is present.
 14. Report sections are parsed and stored.
 15. PDF/Markdown export works.
-16. User can browse history.
-17. User can chat by completed report.
-18. Photo search works in mock mode and adapter mode behind flag.
-19. Stars purchase works in test/mock mode.
-20. YooKassa purchase works in test/mock mode.
-21. Duplicate payment events cannot double-credit.
-22. Refunds adjust credits through ledger.
-23. `audit-economics` passes for enabled public packages/modes.
-24. Safety/compliance guardrails are implemented.
-25. `/delete_me` works.
-26. Admin tools exist.
-27. Logs do not leak secrets.
-28. Tests, lint, typecheck and audit pass.
-29. README documents local run, env, test, deploy basics.
-30. Production checklist is either completed or has explicit remaining external/business blockers.
+16. HTML export works.
+17. User can browse history.
+18. User can chat by completed report.
+19. Photo search works in mock mode and adapter mode behind flag.
+20. Stars purchase works in test/mock mode.
+21. YooKassa purchase works in test/mock mode.
+22. Duplicate payment events cannot double-credit.
+23. Refunds adjust credits through ledger.
+24. `audit-economics` passes for enabled public packages/modes.
+25. RU/EN localization is complete for user-facing MVP flows.
+26. Retention jobs and artifact cleanup work.
+27. Safety/compliance guardrails are implemented.
+28. `/delete_me` works.
+29. Admin tools exist.
+30. Logs do not leak secrets.
+31. Tests, lint, typecheck and audit pass.
+32. README documents local run, env, test, deploy basics.
+33. Production checklist is either completed or has explicit remaining external/business blockers.
 
 ## 19. Working style
 

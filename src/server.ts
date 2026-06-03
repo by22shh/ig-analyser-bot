@@ -13,6 +13,9 @@ if (env.TELEGRAM_USE_LONG_POLLING) {
   bot.start();
   logger.info("telegram_long_polling_started");
 } else if (env.TELEGRAM_WEBHOOK_URL && env.TELEGRAM_BOT_TOKEN) {
+  // Required before handleUpdate() can run in webhook mode: grammy throws
+  // "Bot not initialized!" otherwise. (Long polling inits inside bot.start().)
+  await bot.init();
   await bot.api.setWebhook(env.TELEGRAM_WEBHOOK_URL, {
     ...(env.TELEGRAM_WEBHOOK_SECRET ? { secret_token: env.TELEGRAM_WEBHOOK_SECRET } : {})
   });

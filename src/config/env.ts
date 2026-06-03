@@ -247,6 +247,15 @@ function assertProductionConfiguration(data: ParsedEnv) {
     requireNumber("ECON_PHOTO_SEARCH_COST_P75_RUB");
     requireNumber("ECON_FACECHECK_SEARCH_COST_RUB");
     requireNumber("FACECHECK_MAX_COST_RUB");
+    // The declared cost cap must actually bound the budgeted per-search cost,
+    // otherwise FACECHECK_MAX_COST_RUB is required but constrains nothing.
+    if (
+      typeof data.ECON_FACECHECK_SEARCH_COST_RUB === "number" &&
+      typeof data.FACECHECK_MAX_COST_RUB === "number" &&
+      data.ECON_FACECHECK_SEARCH_COST_RUB > data.FACECHECK_MAX_COST_RUB
+    ) {
+      errors.push("ECON_FACECHECK_SEARCH_COST_RUB must not exceed FACECHECK_MAX_COST_RUB");
+    }
     if (data.FACECHECK_TESTING_MODE) {
       errors.push(
         "FACECHECK_TESTING_MODE must be false when photo search is enabled in production"

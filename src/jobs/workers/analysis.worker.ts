@@ -138,22 +138,27 @@ export function startAnalysisWorker(input: {
           strategicReport,
           report.expiresAt ?? new Date(Date.now() + retentionDays * 86400000)
         );
+        // Capture credits and mark the job completed in the same transaction:
+        // a crash between the two would otherwise leave a captured job that is
+        // not "completed", so a retry would re-run the paid pipeline and the
+        // second capture would fail with RESERVE_NOT_FOUND.
         await credits.captureReserve({
           userId: row.userId,
           analysisJobId: row.id,
           amountUnits: row.costCreditUnits,
-          metadata: { mode: row.mode, username: row.targetUsername }
-        });
-
-        await input.prisma.analysisJob.update({
-          where: { id: row.id },
-          data: {
-            status: "completed",
-            stage: "completed",
-            progressCurrent: 4,
-            progressTotal: 4,
-            progressPercent: 100,
-            finishedAt: new Date()
+          metadata: { mode: row.mode, username: row.targetUsername },
+          within: async (tx) => {
+            await tx.analysisJob.update({
+              where: { id: row.id },
+              data: {
+                status: "completed",
+                stage: "completed",
+                progressCurrent: 4,
+                progressTotal: 4,
+                progressPercent: 100,
+                finishedAt: new Date()
+              }
+            });
           }
         });
         // Work is done and credits captured; a delivery hiccup must not fail the

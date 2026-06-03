@@ -192,6 +192,10 @@ export class CreditsService {
     photoSearchJobId?: string;
     amountUnits: number;
     metadata?: Prisma.InputJsonValue;
+    // Extra writes (e.g. marking the owning job completed) committed atomically
+    // with the capture, so a crash cannot leave a captured-but-unfinished job
+    // that a retry would re-run and double-charge.
+    within?: (tx: Prisma.TransactionClient) => Promise<void>;
   }) {
     if (input.amountUnits <= 0) throw new Error("amountUnits must be positive");
     return this.prisma.$transaction(async (tx) => {
@@ -210,7 +214,7 @@ export class CreditsService {
           balanceUnits: { decrement: amount }
         }
       });
-      return tx.creditTransaction.create({
+      const transaction = await tx.creditTransaction.create({
         data: {
           userId: input.userId,
           analysisJobId: input.analysisJobId,
@@ -221,6 +225,8 @@ export class CreditsService {
           metadata: input.metadata
         }
       });
+      if (input.within) await input.within(tx);
+      return transaction;
     });
   }
 

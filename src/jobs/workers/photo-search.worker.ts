@@ -61,11 +61,20 @@ export function startPhotoSearchWorker(input: {
             rawScore: match.rawScore
           }))
         });
+        // Capture credits and mark the job completed atomically (same reasoning
+        // as the analysis worker): a crash between the two would let a retry
+        // re-run the paid FaceCheck search and then fail the second capture.
         await credits.captureReserve({
           userId: row.userId,
           photoSearchJobId: row.id,
           amountUnits: MODE_COST_UNITS.photo_search,
-          metadata: { photoSearchJobId: row.id }
+          metadata: { photoSearchJobId: row.id },
+          within: async (tx) => {
+            await tx.photoSearchJob.update({
+              where: { id: row.id },
+              data: { status: "completed", finishedAt: new Date() }
+            });
+          }
         });
         await recordUsage(input.prisma, {
           userId: row.userId,
@@ -73,10 +82,6 @@ export function startPhotoSearchWorker(input: {
             env.FACECHECK_API_TOKEN && !env.FACECHECK_TESTING_MODE ? "facecheck" : "mock_facecheck",
           operation: "photo_search",
           status: "success"
-        });
-        await input.prisma.photoSearchJob.update({
-          where: { id: row.id },
-          data: { status: "completed", finishedAt: new Date() }
         });
         if (input.bot) {
           const kb = new InlineKeyboard();

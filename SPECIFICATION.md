@@ -1,6 +1,6 @@
 # Спецификация Telegram-бота ZRETI
 
-Версия: 0.5.
+Версия: 0.6.
 
 Дата: 2026-06-03.
 
@@ -49,6 +49,7 @@
 3. Затем заменить моки реальными adapters по одному: Apify, image fetch/vision, final report, PDF, FaceCheck.
 4. Только после этого включать credits capture/refund и admin инструменты.
 5. Перед включением реальных платежей добавить economics guardrails: лимиты токенов/постов/изображений, учет `api_usage_events`, расчет себестоимости и CI-проверку pricing.
+6. UX, формат сообщений, меню, paywall, профиль и базовые пользовательские сценарии делать максимально похожими на sibling-бот `/Users/Bayramov_N/Desktop/Other/ai-assistant-bot`, если это не конфликтует с аналитической/OSINT-спецификой ZRETI.
 
 ### 1.2. Functional parity with the source site
 
@@ -154,6 +155,8 @@ Parity definition:
 5. Рискованные режимы доступны только с ограничениями и явным подтверждением правил.
 6. Бот не должен помогать преследованию, доксингу, угрозам, давлению на третьих лиц, обходу приватности.
 7. Любой внешний API может упасть; система должна деградировать понятно.
+8. Бот должен ощущаться частью той же группы продуктов, что и `ai-assistant-bot`: похожие меню, tone of voice, credit/paywall flow, profile screen, support/help сценарии и структура кнопок.
+9. UX-сходство не должно ухудшать безопасность: ZRETI-specific compliance, публичные источники и ограничения анализа имеют приоритет над дружелюбностью формулировок.
 
 ## 5. Персоны пользователей
 
@@ -347,18 +350,50 @@ Parity definition:
 
 ## 7. Telegram UX
 
+### 7.0. UX alignment with `ai-assistant-bot`
+
+ZRETI and `ai-assistant-bot` belong to one product group. Therefore ZRETI should reuse the sibling bot's Telegram-native UX patterns where they fit the domain.
+
+Reference document: [docs/sibling-bot-ux-reference.md](./docs/sibling-bot-ux-reference.md).
+
+Shared UX requirements:
+
+- HTML parse mode for bot-authored formatted messages.
+- Centralized message/text helpers; handlers must not assemble large user-facing strings inline.
+- Short title line with a clear icon/label, then compact paragraphs or bullets.
+- Dynamic user/provider/model/report text must be HTML-escaped.
+- Main menu is inline-keyboard based and can be restored from any state.
+- `Назад` returns to the previous screen or main menu; `Отменить` clears the current wizard/FSM.
+- Insufficient credits always shows cost, available balance and a direct top-up keyboard.
+- Paywall is Stars-first; RUB/YooKassa is shown only when configured and allowed.
+- Profile screen includes identity, settings, credits and referral/share controls if enabled.
+- Long outputs are chunked; action keyboard is attached only to the final chunk.
+- Support, terms and privacy links are shown from `/help` and optionally from main menu.
+
+Sibling patterns to adapt, not copy blindly:
+
+- `ai-assistant-bot` lets users choose LLM models; ZRETI should not expose free model selection in MVP because report quality and economics depend on a controlled pipeline.
+- `ai-assistant-bot` has daily free credits; ZRETI may use admin/trial grants, but daily free expensive reports must be disabled unless `audit-economics` approves it as acquisition spend.
+- `Regenerate` and `Continue` are cheap chat actions in sibling bot; ZRETI re-analysis is expensive and must be priced or admin-only.
+- Custom credit amount is useful in sibling bot; ZRETI should postpone arbitrary custom packages until the package catalog and economics audit are implemented.
+
 ### 7.1. Команды
 
 MVP commands:
 
-- `/start` - onboarding, язык, согласие, главное меню.
-- `/menu` - главное меню.
+- `/start` - onboarding, referral payload, согласие, главное меню.
+- `/menu` - главное меню, alias for returning to welcome payload.
 - `/analyze` - начать анализ по username.
 - `/photo` - поиск username по фото.
 - `/history` - история отчетов.
-- `/credits` - баланс/тариф.
+- `/credits` - баланс/тариф, alias to sibling-like credits screen.
+- `/balance` - баланс, alias like `ai-assistant-bot`.
+- `/buy` - пополнение, alias like `ai-assistant-bot`.
+- `/topup` - пополнение, alias like `ai-assistant-bot`.
 - `/settings` - язык, формат отчета, retention.
 - `/help` - помощь.
+- `/cancel` - отменить текущий wizard/FSM.
+- `/reset` - очистить текущий report-chat context, not reports/history.
 - `/delete_me` - удалить пользовательские данные.
 
 Admin commands:
@@ -374,30 +409,66 @@ Admin commands:
 
 Кнопки:
 
-- `Анализ по username`.
+- `Анализ профиля`.
 - `Поиск по фото`.
 - `История`.
-- `Баланс`.
+- `Профиль`.
+- `Пополнить кредиты`.
+- `Что я умею`.
+- `Поддержка`, if configured.
 - `Настройки`.
-- `Помощь`.
 
 Если пользователь admin, добавляется:
 
 - `Admin`.
 
+Menu layout should follow sibling bot's compact row logic:
+
+- optional Mini App / web dashboard button first, one full-width row;
+- two primary actions in one row where possible;
+- profile and credits near each other;
+- help/capabilities after core actions;
+- URL buttons only when configured;
+- `Назад` as the final single-button row in submenus.
+
 ### 7.3. Onboarding flow
 
 1. `/start`.
 2. Бот определяет Telegram language code.
-3. Показывает выбор языка: `Русский`, `English`.
-4. Показывает краткое описание:
+3. Если пользователь новый, обрабатывает referral payload по паттерну sibling bot.
+4. Показывает выбор языка: `Русский`, `English`, если язык не был выбран ранее.
+5. Показывает краткое описание:
    - анализируем только публичные данные;
    - не анализируем private profiles;
    - пользователь отвечает за законность цели;
    - фото-поиск требует права на использование изображения.
-5. Пользователь нажимает `Принимаю правила`.
-6. Создается/обновляется user record.
-7. Показывается главное меню.
+6. Пользователь нажимает `Принимаю правила`.
+7. Создается/обновляется user record.
+8. Показывается sibling-like welcome payload:
+   - бренд;
+   - короткая ценность;
+   - credits total;
+   - сколько куплено/выдано;
+   - текущий язык/режим по умолчанию;
+   - главное меню.
+
+Welcome message shape:
+
+```text
+<icon> <b>ZRETI</b> - короткое описание ценности.
+
+💎 Кредиты: <b>{total}</b>
+🌐 Язык отчета: <b>{language}</b>
+
+<b>Что можно сделать:</b>
+• Анализ публичного Instagram-профиля
+• Поиск возможного профиля по фото
+• PDF-отчет и чат по готовому отчету
+
+Выберите действие ниже.
+```
+
+Implementation note: exact icons/text can change, but message density and account-state-first structure should remain close to `ai-assistant-bot`.
 
 ### 7.4. Username analysis flow
 
@@ -434,7 +505,138 @@ Admin commands:
    - `Новый анализ`;
    - `Повторить позже`.
 
-### 7.5. Photo search flow
+### 7.5. Profile and credits screen
+
+Profile screen should follow `ai-assistant-bot` structure, adapted for ZRETI.
+
+Required profile fields:
+
+- Telegram display name;
+- Telegram user ID in `<code>`;
+- selected language;
+- total credits;
+- purchased credits;
+- granted/trial credits;
+- completed reports count;
+- active jobs count;
+- retention setting;
+- referral link and invited count, if referral feature is enabled.
+
+Profile buttons:
+
+- `Пополнить кредиты`;
+- `История`;
+- `Скопировать ссылку`, if referral is enabled and Telegram client supports copy text;
+- `Пригласить друга`, if referral is enabled;
+- `Назад`.
+
+Balance aliases:
+
+- `/credits` and `/balance` both show the same compact balance card.
+- If balance is insufficient for the last attempted action, include the action cost and a direct top-up keyboard.
+
+Balance message shape:
+
+```text
+💎 <b>Ваши кредиты: {total}</b>
+• куплено: {purchased}
+• выдано/промо: {granted}
+
+Standard-анализ: {standard_cost} 💎
+Photo search: {photo_cost} 💎
+
+Бесплатные/промо credits могут быть ограничены сроком действия.
+```
+
+### 7.6. Paywall flow
+
+Paywall should mirror the sibling bot's two-step method selection.
+
+Entry points:
+
+- `Пополнить кредиты` button;
+- `/buy`;
+- `/topup`;
+- insufficient credits error;
+- profile screen.
+
+Step 1, method selection:
+
+- If both channels are enabled:
+  - `Telegram Stars`;
+  - `Банковская карта / СБП`.
+- If only Stars are enabled, skip method selection and show Stars packages.
+- If only YooKassa is enabled, show RUB packages and receipt email flow if needed.
+
+Step 2, package selection:
+
+- Buttons show package title, credits and price:
+  - Stars: `{title} - {credits}💎 за {stars} ⭐`;
+  - RUB: `{title} - {credits}💎 за {rub} ₽`.
+- `Назад` returns to method selection.
+- `В меню` returns to main menu.
+
+Stars payment message shape:
+
+```text
+⭐ <b>Оплата через Telegram Stars</b>
+
+Выберите пакет. В кнопке указаны credits и цена в Stars.
+Кредиты начислятся автоматически после оплаты.
+```
+
+YooKassa payment message shape:
+
+```text
+💳 <b>Оплата картой или через СБП</b>
+
+Выберите пакет. После оплаты на защищенной странице YooKassa
+кредиты начислятся автоматически.
+```
+
+If YooKassa test mode is enabled, prepend a visible test-mode badge.
+
+Custom amount:
+
+- Do not include arbitrary custom credits in MVP.
+- Add it only after `audit-economics` supports arbitrary amount pricing.
+
+### 7.7. Help, support and legal
+
+`/help` should follow sibling structure:
+
+- short explanation of what the bot does;
+- step-by-step usage;
+- support link;
+- terms link;
+- privacy link;
+- `/delete_me` mention;
+- warning that Telegram support cannot solve purchases made through the bot.
+
+`Что я умею` is a separate compact capabilities screen, not a long documentation page.
+
+### 7.8. Cancel, back and reset behavior
+
+Adopt sibling bot behavior:
+
+- `/cancel` clears current FSM/wizard and confirms cancellation.
+- `Отменить` button does the same for current wizard.
+- `Назад` returns to the previous wizard step where possible.
+- `В меню` clears FSM and renders fresh welcome payload.
+- `/reset` clears only current report-chat context. It must not delete reports, jobs, payment records or profile data.
+
+Wizard states that must support cancel/back:
+
+- waiting for username;
+- mode selection;
+- HR target position;
+- OSINT lawful basis confirmation;
+- photo upload;
+- photo match selection;
+- YooKassa receipt email;
+- report-chat prompt.
+
+### 7.9. Photo search flow
 
 1. Пользователь нажимает `Поиск по фото`.
 2. Бот просит отправить фото как image или document.
@@ -456,7 +658,7 @@ Admin commands:
    - загрузить другое фото;
    - ввести username вручную.
 
-### 7.6. Report browsing flow
+### 7.10. Report browsing flow
 
 После анализа пользователь получает короткий message:
 
@@ -478,11 +680,24 @@ ER: 5.67%
 Inline buttons:
 
 - `Секции`.
+- `PDF`.
+- `Задать вопрос`.
+- `Источники`.
+- `Повторить анализ`.
+- `Назад`.
+
+Secondary section buttons:
+
 - `Готовые фразы`.
 - `Инсайты`.
 - `Digital circle`.
-- `PDF`.
-- `Чат по отчету`.
+- `Метрики`.
+
+Rules:
+
+- `Повторить анализ` is a new paid job by default.
+- Provider retry after failure is admin/system flow and must not look like a free regenerate button.
+- Keyboard goes on the last chunk if the message is split.
 
 Telegram text message limit требует разбивать длинные секции на части. Правило:
 
@@ -490,7 +705,7 @@ Telegram text message limit требует разбивать длинные с�
 - формат HTML parse mode, а не MarkdownV2, чтобы проще экранировать спецсимволы;
 - если section > 3 chunks, отправлять section как document `.txt/.md` плюс short preview.
 
-### 7.7. Chat by report flow
+### 7.11. Chat by report flow
 
 1. Пользователь нажимает `Чат по отчету`.
 2. Бот привязывает active chat session к последнему report или выбранному report.
@@ -505,6 +720,13 @@ Telegram text message limit требует разбивать длинные с�
 6. Chat service отвечает на основе report context.
 7. Ответ сохраняется в `report_chat_messages`.
 
+After report-chat answer, show sibling-like compact action buttons:
+
+- `Еще вопрос`;
+- `К отчету`;
+- `PDF`;
+- `Назад`.
+
 Ограничения:
 
 - chat доступен только по завершенному report;
@@ -512,7 +734,7 @@ Telegram text message limit требует разбивать длинные с�
 - чат не должен раскрывать raw prompts;
 - чат не должен генерировать вредные инструкции.
 
-### 7.8. History flow
+### 7.12. History flow
 
 `/history` показывает последние N отчетов.
 
@@ -2783,6 +3005,8 @@ Required:
 
 - username normalization;
 - Telegram callback routing;
+- Telegram message renderers/golden snapshots for start, profile, paywall, insufficient credits and report summary;
+- keyboard layout snapshots for main menu, paywall, profile, report actions and back/cancel states;
 - chunking messages <= 4096;
 - HTML escaping;
 - Apify mapping;
@@ -2802,6 +3026,11 @@ Required:
 Required:
 
 - fake Telegram update -> command handler;
+- `/start` -> sibling-like welcome payload and main menu;
+- `/balance` / `/credits` -> compact balance card;
+- insufficient credits -> top-up keyboard;
+- paywall Stars-only -> Stars packages directly;
+- paywall Stars+YooKassa -> method picker first;
 - start analysis -> queue job;
 - Apify mocked response -> profile snapshot;
 - LLM mocked report -> parsed sections;
@@ -3088,22 +3317,24 @@ These tickets are the recommended start order:
 3. Add Prisma/Drizzle schema for `users`, `user_settings`, `analysis_jobs`, `reports`, `report_sections`, `credit_accounts`, `credit_transactions`, `audit_logs`.
 4. Implement structured logger and request/job correlation IDs.
 5. Implement Telegram webhook with secret validation and duplicate `update_id` protection.
-6. Implement `/start`, language selection, consent acceptance and main menu.
-7. Implement username normalization with unit tests.
-8. Implement analysis wizard with mode selection and confirmation.
-9. Implement credit account creation and admin grant command.
-10. Implement initial economics module with package catalog, net RUB/credit floor and required-unit calculations.
-11. Implement BullMQ queues and mocked `analysis.worker`.
-12. Implement progress message creation/editing.
-13. Implement mocked completed report and section browsing.
-14. Implement message chunking and HTML escaping tests.
-15. Implement report persistence and `/history`.
-16. Implement Markdown export as a simple artifact.
-17. Implement Apify adapter behind interface with mocked integration test.
-18. Implement real Apify fetch for one public username in staging/dev.
-19. Implement report parser and required-section validation.
-20. Implement OpenRouter final report adapter with provider timeout/retry.
-21. Implement PDF export after Telegram report delivery is already stable.
+6. Implement locale/message catalog and inline keyboard helpers based on sibling-bot UX patterns.
+7. Implement `/start`, language selection, consent acceptance and sibling-like main menu.
+8. Implement `/profile`, `/balance`, `/credits`, `/buy`, `/topup`, `/cancel`, `/reset` shell flows.
+9. Implement username normalization with unit tests.
+10. Implement analysis wizard with mode selection and confirmation.
+11. Implement credit account creation and admin grant command.
+12. Implement initial economics module with package catalog, net RUB/credit floor and required-unit calculations.
+13. Implement BullMQ queues and mocked `analysis.worker`.
+14. Implement progress message creation/editing.
+15. Implement mocked completed report and section browsing.
+16. Implement message chunking, HTML escaping and UX snapshot tests.
+17. Implement report persistence and `/history`.
+18. Implement Markdown export as a simple artifact.
+19. Implement Apify adapter behind interface with mocked integration test.
+20. Implement real Apify fetch for one public username in staging/dev.
+21. Implement report parser and required-section validation.
+22. Implement OpenRouter final report adapter with provider timeout/retry.
+23. Implement PDF export after Telegram report delivery is already stable.
 
 The first sprint should not include FaceCheck, HR, OSINT, real payments or Mini App work. Those depend on a stable core pipeline.
 
@@ -3127,8 +3358,9 @@ MVP is done when all conditions below are true:
 14. Basic admin view shows active/failed jobs and usage.
 15. Unit and integration tests cover normalization, chunking, report parser, credit reservation and provider error mapping.
 16. Logs contain no secrets or raw base64.
-17. `audit-economics` passes for the enabled payment packages and public modes.
-18. Production checklist items that apply to MVP staging are completed.
+17. UX snapshot tests confirm `/start`, profile, paywall and report actions follow the sibling-bot format.
+18. `audit-economics` passes for the enabled payment packages and public modes.
+19. Production checklist items that apply to MVP staging are completed.
 
 ### 22.4. Decisions that can remain open during Phase 0-2
 
@@ -3211,6 +3443,8 @@ Before launch:
 ## 25. Sources and constraints
 
 Source project facts are documented in [docs/source-project-analysis.md](./docs/source-project-analysis.md).
+
+Sibling bot UX patterns are documented in [docs/sibling-bot-ux-reference.md](./docs/sibling-bot-ux-reference.md), based on `/Users/Bayramov_N/Desktop/Other/ai-assistant-bot`.
 
 Telegram Bot API constraints used in this spec:
 

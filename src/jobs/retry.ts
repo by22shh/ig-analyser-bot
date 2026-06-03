@@ -8,7 +8,10 @@
  * final attempt, otherwise a successful retry would capture an already-released
  * reserve (i.e. hand out the work for free).
  */
-export function isFinalAttempt(job: { attemptsMade: number; attempts: number | undefined }): boolean {
+export function isFinalAttempt(job: {
+  attemptsMade: number;
+  attempts: number | undefined;
+}): boolean {
   const attempts = job.attempts && job.attempts > 0 ? job.attempts : 1;
   return job.attemptsMade + 1 >= attempts;
 }

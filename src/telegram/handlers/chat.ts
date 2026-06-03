@@ -1,7 +1,10 @@
 import { CB } from "../constants.js";
+import { InsufficientCreditsError } from "../../modules/billing/credits.service.js";
 import type { MyContext } from "../context.js";
+import { paymentMethodsKeyboard } from "../keyboards/payments.js";
 import { reportChatKeyboard } from "../keyboards/reports.js";
 import { t, type LocaleMessages } from "../locales/index.js";
+import { escapeHtml } from "../formatters/html.js";
 import { sendHtml } from "./helpers.js";
 
 export function registerChatHandlers(bot: import("grammy").Bot<MyContext>) {
@@ -45,12 +48,32 @@ function quickQuestion(messages: LocaleMessages, key: string): string {
 
 async function ask(ctx: MyContext, reportId: string, question: string) {
   if (!ctx.user) return;
+  const messages = t(ctx.user.language);
   await ctx.replyWithChatAction("typing");
-  const answer = await ctx.services.chat.ask({
-    userId: ctx.user.id,
-    reportId,
-    question,
-    language: ctx.user.language === "en" ? "en" : "ru"
-  });
-  await sendHtml(ctx, answer.text, reportChatKeyboard(t(ctx.user.language), reportId));
+  try {
+    const answer = await ctx.services.chat.ask({
+      userId: ctx.user.id,
+      reportId,
+      question,
+      language: ctx.user.language === "en" ? "en" : "ru"
+    });
+    try {
+      await sendHtml(ctx, escapeHtml(answer.text), reportChatKeyboard(messages, reportId));
+    } catch (deliveryError) {
+      await ctx.services.chat
+        .refundUndeliveredAnswer({
+          userId: ctx.user.id,
+          reportId,
+          reason: deliveryError instanceof Error ? deliveryError.message : String(deliveryError)
+        })
+        .catch(() => undefined);
+      throw deliveryError;
+    }
+  } catch (error) {
+    if (error instanceof InsufficientCreditsError) {
+      await sendHtml(ctx, messages.insufficientCredits(error), paymentMethodsKeyboard(messages));
+      return;
+    }
+    throw error;
+  }
 }

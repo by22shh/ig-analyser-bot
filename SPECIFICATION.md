@@ -57,33 +57,33 @@
 
 Feature parity target:
 
-| Функция сайта | Должна быть в боте | Как переносится в Telegram |
-| --- | --- | --- |
-| Анализ по Instagram username / ссылке | Да | `/analyze`, прямой ввод `@username` или URL, wizard выбора режима |
-| Очистка username из `@name` и `instagram.com/name` | Да | `normalizeInstagramUsername` с unit tests |
-| Поиск по фото | Да | `/photo`, загрузка фото/document, FaceCheck adapter, список кандидатов кнопками |
-| Выбор найденного username после photo search | Да | Inline-кнопки `Анализировать`, `Открыть Instagram`, `Не тот человек` |
-| Standard profile analysis | Да | Первый end-to-end режим MVP |
-| Debt/collector mode сайта | Частично, с изменением | Не переносится как "коллекторский прессинг"; заменяется на role-gated `OSINT / Compliance` без давления, доксинга и контакта с третьими лицами |
-| HR candidate analysis | Да | Feature flag, target position, disclaimer, отчет как гипотезы для проверки |
-| Influencer audit | Да | Второй режим после standard или отдельный feature flag |
-| Apify-сбор публичных Instagram-постов | Да | Server-side Apify adapter, jobs, retries, snapshots в БД |
-| Анализ до 30 последних постов | Да | `ANALYSIS_POST_LIMIT`, по умолчанию 30 |
-| Vision-анализ изображений пачками | Да | Worker pipeline, batch size 5, model config |
-| Финальный LLM-отчет с `[[SECTION]]` | Да | Prompt registry, parser, validation required sections |
-| Источники-ссылки на посты | Да | Source map в report sections, ссылки в Telegram/PDF/Markdown |
-| Метрики: avg likes, comments, ER, frequency | Да | Telegram summary + report metrics |
-| График лайков/комментариев | Да, но не как web chart в MVP | В MVP таблица/summary; в PDF можно рендерить chart image; Mini App может вернуть интерактивный график |
-| Digital footprint: locations, music, related profiles, pinned posts | Да | Отдельная секция Telegram/PDF |
-| Digital Circle / близкие связи | Да | Перенос алгоритма scoring из сайта, top 8 связей |
-| Копирование секций | Да, в другой форме | Пользователь получает секцию отдельным сообщением/document; Telegram-клиент сам позволяет копировать текст |
-| White-label PDF settings | Да, но не обязательно в первом MVP | Server-side PDF, title/logo settings для pro/admin или v1.1 |
-| `window.print()` PDF сайта | Нет как механизм | Заменяется server-side HTML-to-PDF через Playwright |
-| AI Chat по готовому отчету | Да | `Чат по отчету`, quick questions, сохранение chat history |
-| Recent searches из localStorage | Да, в улучшенной форме | `/history` в PostgreSQL, не localStorage |
-| RU/EN language switcher | Да | Onboarding/settings, locale middleware |
-| Ошибки private profile / credits / retry | Да | Error mapping, refunds/retries, progress messages |
-| Cyber UI, анимации, sticky dashboard | Нет как обязательная parity | Telegram UX + PDF/Markdown; visual parity возможна только в Mini App |
+| Функция сайта                                                       | Должна быть в боте                 | Как переносится в Telegram                                                                                                                     |
+| ------------------------------------------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Анализ по Instagram username / ссылке                               | Да                                 | `/analyze`, прямой ввод `@username` или URL, wizard выбора режима                                                                              |
+| Очистка username из `@name` и `instagram.com/name`                  | Да                                 | `normalizeInstagramUsername` с unit tests                                                                                                      |
+| Поиск по фото                                                       | Да                                 | `/photo`, загрузка фото/document, FaceCheck adapter, список кандидатов кнопками                                                                |
+| Выбор найденного username после photo search                        | Да                                 | Inline-кнопки `Анализировать`, `Открыть Instagram`, `Не тот человек`                                                                           |
+| Standard profile analysis                                           | Да                                 | Первый end-to-end режим MVP                                                                                                                    |
+| Debt/collector mode сайта                                           | Частично, с изменением             | Не переносится как "коллекторский прессинг"; заменяется на role-gated `OSINT / Compliance` без давления, доксинга и контакта с третьими лицами |
+| HR candidate analysis                                               | Да                                 | Feature flag, target position, disclaimer, отчет как гипотезы для проверки                                                                     |
+| Influencer audit                                                    | Да                                 | Второй режим после standard или отдельный feature flag                                                                                         |
+| Apify-сбор публичных Instagram-постов                               | Да                                 | Server-side Apify adapter, jobs, retries, snapshots в БД                                                                                       |
+| Анализ до 30 последних постов                                       | Да                                 | `ANALYSIS_POST_LIMIT`, по умолчанию 30                                                                                                         |
+| Vision-анализ изображений пачками                                   | Да                                 | Worker pipeline, batch size 5, model config                                                                                                    |
+| Финальный LLM-отчет с `[[SECTION]]`                                 | Да                                 | Prompt registry, parser, validation required sections                                                                                          |
+| Источники-ссылки на посты                                           | Да                                 | Source map в report sections, ссылки в Telegram/PDF/Markdown                                                                                   |
+| Метрики: avg likes, comments, ER, frequency                         | Да                                 | Telegram summary + report metrics                                                                                                              |
+| График лайков/комментариев                                          | Да, но не как web chart в MVP      | В MVP таблица/summary; в PDF можно рендерить chart image; Mini App может вернуть интерактивный график                                          |
+| Digital footprint: locations, music, related profiles, pinned posts | Да                                 | Отдельная секция Telegram/PDF                                                                                                                  |
+| Digital Circle / близкие связи                                      | Да                                 | Перенос алгоритма scoring из сайта, top 8 связей                                                                                               |
+| Копирование секций                                                  | Да, в другой форме                 | Пользователь получает секцию отдельным сообщением/document; Telegram-клиент сам позволяет копировать текст                                     |
+| White-label PDF settings                                            | Да, но не обязательно в первом MVP | Server-side PDF, title/logo settings для pro/admin или v1.1                                                                                    |
+| `window.print()` PDF сайта                                          | Нет как механизм                   | Заменяется server-side HTML-to-PDF через Playwright                                                                                            |
+| AI Chat по готовому отчету                                          | Да                                 | `Чат по отчету`, quick questions, сохранение chat history                                                                                      |
+| Recent searches из localStorage                                     | Да, в улучшенной форме             | `/history` в PostgreSQL, не localStorage                                                                                                       |
+| RU/EN language switcher                                             | Да                                 | Onboarding/settings, locale middleware                                                                                                         |
+| Ошибки private profile / credits / retry                            | Да                                 | Error mapping, refunds/retries, progress messages                                                                                              |
+| Cyber UI, анимации, sticky dashboard                                | Нет как обязательная parity        | Telegram UX + PDF/Markdown; visual parity возможна только в Mini App                                                                           |
 
 Parity definition:
 
@@ -497,13 +497,14 @@ Implementation note: exact icons/text can change, but message density and accoun
 10. Worker выполняет pipeline.
 11. Бот редактирует progress message или отправляет stage updates.
 12. После завершения бот отправляет:
-   - краткое summary;
-   - метрики;
-   - кнопки секций;
-   - `PDF`;
-   - `Задать вопрос`;
-   - `Новый анализ`;
-   - `Повторить позже`.
+
+- краткое summary;
+- метрики;
+- кнопки секций;
+- `PDF`;
+- `Задать вопрос`;
+- `Новый анализ`;
+- `Повторить позже`.
 
 ### 7.5. Profile and credits screen
 
@@ -2378,31 +2379,31 @@ MVP payment types:
 
 Canonical credit packages v0.2:
 
-| Package | Credits | Target user |
-| --- | ---: | --- |
-| Trial | 1 | Manual/admin grant only |
-| Start | 3 | First paid users |
-| Pro | 10 | Regular users |
-| Agency | 30 | Small teams |
-| Scale | 100 | Agencies / negotiated |
+| Package | Credits | Target user             |
+| ------- | ------: | ----------------------- |
+| Trial   |       1 | Manual/admin grant only |
+| Start   |       3 | First paid users        |
+| Pro     |      10 | Regular users           |
+| Agency  |      30 | Small teams             |
+| Scale   |     100 | Agencies / negotiated   |
 
 YooKassa RUB prices v0.2:
 
-| Package | Price RUB | Gross RUB / credit | Public status |
-| --- | ---: | ---: | --- |
-| Start | 690 | 230 | Public if `audit-economics` passes |
-| Pro | 1,990 | 199 | Hidden/reprice until p75 cost is proven |
-| Agency | 5,490 | 183 | Hidden/reprice until p75 cost is proven |
-| Scale | 15,900 | 159 | Hidden/negotiated |
+| Package | Price RUB | Gross RUB / credit | Public status                           |
+| ------- | --------: | -----------------: | --------------------------------------- |
+| Start   |       690 |                230 | Public if `audit-economics` passes      |
+| Pro     |     1,990 |                199 | Hidden/reprice until p75 cost is proven |
+| Agency  |     5,490 |                183 | Hidden/reprice until p75 cost is proven |
+| Scale   |    15,900 |                159 | Hidden/negotiated                       |
 
 Telegram Stars prices v0.2:
 
-| Package | Price XTR | XTR / credit | Public status |
-| --- | ---: | ---: | --- |
-| Start | 690 | 230 | Public if Stars payout floor is confirmed |
-| Pro | 2,300 | 230 | Public only if `audit-economics` passes |
-| Agency | 6,900 | 230 | Public only if `audit-economics` passes |
-| Scale | 23,000 | 230 | Hidden/negotiated; check Bot API amount limits before enabling |
+| Package | Price XTR | XTR / credit | Public status                                                  |
+| ------- | --------: | -----------: | -------------------------------------------------------------- |
+| Start   |       690 |          230 | Public if Stars payout floor is confirmed                      |
+| Pro     |     2,300 |          230 | Public only if `audit-economics` passes                        |
+| Agency  |     6,900 |          230 | Public only if `audit-economics` passes                        |
+| Scale   |    23,000 |          230 | Hidden/negotiated; check Bot API amount limits before enabling |
 
 The initial Stars catalog deliberately avoids bulk discounts until real Stars payout/reward settlement and tax treatment are confirmed.
 
@@ -2620,29 +2621,29 @@ Interpretation:
 
 Illustrative package contribution with `C_standard = 55 RUB`:
 
-| Package | Gross | Net after YooKassa | Assumed provider cost | Contribution | Contribution margin |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Start, 3 credits | 690 | 658.54 | 165 | 493.54 | 71.5% |
-| Pro, 10 credits | 1,990 | 1,899.26 | 550 | 1,349.26 | 67.8% |
-| Agency, 30 credits | 5,490 | 5,239.66 | 1,650 | 3,589.66 | 65.4% |
-| Scale, 100 credits | 15,900 | 15,174.96 | 5,500 | 9,674.96 | 60.8% |
+| Package            |  Gross | Net after YooKassa | Assumed provider cost | Contribution | Contribution margin |
+| ------------------ | -----: | -----------------: | --------------------: | -----------: | ------------------: |
+| Start, 3 credits   |    690 |             658.54 |                   165 |       493.54 |               71.5% |
+| Pro, 10 credits    |  1,990 |           1,899.26 |                   550 |     1,349.26 |               67.8% |
+| Agency, 30 credits |  5,490 |           5,239.66 |                 1,650 |     3,589.66 |               65.4% |
+| Scale, 100 credits | 15,900 |          15,174.96 |                 5,500 |     9,674.96 |               60.8% |
 
 Strict guardrail check with `C_standard = 55 RUB`, `ECON_PAYMENT_FEE_RESERVE = 20%`, `ECON_TARGET_REVENUE_MULTIPLE = 3`:
 
-| Package | Gross RUB / credit | Guardrail net RUB / credit | Absolute break-even cost | Max provider cost for 3x | Status at 55 RUB |
-| --- | ---: | ---: | ---: | ---: | --- |
-| Start | 230.00 | 184.00 | 184.00 | 61.33 | Pass |
-| Pro | 199.00 | 159.20 | 159.20 | 53.07 | Fail / reprice or reduce cost |
-| Agency | 183.00 | 146.40 | 146.40 | 48.80 | Fail / reprice or reduce cost |
-| Scale | 159.00 | 127.20 | 127.20 | 42.40 | Fail / keep hidden |
+| Package | Gross RUB / credit | Guardrail net RUB / credit | Absolute break-even cost | Max provider cost for 3x | Status at 55 RUB              |
+| ------- | -----------------: | -------------------------: | -----------------------: | -----------------------: | ----------------------------- |
+| Start   |             230.00 |                     184.00 |                   184.00 |                    61.33 | Pass                          |
+| Pro     |             199.00 |                     159.20 |                   159.20 |                    53.07 | Fail / reprice or reduce cost |
+| Agency  |             183.00 |                     146.40 |                   146.40 |                    48.80 | Fail / reprice or reduce cost |
+| Scale   |             159.00 |                     127.20 |                   127.20 |                    42.40 | Fail / keep hidden            |
 
 Stars guardrail check with `230 XTR/credit`, `ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR = 0.01`, `ECON_USD_TO_RUB_BUFFER = 90`, `ECON_STARS_PAYOUT_RESERVE = 20%`:
 
 | Package | XTR / credit | Guardrail net RUB-equivalent / credit | Max provider cost for 3x | Status at 55 RUB |
-| --- | ---: | ---: | ---: | --- |
-| Start | 230 | 165.60 | 55.20 | Pass, but tight |
-| Pro | 230 | 165.60 | 55.20 | Pass, but tight |
-| Agency | 230 | 165.60 | 55.20 | Pass, but tight |
+| ------- | -----------: | ------------------------------------: | -----------------------: | ---------------- |
+| Start   |          230 |                                165.60 |                    55.20 | Pass, but tight  |
+| Pro     |          230 |                                165.60 |                    55.20 | Pass, but tight  |
+| Agency  |          230 |                                165.60 |                    55.20 | Pass, but tight  |
 
 Verdict for current package catalog:
 

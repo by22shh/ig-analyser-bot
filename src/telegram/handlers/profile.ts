@@ -75,7 +75,10 @@ export function registerProfileHandlers(bot: import("grammy").Bot<MyContext>) {
 
   bot.callbackQuery(new RegExp(`^${CB.SET_EXPORT}:(pdf|markdown|html)$`), async (ctx) => {
     if (!ctx.user || !ctx.match?.[1]) return;
-    await ctx.services.users.updateExportFormat(ctx.user.id, ctx.match[1] as "pdf" | "markdown" | "html");
+    await ctx.services.users.updateExportFormat(
+      ctx.user.id,
+      ctx.match[1] as "pdf" | "markdown" | "html"
+    );
     await ctx.answerCallbackQuery();
     await sendHtml(ctx, t(ctx.user.language).settingsUpdated());
     await showSettings(ctx);
@@ -111,18 +114,30 @@ async function showPaywall(ctx: MyContext) {
   const messages = t(ctx.user.language);
   await ctx.services.payments.ensureCatalog();
   if (env.FEATURE_TELEGRAM_STARS && !env.FEATURE_YOOKASSA_PAYMENTS) {
-    await sendHtml(ctx, messages.starsIntro(), packageKeyboard(messages, "telegram_stars", ctx.services.payments.packages("telegram_stars")));
+    await sendHtml(
+      ctx,
+      messages.starsIntro(),
+      packageKeyboard(messages, "telegram_stars", ctx.services.payments.packages("telegram_stars"))
+    );
     return;
   }
   if (!env.FEATURE_TELEGRAM_STARS && env.FEATURE_YOOKASSA_PAYMENTS) {
-    await sendHtml(ctx, messages.yookassaIntro(env.YOOKASSA_TEST_MODE), packageKeyboard(messages, "yookassa", ctx.services.payments.packages("yookassa")));
+    await sendHtml(
+      ctx,
+      messages.yookassaIntro(env.YOOKASSA_TEST_MODE),
+      packageKeyboard(messages, "yookassa", ctx.services.payments.packages("yookassa"))
+    );
     return;
   }
   if (!env.FEATURE_TELEGRAM_STARS && !env.FEATURE_YOOKASSA_PAYMENTS) {
     await sendHtml(ctx, messages.paymentMethodUnavailable(), backMenuKeyboard(messages));
     return;
   }
-  await sendHtml(ctx, messages.paywallIntro(env.TELEGRAM_STARS_TEST_MODE || env.YOOKASSA_TEST_MODE), paymentMethodsKeyboard(messages));
+  await sendHtml(
+    ctx,
+    messages.paywallIntro(env.TELEGRAM_STARS_TEST_MODE || env.YOOKASSA_TEST_MODE),
+    paymentMethodsKeyboard(messages)
+  );
 }
 
 async function showSettings(ctx: MyContext) {
@@ -142,5 +157,9 @@ async function showSettings(ctx: MyContext) {
 
 async function showHelp(ctx: MyContext) {
   const messages = t(ctx.user?.language);
-  await sendHtml(ctx, messages.help(env.SUPPORT_URL, env.TOS_URL, env.PRIVACY_URL), helpKeyboard(messages));
+  await sendHtml(
+    ctx,
+    messages.help(env.SUPPORT_URL, env.TOS_URL, env.PRIVACY_URL),
+    helpKeyboard(messages)
+  );
 }

@@ -37,7 +37,9 @@ describe("message snapshots", () => {
   it("renders paywall and insufficient credits", () => {
     expect(ru.paywallIntro(true)).toMatchSnapshot();
     expect(paymentMethodsKeyboard(ru).inline_keyboard).toMatchSnapshot();
-    expect(packageKeyboard(ru, "telegram_stars", publicPackages("telegram_stars")).inline_keyboard).toMatchSnapshot();
+    expect(
+      packageKeyboard(ru, "telegram_stars", publicPackages("telegram_stars")).inline_keyboard
+    ).toMatchSnapshot();
     expect(ru.insufficientCredits({ costUnits: 200, availableUnits: 50 })).toMatchSnapshot();
   });
 

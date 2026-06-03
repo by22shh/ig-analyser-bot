@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { decodeInvoicePayload, encodeInvoicePayload } from "../../src/modules/payments/invoice-payload.js";
+import {
+  decodeInvoicePayload,
+  encodeInvoicePayload
+} from "../../src/modules/payments/invoice-payload.js";
 
 describe("invoice payload", () => {
   it("round trips bounded payment data", () => {

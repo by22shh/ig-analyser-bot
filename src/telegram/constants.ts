@@ -6,6 +6,7 @@ export const CB = {
   ANALYZE: "a:start",
   MODE: "a:mode",
   RUN: "a:run",
+  OSINT_LAWFUL_BASIS: "a:osint_basis",
   PHOTO: "p:start",
   PHOTO_ACK: "p:ack",
   PHOTO_ANALYZE: "p:an",

@@ -13,7 +13,33 @@ describe("report parser", () => {
   });
 
   it("reports missing required sections", () => {
-    const missing = validateRequiredSections("influencer", [{ title: "Brand safety", content: "", sources: [] }]);
+    const missing = validateRequiredSections("influencer", [
+      { title: "Brand safety", content: "", sources: [] }
+    ]);
     expect(missing).toContain("Audience quality");
+  });
+
+  it("accepts English aliases for required standard sections", () => {
+    const sections = [
+      "Main themes and priorities",
+      "Recurring visual and textual patterns",
+      "Behavior and engagement",
+      "Audience and comments",
+      "Communication style",
+      "Profession and status",
+      "Difference from typical accounts",
+      "Absences as a signal",
+      "Potential value of contact",
+      "Triggers and hooks",
+      "Communication recommendations",
+      "Ready phrases for starting a dialogue",
+      "Non-obvious observations",
+      "Overall profile value assessment",
+      "Behavioral signals",
+      "Mistakes, blind spots, barriers",
+      "Brand-like image"
+    ].map((title) => ({ title, content: "", sources: [] }));
+
+    expect(validateRequiredSections("standard", sections)).toEqual([]);
   });
 });

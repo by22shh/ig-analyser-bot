@@ -68,7 +68,9 @@ export function getPackage(code: string): PackageView | undefined {
 export function publicPackages(provider: "telegram_stars" | "yookassa"): PackageView[] {
   return CREDIT_PACKAGES.filter((pkg) => {
     if (!pkg.isPublic) return false;
-    return provider === "telegram_stars" ? pkg.starsAmount != null : pkg.rubAmount != null && pkg.code === "start";
+    return provider === "telegram_stars"
+      ? pkg.starsAmount != null
+      : pkg.rubAmount != null && pkg.code === "start";
   });
 }
 

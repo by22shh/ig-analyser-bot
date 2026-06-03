@@ -13,7 +13,11 @@ describe("digital circle", () => {
         likesCount: 10,
         commentsCount: 2,
         latestComments: [
-          { ownerUsername: "friend", text: "This is a thoughtful comment", timestamp: "2026-06-01T00:00:00Z" },
+          {
+            ownerUsername: "friend",
+            text: "This is a thoughtful comment",
+            timestamp: "2026-06-01T00:00:00Z"
+          },
           { ownerUsername: "spam", text: "wow" }
         ],
         timestamp: "2026-06-01T00:00:00Z",

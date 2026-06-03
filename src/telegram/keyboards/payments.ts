@@ -7,7 +7,8 @@ import type { LocaleMessages } from "../locales/index.js";
 export function paymentMethodsKeyboard(messages: LocaleMessages): InlineKeyboard {
   const kb = new InlineKeyboard();
   if (env.FEATURE_TELEGRAM_STARS) kb.text(messages.buttons.stars, CB.PAY_METHOD_STARS).row();
-  if (env.FEATURE_YOOKASSA_PAYMENTS) kb.text(messages.buttons.yookassa, CB.PAY_METHOD_YOOKASSA).row();
+  if (env.FEATURE_YOOKASSA_PAYMENTS)
+    kb.text(messages.buttons.yookassa, CB.PAY_METHOD_YOOKASSA).row();
   return kb.text(messages.buttons.menu, CB.BACK_MAIN);
 }
 
@@ -20,7 +21,10 @@ export function packageKeyboard(
   for (const pkg of packages) {
     const amount = provider === "telegram_stars" ? pkg.starsAmount : pkg.rubAmount;
     if (amount == null) continue;
-    kb.text(messages.packageButton(pkg, provider), `${provider === "telegram_stars" ? CB.BUY_STARS : CB.BUY_YOOKASSA}:${pkg.code}`).row();
+    kb.text(
+      messages.packageButton(pkg, provider),
+      `${provider === "telegram_stars" ? CB.BUY_STARS : CB.BUY_YOOKASSA}:${pkg.code}`
+    ).row();
   }
   return kb.text(messages.buttons.back, CB.PAYWALL).text(messages.buttons.menu, CB.BACK_MAIN);
 }

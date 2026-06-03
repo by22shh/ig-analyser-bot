@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url";
+import { randomUUID } from "node:crypto";
 import { InlineKeyboard } from "grammy";
 import { InputFile } from "grammy";
 import { ANALYSIS_MODES, CB, type AnalysisMode } from "../constants.js";
@@ -25,7 +26,15 @@ export function registerHistoryHandlers(bot: import("grammy").Bot<MyContext>) {
     await sendHtml(
       ctx,
       messages.sectionsIntro(report.analysisJob.targetUsername),
-      sectionListKeyboard(messages, report.id, report.sections.map((section) => ({ id: section.id, position: section.position, title: section.title })))
+      sectionListKeyboard(
+        messages,
+        report.id,
+        report.sections.map((section) => ({
+          id: section.id,
+          position: section.position,
+          title: section.title
+        }))
+      )
     );
   });
 
@@ -37,7 +46,11 @@ export function registerHistoryHandlers(bot: import("grammy").Bot<MyContext>) {
     });
     if (!section || section.report.userId !== ctx.user.id) return;
     await ctx.answerCallbackQuery();
-    await sendHtml(ctx, t(ctx.user.language).section(section.title, section.content), reportActionsKeyboard(t(ctx.user.language), section.reportId));
+    await sendHtml(
+      ctx,
+      t(ctx.user.language).section(section.title, section.content),
+      reportActionsKeyboard(t(ctx.user.language), section.reportId)
+    );
   });
 
   bot.callbackQuery(new RegExp(`^${CB.REPORT_PDF}:([0-9a-f-]+)$`), async (ctx) => {
@@ -58,7 +71,14 @@ export function registerHistoryHandlers(bot: import("grammy").Bot<MyContext>) {
     if (!report) return;
     const messages = t(ctx.user.language);
     await ctx.answerCallbackQuery();
-    await sendHtml(ctx, messages.reportSources({ username: report.analysisJob.targetUsername, sources: collectSources(report) }), reportActionsKeyboard(messages, report.id));
+    await sendHtml(
+      ctx,
+      messages.reportSources({
+        username: report.analysisJob.targetUsername,
+        sources: collectSources(report)
+      }),
+      reportActionsKeyboard(messages, report.id)
+    );
   });
 
   bot.callbackQuery(new RegExp(`^${CB.REPORT_OPEN}:([0-9a-f-]+):repeat$`), async (ctx) => {
@@ -67,7 +87,12 @@ export function registerHistoryHandlers(bot: import("grammy").Bot<MyContext>) {
     if (!report) return;
     const mode = isAnalysisMode(report.mode) ? report.mode : "standard";
     const messages = t(ctx.user.language);
-    await ctx.services.wizard.set(ctx.user.id, "confirming_analysis", { username: report.analysisJob.targetUsername, mode });
+    const requestId = randomUUID();
+    await ctx.services.wizard.set(ctx.user.id, "confirming_analysis", {
+      username: report.analysisJob.targetUsername,
+      mode,
+      requestId
+    });
     await ctx.answerCallbackQuery();
     await sendHtml(
       ctx,
@@ -76,7 +101,7 @@ export function registerHistoryHandlers(bot: import("grammy").Bot<MyContext>) {
         mode,
         costUnits: MODE_COST_UNITS[mode]
       })}`,
-      confirmAnalysisKeyboard(messages, mode)
+      confirmAnalysisKeyboard(messages, mode, requestId)
     );
   });
 }
@@ -86,11 +111,20 @@ async function showHistory(ctx: MyContext) {
   const reports = await ctx.services.reports.latestReports(ctx.user.id, 10);
   const kb = new InlineKeyboard();
   for (const report of reports) {
-    const mode = isAnalysisMode(report.mode) ? t(ctx.user.language).modeTitle(report.mode) : report.mode;
-    kb.text(`@${report.analysisJob.targetUsername} · ${mode}`, `${CB.REPORT_SECTIONS}:${report.id}`).row();
+    const mode = isAnalysisMode(report.mode)
+      ? t(ctx.user.language).modeTitle(report.mode)
+      : report.mode;
+    kb.text(
+      `@${report.analysisJob.targetUsername} · ${mode}`,
+      `${CB.REPORT_SECTIONS}:${report.id}`
+    ).row();
   }
   kb.text(t(ctx.user.language).buttons.menu, CB.BACK_MAIN);
-  await sendHtml(ctx, reports.length ? t(ctx.user.language).historyTitle() : t(ctx.user.language).historyEmpty(), kb);
+  await sendHtml(
+    ctx,
+    reports.length ? t(ctx.user.language).historyTitle() : t(ctx.user.language).historyEmpty(),
+    kb
+  );
 }
 
 type ArtifactType = "pdf" | "markdown" | "html";
@@ -113,7 +147,10 @@ async function sendArtifact(ctx: MyContext, reportId: string, type: ArtifactType
     });
     return;
   }
-  const url = artifact.publicUrl && !artifact.publicUrl.startsWith("file://") ? artifact.publicUrl : await ctx.services.storage.signedUrl(artifact.storageKey);
+  const url =
+    artifact.publicUrl && !artifact.publicUrl.startsWith("file://")
+      ? artifact.publicUrl
+      : await ctx.services.storage.signedUrl(artifact.storageKey);
   const fileUrl = [artifact.publicUrl, url].find((value) => value?.startsWith("file://"));
   const localPath = fileUrl ? fileURLToPath(fileUrl) : undefined;
   const document = localPath ? new InputFile(localPath, artifactFileName(type)) : url;
@@ -129,11 +166,24 @@ async function sendArtifact(ctx: MyContext, reportId: string, type: ArtifactType
     });
     const fileId = sent.document?.file_id;
     if (fileId) {
-      await ctx.services.prisma.reportArtifact.update({ where: { id: artifact.id }, data: { telegramFileId: fileId } });
+      await ctx.services.prisma.reportArtifact.update({
+        where: { id: artifact.id },
+        data: { telegramFileId: fileId }
+      });
     }
   } catch {
-    if (url) await sendHtml(ctx, messages.artifactLinkFallback(type, url), reportActionsKeyboard(messages, report.id));
-    else await sendHtml(ctx, messages.artifactMissing(type), reportActionsKeyboard(messages, report.id));
+    if (url)
+      await sendHtml(
+        ctx,
+        messages.artifactLinkFallback(type, url),
+        reportActionsKeyboard(messages, report.id)
+      );
+    else
+      await sendHtml(
+        ctx,
+        messages.artifactMissing(type),
+        reportActionsKeyboard(messages, report.id)
+      );
   }
 }
 
@@ -142,13 +192,20 @@ function artifactFileName(type: ArtifactType): string {
   return `zreti-report.${extensions[type]}`;
 }
 
-function collectSources(report: Awaited<ReturnType<MyContext["services"]["reports"]["getReportWithSections"]>>): Array<{ label: string; url?: string }> {
+function collectSources(
+  report: Awaited<ReturnType<MyContext["services"]["reports"]["getReportWithSections"]>>
+): Array<{ label: string; url?: string }> {
   if (!report) return [];
   const sources: Array<{ label: string; url?: string }> = [];
   const append = (value: unknown) => {
     if (!value || typeof value !== "object") return;
     const item = value as { label?: unknown; url?: unknown; postId?: unknown };
-    const label = typeof item.label === "string" ? item.label : typeof item.postId === "string" ? `Post ${item.postId}` : "Source";
+    const label =
+      typeof item.label === "string"
+        ? item.label
+        : typeof item.postId === "string"
+          ? `Post ${item.postId}`
+          : "Source";
     const url = typeof item.url === "string" ? item.url : undefined;
     sources.push({ label, url });
   };

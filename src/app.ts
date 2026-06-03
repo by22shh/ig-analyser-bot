@@ -1,4 +1,5 @@
 import Fastify from "fastify";
+import type { FastifyRequest } from "fastify";
 import type { Bot } from "grammy";
 import { isIP } from "node:net";
 import { env } from "./config/env.js";
@@ -9,7 +10,7 @@ import type { MyContext } from "./telegram/context.js";
 const log = childLogger("server");
 
 export function createApp(input: { services: Services; bot: Bot<MyContext> }) {
-  const app = Fastify({ logger: false, trustProxy: true });
+  const app = Fastify({ logger: false, trustProxy: false });
 
   app.get("/health", async () => ({ ok: true, env: env.APP_ENV }));
 
@@ -26,7 +27,12 @@ export function createApp(input: { services: Services; bot: Bot<MyContext> }) {
   });
 
   app.post("/webhooks/yookassa", async (request, reply) => {
-    if (env.YOOKASSA_WEBHOOK_ALLOWED_IPS && !isLocalDevIp(request.ip) && !isAllowedWebhookIp(request.ip, env.YOOKASSA_WEBHOOK_ALLOWED_IPS)) {
+    const webhookIp = resolveRequestIp(request);
+    if (
+      env.YOOKASSA_WEBHOOK_ALLOWED_IPS &&
+      !isLocalDevIp(webhookIp) &&
+      !isAllowedWebhookIp(webhookIp, env.YOOKASSA_WEBHOOK_ALLOWED_IPS)
+    ) {
       reply.code(403);
       return { accepted: false };
     }
@@ -47,16 +53,30 @@ export function createApp(input: { services: Services; bot: Bot<MyContext> }) {
 
   app.get("/payments/yookassa/return", async (_request, reply) => {
     reply.type("text/html; charset=utf-8");
-    return "<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>ZRETI payment</title></head><body><main style=\"font-family:system-ui,sans-serif;max-width:560px;margin:64px auto;padding:0 20px;line-height:1.5\"><h1>ZRETI</h1><p>Оплата обрабатывается. Вернитесь в Telegram: кредиты начислятся автоматически после подтверждения платежа.</p><p>Your payment is being processed. Return to Telegram: credits will be granted automatically after confirmation.</p></main></body></html>";
+    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZRETI payment</title></head><body><main style="font-family:system-ui,sans-serif;max-width:560px;margin:64px auto;padding:0 20px;line-height:1.5"><h1>ZRETI</h1><p>Оплата обрабатывается. Вернитесь в Telegram: кредиты начислятся автоматически после подтверждения платежа.</p><p>Your payment is being processed. Return to Telegram: credits will be granted automatically after confirmation.</p></main></body></html>';
   });
 
-  app.get("/mock/yookassa/pay/:id", async (request) => ({
-    ok: true,
-    id: (request.params as { id: string }).id,
-    message: "Mock payment page. Send a payment.succeeded webhook or use tests to grant credits."
-  }));
+  if (env.APP_ENV !== "production") {
+    app.get("/mock/yookassa/pay/:id", async (request) => ({
+      ok: true,
+      id: (request.params as { id: string }).id,
+      message: "Mock payment page. Send a payment.succeeded webhook or use tests to grant credits."
+    }));
+  }
 
   return app;
+}
+
+export function resolveRequestIp(request: Pick<FastifyRequest, "headers" | "ip" | "raw">): string {
+  const directIp = normalizeIp(request.raw.socket.remoteAddress ?? request.ip);
+  if (!shouldTrustForwardedHeaders(directIp)) return directIp;
+
+  const forwardedIp =
+    firstForwardedIp(request.headers["fly-client-ip"]) ??
+    firstForwardedIp(request.headers["x-real-ip"]) ??
+    firstForwardedIp(request.headers["x-forwarded-for"]);
+
+  return forwardedIp ? normalizeIp(forwardedIp) : directIp;
 }
 
 function isAllowedWebhookIp(ip: string, allowlist: string): boolean {
@@ -87,8 +107,48 @@ function normalizeIp(ip: string): string {
   return ip.startsWith("::ffff:") && isIP(ip.slice(7)) === 4 ? ip.slice(7) : ip;
 }
 
+function firstForwardedIp(header: string | string[] | undefined): string | undefined {
+  const raw = Array.isArray(header) ? header[0] : header;
+  if (!raw) return undefined;
+  const candidate = raw.split(",")[0]?.trim();
+  return candidate && isIP(normalizeIp(candidate)) ? candidate : undefined;
+}
+
 function isLocalDevIp(ip: string): boolean {
   return env.APP_ENV !== "production" && ["127.0.0.1", "::1"].includes(normalizeIp(ip));
+}
+
+function shouldTrustForwardedHeaders(ip: string): boolean {
+  const normalized = normalizeIp(ip);
+  return (
+    isLoopbackIp(normalized) ||
+    isPrivateIpv4(normalized) ||
+    isUniqueLocalIpv6(normalized) ||
+    isLinkLocalIpv6(normalized)
+  );
+}
+
+function isLoopbackIp(ip: string): boolean {
+  return ip === "127.0.0.1" || ip === "::1";
+}
+
+function isPrivateIpv4(ip: string): boolean {
+  if (isIP(ip) !== 4) return false;
+  const octets = ip.split(".").map((part) => Number(part));
+  const [a, b] = octets;
+  return a === 10 || (a === 172 && b != null && b >= 16 && b <= 31) || (a === 192 && b === 168);
+}
+
+function isUniqueLocalIpv6(ip: string): boolean {
+  if (isIP(ip) !== 6) return false;
+  const first = Number.parseInt(ip.split(":")[0] ?? "0", 16);
+  return (first & 0xfe00) === 0xfc00;
+}
+
+function isLinkLocalIpv6(ip: string): boolean {
+  if (isIP(ip) !== 6) return false;
+  const first = Number.parseInt(ip.split(":")[0] ?? "0", 16);
+  return (first & 0xffc0) === 0xfe80;
 }
 
 function ipToBigInt(ip: string, version: 4 | 6): bigint {

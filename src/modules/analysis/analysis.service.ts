@@ -27,6 +27,11 @@ export class AnalysisService {
   async startAnalysis(input: StartAnalysisInput) {
     const username = normalizeInstagramUsername(input.username);
     const costCreditUnits = MODE_COST_UNITS[input.mode];
+    const existing = await this.prisma.analysisJob.findUnique({
+      where: { idempotencyKey: input.idempotencyKey }
+    });
+    if (existing) return analysisStartResult(existing, true);
+
     const reserved = await this.credits.reserve({
       userId: input.userId,
       amountUnits: costCreditUnits,
@@ -56,26 +61,36 @@ export class AnalysisService {
         data: { analysisJobId: job.id }
       });
       await analysisQueue.add("analysis", { analysisJobId: job.id }, { jobId: job.id });
-      return {
-        jobId: job.id,
-        status: "queued" as const,
-        estimatedDurationSec: env.OPENROUTER_API_KEY ? 420 : 15,
-        costCreditUnits
-      };
+      return analysisStartResult(job, false);
     } catch (error) {
       // Never leave a reserve hanging if the job could not be created/enqueued.
       await this.credits
         .releaseReserve({
           userId: input.userId,
           analysisJobId: job?.id,
+          reserveTransactionId: reserved.id,
           amountUnits: costCreditUnits,
           metadata: { reason: "analysis_enqueue_failed" }
         })
         .catch(() => undefined);
       if (job) {
         await this.prisma.analysisJob
-          .update({ where: { id: job.id }, data: { status: "failed", stage: "failed", errorCode: "ENQUEUE_FAILED", finishedAt: new Date() } })
+          .update({
+            where: { id: job.id },
+            data: {
+              status: "failed",
+              stage: "failed",
+              errorCode: "ENQUEUE_FAILED",
+              finishedAt: new Date()
+            }
+          })
           .catch(() => undefined);
+      }
+      if (isUniqueConstraintError(error)) {
+        const duplicate = await this.prisma.analysisJob.findUniqueOrThrow({
+          where: { idempotencyKey: input.idempotencyKey }
+        });
+        return analysisStartResult(duplicate, true);
       }
       throw error;
     }
@@ -94,4 +109,26 @@ export class AnalysisService {
       }
     });
   }
+}
+
+function analysisStartResult(
+  job: { id: string; status: string; costCreditUnits: number },
+  reused: boolean
+) {
+  return {
+    jobId: job.id,
+    status: job.status,
+    estimatedDurationSec: env.OPENROUTER_API_KEY ? 420 : 15,
+    costCreditUnits: job.costCreditUnits,
+    reused
+  };
+}
+
+function isUniqueConstraintError(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code?: unknown }).code === "P2002"
+  );
 }

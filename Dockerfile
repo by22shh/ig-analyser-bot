@@ -13,14 +13,16 @@ RUN pnpm install --frozen-lockfile
 
 FROM deps AS build
 COPY . .
-RUN pnpm prisma:generate && pnpm build
+RUN pnpm prisma:generate && pnpm build && pnpm prune --prod
 
 FROM base AS runner
 ENV NODE_ENV=production
 WORKDIR /app
 COPY package.json pnpm-lock.yaml* ./
-COPY --from=deps /app/node_modules ./node_modules
+# Copy pruned production node_modules from the build stage: it still contains
+# the generated Prisma client/query engine, but dev-only tooling is gone.
+COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
 RUN pnpm exec playwright install --with-deps chromium
-CMD ["node", "dist/server.js"]
+CMD ["node", "dist/src/server.js"]

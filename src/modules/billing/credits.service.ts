@@ -115,6 +115,7 @@ export class CreditsService {
   async reserve(input: {
     userId: string;
     analysisJobId?: string;
+    photoSearchJobId?: string;
     amountUnits: number;
     metadata?: Prisma.InputJsonValue;
   }) {
@@ -134,6 +135,7 @@ export class CreditsService {
         data: {
           userId: input.userId,
           analysisJobId: input.analysisJobId,
+          photoSearchJobId: input.photoSearchJobId,
           type: "reserve",
           amountUnits: -input.amountUnits,
           balanceAfterUnits: updated.balanceUnits,
@@ -143,11 +145,29 @@ export class CreditsService {
     });
   }
 
-  async releaseReserve(input: { userId: string; analysisJobId?: string; amountUnits: number; metadata?: Prisma.InputJsonValue }) {
+  async releaseReserve(input: {
+    userId: string;
+    analysisJobId?: string;
+    photoSearchJobId?: string;
+    reserveTransactionId?: string;
+    amountUnits: number;
+    metadata?: Prisma.InputJsonValue;
+  }) {
+    if (input.amountUnits <= 0) throw new Error("amountUnits must be positive");
     return this.prisma.$transaction(async (tx) => {
       await this.lockAccount(tx, input.userId);
       const account = await tx.creditAccount.findUniqueOrThrow({ where: { userId: input.userId } });
-      const amount = Math.min(account.reservedUnits, input.amountUnits);
+      const outstanding = await this.scopedOutstandingReserve(tx, input);
+      let releasable = outstanding == null ? account.reservedUnits : Math.max(outstanding, 0);
+      if (releasable <= 0 && input.reserveTransactionId) {
+        releasable = await this.reserveAmountForTransaction(
+          tx,
+          input.userId,
+          input.reserveTransactionId
+        );
+      }
+      const amount = Math.min(releasable, input.amountUnits, account.reservedUnits);
+      if (amount <= 0) return null;
       const updated = await tx.creditAccount.update({
         where: { userId: input.userId },
         data: { reservedUnits: { decrement: amount } }
@@ -156,6 +176,7 @@ export class CreditsService {
         data: {
           userId: input.userId,
           analysisJobId: input.analysisJobId,
+          photoSearchJobId: input.photoSearchJobId,
           type: "refund",
           amountUnits: amount,
           balanceAfterUnits: updated.balanceUnits,
@@ -165,11 +186,23 @@ export class CreditsService {
     });
   }
 
-  async captureReserve(input: { userId: string; analysisJobId?: string; amountUnits: number; metadata?: Prisma.InputJsonValue }) {
+  async captureReserve(input: {
+    userId: string;
+    analysisJobId?: string;
+    photoSearchJobId?: string;
+    amountUnits: number;
+    metadata?: Prisma.InputJsonValue;
+  }) {
+    if (input.amountUnits <= 0) throw new Error("amountUnits must be positive");
     return this.prisma.$transaction(async (tx) => {
       await this.lockAccount(tx, input.userId);
       const account = await tx.creditAccount.findUniqueOrThrow({ where: { userId: input.userId } });
-      const amount = Math.min(account.reservedUnits, input.amountUnits);
+      const outstanding = await this.scopedOutstandingReserve(tx, input);
+      const amount = input.amountUnits;
+      const capturable = outstanding == null ? account.reservedUnits : Math.max(outstanding, 0);
+      if (capturable < amount || account.reservedUnits < amount) {
+        throw new Error("RESERVE_NOT_FOUND");
+      }
       const updated = await tx.creditAccount.update({
         where: { userId: input.userId },
         data: {
@@ -181,6 +214,7 @@ export class CreditsService {
         data: {
           userId: input.userId,
           analysisJobId: input.analysisJobId,
+          photoSearchJobId: input.photoSearchJobId,
           type: "capture",
           amountUnits: -amount,
           balanceAfterUnits: updated.balanceUnits,
@@ -191,6 +225,47 @@ export class CreditsService {
   }
 
   private async lockAccount(tx: Prisma.TransactionClient, userId: string) {
-    await tx.$queryRaw`SELECT id FROM credit_accounts WHERE user_id = CAST(${userId} AS uuid) FOR UPDATE`;
+    await tx.$queryRaw`SELECT id FROM credit_accounts WHERE "userId" = CAST(${userId} AS uuid) FOR UPDATE`;
+  }
+
+  private async scopedOutstandingReserve(
+    tx: Prisma.TransactionClient,
+    input: { userId: string; analysisJobId?: string; photoSearchJobId?: string }
+  ): Promise<number | undefined> {
+    const scope =
+      input.analysisJobId != null
+        ? { analysisJobId: input.analysisJobId }
+        : input.photoSearchJobId != null
+          ? { photoSearchJobId: input.photoSearchJobId }
+          : undefined;
+    if (!scope) return undefined;
+    const transactions = await tx.creditTransaction.findMany({
+      where: {
+        userId: input.userId,
+        ...scope,
+        type: { in: ["reserve", "capture", "refund"] }
+      },
+      select: { type: true, amountUnits: true }
+    });
+    return transactions.reduce((sum, transaction) => {
+      if (transaction.type === "reserve")
+        return sum + Math.abs(Math.min(transaction.amountUnits, 0));
+      if (transaction.type === "capture")
+        return sum - Math.abs(Math.min(transaction.amountUnits, 0));
+      if (transaction.type === "refund") return sum - Math.max(transaction.amountUnits, 0);
+      return sum;
+    }, 0);
+  }
+
+  private async reserveAmountForTransaction(
+    tx: Prisma.TransactionClient,
+    userId: string,
+    reserveTransactionId: string
+  ): Promise<number> {
+    const transaction = await tx.creditTransaction.findFirst({
+      where: { id: reserveTransactionId, userId, type: "reserve" },
+      select: { amountUnits: true }
+    });
+    return Math.abs(Math.min(transaction?.amountUnits ?? 0, 0));
   }
 }

@@ -1,6 +1,7 @@
-import type { PrismaClient, User } from "@prisma/client";
+import { Prisma, type PrismaClient, type User } from "@prisma/client";
 import { adminTelegramIds, env } from "../../config/env.js";
 import type { Locale } from "../../telegram/constants.js";
+import type { StorageAdapter } from "../storage/storage.adapter.js";
 
 export type TelegramIdentity = {
   id: number;
@@ -8,16 +9,23 @@ export type TelegramIdentity = {
   firstName?: string;
   lastName?: string;
   languageCode?: string;
+  allowReactivate?: boolean;
 };
 
 export class UserService {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(
+    private readonly prisma: PrismaClient,
+    private readonly storage?: Pick<StorageAdapter, "deleteObjects">
+  ) {}
 
   async upsertTelegramUser(identity: TelegramIdentity): Promise<{ user: User; isNew: boolean }> {
     const telegramId = BigInt(identity.id);
     const existing = await this.prisma.user.findUnique({ where: { telegramId } });
     const language = identity.languageCode?.startsWith("en") ? "en" : env.DEFAULT_LANGUAGE;
     if (existing) {
+      if (existing.status === "deleted" && !identity.allowReactivate) {
+        return { user: existing, isNew: false };
+      }
       const user = await this.prisma.user.update({
         where: { id: existing.id },
         data: {
@@ -25,7 +33,18 @@ export class UserService {
           firstName: identity.firstName,
           lastName: identity.lastName,
           language: existing.language || language,
-          role: adminTelegramIds.includes(identity.id) && existing.role === "user" ? "admin" : existing.role
+          role:
+            adminTelegramIds.includes(identity.id) && existing.role === "user"
+              ? "admin"
+              : existing.role,
+          ...(existing.status === "deleted"
+            ? {
+                status: "active",
+                deletedAt: null,
+                consentVersion: null,
+                consentAcceptedAt: null
+              }
+            : {})
         }
       });
       await this.ensureSettingsAndAccount(user.id);
@@ -105,7 +124,7 @@ export class UserService {
 
   async updateReportRetention(userId: string, days: number) {
     const allowed = [7, 30, 90];
-    const reportRetentionDays = allowed.includes(days) ? days : env.REPORT_RETENTION_DAYS ?? 30;
+    const reportRetentionDays = allowed.includes(days) ? days : (env.REPORT_RETENTION_DAYS ?? 30);
     return this.prisma.userSettings.upsert({
       where: { userId },
       create: {
@@ -133,7 +152,9 @@ export class UserService {
       this.prisma.analysisJob.count({
         where: {
           userId,
-          status: { in: ["queued", "fetching_profile", "analyzing_images", "generating_report", "generating_exports"] }
+          status: {
+            in: ["queued", "fetching_profile", "analyzing_images", "generating_exports", "retrying"]
+          }
         }
       })
     ]);
@@ -154,21 +175,73 @@ export class UserService {
   }
 
   async deleteMe(userId: string): Promise<void> {
+    const artifacts = await this.prisma.reportArtifact.findMany({
+      where: { report: { userId } },
+      select: { storageKey: true }
+    });
+    if (this.storage) {
+      await this.storage.deleteObjects(artifacts.map((artifact) => artifact.storageKey));
+    }
     await this.prisma.$transaction(async (tx) => {
-      await tx.reportArtifact.deleteMany({
-        where: { report: { userId } }
-      });
+      await tx.reportArtifact.deleteMany({ where: { report: { userId } } });
+      await tx.reportChatSession.deleteMany({ where: { userId } });
+      await tx.analysisJob.deleteMany({ where: { userId } });
       await tx.report.deleteMany({ where: { userId } });
       await tx.photoSearchJob.deleteMany({ where: { userId } });
       await tx.telegramWizardState.deleteMany({ where: { userId } });
+      await tx.telegramUpdate.updateMany({ where: { userId }, data: { userId: null } });
+      await tx.creditTransaction.updateMany({
+        where: { userId },
+        data: { metadata: Prisma.JsonNull }
+      });
+      await tx.paymentOrder.updateMany({
+        where: { userId },
+        data: {
+          userEmail: null,
+          telegramChatId: null,
+          telegramInvoiceMessageId: null
+        }
+      });
+      await tx.paymentEvent.updateMany({
+        where: { paymentOrder: { userId } },
+        data: { payload: Prisma.JsonNull }
+      });
+      await tx.telegramStarPayment.updateMany({
+        where: { paymentOrder: { userId } },
+        data: {
+          telegramUserId: BigInt(0),
+          telegramChatId: BigInt(0),
+          invoiceMessageId: null,
+          preCheckoutQueryId: null,
+          successfulPayment: Prisma.JsonNull,
+          rawPreCheckoutQuery: Prisma.JsonNull,
+          rawSuccessfulPayment: Prisma.JsonNull
+        }
+      });
+      await tx.yooKassaPayment.updateMany({
+        where: { paymentOrder: { userId } },
+        data: { metadata: Prisma.JsonNull, raw: Prisma.JsonNull }
+      });
+      await tx.fiscalReceipt.updateMany({
+        where: { paymentOrder: { userId } },
+        data: {
+          customerEmail: null,
+          payload: Prisma.JsonNull,
+          raw: Prisma.JsonNull
+        }
+      });
       await tx.user.update({
         where: { id: userId },
         data: {
           status: "deleted",
+          telegramId: anonymizedTelegramId(userId),
           telegramUsername: null,
           firstName: null,
           lastName: null,
           email: null,
+          referralCode: null,
+          consentVersion: null,
+          consentAcceptedAt: null,
           deletedAt: new Date()
         }
       });
@@ -183,4 +256,9 @@ export class UserService {
       });
     });
   }
+}
+
+function anonymizedTelegramId(userId: string): bigint {
+  const hex = userId.replaceAll("-", "").slice(0, 15) || "0";
+  return -BigInt(`0x${hex}`);
 }

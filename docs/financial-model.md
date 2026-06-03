@@ -40,19 +40,19 @@ MVP продает предоплаченные пакеты кредитов ч
 С текущими пакетами и консервативным платежным резервом `20%`:
 
 | Package | RUB / credit | Net guardrail RUB / credit | Max provider cost without variable loss | Max provider cost for 3x safety | Status at `C_standard = 55 RUB` |
-| --- | ---: | ---: | ---: | ---: | --- |
-| Start | 230.00 | 184.00 | 184.00 | 61.33 | Safe |
-| Pro | 199.00 | 159.20 | 159.20 | 53.07 | Too cheap for 3x |
-| Agency | 183.00 | 146.40 | 146.40 | 48.80 | Too cheap for 3x |
-| Scale | 159.00 | 127.20 | 127.20 | 42.40 | Too cheap for 3x |
+| ------- | -----------: | -------------------------: | --------------------------------------: | ------------------------------: | ------------------------------- |
+| Start   |       230.00 |                     184.00 |                                  184.00 |                           61.33 | Safe                            |
+| Pro     |       199.00 |                     159.20 |                                  159.20 |                           53.07 | Too cheap for 3x                |
+| Agency  |       183.00 |                     146.40 |                                  146.40 |                           48.80 | Too cheap for 3x                |
+| Scale   |       159.00 |                     127.20 |                                  127.20 |                           42.40 | Too cheap for 3x                |
 
 С новым Stars-каталогом `230 XTR/credit` и conservative floor `0.01 USD/XTR`, `90 RUB/USD`, `20%` reserve:
 
 | Package | XTR / credit | Net RUB-equivalent / credit | Max provider cost for 3x safety | Status at `C_standard = 55 RUB` |
-| --- | ---: | ---: | ---: | --- |
-| Start | 230 | 165.60 | 55.20 | Safe, but tight |
-| Pro | 230 | 165.60 | 55.20 | Safe, but tight |
-| Agency | 230 | 165.60 | 55.20 | Safe, but tight |
+| ------- | -----------: | --------------------------: | ------------------------------: | ------------------------------- |
+| Start   |          230 |                      165.60 |                           55.20 | Safe, but tight                 |
+| Pro     |          230 |                      165.60 |                           55.20 | Safe, but tight                 |
+| Agency  |          230 |                      165.60 |                           55.20 | Safe, but tight                 |
 
 Решение для launch:
 
@@ -88,45 +88,45 @@ MVP продает предоплаченные пакеты кредитов ч
 
 Стоимость функций:
 
-| Функция | Units | Credits |
-| --- | ---: | ---: |
-| Standard analysis | 100 | 1 |
-| Influencer audit | 200 | 2 |
-| HR analysis | 200 | 2 |
-| Photo search | 100 | 1 |
-| OSINT / Compliance | 300+ | 3+ |
-| Chat message after included cap | 5 | 0.05 |
-| PDF/Markdown export | 0 | Included |
+| Функция                         | Units |  Credits |
+| ------------------------------- | ----: | -------: |
+| Standard analysis               |   100 |        1 |
+| Influencer audit                |   200 |        2 |
+| HR analysis                     |   200 |        2 |
+| Photo search                    |   100 |        1 |
+| OSINT / Compliance              |  300+ |       3+ |
+| Chat message after included cap |     5 |     0.05 |
+| PDF/Markdown export             |     0 | Included |
 
 ## 3. Launch packages
 
 Рекомендуемые пакеты v0.2:
 
-| Package | Credits | Notes |
-| --- | ---: | --- |
-| Trial | 1 | Только admin grant |
-| Start | 3 | Первый платеж |
-| Pro | 10 | Базовый пакет |
-| Agency | 30 | Малые команды |
-| Scale | 100 | Агентства, только если себестоимость стабильна |
+| Package | Credits | Notes                                          |
+| ------- | ------: | ---------------------------------------------- |
+| Trial   |       1 | Только admin grant                             |
+| Start   |       3 | Первый платеж                                  |
+| Pro     |      10 | Базовый пакет                                  |
+| Agency  |      30 | Малые команды                                  |
+| Scale   |     100 | Агентства, только если себестоимость стабильна |
 
 YooKassa RUB prices:
 
-| Package | Price RUB | RUB / credit | Notes |
-| --- | ---: | ---: | --- |
-| Start | 690 | 230 | Public if `audit-economics` passes |
-| Pro | 1,990 | 199 | Hidden/reprice until p75 cost is proven |
-| Agency | 5,490 | 183 | Hidden/reprice until p75 cost is proven |
-| Scale | 15,900 | 159 | Negotiated/hidden |
+| Package | Price RUB | RUB / credit | Notes                                   |
+| ------- | --------: | -----------: | --------------------------------------- |
+| Start   |       690 |          230 | Public if `audit-economics` passes      |
+| Pro     |     1,990 |          199 | Hidden/reprice until p75 cost is proven |
+| Agency  |     5,490 |          183 | Hidden/reprice until p75 cost is proven |
+| Scale   |    15,900 |          159 | Negotiated/hidden                       |
 
 Telegram Stars prices:
 
-| Package | Price XTR | XTR / credit | Notes |
-| --- | ---: | ---: | --- |
-| Start | 690 | 230 | Public after Stars payout floor confirmation |
-| Pro | 2,300 | 230 | Public only if `audit-economics` passes |
-| Agency | 6,900 | 230 | Public only if `audit-economics` passes |
-| Scale | 23,000 | 230 | Hidden; check Bot API amount limits before enabling |
+| Package | Price XTR | XTR / credit | Notes                                               |
+| ------- | --------: | -----------: | --------------------------------------------------- |
+| Start   |       690 |          230 | Public after Stars payout floor confirmation        |
+| Pro     |     2,300 |          230 | Public only if `audit-economics` passes             |
+| Agency  |     6,900 |          230 | Public only if `audit-economics` passes             |
+| Scale   |    23,000 |          230 | Hidden; check Bot API amount limits before enabling |
 
 Pricing rules:
 
@@ -290,17 +290,17 @@ C_chat_message = C_chat
 
 Required cost caps:
 
-| Cost dimension | MVP cap | Why it matters |
-| --- | ---: | --- |
-| Instagram posts | 30 | Prevents Apify/vision/report context from growing with large profiles |
-| Vision batch size | 5 | Keeps image analysis predictable and retryable |
-| Images analyzed | 30 | Matches post cap and bounds image download/vision spend |
-| Image download size | 8 MB per image | Prevents traffic and processing spikes |
-| Final report input tokens | model-specific fixed budget | Prevents long profile data from expanding LLM spend |
-| Final report output tokens | model-specific fixed budget | Prevents verbose reports from exceeding modeled cost |
-| Report chat input/output | model-specific fixed budget | Makes post-report chat chargeable and auditable |
-| FaceCheck search | timeout + max cost per search | Photo search must not become an uncapped external spend |
-| PDF rendering | timeout + max artifact size | Prevents worker blockage and storage surprises |
+| Cost dimension             |                       MVP cap | Why it matters                                                        |
+| -------------------------- | ----------------------------: | --------------------------------------------------------------------- |
+| Instagram posts            |                            30 | Prevents Apify/vision/report context from growing with large profiles |
+| Vision batch size          |                             5 | Keeps image analysis predictable and retryable                        |
+| Images analyzed            |                            30 | Matches post cap and bounds image download/vision spend               |
+| Image download size        |                8 MB per image | Prevents traffic and processing spikes                                |
+| Final report input tokens  |   model-specific fixed budget | Prevents long profile data from expanding LLM spend                   |
+| Final report output tokens |   model-specific fixed budget | Prevents verbose reports from exceeding modeled cost                  |
+| Report chat input/output   |   model-specific fixed budget | Makes post-report chat chargeable and auditable                       |
+| FaceCheck search           | timeout + max cost per search | Photo search must not become an uncapped external spend               |
+| PDF rendering              |   timeout + max artifact size | Prevents worker blockage and storage surprises                        |
 
 Every cap must be represented in configuration and in `audit-economics`.
 
@@ -344,11 +344,11 @@ r_yk_effective = 4.56%
 ```
 
 | Package | Gross RUB | Net after YooKassa | Provider cost | Contribution | Contribution margin |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Start | 690 | 658.54 | 165 | 493.54 | 71.5% |
-| Pro | 1,990 | 1,899.26 | 550 | 1,349.26 | 67.8% |
-| Agency | 5,490 | 5,239.66 | 1,650 | 3,589.66 | 65.4% |
-| Scale | 15,900 | 15,174.96 | 5,500 | 9,674.96 | 60.8% |
+| ------- | --------: | -----------------: | ------------: | -----------: | ------------------: |
+| Start   |       690 |             658.54 |           165 |       493.54 |               71.5% |
+| Pro     |     1,990 |           1,899.26 |           550 |     1,349.26 |               67.8% |
+| Agency  |     5,490 |           5,239.66 |         1,650 |     3,589.66 |               65.4% |
+| Scale   |    15,900 |          15,174.96 |         5,500 |     9,674.96 |               60.8% |
 
 Stars contribution model:
 
@@ -360,10 +360,10 @@ ECON_STARS_PAYOUT_RESERVE = 20%
 ```
 
 | Package | Stars | Net RUB-equivalent | Provider cost | Contribution equivalent | Net/provider multiple |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Start | 690 | 496.80 | 165 | 331.80 | 3.01x |
-| Pro | 2,300 | 1,656.00 | 550 | 1,106.00 | 3.01x |
-| Agency | 6,900 | 4,968.00 | 1,650 | 3,318.00 | 3.01x |
+| ------- | ----: | -----------------: | ------------: | ----------------------: | --------------------: |
+| Start   |   690 |             496.80 |           165 |                  331.80 |                 3.01x |
+| Pro     | 2,300 |           1,656.00 |           550 |                1,106.00 |                 3.01x |
+| Agency  | 6,900 |           4,968.00 |         1,650 |                3,318.00 |                 3.01x |
 
 Stars are intentionally priced without bulk discount in v0.2. At `C_standard = 55 RUB`, `230 XTR/credit` is just above the strict `3x` threshold. If real `C_standard p75` is higher than 55 RUB, Stars prices must increase or affected packages must be disabled.
 
@@ -377,20 +377,20 @@ required_gross_rub_per_credit = 55 * 3 / (1 - 0.20) = 206.25 RUB
 ```
 
 | Package | Gross RUB / credit | Net guardrail RUB / credit | Net/provider multiple | 3x result |
-| --- | ---: | ---: | ---: | --- |
-| Start | 230.00 | 184.00 | 3.35x | Pass |
-| Pro | 199.00 | 159.20 | 2.89x | Fail |
-| Agency | 183.00 | 146.40 | 2.66x | Fail |
-| Scale | 159.00 | 127.20 | 2.31x | Fail |
+| ------- | -----------------: | -------------------------: | --------------------: | --------- |
+| Start   |             230.00 |                     184.00 |                 3.35x | Pass      |
+| Pro     |             199.00 |                     159.20 |                 2.89x | Fail      |
+| Agency  |             183.00 |                     146.40 |                 2.66x | Fail      |
+| Scale   |             159.00 |                     127.20 |                 2.31x | Fail      |
 
 To keep `C_standard = 55 RUB` and pass the `3x` rule, minimum package prices are:
 
-| Package | Current price | Minimum strict price | Recommended action |
-| --- | ---: | ---: | --- |
-| Start, 3 credits | 690 | 619 | Keep |
-| Pro, 10 credits | 1,990 | 2,063 | Raise to 2,090+ or enable only after cost reduction |
-| Agency, 30 credits | 5,490 | 6,188 | Raise to 6,190+ or keep hidden |
-| Scale, 100 credits | 15,900 | 20,625 | Keep hidden / negotiated / reprice to 20,900+ |
+| Package            | Current price | Minimum strict price | Recommended action                                  |
+| ------------------ | ------------: | -------------------: | --------------------------------------------------- |
+| Start, 3 credits   |           690 |                  619 | Keep                                                |
+| Pro, 10 credits    |         1,990 |                2,063 | Raise to 2,090+ or enable only after cost reduction |
+| Agency, 30 credits |         5,490 |                6,188 | Raise to 6,190+ or keep hidden                      |
+| Scale, 100 credits |        15,900 |               20,625 | Keep hidden / negotiated / reprice to 20,900+       |
 
 If `C_standard = 80 RUB`:
 

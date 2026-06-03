@@ -16,7 +16,11 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
       await sendHtml(ctx, messages.paymentMethodUnavailable(), backMenuKeyboard(messages));
       return;
     }
-    await sendHtml(ctx, messages.starsIntro(), packageKeyboard(messages, "telegram_stars", ctx.services.payments.packages("telegram_stars")));
+    await sendHtml(
+      ctx,
+      messages.starsIntro(),
+      packageKeyboard(messages, "telegram_stars", ctx.services.payments.packages("telegram_stars"))
+    );
   });
 
   bot.callbackQuery(CB.PAY_METHOD_YOOKASSA, async (ctx) => {
@@ -27,18 +31,28 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
       await sendHtml(ctx, messages.paymentMethodUnavailable(), backMenuKeyboard(messages));
       return;
     }
-    await sendHtml(ctx, messages.yookassaIntro(env.YOOKASSA_TEST_MODE), packageKeyboard(messages, "yookassa", ctx.services.payments.packages("yookassa")));
+    await sendHtml(
+      ctx,
+      messages.yookassaIntro(env.YOOKASSA_TEST_MODE),
+      packageKeyboard(messages, "yookassa", ctx.services.payments.packages("yookassa"))
+    );
   });
 
   bot.callbackQuery(new RegExp(`^${CB.BUY_STARS}:([a-z_]+)$`), async (ctx) => {
     if (!ctx.user || !ctx.match?.[1]) return;
     await ctx.answerCallbackQuery();
     if (!env.FEATURE_TELEGRAM_STARS) {
-      await sendHtml(ctx, t(ctx.user.language).paymentMethodUnavailable(), backMenuKeyboard(t(ctx.user.language)));
+      await sendHtml(
+        ctx,
+        t(ctx.user.language).paymentMethodUnavailable(),
+        backMenuKeyboard(t(ctx.user.language))
+      );
       return;
     }
     await ctx.services.payments.ensureCatalog();
-    const pkg = ctx.services.payments.packages("telegram_stars").find((item) => item.code === ctx.match![1]);
+    const pkg = ctx.services.payments
+      .packages("telegram_stars")
+      .find((item) => item.code === ctx.match![1]);
     await ctx.services.payments.createTelegramStarsInvoice({
       api: ctx.api,
       userId: ctx.user.id,
@@ -62,7 +76,13 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
     await ctx.services.payments.ensureCatalog();
     if (env.YOOKASSA_USE_RECEIPTS && !ctx.user.email) {
       await ctx.services.wizard.set(ctx.user.id, "waiting_email", { packageCode: ctx.match[1] });
-      await sendHtml(ctx, messages.askReceiptEmail(), new InlineKeyboard().text(messages.buttons.cancel, CB.CANCEL).text(messages.buttons.menu, CB.BACK_MAIN));
+      await sendHtml(
+        ctx,
+        messages.askReceiptEmail(),
+        new InlineKeyboard()
+          .text(messages.buttons.cancel, CB.CANCEL)
+          .text(messages.buttons.menu, CB.BACK_MAIN)
+      );
       return;
     }
     await createAndSendYooKassaOrder(ctx, ctx.match[1], ctx.user.email ?? undefined);
@@ -81,7 +101,13 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
     const messages = t(ctx.user.language);
     const email = ctx.message.text.trim().toLowerCase();
     if (!isValidEmail(email)) {
-      await sendHtml(ctx, messages.invalidEmail(), new InlineKeyboard().text(messages.buttons.cancel, CB.CANCEL).text(messages.buttons.menu, CB.BACK_MAIN));
+      await sendHtml(
+        ctx,
+        messages.invalidEmail(),
+        new InlineKeyboard()
+          .text(messages.buttons.cancel, CB.CANCEL)
+          .text(messages.buttons.menu, CB.BACK_MAIN)
+      );
       return;
     }
     ctx.user = await ctx.services.users.updateEmail(ctx.user.id, email);
@@ -108,7 +134,11 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
       payloadInvalidMessage: t(ctx.user?.language).preCheckoutPayloadInvalid(),
       paymentInvalidMessage: t(ctx.user?.language).preCheckoutPaymentInvalid()
     });
-    await ctx.api.answerPreCheckoutQuery(query.id, result.ok, result.errorMessage ? { error_message: result.errorMessage } : undefined);
+    await ctx.api.answerPreCheckoutQuery(
+      query.id,
+      result.ok,
+      result.errorMessage ? { error_message: result.errorMessage } : undefined
+    );
   });
 
   bot.on("message:successful_payment", async (ctx) => {
@@ -126,7 +156,14 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
       raw: payment as never
     });
     if (result.processed) {
-      await sendHtml(ctx, t(ctx.user.language).paymentSuccess(result.creditsUnitsGranted ?? 0, result.balanceUnits ?? 0), backMenuKeyboard(t(ctx.user.language)));
+      await sendHtml(
+        ctx,
+        t(ctx.user.language).paymentSuccess(
+          result.creditsUnitsGranted ?? 0,
+          result.balanceUnits ?? 0
+        ),
+        backMenuKeyboard(t(ctx.user.language))
+      );
     }
   });
 }
@@ -145,7 +182,12 @@ async function createAndSendYooKassaOrder(ctx: MyContext, packageCode: string, u
   await sendHtml(
     ctx,
     messages.yookassaPaymentCreated(order.amountMinor),
-    order.confirmationUrl ? new InlineKeyboard().url(messages.buttons.pay, order.confirmationUrl).row().text(messages.buttons.menu, CB.BACK_MAIN) : backMenuKeyboard(messages)
+    order.confirmationUrl
+      ? new InlineKeyboard()
+          .url(messages.buttons.pay, order.confirmationUrl)
+          .row()
+          .text(messages.buttons.menu, CB.BACK_MAIN)
+      : backMenuKeyboard(messages)
   );
 }
 

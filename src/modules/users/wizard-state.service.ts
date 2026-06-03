@@ -15,7 +15,9 @@ export class WizardStateService {
     });
   }
 
-  async get<T extends WizardPayload = WizardPayload>(userId: string): Promise<{ state: WizardState; payload: T } | null> {
+  async get<T extends WizardPayload = WizardPayload>(
+    userId: string
+  ): Promise<{ state: WizardState; payload: T } | null> {
     const row = await this.prisma.telegramWizardState.findUnique({ where: { userId } });
     if (!row) return null;
     return { state: row.state as WizardState, payload: (row.payload ?? {}) as T };

@@ -11,12 +11,13 @@ export class PhotoSearchService {
 
   async createJob(input: {
     userId: string;
+    chatId?: number;
     telegramFileId: string;
     telegramFileUniqueId?: string;
     mimeType?: string;
     sizeBytes?: number;
   }) {
-    await this.credits.reserve({
+    const reserved = await this.credits.reserve({
       userId: input.userId,
       amountUnits: MODE_COST_UNITS.photo_search,
       metadata: { type: "photo_search" }
@@ -26,12 +27,17 @@ export class PhotoSearchService {
       job = await this.prisma.photoSearchJob.create({
         data: {
           userId: input.userId,
+          telegramChatId: input.chatId != null ? BigInt(input.chatId) : undefined,
           telegramFileId: input.telegramFileId,
           telegramFileUniqueId: input.telegramFileUniqueId,
           inputMimeType: input.mimeType,
           inputSizeBytes: input.sizeBytes,
           status: "queued"
         }
+      });
+      await this.prisma.creditTransaction.update({
+        where: { id: reserved.id },
+        data: { photoSearchJobId: job.id }
       });
       await photoSearchQueue.add("photo-search", { photoSearchJobId: job.id }, { jobId: job.id });
       return job;
@@ -40,13 +46,18 @@ export class PhotoSearchService {
       await this.credits
         .releaseReserve({
           userId: input.userId,
+          photoSearchJobId: job?.id,
+          reserveTransactionId: reserved.id,
           amountUnits: MODE_COST_UNITS.photo_search,
           metadata: { reason: "photo_search_enqueue_failed" }
         })
         .catch(() => undefined);
       if (job) {
         await this.prisma.photoSearchJob
-          .update({ where: { id: job.id }, data: { status: "failed", errorCode: "ENQUEUE_FAILED", finishedAt: new Date() } })
+          .update({
+            where: { id: job.id },
+            data: { status: "failed", errorCode: "ENQUEUE_FAILED", finishedAt: new Date() }
+          })
           .catch(() => undefined);
       }
       throw error;

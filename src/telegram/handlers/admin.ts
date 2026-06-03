@@ -21,7 +21,9 @@ export function registerAdminHandlers(bot: import("grammy").Bot<MyContext>) {
       await sendHtml(ctx, messages.adminGrantUsage());
       return;
     }
-    const target = await ctx.services.prisma.user.findUnique({ where: { telegramId: BigInt(telegramId) } });
+    const target = await ctx.services.prisma.user.findUnique({
+      where: { telegramId: BigInt(telegramId) }
+    });
     if (!target) {
       await sendHtml(ctx, messages.adminUserNotFound());
       return;
@@ -41,7 +43,13 @@ async function showAdmin(ctx: MyContext) {
   if (!ctx.user || !ctx.services.users.isAdmin(ctx.user)) return;
   const [users, jobs, failed, payments] = await Promise.all([
     ctx.services.prisma.user.count(),
-    ctx.services.prisma.analysisJob.count({ where: { status: { in: ["queued", "fetching_profile", "analyzing_images", "generating_report"] } } }),
+    ctx.services.prisma.analysisJob.count({
+      where: {
+        status: {
+          in: ["queued", "fetching_profile", "analyzing_images", "generating_exports", "retrying"]
+        }
+      }
+    }),
     ctx.services.prisma.analysisJob.count({ where: { status: "failed" } }),
     ctx.services.prisma.paymentOrder.count({ where: { status: "paid" } })
   ]);

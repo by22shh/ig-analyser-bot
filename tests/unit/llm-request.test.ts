@@ -3,7 +3,11 @@ import { buildChatCompletionBody, buildVisionUserContent } from "../../src/modul
 
 describe("buildVisionUserContent", () => {
   it("attaches the image as an image_url part so the model can actually see it", () => {
-    const content = buildVisionUserContent({ postId: "p1", caption: "beach", imageUrl: "https://cdn/x.jpg" });
+    const content = buildVisionUserContent({
+      postId: "p1",
+      caption: "beach",
+      imageUrl: "https://cdn/x.jpg"
+    });
     expect(content).toContainEqual({ type: "text", text: expect.stringContaining("p1") });
     expect(content).toContainEqual({ type: "text", text: expect.stringContaining("beach") });
     expect(content).toContainEqual({ type: "image_url", image_url: { url: "https://cdn/x.jpg" } });
@@ -18,7 +22,12 @@ describe("buildVisionUserContent", () => {
 
 describe("buildChatCompletionBody", () => {
   it("uses the per-call token budget instead of a single global cap", () => {
-    const body = buildChatCompletionBody({ model: "m", system: "sys", user: "hi", maxTokens: 2048 });
+    const body = buildChatCompletionBody({
+      model: "m",
+      system: "sys",
+      user: "hi",
+      maxTokens: 2048
+    });
     expect(body.max_tokens).toBe(2048);
     expect(body.model).toBe("m");
     expect(body.messages).toEqual([

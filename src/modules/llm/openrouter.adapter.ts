@@ -1,6 +1,10 @@
 import { env } from "../../config/env.js";
 import { reportPromptForMode, prompts } from "./prompts.js";
-import { buildChatCompletionBody, buildVisionUserContent, type ChatUserContent } from "./request.js";
+import {
+  buildChatCompletionBody,
+  buildVisionUserContent,
+  type ChatUserContent
+} from "./request.js";
 import type { ChatInput, LlmProvider, ReportInput, VisionInput } from "./types.js";
 
 type OpenRouterResponse = {
@@ -58,7 +62,11 @@ export class OpenRouterLlmProvider implements LlmProvider {
         const content = await this.chatCompletion({
           model: env.MODEL_VISION,
           system: prompts.vision.system,
-          user: buildVisionUserContent({ postId: post.id, caption: post.caption, imageUrl: post.displayUrl }),
+          user: buildVisionUserContent({
+            postId: post.id,
+            caption: post.caption,
+            imageUrl: post.displayUrl
+          }),
           maxTokens: env.LLM_FINAL_OUTPUT_TOKEN_BUDGET ?? 4096
         });
         output.push({
@@ -104,10 +112,20 @@ export class OpenRouterLlmProvider implements LlmProvider {
       user: `Language: ${input.language}\nReport context:\n${input.reportText.slice(0, env.LLM_CHAT_INPUT_TOKEN_BUDGET ?? 12000)}\n\nQuestion:\n${input.question}`,
       maxTokens: env.LLM_CHAT_OUTPUT_TOKEN_BUDGET ?? 2048
     });
-    return { text: content.text, model: env.MODEL_CHAT, tokensIn: content.tokensIn, tokensOut: content.tokensOut };
+    return {
+      text: content.text,
+      model: env.MODEL_CHAT,
+      tokensIn: content.tokensIn,
+      tokensOut: content.tokensOut
+    };
   }
 
-  private async chatCompletion(input: { model: string; system: string; user: ChatUserContent; maxTokens: number }) {
+  private async chatCompletion(input: {
+    model: string;
+    system: string;
+    user: ChatUserContent;
+    maxTokens: number;
+  }) {
     if (!this.apiKey) throw new Error("OPENROUTER_API_KEY_MISSING");
     const started = Date.now();
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {

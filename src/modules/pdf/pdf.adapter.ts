@@ -10,7 +10,10 @@ export class PlaywrightPdfAdapter implements PdfAdapter {
     const browser = await chromium.launch({ headless: true });
     try {
       const page = await browser.newPage();
-      await page.setContent(html, { waitUntil: "networkidle", timeout: (env.PDF_RENDER_TIMEOUT_SECONDS ?? 60) * 1000 });
+      await page.setContent(html, {
+        waitUntil: "networkidle",
+        timeout: (env.PDF_RENDER_TIMEOUT_SECONDS ?? 60) * 1000
+      });
       const bytes = await page.pdf({
         format: "A4",
         printBackground: true,

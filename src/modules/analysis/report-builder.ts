@@ -28,7 +28,9 @@ export async function buildStrategicReport(input: {
   const missing = validateRequiredSections(input.mode, sections);
   const metrics = computeReportMetrics(input.profile, posts);
   const sourceMap = sections.flatMap((section) => section.sources);
-  const bullets = sections.slice(0, 5).map((section) => `${section.title}: ${section.content.slice(0, 140).replace(/\s+/g, " ")}...`);
+  const bullets = sections
+    .slice(0, 5)
+    .map((section) => `${section.title}: ${section.content.slice(0, 140).replace(/\s+/g, " ")}...`);
 
   return {
     mode: input.mode,
@@ -37,7 +39,9 @@ export async function buildStrategicReport(input: {
     rawText: generated.rawText,
     sections,
     summary: {
-      bullets: bullets.length ? bullets : [`Public profile @${input.profile.username} was analyzed.`],
+      bullets: bullets.length
+        ? bullets
+        : [`Public profile @${input.profile.username} was analyzed.`],
       warnings: missing.length ? [`Missing/weak sections: ${missing.join(", ")}`] : []
     },
     metrics,
@@ -45,6 +49,7 @@ export async function buildStrategicReport(input: {
     model: generated.model,
     promptVersion: generated.promptVersion,
     profile: input.profile,
-    posts
+    posts,
+    vision
   };
 }

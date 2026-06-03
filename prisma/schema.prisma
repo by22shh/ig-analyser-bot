@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -27,18 +27,18 @@ model User {
   updatedAt         DateTime  @updatedAt
   deletedAt         DateTime?
 
-  settings              UserSettings?
-  creditAccount         CreditAccount?
-  creditTransactions    CreditTransaction[]
-  paymentOrders         PaymentOrder[]
-  analysisJobs          AnalysisJob[]
-  reports               Report[]
-  photoSearchJobs       PhotoSearchJob[]
-  reportChatSessions    ReportChatSession[]
-  sentAuditLogs         AuditLog[]           @relation("AuditActor")
-  targetAuditLogs       AuditLog[]           @relation("AuditTarget")
-  telegramWizardState   TelegramWizardState?
-  telegramUpdates       TelegramUpdate[]
+  settings            UserSettings?
+  creditAccount       CreditAccount?
+  creditTransactions  CreditTransaction[]
+  paymentOrders       PaymentOrder[]
+  analysisJobs        AnalysisJob[]
+  reports             Report[]
+  photoSearchJobs     PhotoSearchJob[]
+  reportChatSessions  ReportChatSession[]
+  sentAuditLogs       AuditLog[]           @relation("AuditActor")
+  targetAuditLogs     AuditLog[]           @relation("AuditTarget")
+  telegramWizardState TelegramWizardState?
+  telegramUpdates     TelegramUpdate[]
 
   @@index([status, createdAt])
   @@map("users")
@@ -76,6 +76,7 @@ model CreditTransaction {
   id                String   @id @default(uuid()) @db.Uuid
   userId            String   @db.Uuid
   analysisJobId     String?  @db.Uuid
+  photoSearchJobId  String?  @db.Uuid
   type              String
   amountUnits       Int
   balanceAfterUnits Int
@@ -84,11 +85,13 @@ model CreditTransaction {
   metadata          Json?
   createdAt         DateTime @default(now())
 
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  analysisJob AnalysisJob? @relation(fields: [analysisJobId], references: [id], onDelete: SetNull)
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  analysisJob    AnalysisJob?    @relation(fields: [analysisJobId], references: [id], onDelete: SetNull)
+  photoSearchJob PhotoSearchJob? @relation(fields: [photoSearchJobId], references: [id], onDelete: SetNull)
 
   @@index([userId, createdAt])
   @@index([analysisJobId])
+  @@index([photoSearchJobId])
   @@index([provider, providerPaymentId])
   @@map("credit_transactions")
 }
@@ -129,7 +132,7 @@ model CreditPackagePrice {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
-  package CreditPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  package CreditPackage  @relation(fields: [packageId], references: [id], onDelete: Cascade)
   orders  PaymentOrder[]
 
   @@unique([packageId, provider, currency])
@@ -158,14 +161,14 @@ model PaymentOrder {
   createdAt                DateTime  @default(now())
   updatedAt                DateTime  @updatedAt
 
-  user                 User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  package              CreditPackage        @relation(fields: [packageId], references: [id])
-  packagePrice         CreditPackagePrice?  @relation(fields: [packagePriceId], references: [id])
-  events               PaymentEvent[]
-  yookassaPayment      YooKassaPayment?
-  telegramStarPayment  TelegramStarPayment?
-  refunds              PaymentRefund[]
-  receipts             FiscalReceipt[]
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  package             CreditPackage        @relation(fields: [packageId], references: [id])
+  packagePrice        CreditPackagePrice?  @relation(fields: [packagePriceId], references: [id])
+  events              PaymentEvent[]
+  yookassaPayment     YooKassaPayment?
+  telegramStarPayment TelegramStarPayment?
+  refunds             PaymentRefund[]
+  receipts            FiscalReceipt[]
 
   @@index([userId, createdAt])
   @@index([status, createdAt])
@@ -192,24 +195,24 @@ model PaymentEvent {
 }
 
 model YooKassaPayment {
-  id                    String    @id @default(uuid()) @db.Uuid
-  paymentOrderId        String    @unique @db.Uuid
-  yookassaPaymentId     String    @unique
-  status                String
-  paid                  Boolean   @default(false)
-  amountMinor           Int
-  currency              String
-  incomeAmountMinor     Int?
-  paymentMethodType     String?
-  refundable            Boolean   @default(false)
-  test                  Boolean   @default(true)
-  metadata              Json?
-  createdAtProvider     DateTime?
-  capturedAt            DateTime?
-  expiresAt             DateTime?
-  raw                   Json?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  id                String    @id @default(uuid()) @db.Uuid
+  paymentOrderId    String    @unique @db.Uuid
+  yookassaPaymentId String    @unique
+  status            String
+  paid              Boolean   @default(false)
+  amountMinor       Int
+  currency          String
+  incomeAmountMinor Int?
+  paymentMethodType String?
+  refundable        Boolean   @default(false)
+  test              Boolean   @default(true)
+  metadata          Json?
+  createdAtProvider DateTime?
+  capturedAt        DateTime?
+  expiresAt         DateTime?
+  raw               Json?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   paymentOrder PaymentOrder @relation(fields: [paymentOrderId], references: [id], onDelete: Cascade)
 
@@ -217,23 +220,23 @@ model YooKassaPayment {
 }
 
 model TelegramStarPayment {
-  id                        String    @id @default(uuid()) @db.Uuid
-  paymentOrderId            String    @unique @db.Uuid
-  telegramUserId            BigInt
-  telegramChatId            BigInt
-  invoicePayload            String    @unique
-  invoiceMessageId          BigInt?
-  preCheckoutQueryId        String?   @unique
-  telegramPaymentChargeId   String?   @unique
-  providerPaymentChargeId   String?
-  status                    String
-  starsAmount               Int
-  currency                  String    @default("XTR")
-  successfulPayment         Json?
-  rawPreCheckoutQuery       Json?
-  rawSuccessfulPayment      Json?
-  createdAt                 DateTime  @default(now())
-  updatedAt                 DateTime  @updatedAt
+  id                      String   @id @default(uuid()) @db.Uuid
+  paymentOrderId          String   @unique @db.Uuid
+  telegramUserId          BigInt
+  telegramChatId          BigInt
+  invoicePayload          String   @unique
+  invoiceMessageId        BigInt?
+  preCheckoutQueryId      String?  @unique
+  telegramPaymentChargeId String?  @unique
+  providerPaymentChargeId String?
+  status                  String
+  starsAmount             Int
+  currency                String   @default("XTR")
+  successfulPayment       Json?
+  rawPreCheckoutQuery     Json?
+  rawSuccessfulPayment    Json?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   paymentOrder PaymentOrder @relation(fields: [paymentOrderId], references: [id], onDelete: Cascade)
 
@@ -310,12 +313,12 @@ model AnalysisJob {
   finishedAt                DateTime?
   updatedAt                 DateTime  @updatedAt
 
-  user                    User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  creditTransactions      CreditTransaction[]
-  instagramProfile        InstagramProfileSnapshot?
-  visionAnalysisItems     VisionAnalysisItem[]
-  report                  Report?
-  apiUsageEvents          ApiUsageEvent[]
+  user                User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creditTransactions  CreditTransaction[]
+  instagramProfile    InstagramProfileSnapshot?
+  visionAnalysisItems VisionAnalysisItem[]
+  report              Report?
+  apiUsageEvents      ApiUsageEvent[]
 
   @@index([userId, createdAt])
   @@index([status, createdAt])
@@ -341,7 +344,7 @@ model InstagramProfileSnapshot {
   rawDebug          Json?
   createdAt         DateTime @default(now())
 
-  analysisJob AnalysisJob              @relation(fields: [analysisJobId], references: [id], onDelete: Cascade)
+  analysisJob AnalysisJob             @relation(fields: [analysisJobId], references: [id], onDelete: Cascade)
   posts       InstagramPostSnapshot[]
 
   @@index([username])
@@ -393,17 +396,17 @@ model VisionAnalysisItem {
   errorCode      String?
   createdAt      DateTime @default(now())
 
-  analysisJob  AnalysisJob             @relation(fields: [analysisJobId], references: [id], onDelete: Cascade)
-  postSnapshot InstagramPostSnapshot?  @relation(fields: [postSnapshotId], references: [id], onDelete: SetNull)
+  analysisJob  AnalysisJob            @relation(fields: [analysisJobId], references: [id], onDelete: Cascade)
+  postSnapshot InstagramPostSnapshot? @relation(fields: [postSnapshotId], references: [id], onDelete: SetNull)
 
   @@index([analysisJobId, postId])
   @@map("vision_analysis_items")
 }
 
 model Report {
-  id            String   @id @default(uuid()) @db.Uuid
-  analysisJobId String   @unique @db.Uuid
-  userId        String   @db.Uuid
+  id            String    @id @default(uuid()) @db.Uuid
+  analysisJobId String    @unique @db.Uuid
+  userId        String    @db.Uuid
   mode          String
   language      String
   rawText       String
@@ -412,15 +415,15 @@ model Report {
   sourceMap     Json?
   model         String
   promptVersion String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   expiresAt     DateTime?
 
-  analysisJob      AnalysisJob          @relation(fields: [analysisJobId], references: [id], onDelete: Cascade)
-  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sections         ReportSection[]
-  artifacts        ReportArtifact[]
-  chatSessions     ReportChatSession[]
+  analysisJob  AnalysisJob         @relation(fields: [analysisJobId], references: [id], onDelete: Cascade)
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sections     ReportSection[]
+  artifacts    ReportArtifact[]
+  chatSessions ReportChatSession[]
 
   @@index([userId, createdAt])
   @@index([expiresAt])
@@ -464,6 +467,7 @@ model ReportArtifact {
 model PhotoSearchJob {
   id                   String    @id @default(uuid()) @db.Uuid
   userId               String    @db.Uuid
+  telegramChatId       BigInt?
   telegramFileId       String
   telegramFileUniqueId String?
   inputMimeType        String?
@@ -473,8 +477,9 @@ model PhotoSearchJob {
   createdAt            DateTime  @default(now())
   finishedAt           DateTime?
 
-  user    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  matches PhotoSearchMatch[]
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matches            PhotoSearchMatch[]
+  creditTransactions CreditTransaction[]
 
   @@index([userId, createdAt])
   @@index([status, createdAt])
@@ -531,19 +536,19 @@ model ReportChatMessage {
 }
 
 model ApiUsageEvent {
-  id             String   @id @default(uuid()) @db.Uuid
-  userId         String?  @db.Uuid
-  analysisJobId  String?  @db.Uuid
-  provider       String
-  operation      String
-  model          String?
-  status         String
-  latencyMs      Int?
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String?  @db.Uuid
+  analysisJobId   String?  @db.Uuid
+  provider        String
+  operation       String
+  model           String?
+  status          String
+  latencyMs       Int?
   costEstimateRub Decimal?
-  tokensIn       Int?
-  tokensOut      Int?
-  errorCode      String?
-  createdAt      DateTime @default(now())
+  tokensIn        Int?
+  tokensOut       Int?
+  errorCode       String?
+  createdAt       DateTime @default(now())
 
   analysisJob AnalysisJob? @relation(fields: [analysisJobId], references: [id], onDelete: SetNull)
 
@@ -554,15 +559,15 @@ model ApiUsageEvent {
 }
 
 model AuditLog {
-  id            String   @id @default(uuid()) @db.Uuid
-  actorUserId   String?  @db.Uuid
-  targetUserId  String?  @db.Uuid
-  action        String
-  entityType    String
-  entityId      String?  @db.Uuid
-  metadata      Json?
-  ipHash        String?
-  createdAt     DateTime @default(now())
+  id           String   @id @default(uuid()) @db.Uuid
+  actorUserId  String?  @db.Uuid
+  targetUserId String?  @db.Uuid
+  action       String
+  entityType   String
+  entityId     String?  @db.Uuid
+  metadata     Json?
+  ipHash       String?
+  createdAt    DateTime @default(now())
 
   actorUser  User? @relation("AuditActor", fields: [actorUserId], references: [id], onDelete: SetNull)
   targetUser User? @relation("AuditTarget", fields: [targetUserId], references: [id], onDelete: SetNull)
@@ -574,9 +579,13 @@ model AuditLog {
 }
 
 model TelegramUpdate {
-  updateId  BigInt   @id
-  userId    String?  @db.Uuid
-  processedAt DateTime @default(now())
+  updateId     BigInt    @id
+  userId       String?   @db.Uuid
+  status       String    @default("processing")
+  receivedAt   DateTime  @default(now())
+  processedAt  DateTime?
+  failedAt     DateTime?
+  errorMessage String?
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 

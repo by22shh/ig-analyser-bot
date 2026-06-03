@@ -32,7 +32,13 @@ export class PaymentService {
       });
       if (pkg.starsAmount != null) {
         await this.prisma.creditPackagePrice.upsert({
-          where: { packageId_provider_currency: { packageId: created.id, provider: "telegram_stars", currency: "XTR" } },
+          where: {
+            packageId_provider_currency: {
+              packageId: created.id,
+              provider: "telegram_stars",
+              currency: "XTR"
+            }
+          },
           create: {
             packageId: created.id,
             provider: "telegram_stars",
@@ -48,7 +54,13 @@ export class PaymentService {
       }
       if (pkg.rubAmount != null) {
         await this.prisma.creditPackagePrice.upsert({
-          where: { packageId_provider_currency: { packageId: created.id, provider: "yookassa", currency: "RUB" } },
+          where: {
+            packageId_provider_currency: {
+              packageId: created.id,
+              provider: "yookassa",
+              currency: "RUB"
+            }
+          },
           create: {
             packageId: created.id,
             provider: "yookassa",
@@ -58,7 +70,11 @@ export class PaymentService {
             isActive: true,
             yookassaDescription: `${pkg.title} credits`
           },
-          update: { amountMinor: pkg.rubAmount * 100, isPublic: pkg.isPublic && pkg.code === "start", isActive: true }
+          update: {
+            amountMinor: pkg.rubAmount * 100,
+            isPublic: pkg.isPublic && pkg.code === "start",
+            isActive: true
+          }
         });
       }
     }
@@ -84,6 +100,32 @@ export class PaymentService {
     const price = await this.prisma.creditPackagePrice.findFirstOrThrow({
       where: { packageId: dbPkg.id, provider: "telegram_stars", currency: "XTR", isActive: true }
     });
+    const existingOrder = await this.prisma.paymentOrder.findFirst({
+      where: {
+        userId: input.userId,
+        packageId: dbPkg.id,
+        provider: "telegram_stars",
+        status: "pending_payment",
+        telegramChatId: BigInt(input.chatId),
+        expiresAt: { gt: new Date() }
+      },
+      include: { telegramStarPayment: true },
+      orderBy: { createdAt: "desc" }
+    });
+    if (
+      existingOrder?.telegramStarPayment &&
+      existingOrder.amountMinor === price.amountMinor &&
+      existingOrder.telegramStarPayment.status !== "invoice_failed" &&
+      existingOrder.telegramStarPayment.telegramUserId === BigInt(input.telegramUserId)
+    ) {
+      return {
+        orderId: existingOrder.id,
+        invoicePayload: existingOrder.telegramStarPayment.invoicePayload,
+        starsAmount: price.amountMinor,
+        creditsUnits: existingOrder.creditsUnits,
+        reused: true as const
+      };
+    }
     const order = await this.prisma.paymentOrder.create({
       data: {
         userId: input.userId,
@@ -130,10 +172,16 @@ export class PaymentService {
         { provider_token: "" }
       )
       .catch(async (error) => {
-        await this.prisma.paymentOrder.update({ where: { id: order.id }, data: { status: "invoice_failed" } });
+        await this.prisma.paymentOrder.update({
+          where: { id: order.id },
+          data: { status: "invoice_failed" }
+        });
         await this.prisma.telegramStarPayment.update({
           where: { paymentOrderId: order.id },
-          data: { status: "invoice_failed", rawSuccessfulPayment: { error: error instanceof Error ? error.message : String(error) } }
+          data: {
+            status: "invoice_failed",
+            rawSuccessfulPayment: { error: error instanceof Error ? error.message : String(error) }
+          }
         });
         throw error;
       });
@@ -145,7 +193,13 @@ export class PaymentService {
       where: { paymentOrderId: order.id },
       data: { invoiceMessageId: BigInt(message.message_id) }
     });
-    return { orderId: order.id, invoicePayload, starsAmount: price.amountMinor, creditsUnits: pkg.creditsUnits };
+    return {
+      orderId: order.id,
+      invoicePayload,
+      starsAmount: price.amountMinor,
+      creditsUnits: pkg.creditsUnits,
+      reused: false as const
+    };
   }
 
   async handleTelegramPreCheckout(input: {
@@ -159,7 +213,11 @@ export class PaymentService {
     paymentInvalidMessage?: string;
   }) {
     const payload = decodeInvoicePayload(input.invoicePayload);
-    if (!payload) return { ok: false, errorMessage: input.payloadInvalidMessage ?? "The price has expired. Open top-up again." };
+    if (!payload)
+      return {
+        ok: false,
+        errorMessage: input.payloadInvalidMessage ?? "The price has expired. Open top-up again."
+      };
     const order = await this.prisma.paymentOrder.findUnique({
       where: { id: payload.orderId },
       include: { telegramStarPayment: true }
@@ -173,9 +231,12 @@ export class PaymentService {
       order.userId !== payload.userId ||
       !order.telegramStarPayment ||
       order.telegramStarPayment.telegramUserId !== BigInt(input.telegramUserId) ||
-      order.expiresAt && order.expiresAt < new Date()
+      (order.expiresAt && order.expiresAt < new Date())
     ) {
-      return { ok: false, errorMessage: input.paymentInvalidMessage ?? "Payment was not found or the amount changed." };
+      return {
+        ok: false,
+        errorMessage: input.paymentInvalidMessage ?? "Payment was not found or the amount changed."
+      };
     }
     await this.prisma.telegramStarPayment.update({
       where: { paymentOrderId: order.id },
@@ -211,18 +272,20 @@ export class PaymentService {
     });
     const event =
       existingEvent ??
-      (await this.prisma.paymentEvent.create({
-        data: {
-          ...eventKey,
-          paymentOrderId: payload.orderId,
-          payload: input.raw,
-          processingStatus: "received"
-        }
-      }).catch(() =>
-        this.prisma.paymentEvent.findUniqueOrThrow({
-          where: { provider_eventType_providerObjectId: eventKey }
+      (await this.prisma.paymentEvent
+        .create({
+          data: {
+            ...eventKey,
+            paymentOrderId: payload.orderId,
+            payload: input.raw,
+            processingStatus: "received"
+          }
         })
-      ));
+        .catch(() =>
+          this.prisma.paymentEvent.findUniqueOrThrow({
+            where: { provider_eventType_providerObjectId: eventKey }
+          })
+        ));
 
     return this.prisma.$transaction(async (tx) => {
       await tx.$queryRaw`SELECT id FROM payment_events WHERE id = CAST(${event.id} AS uuid) FOR UPDATE`;
@@ -289,7 +352,7 @@ export class PaymentService {
           paidAt: new Date()
         }
       });
-      await tx.$queryRaw`SELECT id FROM credit_accounts WHERE user_id = CAST(${order.userId} AS uuid) FOR UPDATE`;
+      await tx.$queryRaw`SELECT id FROM credit_accounts WHERE "userId" = CAST(${order.userId} AS uuid) FOR UPDATE`;
       const account = await tx.creditAccount.update({
         where: { userId: order.userId },
         data: { balanceUnits: { increment: order.creditsUnits } }
@@ -313,18 +376,57 @@ export class PaymentService {
           processedAt: new Date()
         }
       });
-      return { processed: true, orderId: order.id, creditsUnitsGranted: order.creditsUnits, balanceUnits: account.balanceUnits };
+      return {
+        processed: true,
+        orderId: order.id,
+        creditsUnitsGranted: order.creditsUnits,
+        balanceUnits: account.balanceUnits
+      };
     });
   }
 
-  async createYooKassaOrder(input: { userId: string; chatId: number; packageCode: string; userEmail?: string; idempotencyKey: string }) {
+  async createYooKassaOrder(input: {
+    userId: string;
+    chatId: number;
+    packageCode: string;
+    userEmail?: string;
+    idempotencyKey: string;
+  }) {
     const pkg = getPackage(input.packageCode);
     if (!pkg?.rubAmount) throw new Error("PACKAGE_NOT_FOUND");
     if (pkg.code !== "start") throw new Error("PACKAGE_NOT_PUBLIC_FOR_YOOKASSA");
     const dbPkg = await this.prisma.creditPackage.findUniqueOrThrow({ where: { code: pkg.code } });
     const price = await this.prisma.creditPackagePrice.findFirstOrThrow({
-      where: { packageId: dbPkg.id, provider: "yookassa", currency: "RUB", isActive: true, isPublic: true }
+      where: {
+        packageId: dbPkg.id,
+        provider: "yookassa",
+        currency: "RUB",
+        isActive: true,
+        isPublic: true
+      }
     });
+    const existingOrder = await this.prisma.paymentOrder.findFirst({
+      where: {
+        userId: input.userId,
+        packageId: dbPkg.id,
+        provider: "yookassa",
+        status: "pending_payment",
+        telegramChatId: BigInt(input.chatId),
+        userEmail: input.userEmail ?? null,
+        confirmationUrl: { not: null },
+        expiresAt: { gt: new Date() }
+      },
+      orderBy: { createdAt: "desc" }
+    });
+    if (existingOrder?.confirmationUrl && existingOrder.amountMinor === price.amountMinor) {
+      return {
+        orderId: existingOrder.id,
+        confirmationUrl: existingOrder.confirmationUrl,
+        amountMinor: existingOrder.amountMinor,
+        creditsUnits: existingOrder.creditsUnits,
+        reused: true as const
+      };
+    }
     const order = await this.prisma.paymentOrder.create({
       data: {
         userId: input.userId,
@@ -351,7 +453,10 @@ export class PaymentService {
         email: input.userEmail
       })
       .catch(async (error) => {
-        await this.prisma.paymentOrder.update({ where: { id: order.id }, data: { status: "payment_create_failed" } });
+        await this.prisma.paymentOrder.update({
+          where: { id: order.id },
+          data: { status: "payment_create_failed" }
+        });
         throw error;
       });
     await this.prisma.paymentOrder.update({
@@ -381,41 +486,64 @@ export class PaymentService {
           customerEmail: input.userEmail,
           amountMinor: price.amountMinor,
           currency: "RUB",
-          taxSystemCode: env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE ? Number(env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE) : undefined,
+          taxSystemCode: env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE
+            ? Number(env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE)
+            : undefined,
           vatCode: env.YOOKASSA_DEFAULT_VAT_CODE,
           payload: { orderId: order.id, packageCode: pkg.code }
         }
       });
     }
-    return { orderId: order.id, confirmationUrl: payment.confirmationUrl, amountMinor: price.amountMinor, creditsUnits: pkg.creditsUnits };
+    return {
+      orderId: order.id,
+      confirmationUrl: payment.confirmationUrl,
+      amountMinor: price.amountMinor,
+      creditsUnits: pkg.creditsUnits,
+      reused: false as const
+    };
   }
 
   async handleYooKassaWebhook(input: { event: string; object: any; raw: Prisma.InputJsonValue }) {
     const providerObjectId = input.object?.id;
     if (!providerObjectId) return { accepted: false, processed: false };
-    const event = await this.prisma.paymentEvent.create({
-      data: {
-        provider: "yookassa",
-        eventType: input.event,
-        providerObjectId,
-        payload: input.raw,
-        processingStatus: "received"
-      }
-    }).catch(async () => {
-      const existing = await this.prisma.paymentEvent.findUnique({
-        where: { provider_eventType_providerObjectId: { provider: "yookassa", eventType: input.event, providerObjectId } }
+    const event = await this.prisma.paymentEvent
+      .create({
+        data: {
+          provider: "yookassa",
+          eventType: input.event,
+          providerObjectId,
+          payload: input.raw,
+          processingStatus: "received"
+        }
+      })
+      .catch(async () => {
+        const existing = await this.prisma.paymentEvent.findUnique({
+          where: {
+            provider_eventType_providerObjectId: {
+              provider: "yookassa",
+              eventType: input.event,
+              providerObjectId
+            }
+          }
+        });
+        return existing;
       });
-      return existing;
-    });
-    if (!event || event.processingStatus === "processed") return { accepted: true, processed: false };
+    if (!event || event.processingStatus === "processed")
+      return { accepted: true, processed: false };
 
     if (input.event !== "payment.succeeded") {
-      await this.prisma.paymentEvent.update({ where: { id: event.id }, data: { processingStatus: "ignored", processedAt: new Date() } });
+      await this.prisma.paymentEvent.update({
+        where: { id: event.id },
+        data: { processingStatus: "ignored", processedAt: new Date() }
+      });
       return { accepted: true, processed: false };
     }
     const payment = await this.yookassa.getPayment(providerObjectId);
     if (!payment.paid || payment.status !== "succeeded") {
-      await this.prisma.paymentEvent.update({ where: { id: event.id }, data: { processingStatus: "ignored", processedAt: new Date() } });
+      await this.prisma.paymentEvent.update({
+        where: { id: event.id },
+        data: { processingStatus: "ignored", processedAt: new Date() }
+      });
       return { accepted: true, processed: false };
     }
     return this.prisma.$transaction(async (tx) => {
@@ -423,7 +551,9 @@ export class PaymentService {
       const lockedEvent = await tx.paymentEvent.findUniqueOrThrow({ where: { id: event.id } });
       if (lockedEvent.processingStatus === "processed") return { accepted: true, processed: false };
 
-      const orderLocks = await tx.$queryRaw<Array<{ id: string }>>`SELECT id FROM payment_orders WHERE provider_payment_id = ${providerObjectId} FOR UPDATE`;
+      const orderLocks = await tx.$queryRaw<
+        Array<{ id: string }>
+      >`SELECT id FROM payment_orders WHERE "providerPaymentId" = ${providerObjectId} FOR UPDATE`;
       const orderId = orderLocks[0]?.id;
       if (!orderId) throw new Error("PAYMENT_ORDER_NOT_FOUND");
       const order = await tx.paymentOrder.findUniqueOrThrow({ where: { id: orderId } });
@@ -434,8 +564,20 @@ export class PaymentService {
         });
         return { accepted: true, processed: false, orderId: order.id };
       }
+      if (order.amountMinor !== payment.amountMinor || order.currency !== payment.currency) {
+        await tx.paymentEvent.update({
+          where: { id: event.id },
+          data: {
+            paymentOrderId: order.id,
+            processingStatus: "failed",
+            errorCode: "PAYMENT_AMOUNT_MISMATCH",
+            processedAt: new Date()
+          }
+        });
+        return { accepted: true, processed: false, orderId: order.id };
+      }
 
-      await tx.$queryRaw`SELECT id FROM credit_accounts WHERE user_id = CAST(${order.userId} AS uuid) FOR UPDATE`;
+      await tx.$queryRaw`SELECT id FROM credit_accounts WHERE "userId" = CAST(${order.userId} AS uuid) FOR UPDATE`;
       const account = await tx.creditAccount.update({
         where: { userId: order.userId },
         data: { balanceUnits: { increment: order.creditsUnits } }
@@ -451,36 +593,61 @@ export class PaymentService {
           metadata: { orderId: order.id }
         }
       });
-      await tx.paymentOrder.update({ where: { id: order.id }, data: { status: "paid", paidAt: new Date() } });
+      await tx.paymentOrder.update({
+        where: { id: order.id },
+        data: { status: "paid", paidAt: new Date() }
+      });
       await tx.yooKassaPayment.update({
         where: { paymentOrderId: order.id },
-        data: { status: payment.status, paid: payment.paid, refundable: payment.refundable, raw: payment.raw as never }
+        data: {
+          status: payment.status,
+          paid: payment.paid,
+          refundable: payment.refundable,
+          raw: payment.raw as never
+        }
       });
       await tx.fiscalReceipt.updateMany({
-        where: { paymentOrderId: order.id, provider: "yookassa", type: "payment", status: "pending" },
+        where: {
+          paymentOrderId: order.id,
+          provider: "yookassa",
+          type: "payment",
+          status: "pending"
+        },
         data: { status: "succeeded", raw: payment.raw as never }
       });
       await tx.paymentEvent.update({
         where: { id: event.id },
         data: { paymentOrderId: order.id, processingStatus: "processed", processedAt: new Date() }
       });
-      return { accepted: true, processed: true, orderId: order.id, creditsUnitsGranted: order.creditsUnits };
+      return {
+        accepted: true,
+        processed: true,
+        orderId: order.id,
+        creditsUnitsGranted: order.creditsUnits
+      };
     });
   }
 
-  async refundTelegramStarsPayment(input: { api: Api<RawApi>; paymentOrderId: string; adminUserId?: string; reason: string }) {
+  async refundTelegramStarsPayment(input: {
+    api: Api<RawApi>;
+    paymentOrderId: string;
+    adminUserId?: string;
+    reason: string;
+  }) {
     const order = await this.prisma.paymentOrder.findUniqueOrThrow({
       where: { id: input.paymentOrderId },
       include: { telegramStarPayment: true }
     });
-    if (!order.telegramStarPayment?.telegramPaymentChargeId) throw new Error("STARS_CHARGE_ID_MISSING");
+    if (!order.telegramStarPayment?.telegramPaymentChargeId)
+      throw new Error("STARS_CHARGE_ID_MISSING");
     if (order.status !== "paid") throw new Error("ORDER_NOT_PAID");
     if (!env.TELEGRAM_STARS_REFUNDS_ENABLED) throw new Error("STARS_REFUNDS_DISABLED");
     const existing = await this.prisma.paymentRefund.findFirst({
       where: { paymentOrderId: order.id, provider: "telegram_stars" },
       orderBy: { createdAt: "desc" }
     });
-    if (existing?.status === "succeeded") return { refundId: existing.id, status: "succeeded" as const, alreadyProcessed: true };
+    if (existing?.status === "succeeded")
+      return { refundId: existing.id, status: "succeeded" as const, alreadyProcessed: true };
     if (existing) throw new Error("REFUND_ALREADY_EXISTS");
 
     const snapshot = await this.credits.snapshot(order.userId);
@@ -508,7 +675,10 @@ export class PaymentService {
       type: "refund"
     });
     try {
-      await (input.api as any).refundStarPayment(Number(order.telegramStarPayment.telegramUserId), order.telegramStarPayment.telegramPaymentChargeId);
+      await (input.api as any).refundStarPayment(
+        Number(order.telegramStarPayment.telegramUserId),
+        order.telegramStarPayment.telegramPaymentChargeId
+      );
       await this.prisma.paymentRefund.update({
         where: { id: refund.id },
         data: { status: "succeeded" }
@@ -524,7 +694,10 @@ export class PaymentService {
       });
       await this.prisma.paymentRefund.update({
         where: { id: refund.id },
-        data: { status: "failed", raw: { error: error instanceof Error ? error.message : String(error) } }
+        data: {
+          status: "failed",
+          raw: { error: error instanceof Error ? error.message : String(error) }
+        }
       });
       throw error;
     }

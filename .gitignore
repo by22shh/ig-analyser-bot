@@ -24,13 +24,13 @@ playwright-report/
 test-results/
 
 # Generated files
-tmp/
-temp/
-artifacts/
-exports/
-reports/
-uploads/
-.data/
+/tmp/
+/temp/
+/artifacts/
+/exports/
+/reports/
+/uploads/
+/.data/
 
 # OS / editor
 .DS_Store

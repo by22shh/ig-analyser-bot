@@ -72,7 +72,15 @@ fly secrets set \
   TELEGRAM_WEBHOOK_SECRET="replace-with-long-random-string" \
   TELEGRAM_ADMIN_IDS="123456789" \
   APP_BASE_URL="https://your-fly-app-name.fly.dev" \
-  TELEGRAM_WEBHOOK_URL="https://your-fly-app-name.fly.dev/telegram/webhook"
+  TELEGRAM_WEBHOOK_URL="https://your-fly-app-name.fly.dev/telegram/webhook" \
+  APIFY_TOKEN="..." \
+  OPENROUTER_API_KEY="..." \
+  YOOKASSA_SHOP_ID="..." \
+  YOOKASSA_SECRET_KEY="..." \
+  S3_ENDPOINT="..." \
+  S3_BUCKET="..." \
+  S3_ACCESS_KEY_ID="..." \
+  S3_SECRET_ACCESS_KEY="..."
 ```
 
 `YOOKASSA_RETURN_URL` can be omitted. The app derives it as:
@@ -89,12 +97,18 @@ fly secrets set YOOKASSA_RETURN_URL="https://your-domain.example/payments/yookas
 
 ## 5. Set Provider Secrets
 
-Add the real integrations you plan to enable:
+The default [fly.toml](/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/fly.toml) enables Telegram Stars, YooKassa and real analysis mode in production. The app intentionally refuses to start in `APP_ENV=production` if these enabled integrations would fall back to mock mode.
 
 ```bash
 fly secrets set \
   APIFY_TOKEN="..." \
-  OPENROUTER_API_KEY="..."
+  OPENROUTER_API_KEY="..." \
+  YOOKASSA_SHOP_ID="..." \
+  YOOKASSA_SECRET_KEY="..." \
+  S3_ENDPOINT="..." \
+  S3_BUCKET="..." \
+  S3_ACCESS_KEY_ID="..." \
+  S3_SECRET_ACCESS_KEY="..."
 ```
 
 Optional integrations:
@@ -102,12 +116,6 @@ Optional integrations:
 ```bash
 fly secrets set \
   FACECHECK_API_TOKEN="..." \
-  YOOKASSA_SHOP_ID="..." \
-  YOOKASSA_SECRET_KEY="..." \
-  S3_ENDPOINT="..." \
-  S3_BUCKET="..." \
-  S3_ACCESS_KEY_ID="..." \
-  S3_SECRET_ACCESS_KEY="..." \
   S3_PUBLIC_BASE_URL="..."
 ```
 
@@ -155,7 +163,7 @@ curl https://your-fly-app-name.fly.dev/health
 Expected health response:
 
 ```json
-{"ok":true,"env":"production"}
+{ "ok": true, "env": "production" }
 ```
 
 Then open the bot in Telegram and run:

@@ -48,9 +48,15 @@ export function economicsSettingsFromEnv(): EconomicsSettings {
     targetRevenueMultiple: env.ECON_TARGET_REVENUE_MULTIPLE ?? 3,
     providerCosts: {
       standard: env.ECON_STANDARD_REPORT_COST_P75_RUB,
-      influencer: env.ECON_STANDARD_REPORT_COST_P75_RUB ? env.ECON_STANDARD_REPORT_COST_P75_RUB * 1.15 : undefined,
-      hr: env.ECON_STANDARD_REPORT_COST_P75_RUB ? env.ECON_STANDARD_REPORT_COST_P75_RUB * 1.15 : undefined,
-      osint_compliance: env.ECON_STANDARD_REPORT_COST_P75_RUB ? env.ECON_STANDARD_REPORT_COST_P75_RUB * 1.35 : undefined,
+      influencer: env.ECON_STANDARD_REPORT_COST_P75_RUB
+        ? env.ECON_STANDARD_REPORT_COST_P75_RUB * 1.15
+        : undefined,
+      hr: env.ECON_STANDARD_REPORT_COST_P75_RUB
+        ? env.ECON_STANDARD_REPORT_COST_P75_RUB * 1.15
+        : undefined,
+      osint_compliance: env.ECON_STANDARD_REPORT_COST_P75_RUB
+        ? env.ECON_STANDARD_REPORT_COST_P75_RUB * 1.35
+        : undefined,
       photo_search: env.ECON_PHOTO_SEARCH_COST_P75_RUB,
       chat_message: env.ECON_CHAT_MESSAGE_COST_P75_RUB
     },
@@ -111,7 +117,11 @@ export function requiredUnitsForCost(costRub: number, settings: EconomicsSetting
   return Math.ceil(credits * 100);
 }
 
-export function revenueMultiple(units: number, costRub: number, settings: EconomicsSettings): number {
+export function revenueMultiple(
+  units: number,
+  costRub: number,
+  settings: EconomicsSettings
+): number {
   if (costRub <= 0) return Infinity;
   return netRevenueForUnits(units, settings) / costRub;
 }

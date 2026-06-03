@@ -6,7 +6,9 @@ export function normalizeInstagramUsername(input: string): string {
   if (!value) throw new Error("USERNAME_EMPTY");
 
   try {
-    const maybeUrl = value.includes("instagram.com") ? new URL(value.startsWith("http") ? value : `https://${value}`) : null;
+    const maybeUrl = value.includes("instagram.com")
+      ? new URL(value.startsWith("http") ? value : `https://${value}`)
+      : null;
     if (maybeUrl) {
       const parts = maybeUrl.pathname.split("/").filter(Boolean);
       value = parts[0] ?? "";

@@ -4,7 +4,7 @@
 
 Скопируй промпт целиком и передай агенту в корне репозитория `/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot`.
 
-```text
+````text
 Ты senior full-stack/backend engineer и coding agent. Твоя задача - полностью реализовать Telegram-бота ZRETI в репозитории:
 
 /Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot
@@ -447,7 +447,7 @@ scripts/
   audit-economics.ts
 prisma/
 docker-compose.yml
-```
+````
 
 Add/update README with exact local commands.
 
@@ -685,4 +685,7 @@ When finished, report:
 - current git status.
 
 The final answer must be concise, factual and in Russian.
+
+```
+
 ```

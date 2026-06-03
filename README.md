@@ -12,6 +12,7 @@
 - [docs/source-project-analysis.md](./docs/source-project-analysis.md) - детальный разбор текущего React/Vite-сайта, на котором основана спецификация.
 - [docs/financial-model.md](./docs/financial-model.md) - финансовая модель: Telegram Stars, YooKassa, credit packages, unit economics, no-loss guardrails, margin targets, refunds и break-even.
 - [docs/sibling-bot-ux-reference.md](./docs/sibling-bot-ux-reference.md) - UX-паттерны sibling-бота `ai-assistant-bot`, которые нужно сохранить для единого формата группы ботов.
+- [docs/implementation-master-prompt.md](./docs/implementation-master-prompt.md) - готовый master prompt для coding agent, который должен реализовать бота по спецификациям до production-ready MVP.
 
 ## Предлагаемый стек
 

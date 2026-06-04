@@ -13,10 +13,11 @@ export async function consentGate(ctx: MyContext, next: NextFunction) {
   }
 
   const messages = t(ctx.user.language);
+  const current = ctx.user.language === "en" ? "en" : "ru";
   if (ctx.callbackQuery) await ctx.answerCallbackQuery().catch(() => undefined);
   await ctx.reply(messages.startNeedsConsent(), {
     parse_mode: "HTML",
-    reply_markup: consentKeyboard(messages),
+    reply_markup: consentKeyboard(messages, current),
     link_preview_options: { is_disabled: true }
   });
 }

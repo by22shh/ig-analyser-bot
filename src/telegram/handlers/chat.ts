@@ -4,8 +4,8 @@ import type { MyContext } from "../context.js";
 import { paymentMethodsKeyboard } from "../keyboards/payments.js";
 import { reportChatKeyboard } from "../keyboards/reports.js";
 import { t, type LocaleMessages } from "../locales/index.js";
-import { escapeHtml } from "../formatters/html.js";
-import { sendHtml } from "./helpers.js";
+import { mdLiteToHtml } from "../formatters/html.js";
+import { editOrSendHtml, sendHtml } from "./helpers.js";
 
 export function registerChatHandlers(bot: import("grammy").Bot<MyContext>) {
   bot.callbackQuery(new RegExp(`^${CB.REPORT_CHAT}:([0-9a-f-]+)$`), async (ctx) => {
@@ -13,7 +13,7 @@ export function registerChatHandlers(bot: import("grammy").Bot<MyContext>) {
     const messages = t(ctx.user.language);
     await ctx.services.wizard.set(ctx.user.id, "report_chat", { reportId: ctx.match[1] });
     await ctx.answerCallbackQuery();
-    await sendHtml(ctx, messages.chatIntro(), reportChatKeyboard(messages, ctx.match[1]));
+    await editOrSendHtml(ctx, messages.chatIntro(), reportChatKeyboard(messages, ctx.match[1]));
   });
 
   bot.callbackQuery(new RegExp(`^${CB.CHAT_QUICK}:([0-9a-f-]+):([a-z_]+)$`), async (ctx) => {
@@ -61,7 +61,7 @@ async function ask(ctx: MyContext, reportId: string, question: string) {
       // and re-calling the (paid) LLM.
       requestId: String(ctx.update.update_id)
     });
-    await sendHtml(ctx, escapeHtml(answer.text), reportChatKeyboard(messages, reportId));
+    await sendHtml(ctx, mdLiteToHtml(answer.text), reportChatKeyboard(messages, reportId));
   } catch (error) {
     if (error instanceof InsufficientCreditsError) {
       await sendHtml(ctx, messages.insufficientCredits(error), paymentMethodsKeyboard(messages));

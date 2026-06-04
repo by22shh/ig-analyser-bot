@@ -8,7 +8,7 @@ import { modeKeyboard } from "../keyboards/analysis.js";
 import { backMenuKeyboard } from "../keyboards/main-menu.js";
 import { paymentMethodsKeyboard } from "../keyboards/payments.js";
 import { t } from "../locales/index.js";
-import { sendHtml } from "./helpers.js";
+import { editOrSendHtml, sendHtml } from "./helpers.js";
 
 export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
   bot.command("photo", async (ctx) => openPhoto(ctx));
@@ -22,7 +22,7 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
     // shares it, so an album/media-group or double-send collapses to one search.
     await ctx.services.wizard.set(ctx.user.id, "waiting_photo", { requestId: randomUUID() });
     await ctx.answerCallbackQuery();
-    await sendHtml(
+    await editOrSendHtml(
       ctx,
       t(ctx.user.language).photoAsk(),
       new InlineKeyboard()
@@ -87,7 +87,7 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
     if (!ctx.user || !ctx.match?.[1]) return;
     await ctx.services.wizard.set(ctx.user.id, "selecting_mode", { username: ctx.match[1] });
     await ctx.answerCallbackQuery();
-    await sendHtml(
+    await editOrSendHtml(
       ctx,
       t(ctx.user.language).chooseMode(ctx.match[1]),
       modeKeyboard(t(ctx.user.language), ctx.services.users.isCompliance(ctx.user))
@@ -98,10 +98,10 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
 async function openPhoto(ctx: MyContext) {
   const messages = t(ctx.user?.language);
   if (!env.FEATURE_PHOTO_SEARCH) {
-    await sendHtml(ctx, messages.photoDisabled(), backMenuKeyboard(messages));
+    await editOrSendHtml(ctx, messages.photoDisabled(), backMenuKeyboard(messages));
     return;
   }
-  await sendHtml(
+  await editOrSendHtml(
     ctx,
     messages.photoIntro(),
     new InlineKeyboard()

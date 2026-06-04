@@ -2,7 +2,7 @@ import { env } from "../../config/env.js";
 import { CB } from "../constants.js";
 import type { MyContext } from "../context.js";
 import { t } from "../locales/index.js";
-import { sendHtml } from "./helpers.js";
+import { editOrSendHtml, sendHtml } from "./helpers.js";
 import { InlineKeyboard } from "grammy";
 
 export function registerAdminHandlers(bot: import("grammy").Bot<MyContext>) {
@@ -78,7 +78,7 @@ async function showAdmin(ctx: MyContext) {
     ctx.services.prisma.analysisJob.count({ where: { status: "failed" } }),
     ctx.services.prisma.paymentOrder.count({ where: { status: "paid" } })
   ]);
-  await sendHtml(
+  await editOrSendHtml(
     ctx,
     t(ctx.user.language).adminStats({ users, jobs, failed, payments }),
     new InlineKeyboard().text(t(ctx.user.language).buttons.menu, CB.BACK_MAIN)

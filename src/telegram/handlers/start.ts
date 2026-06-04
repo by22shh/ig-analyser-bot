@@ -1,8 +1,8 @@
 import { CB } from "../constants.js";
 import type { MyContext } from "../context.js";
-import { consentKeyboard } from "../keyboards/main-menu.js";
+import { backMenuKeyboard, consentKeyboard } from "../keyboards/main-menu.js";
 import { t } from "../locales/index.js";
-import { renderMainMenu, sendHtml } from "./helpers.js";
+import { editOrSendHtml, renderMainMenu, sendHtml } from "./helpers.js";
 
 export function registerStartHandlers(bot: import("grammy").Bot<MyContext>) {
   bot.command(["start", "menu"], async (ctx) => {
@@ -10,7 +10,7 @@ export function registerStartHandlers(bot: import("grammy").Bot<MyContext>) {
     await ctx.services.wizard.clear(ctx.user.id);
     const messages = t(ctx.user.language);
     if (!ctx.user.consentAcceptedAt) {
-      await sendHtml(ctx, messages.startNeedsConsent(), consentKeyboard(messages));
+      await sendHtml(ctx, messages.startNeedsConsent(), consentKeyboard(messages, locale(ctx)));
       return;
     }
     await renderMainMenu(ctx);
@@ -22,7 +22,11 @@ export function registerStartHandlers(bot: import("grammy").Bot<MyContext>) {
     const messages = t(ctx.user.language);
     await ctx.answerCallbackQuery();
     if (!ctx.user.consentAcceptedAt) {
-      await sendHtml(ctx, messages.startNeedsConsent(), consentKeyboard(messages));
+      await editOrSendHtml(
+        ctx,
+        messages.startNeedsConsent(),
+        consentKeyboard(messages, locale(ctx))
+      );
       return;
     }
     await sendHtml(ctx, messages.languageUpdated(ctx.user.language));
@@ -48,6 +52,10 @@ export function registerStartHandlers(bot: import("grammy").Bot<MyContext>) {
   bot.callbackQuery("cap", async (ctx) => {
     const messages = t(ctx.user?.language);
     await ctx.answerCallbackQuery();
-    await sendHtml(ctx, messages.capabilities());
+    await editOrSendHtml(ctx, messages.capabilities(), backMenuKeyboard(messages));
   });
+}
+
+function locale(ctx: MyContext): "ru" | "en" {
+  return ctx.user?.language === "en" ? "en" : "ru";
 }

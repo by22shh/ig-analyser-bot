@@ -82,9 +82,9 @@ exports[`message snapshots > renders profile 1`] = `
 • куплено: 0
 • выдано/промо: 1
 
-📚 Отчетов: <b>2</b>
+📚 Отчётов: <b>2</b>
 ⏳ Активных задач: <b>1</b>
-🧹 Хранение отчетов: <b>30 дн.</b>"
+🧹 Хранение отчётов: <b>30 дн.</b>"
 `;
 
 exports[`message snapshots > renders report actions 1`] = `
@@ -131,16 +131,16 @@ exports[`message snapshots > renders report actions 1`] = `
 exports[`message snapshots > renders start payload 1`] = `
 "👁 <b>Разбор публичного Instagram-профиля</b>
 
-Пришлите @username или ссылку — я соберу открытые данные и превращу их в понятный стратегический отчет.
+Пришлите @username или ссылку — соберу открытые данные и превращу их в понятный стратегический отчёт.
 
 <b>Вы получите:</b>
 • позиционирование и заметные сигналы профиля
 • темы, визуальный стиль и повторяющиеся паттерны
 • практические выводы для HR, блогинга или личной стратегии
-• PDF/Markdown и чат по готовому отчету
+• PDF/Markdown и чат по готовому отчёту
 
-💎 Баланс: <b>3</b> · отчет от <b>1</b> 💎
-🌐 Язык отчета: <b>ru</b>
+💎 Баланс: <b>3</b> · тарифы: стандарт 1 · блогер/HR 2
+🌐 Язык отчёта: <b>ru</b>
 
 Начните с кнопки «Анализ профиля»."
 `;
@@ -178,6 +178,8 @@ exports[`message snapshots > renders start payload 2`] = `
       "callback_data": "cap",
       "text": "✨ Что я умею",
     },
+  ],
+  [
     {
       "text": "📢 Группа",
       "url": "https://t.me/homie_tech",
@@ -190,7 +192,7 @@ exports[`message snapshots > renders start payload 2`] = `
   [
     {
       "callback_data": "adm",
-      "text": "🛠 Admin",
+      "text": "🛠 Админка",
     },
   ],
 ]

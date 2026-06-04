@@ -25,6 +25,7 @@ const schema = z.object({
   APP_ENV: z.enum(["development", "test", "staging", "production"]).default("development"),
   APP_BASE_URL: z.string().url().default("http://localhost:3000"),
   PORT: optionalNumber(3000),
+  BRAND_NAME: z.string().min(1).default("SocialAnalyserBot"),
 
   TELEGRAM_BOT_TOKEN: optionalString,
   TELEGRAM_WEBHOOK_URL: optionalString,
@@ -90,14 +91,21 @@ const schema = z.object({
 
   DEFAULT_LANGUAGE: z.enum(["ru", "en"]).default("ru"),
   ADMIN_DEFAULT_CREDITS: optionalNumber(100),
+  // Free credits granted once to each new user on first contact. 1 credit = one
+  // Standard report. Set to 0 to disable the welcome bonus. Each granted report
+  // costs real provider money (Apify/OpenRouter), so tune with abuse risk in mind.
+  WELCOME_BONUS_CREDITS: optionalNumber(1),
   REPORT_RETENTION_DAYS: optionalNumber(30),
   PHOTO_UPLOAD_MAX_MB: optionalNumber(10),
   ANALYSIS_POST_LIMIT: optionalNumber(30),
   VISION_BATCH_SIZE: optionalNumber(5),
   ANALYSIS_MAX_IMAGES_ANALYZED: optionalNumber(30),
   ANALYSIS_MAX_IMAGE_DOWNLOAD_MB: optionalNumber(8),
+  LLM_STRUCTURED_OUTPUTS: boolFromString.default(true),
   LLM_FINAL_INPUT_TOKEN_BUDGET: optionalNumber(24000),
   LLM_FINAL_OUTPUT_TOKEN_BUDGET: optionalNumber(4096),
+  LLM_REPAIR_OUTPUT_TOKEN_BUDGET: optionalNumber(4096),
+  LLM_VISION_OUTPUT_TOKEN_BUDGET: optionalNumber(700),
   LLM_CHAT_INPUT_TOKEN_BUDGET: optionalNumber(12000),
   LLM_CHAT_OUTPUT_TOKEN_BUDGET: optionalNumber(2048),
   FACECHECK_TIMEOUT_SECONDS: optionalNumber(90),

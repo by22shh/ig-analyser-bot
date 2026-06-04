@@ -14,7 +14,7 @@ import {
 import { backMenuKeyboard } from "../keyboards/main-menu.js";
 import { paymentMethodsKeyboard } from "../keyboards/payments.js";
 import { t } from "../locales/index.js";
-import { sendHtml } from "./helpers.js";
+import { editOrSendHtml, sendHtml } from "./helpers.js";
 
 type AnalyzePayload = {
   username?: string;
@@ -35,7 +35,7 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
     if (!ctx.user) return;
     await ctx.answerCallbackQuery();
     await ctx.services.wizard.set(ctx.user.id, "waiting_username");
-    await sendHtml(ctx, t(ctx.user.language).askUsername(), cancelKeyboard(ctx));
+    await editOrSendHtml(ctx, t(ctx.user.language).askUsername(), cancelKeyboard(ctx));
   });
 
   bot.callbackQuery(
@@ -60,7 +60,7 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
           ...state.payload,
           mode
         });
-        await sendHtml(ctx, messages.askHrPosition(), cancelKeyboard(ctx));
+        await editOrSendHtml(ctx, messages.askHrPosition(), cancelKeyboard(ctx));
         return;
       }
       if (mode === "osint_compliance") {
@@ -70,7 +70,11 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
           requestId: randomUUID(),
           lawfulBasisAccepted: false
         });
-        await sendHtml(ctx, messages.askOsintLawfulBasis(), osintLawfulBasisKeyboard(messages));
+        await editOrSendHtml(
+          ctx,
+          messages.askOsintLawfulBasis(),
+          osintLawfulBasisKeyboard(messages)
+        );
         return;
       }
       await showConfirm(ctx, { ...state.payload, mode });
@@ -128,7 +132,7 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
       });
       await ctx.services.wizard.clear(ctx.user.id);
       await ctx.answerCallbackQuery();
-      await sendHtml(
+      await editOrSendHtml(
         ctx,
         result.reused
           ? messages.jobAlreadyQueued(state.payload.username)
@@ -137,7 +141,11 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
     } catch (error) {
       if (error instanceof InsufficientCreditsError) {
         await ctx.answerCallbackQuery();
-        await sendHtml(ctx, messages.insufficientCredits(error), paymentMethodsKeyboard(messages));
+        await editOrSendHtml(
+          ctx,
+          messages.insufficientCredits(error),
+          paymentMethodsKeyboard(messages)
+        );
         return;
       }
       throw error;
@@ -195,7 +203,11 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
     if (!ctx.user) return;
     await ctx.services.wizard.clear(ctx.user.id);
     await ctx.answerCallbackQuery();
-    await sendHtml(ctx, t(ctx.user.language).cancelled(), backMenuKeyboard(t(ctx.user.language)));
+    await editOrSendHtml(
+      ctx,
+      t(ctx.user.language).cancelled(),
+      backMenuKeyboard(t(ctx.user.language))
+    );
   });
 }
 
@@ -205,7 +217,7 @@ async function showConfirm(ctx: MyContext, payload: AnalyzePayload) {
   const requestId = payload.requestId ?? randomUUID();
   const nextPayload = { ...payload, requestId };
   await ctx.services.wizard.set(ctx.user.id, "confirming_analysis", nextPayload);
-  await sendHtml(
+  await editOrSendHtml(
     ctx,
     messages.confirmAnalysis({
       username: payload.username,

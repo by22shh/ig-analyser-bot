@@ -4,7 +4,7 @@ import type { MyContext } from "../context.js";
 import { packageKeyboard } from "../keyboards/payments.js";
 import { backMenuKeyboard } from "../keyboards/main-menu.js";
 import { t } from "../locales/index.js";
-import { sendHtml } from "./helpers.js";
+import { editOrSendHtml, sendHtml } from "./helpers.js";
 import { InlineKeyboard } from "grammy";
 
 export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
@@ -16,7 +16,7 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
       await sendHtml(ctx, messages.paymentMethodUnavailable(), backMenuKeyboard(messages));
       return;
     }
-    await sendHtml(
+    await editOrSendHtml(
       ctx,
       messages.starsIntro(),
       packageKeyboard(messages, "telegram_stars", ctx.services.payments.packages("telegram_stars"))
@@ -31,7 +31,7 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
       await sendHtml(ctx, messages.paymentMethodUnavailable(), backMenuKeyboard(messages));
       return;
     }
-    await sendHtml(
+    await editOrSendHtml(
       ctx,
       messages.yookassaIntro(env.YOOKASSA_TEST_MODE),
       packageKeyboard(messages, "yookassa", ctx.services.payments.packages("yookassa"))
@@ -83,7 +83,7 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
     await ctx.services.payments.ensureCatalog();
     if (env.YOOKASSA_USE_RECEIPTS && !ctx.user.email) {
       await ctx.services.wizard.set(ctx.user.id, "waiting_email", { packageCode: ctx.match[1] });
-      await sendHtml(
+      await editOrSendHtml(
         ctx,
         messages.askReceiptEmail(),
         new InlineKeyboard()
@@ -184,7 +184,7 @@ async function createAndSendYooKassaOrder(ctx: MyContext, packageCode: string, u
     userEmail,
     idempotencyKey: `yk:${ctx.user.id}:${packageCode}:${Date.now()}`
   });
-  await sendHtml(
+  await editOrSendHtml(
     ctx,
     messages.yookassaPaymentCreated(order.amountMinor),
     order.confirmationUrl

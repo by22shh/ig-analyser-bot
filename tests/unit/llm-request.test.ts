@@ -44,4 +44,36 @@ describe("buildChatCompletionBody", () => {
     const body = buildChatCompletionBody({ model: "m", system: "sys", user, maxTokens: 512 });
     expect(body.messages).toContainEqual({ role: "user", content: user });
   });
+
+  it("passes structured output and provider controls when requested", () => {
+    const body = buildChatCompletionBody({
+      model: "m",
+      system: "sys",
+      user: "hi",
+      maxTokens: 512,
+      responseFormat: {
+        type: "json_schema",
+        json_schema: {
+          name: "x",
+          strict: true,
+          schema: { type: "object", additionalProperties: false }
+        }
+      },
+      provider: { require_parameters: true, data_collection: "deny" },
+      reasoning: { enabled: true, exclude: true },
+      temperature: 0.2
+    });
+
+    expect(body.response_format).toEqual({
+      type: "json_schema",
+      json_schema: {
+        name: "x",
+        strict: true,
+        schema: { type: "object", additionalProperties: false }
+      }
+    });
+    expect(body.provider).toEqual({ require_parameters: true, data_collection: "deny" });
+    expect(body.reasoning).toEqual({ enabled: true, exclude: true });
+    expect(body.temperature).toBe(0.2);
+  });
 });

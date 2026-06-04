@@ -123,11 +123,32 @@ function inferKind(title: string): string {
 }
 
 function extractSources(text: string) {
-  const urls = new Set<string>();
-  for (const match of text.matchAll(/https?:\/\/[^\s)]+/g)) {
-    urls.add(match[0]);
+  const sources: Array<{ url: string; label: string; postId?: string }> = [];
+  const seen = new Set<string>();
+  for (const line of text.split(/\r?\n/)) {
+    for (const match of line.matchAll(/https?:\/\/[^\s)]+/g)) {
+      const url = match[0];
+      if (seen.has(url)) continue;
+      seen.add(url);
+      const postId =
+        line.match(/\[([^\]\s]+)\]/)?.[1] ??
+        line.match(/\bpost(?:Id| ID| id)?[:\s]+([A-Za-z0-9_-]+)/)?.[1];
+      sources.push({
+        url,
+        postId,
+        label: cleanSourceLabel(line, sources.length + 1)
+      });
+    }
   }
-  return [...urls].slice(0, 8).map((url, index) => ({ url, label: `Source ${index + 1}` }));
+  return sources.slice(0, 8);
+}
+
+function cleanSourceLabel(line: string, index: number): string {
+  const cleaned = line
+    .replace(/https?:\/\/[^\s)]+/g, "")
+    .replace(/^[-*\s]+/, "")
+    .trim();
+  return cleaned || `Source ${index}`;
 }
 
 export function validateRequiredSections(

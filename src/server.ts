@@ -2,12 +2,19 @@ import { env } from "./config/env.js";
 import { logger } from "./config/logger.js";
 import { createServices } from "./modules/container.js";
 import { createBot } from "./telegram/bot.js";
+import { configureCommands } from "./telegram/commands.js";
 import { createApp } from "./app.js";
 
 const services = createServices();
 await services.payments.ensureCatalog();
 const bot = createBot(services);
 const app = createApp({ services, bot });
+
+// Register the Telegram "/" command menu so the bot's commands are discoverable.
+// Guarded by a real token: the dev fallback token would 404 against the API.
+if (env.TELEGRAM_BOT_TOKEN) {
+  await configureCommands(bot);
+}
 
 if (env.TELEGRAM_USE_LONG_POLLING) {
   bot.start();

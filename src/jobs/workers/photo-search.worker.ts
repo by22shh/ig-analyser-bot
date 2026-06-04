@@ -95,7 +95,9 @@ export function startPhotoSearchWorker(input: {
             kb.text(
               `@${match.username} ${(match.confidence * 100).toFixed(0)}%`,
               `${CB.PHOTO_ANALYZE}:${match.username}`
-            ).row();
+            );
+            if (match.profileUrl) kb.url(messages.buttons.openInstagram, match.profileUrl);
+            kb.row();
           }
           kb.text(messages.buttons.menu, CB.BACK_MAIN);
           // Work is done and captured; a delivery hiccup must not fail the job.
@@ -103,7 +105,11 @@ export function startPhotoSearchWorker(input: {
             await input.bot.api.sendMessage(
               Number(row.telegramChatId ?? row.user.telegramId),
               messages.photoMatches(matches),
-              { reply_markup: kb }
+              {
+                parse_mode: "HTML",
+                reply_markup: kb,
+                link_preview_options: { is_disabled: true }
+              }
             );
           } catch (notifyError) {
             log.warn({ error: notifyError, jobId: row.id }, "photo_search_notify_failed");

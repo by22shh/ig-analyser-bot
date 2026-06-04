@@ -1,10 +1,11 @@
+import { env } from "../../config/env.js";
 import { AnalysisMode } from "../constants.js";
 import { escapeHtml, formatCredits, percent } from "../formatters/html.js";
 import type { PackageView } from "../../modules/billing/packages.js";
 import type { ReportMetrics, ReportSummaryView } from "../../modules/reports/types.js";
 
 export const ru = {
-  brand: "Бот",
+  brand: env.BRAND_NAME,
   buttons: {
     analyze: "🔎 Анализ профиля",
     photo: "🖼 Поиск по фото",
@@ -15,14 +16,14 @@ export const ru = {
     channel: "📢 Группа",
     support: "🛟 Поддержка",
     settings: "⚙️ Настройки",
-    admin: "🛠 Admin",
+    admin: "🛠 Админка",
     terms: "☑️ Правила",
     back: "⬅️ Назад",
     cancel: "✖️ Отменить",
     menu: "🏠 В меню",
     accept: "✅ Принимаю правила",
     run: "▶️ Запустить",
-    confirmLawfulBasis: "✅ Подтверждаю lawful basis",
+    confirmLawfulBasis: "✅ Подтверждаю правовое основание",
     stars: "⭐ Telegram Stars",
     yookassa: "💳 Банковская карта / СБП",
     pay: "Оплатить",
@@ -32,20 +33,24 @@ export const ru = {
     chat: "💬 Задать вопрос",
     sources: "🔗 Источники",
     repeat: "🔁 Повторить анализ",
-    confirmDelete: "🗑 Да, удалить навсегда"
+    confirmDelete: "🗑 Да, удалить навсегда",
+    openInstagram: "🔗 Открыть в Instagram",
+    prevSection: "◀️ Пред.",
+    nextSection: "След. ▶️",
+    toSections: "📚 К секциям"
   },
   modeTitle(mode: AnalysisMode): string {
     const titles: Record<AnalysisMode, string> = {
-      standard: "Standard",
-      influencer: "Influencer audit",
-      hr: "HR context",
-      osint_compliance: "OSINT / Compliance"
+      standard: "Стандартный",
+      influencer: "Аудит блогера",
+      hr: "HR-контекст",
+      osint_compliance: "OSINT-проверка"
     };
     return titles[mode];
   },
   startNeedsConsent(): string {
     return (
-      "👁 <b>Бот</b> анализирует только публичные Instagram-данные.\n\n" +
+      `👁 <b>${escapeHtml(this.brand)}</b> анализирует только публичные Instagram-данные.\n\n` +
       "Нельзя использовать бота для преследования, доксинга, угроз, давления или обхода приватности. " +
       "Фото-поиск требует, чтобы у вас было право использовать изображение.\n\n" +
       "Выберите язык, затем нажмите «Принимаю правила»."
@@ -57,30 +62,38 @@ export const ru = {
     grantedUnits: number;
     language: string;
     photoSearchEnabled?: boolean;
+    welcomeBonusCredits?: number;
   }): string {
     const photoLine = input.photoSearchEnabled ? "• найти возможный профиль по фото\n" : "";
+    const photoTariff = input.photoSearchEnabled ? " · фото 1" : "";
+    const bonusLine =
+      input.welcomeBonusCredits && input.welcomeBonusCredits > 0
+        ? `🎁 <b>Вам начислен бонус: ${formatCredits(input.welcomeBonusCredits * 100)} 💎</b> — первого отчёта хватит бесплатно.\n\n`
+        : "";
     return (
+      bonusLine +
       "👁 <b>Разбор публичного Instagram-профиля</b>\n\n" +
-      "Пришлите @username или ссылку — я соберу открытые данные и превращу их в понятный стратегический отчет.\n\n" +
+      "Пришлите @username или ссылку — соберу открытые данные и превращу их в понятный стратегический отчёт.\n\n" +
       "<b>Вы получите:</b>\n" +
       "• позиционирование и заметные сигналы профиля\n" +
       "• темы, визуальный стиль и повторяющиеся паттерны\n" +
       "• практические выводы для HR, блогинга или личной стратегии\n" +
       photoLine +
-      "• PDF/Markdown и чат по готовому отчету\n\n" +
-      `💎 Баланс: <b>${formatCredits(input.totalUnits)}</b> · отчет от <b>1</b> 💎\n` +
-      `🌐 Язык отчета: <b>${escapeHtml(input.language)}</b>\n\n` +
+      "• PDF/Markdown и чат по готовому отчёту\n\n" +
+      `💎 Баланс: <b>${formatCredits(input.totalUnits)}</b> · тарифы: стандарт 1 · блогер/HR 2${photoTariff}\n` +
+      `🌐 Язык отчёта: <b>${escapeHtml(input.language)}</b>\n\n` +
       "Начните с кнопки «Анализ профиля»."
     );
   },
   capabilities(): string {
     return (
-      "✨ <b>Что умеет бот</b>\n\n" +
-      "• Собирает публичные посты и профильные метаданные.\n" +
-      "• Анализирует до 30 последних постов, визуальные паттерны и Digital Circle.\n" +
-      "• Делает краткий вывод в Telegram, подробные секции, PDF/Markdown/HTML.\n" +
-      "• Позволяет задавать вопросы по готовому отчету.\n\n" +
-      "Бот не анализирует закрытые профили и не помогает с преследованием, доксингом или давлением."
+      `✨ <b>Что умеет ${escapeHtml(this.brand)}</b>\n\n` +
+      "• Собирает публичные посты и метаданные профиля.\n" +
+      "• Анализирует до 30 последних постов, визуальные паттерны и карту окружения (Digital Circle).\n" +
+      "• Даёт краткий вывод в Telegram, подробные секции и экспорт в PDF/Markdown/HTML.\n" +
+      "• Позволяет задавать вопросы по готовому отчёту.\n\n" +
+      "<b>Тарифы:</b> стандарт 1 💎 · блогер/HR 2 💎 · OSINT 3 💎 · фото 1 💎 · вопрос в чате 0.05 💎\n\n" +
+      `${escapeHtml(this.brand)} не анализирует закрытые профили и не помогает с преследованием, доксингом или давлением.`
     );
   },
   profile(input: {
@@ -101,9 +114,9 @@ export const ru = {
       `💎 <b>Кредиты: ${formatCredits(input.totalUnits)}</b>\n` +
       `• куплено: ${formatCredits(input.purchasedUnits)}\n` +
       `• выдано/промо: ${formatCredits(input.grantedUnits)}\n\n` +
-      `📚 Отчетов: <b>${input.completedReports}</b>\n` +
+      `📚 Отчётов: <b>${input.completedReports}</b>\n` +
       `⏳ Активных задач: <b>${input.activeJobs}</b>\n` +
-      `🧹 Хранение отчетов: <b>${input.retentionDays} дн.</b>`
+      `🧹 Хранение отчётов: <b>${input.retentionDays} дн.</b>`
     );
   },
   balance(input: {
@@ -111,15 +124,20 @@ export const ru = {
     purchasedUnits: number;
     grantedUnits: number;
     photoSearchEnabled?: boolean;
+    osintEnabled?: boolean;
   }): string {
-    const photoLine = input.photoSearchEnabled ? "\nПоиск по фото: <b>1</b> 💎" : "";
+    const photoLine = input.photoSearchEnabled ? "\n• поиск по фото: <b>1</b> 💎" : "";
+    const osintLine = input.osintEnabled ? "\n• OSINT-проверка: <b>3</b> 💎" : "";
     return (
       `💎 <b>Ваши кредиты: ${formatCredits(input.totalUnits)}</b>\n` +
       `• куплено: ${formatCredits(input.purchasedUnits)}\n` +
       `• выдано/промо: ${formatCredits(input.grantedUnits)}\n\n` +
-      "Standard-анализ: <b>1</b> 💎\n" +
-      "Influencer/HR: <b>2</b> 💎" +
-      photoLine
+      "<b>Тарифы:</b>\n" +
+      "• стандартный анализ: <b>1</b> 💎\n" +
+      "• аудит блогера / HR-контекст: <b>2</b> 💎" +
+      osintLine +
+      photoLine +
+      "\n• вопрос в чате по отчёту: <b>0.05</b> 💎"
     );
   },
   insufficientCredits(input: { costUnits: number; availableUnits: number }): string {
@@ -144,18 +162,18 @@ export const ru = {
     return `Выберите режим анализа для <b>@${escapeHtml(username)}</b>.`;
   },
   askHrPosition(): string {
-    return "HR-режим включен только как дополнительный публичный контекст. Пришлите позицию кандидата, например <code>Senior backend engineer</code>.";
+    return "HR-режим включён только как дополнительный публичный контекст. Пришлите позицию кандидата, например <code>Senior backend engineer</code>.";
   },
   osintRestricted(): string {
-    return "OSINT / Compliance доступен только пользователям с ролью compliance/admin и отдельным подтверждением lawful basis.";
+    return "OSINT-проверка доступна только пользователям с ролью compliance/admin и отдельным подтверждением правового основания.";
   },
   modeUnavailable(): string {
     return "Этот режим сейчас недоступен. Вернитесь в меню и выберите доступный режим.";
   },
   askOsintLawfulBasis(): string {
     return (
-      "⚖️ <b>Подтверждение lawful basis</b>\n\n" +
-      "OSINT / Compliance можно использовать только для законной проверки публичных фактов. Подтвердите, что у вас есть правовое основание, вы не будете использовать отчет для давления, преследования, доксинга или обхода приватности, а выводы будут проверяться как гипотезы."
+      "⚖️ <b>Подтверждение правового основания</b>\n\n" +
+      "OSINT-проверку можно использовать только для законной проверки публичных фактов. Подтвердите, что у вас есть правовое основание, вы не будете использовать отчёт для давления, преследования, доксинга или обхода приватности, а выводы будут проверяться как гипотезы."
     );
   },
   confirmAnalysis(input: { username: string; mode: AnalysisMode; costUnits: number }): string {
@@ -164,14 +182,14 @@ export const ru = {
       `Профиль: <b>@${escapeHtml(input.username)}</b>\n` +
       `Режим: <b>${this.modeTitle(input.mode)}</b>\n` +
       `Стоимость: <b>${formatCredits(input.costUnits)}</b> 💎\n` +
-      "Обычно анализ занимает 3-8 минут."
+      "Обычно анализ занимает 3–8 минут."
     );
   },
   jobQueued(username: string): string {
-    return `⏳ Задача по <b>@${escapeHtml(username)}</b> принята. Я пришлю прогресс и отчет сюда.`;
+    return `⏳ Задача по <b>@${escapeHtml(username)}</b> принята. Я пришлю прогресс и отчёт сюда.`;
   },
   jobAlreadyQueued(username: string): string {
-    return `⏳ Задача по <b>@${escapeHtml(username)}</b> уже поставлена в очередь. Я пришлю прогресс и отчет сюда.`;
+    return `⏳ Задача по <b>@${escapeHtml(username)}</b> уже поставлена в очередь. Я пришлю прогресс и отчёт сюда.`;
   },
   staleConfirmation(): string {
     return "Это подтверждение устарело. Откройте анализ заново и подтвердите актуальную задачу.";
@@ -188,24 +206,27 @@ export const ru = {
   }): string {
     const m = input.metrics;
     return (
-      `✅ <b>Отчет по @${escapeHtml(input.username)} готов</b>\n` +
+      `✅ <b>Отчёт по @${escapeHtml(input.username)} готов</b>\n` +
       `Режим: <b>${this.modeTitle(input.mode)}</b>\n\n` +
       "<b>Метрики:</b>\n" +
       `• подписчики: ${m.followersCount.toLocaleString("ru-RU")}\n` +
       `• постов в анализе: ${m.analyzedPosts}\n` +
       `• средние лайки: ${Math.round(m.avgLikes).toLocaleString("ru-RU")}\n` +
       `• средние комментарии: ${Math.round(m.avgComments).toLocaleString("ru-RU")}\n` +
-      `• ER: ${percent(m.engagementRate)}\n` +
+      `• вовлечённость (ER): ${percent(m.engagementRate)}\n` +
       `• частота: раз в ${m.frequencyDays.toFixed(1)} дн.\n\n` +
       "<b>Короткий вывод:</b>\n" +
       input.summary.bullets.map((item) => `• ${escapeHtml(item)}`).join("\n")
     );
   },
   sectionsIntro(username: string): string {
-    return `📚 <b>Секции отчета @${escapeHtml(username)}</b>\nВыберите раздел.`;
+    return `📚 <b>Секции отчёта @${escapeHtml(username)}</b>\nВыберите раздел.`;
   },
   section(title: string, content: string): string {
     return `📌 <b>${escapeHtml(title)}</b>\n\n${escapeHtml(content)}`;
+  },
+  sectionProgress(position: number, total: number): string {
+    return `Раздел ${position} из ${total}`;
   },
   reportSources(input: {
     username: string;
@@ -220,22 +241,31 @@ export const ru = {
     const suffix =
       input.sources.length > 20 ? `\n\nПоказаны первые 20 из ${input.sources.length}.` : "";
     return items.length
-      ? `🔗 <b>Источники отчета @${escapeHtml(input.username)}</b>\n\n${items.join("\n")}${suffix}`
-      : `🔗 <b>Источники отчета @${escapeHtml(input.username)}</b>\n\nВ этом отчете источники не найдены.`;
+      ? `🔗 <b>Источники отчёта @${escapeHtml(input.username)}</b>\n\n${items.join("\n")}${suffix}`
+      : `🔗 <b>Источники отчёта @${escapeHtml(input.username)}</b>\n\nВ этом отчёте источники не найдены.`;
   },
   historyTitle(): string {
-    return "🗂 <b>Последние отчеты</b>";
+    return "🗂 <b>Последние отчёты</b>\nВыберите отчёт, чтобы открыть секции и экспорт.";
   },
   historyEmpty(): string {
-    return "История пока пустая.";
+    return "История пока пустая. Запустите первый анализ кнопкой «Анализ профиля».";
+  },
+  relativeDate(date: Date): string {
+    const days = Math.floor((Date.now() - date.getTime()) / 86400000);
+    if (days <= 0) return "сегодня";
+    if (days === 1) return "вчера";
+    if (days < 7) return `${days} дн. назад`;
+    if (days < 30) return `${Math.floor(days / 7)} нед. назад`;
+    if (days < 365) return `${Math.floor(days / 30)} мес. назад`;
+    return `${Math.floor(days / 365)} г. назад`;
   },
   artifactCaption(type: "pdf" | "markdown" | "html"): string {
-    const titles = { pdf: "PDF-отчет", markdown: "Markdown-отчет", html: "HTML-отчет" };
+    const titles = { pdf: "PDF-отчёт", markdown: "Markdown-отчёт", html: "HTML-отчёт" };
     return `📄 ${titles[type]}`;
   },
   artifactMissing(type: "pdf" | "markdown" | "html"): string {
     const titles = { pdf: "PDF", markdown: "Markdown", html: "HTML" };
-    return `${titles[type]} пока не найден. Попробуйте позже или откройте секции отчета.`;
+    return `${titles[type]} пока не найден. Попробуйте позже или откройте секции отчёта.`;
   },
   artifactLinkFallback(type: "pdf" | "markdown" | "html", url: string): string {
     const titles = { pdf: "PDF", markdown: "Markdown", html: "HTML" };
@@ -265,7 +295,7 @@ export const ru = {
     return "Не похоже на email. Пришлите адрес вида <code>name@example.com</code> или нажмите «Отменить».";
   },
   emailSaved(email: string): string {
-    return `Email для чеков сохранен: <code>${escapeHtml(email)}</code>`;
+    return `Email для чеков сохранён: <code>${escapeHtml(email)}</code>`;
   },
   yookassaPaymentCreated(amountMinor: number): string {
     return `💳 <b>Ссылка на оплату создана</b>\n\nСумма: <b>${(amountMinor / 100).toFixed(2)} ₽</b>\nПосле подтверждения YooKassa кредиты начислятся автоматически.`;
@@ -285,13 +315,13 @@ export const ru = {
     return `Пакет кредитов ${pkg.title}`;
   },
   starsInvoiceAlreadyPending(): string {
-    return "⭐ У вас уже есть активный счет Telegram Stars для этого пакета. Откройте предыдущее сообщение со счетом или подождите, пока он истечет.";
+    return "⭐ У вас уже есть активный счёт Telegram Stars для этого пакета. Откройте предыдущее сообщение со счётом или подождите, пока он истечёт.";
   },
   preCheckoutPayloadInvalid(): string {
     return "Цена устарела. Откройте пополнение заново.";
   },
   preCheckoutPaymentInvalid(): string {
-    return "Платеж не найден или сумма изменилась.";
+    return "Платёж не найден или сумма изменилась.";
   },
   paymentSuccess(units: number, balance: number): string {
     return `✅ Кредиты начислены: <b>${formatCredits(units)}</b> 💎\nБаланс: <b>${formatCredits(balance)}</b> 💎`;
@@ -299,16 +329,17 @@ export const ru = {
   settings(input: { language: string; exportFormat: string; retentionDays: number }): string {
     return (
       "⚙️ <b>Настройки</b>\n\n" +
-      `🌐 Язык интерфейса и отчетов: <b>${escapeHtml(input.language)}</b>\n` +
+      `🌐 Язык интерфейса и отчётов: <b>${escapeHtml(input.language)}</b>\n` +
       `📄 Формат экспорта по умолчанию: <b>${escapeHtml(input.exportFormat.toUpperCase())}</b>\n` +
-      `🧹 Хранение отчетов: <b>${input.retentionDays} дн.</b>`
+      `🧹 Хранение отчётов: <b>${input.retentionDays} дн.</b>\n\n` +
+      "Текущие значения отмечены галочкой."
     );
   },
   settingsUpdated(): string {
     return "✅ Настройки обновлены.";
   },
   languageUpdated(language: string): string {
-    return `🌐 Язык изменен: <b>${escapeHtml(language)}</b>.`;
+    return `🌐 Язык изменён: <b>${escapeHtml(language)}</b>.`;
   },
   exportFormatTitle(format: "pdf" | "markdown" | "html"): string {
     const titles = { pdf: "PDF", markdown: "Markdown", html: "HTML" };
@@ -318,7 +349,7 @@ export const ru = {
     return `${days} дн.`;
   },
   resetDone(): string {
-    return "🧹 Контекст чата по отчету очищен. Отчеты и история сохранены.";
+    return "🧹 Контекст диалога по отчёту очищен. Сами отчёты и история сохранены.";
   },
   photoIntro(): string {
     return (
@@ -327,7 +358,7 @@ export const ru = {
     );
   },
   photoAsk(): string {
-    return "Пришлите фото или изображение файлом до лимита. Исходное фото не сохраняется в отчетах; запись поиска удаляется по сроку хранения.";
+    return "Пришлите фото или изображение файлом до лимита. Исходное фото не сохраняется в отчётах; запись поиска удаляется по сроку хранения.";
   },
   photoRightConfirm(): string {
     return "✅ Есть право использовать фото";
@@ -346,11 +377,11 @@ export const ru = {
   },
   photoMatches(matches: Array<{ username: string }>): string {
     return matches.length
-      ? "Найдены возможные Instagram-кандидаты. Это не подтверждение личности, а список возможных совпадений."
-      : "По этому фото не удалось найти Instagram-кандидатов.";
+      ? "🔎 <b>Возможные Instagram-кандидаты</b>\n\nЭто не подтверждение личности, а список возможных совпадений. Процент — оценка визуального сходства. Выберите кандидата, чтобы запустить анализ профиля."
+      : "По этому фото не удалось найти Instagram-кандидатов. Попробуйте другое изображение или введите username вручную.";
   },
   chatIntro(): string {
-    return "💬 <b>Чат по отчету</b>\n\nЗадайте вопрос или выберите быстрый вариант.";
+    return "💬 <b>Чат по отчёту</b>\n\nЗадайте вопрос или выберите быстрый вариант. Каждый вопрос — 0.05 💎.";
   },
   chatQuick: {
     introLabel: "Как начать разговор?",
@@ -358,10 +389,10 @@ export const ru = {
     portraitLabel: "Коммуникационный портрет",
     introQuestion: "Как лучше начать разговор с этим человеком?",
     sincerityQuestion:
-      "Какие сигналы искренности или постановочности можно осторожно проверить по отчету?",
+      "Какие сигналы искренности или постановочности можно осторожно проверить по отчёту?",
     portraitQuestion:
       "Сформулируй осторожные гипотезы о коммуникационном стиле по публичным данным.",
-    fallbackQuestion: "Что важно проверить по отчету?"
+    fallbackQuestion: "Что важно проверить по отчёту?"
   },
   progressStages: {
     fetchingProfile: "Сбор публичных данных",
@@ -379,7 +410,7 @@ export const ru = {
   },
   adminStats(input: { users: number; jobs: number; failed: number; payments: number }): string {
     return (
-      "🛠 <b>Admin</b>\n\n" +
+      "🛠 <b>Админка</b>\n\n" +
       `Пользователей: <b>${input.users}</b>\n` +
       `Активных задач: <b>${input.jobs}</b>\n` +
       `Ошибок задач: <b>${input.failed}</b>\n` +
@@ -396,23 +427,31 @@ export const ru = {
       : "";
     return (
       "ℹ️ <b>Помощь</b>\n\n" +
-      "1. Нажмите «Анализ профиля» и пришлите публичный username.\n" +
-      "2. Выберите режим и подтвердите стоимость.\n" +
-      "3. Получите краткий вывод, секции и PDF/Markdown.\n\n" +
-      "Я не анализирую закрытые профили и не помогаю с преследованием, доксингом или обходом приватности. Для удаления данных используйте /delete_me." +
+      "<b>Анализ профиля.</b> Нажмите «Анализ профиля» и пришлите публичный @username (можно просто отправить username в чат). Выберите режим, подтвердите стоимость — придут краткий вывод, секции и PDF/Markdown.\n" +
+      "<b>Поиск по фото.</b> Если включён — ищет возможные профили по изображению (нужно право на фото).\n" +
+      "<b>Чат по отчёту.</b> Откройте отчёт → «Задать вопрос» и спросите по публичным данным.\n" +
+      "<b>История.</b> Готовые отчёты и экспорт всегда доступны в «Истории».\n\n" +
+      `${escapeHtml(this.brand)} не анализирует закрытые профили и не помогает с преследованием, доксингом или обходом приватности. Для удаления данных используйте /delete_me.` +
       support +
       terms +
       privacy
     );
   },
   cancelled(): string {
-    return "✖️ Отменено. Возвращаю в меню.";
+    return "✖️ Отменено. Текущий шаг сброшен — вы в меню.";
   },
   deleteMeWarning(): string {
-    return "⚠️ <b>Удаление аккаунта</b>\n\nЭто действие необратимо: профиль, все отчеты и рабочие данные будут удалены или анонимизированы, а оставшиеся кредиты сгорят. Финансовые записи сохраняются согласно требованиям учета.\n\nПродолжить?";
+    return "⚠️ <b>Удаление аккаунта</b>\n\nЭто действие необратимо: профиль, все отчёты и рабочие данные будут удалены или анонимизированы, а оставшиеся кредиты сгорят. Финансовые записи сохраняются согласно требованиям учёта.\n\nПродолжить?";
   },
   deleteMeDone(): string {
-    return "🧹 Профиль, отчеты и рабочие данные удалены или анонимизированы. Финансовые записи могут храниться без лишних персональных полей согласно требованиям учета и политике хранения.";
+    return "🧹 Профиль, отчёты и рабочие данные удалены или анонимизированы. Финансовые записи могут храниться без лишних персональных полей согласно требованиям учёта и политике хранения.";
+  },
+  analysisFailed(): string {
+    return (
+      "⚠️ <b>Не удалось завершить анализ</b>\n\n" +
+      "Мы попробовали несколько раз, но не смогли собрать отчёт. " +
+      "💎 Зарезервированные кредиты возвращены на баланс — повторите попытку позже или напишите в поддержку."
+    );
   },
   genericError(): string {
     return "⚠️ Не удалось обработать запрос. Попробуйте позже или напишите в поддержку.";

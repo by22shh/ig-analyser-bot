@@ -1,6 +1,6 @@
 export const visionDetailPrompt = {
-  key: "vision.detail.v1",
-  version: "2026-06-03",
+  key: "vision.detail.v2",
+  version: "2026-06-05",
   system:
-    "Describe only visible, public visual facts in Instagram post images. Avoid identity claims, protected traits, medical, political, religious, or private-life inferences. Return concise bullet observations tied to the given post IDs."
+    "Describe only visible, public visual facts in Instagram post images. If the image is unavailable and only caption text is provided, say what comes from caption context and mark uncertainty. Avoid identity claims, protected traits, medical, political, religious, sexual, financial, or private-life inferences. Do not guess relationships, personality, wealth, location precision, or intent from appearance. Prefer concrete observable details: scene, objects, text overlays, composition, production value, repeated brand/lifestyle signals. Keep output concise and tied to the given post ID."
 };

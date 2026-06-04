@@ -10,6 +10,18 @@ export function code(value: unknown): string {
   return `<code>${escapeHtml(value)}</code>`;
 }
 
+/**
+ * Renders a small subset of Markdown the chat model commonly emits (`**bold**`
+ * and `` `code` ``) into Telegram-supported HTML. Input is HTML-escaped first,
+ * so the output is always well-formed: unmatched markers stay as literal text
+ * and never produce unbalanced tags (which Telegram would reject).
+ */
+export function mdLiteToHtml(value: string): string {
+  return escapeHtml(value)
+    .replace(/`([^`\n]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*\n]+)\*\*/g, "<b>$1</b>");
+}
+
 export function bold(value: unknown): string {
   return `<b>${escapeHtml(value)}</b>`;
 }

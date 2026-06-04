@@ -4,6 +4,29 @@ export type ChatContentPart =
 
 export type ChatUserContent = string | ChatContentPart[];
 
+export type JsonSchemaResponseFormat = {
+  type: "json_schema";
+  json_schema: {
+    name: string;
+    strict: boolean;
+    schema: Record<string, unknown>;
+  };
+};
+
+export type ProviderPreferences = {
+  require_parameters?: boolean;
+  data_collection?: "allow" | "deny";
+  allow_fallbacks?: boolean;
+  zdr?: boolean;
+};
+
+export type ReasoningConfig = {
+  enabled?: boolean;
+  effort?: "xhigh" | "high" | "medium" | "low" | "minimal" | "none";
+  max_tokens?: number;
+  exclude?: boolean;
+};
+
 /**
  * Builds the OpenRouter user message for a single post. When an image URL is
  * available it is sent as a real `image_url` content part so a vision model can
@@ -36,13 +59,25 @@ export function buildChatCompletionBody(input: {
   system: string;
   user: ChatUserContent;
   maxTokens: number;
+  responseFormat?: JsonSchemaResponseFormat;
+  provider?: ProviderPreferences;
+  temperature?: number;
+  reasoning?: ReasoningConfig;
 }) {
-  return {
+  return stripUndefined({
     model: input.model,
     messages: [
       { role: "system", content: input.system },
       { role: "user", content: input.user }
     ],
-    max_tokens: input.maxTokens
-  };
+    max_tokens: input.maxTokens,
+    response_format: input.responseFormat,
+    provider: input.provider,
+    temperature: input.temperature,
+    reasoning: input.reasoning
+  });
+}
+
+function stripUndefined<T extends Record<string, unknown>>(value: T): T {
+  return Object.fromEntries(Object.entries(value).filter(([, item]) => item !== undefined)) as T;
 }

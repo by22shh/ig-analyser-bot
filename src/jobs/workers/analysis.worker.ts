@@ -17,9 +17,10 @@ import { buildStrategicReport } from "../../modules/analysis/report-builder.js";
 import { ReportService } from "../../modules/reports/report.service.js";
 import type { VisionAnalysisItemView } from "../../modules/reports/types.js";
 import { recordUsage, recordUsageSafe } from "../../modules/observability/usage.js";
-import { safeNotify } from "./notify.js";
+import { safeEditOrNotify, safeNotify } from "./notify.js";
 import { t } from "../../telegram/locales/index.js";
 import { reportActionsKeyboard } from "../../telegram/keyboards/reports.js";
+import { backMenuKeyboard } from "../../telegram/keyboards/main-menu.js";
 import type { MyContext } from "../../telegram/context.js";
 
 const log = childLogger("analysis.worker");
@@ -41,6 +42,8 @@ export function startAnalysisWorker(input: {
       });
       const locale = row.user.language === "en" ? "en" : "ru";
       const messages = t(locale);
+      // Progress updates edit one message in place instead of stacking several.
+      let progressMessageId: number | undefined;
 
       // Idempotency: a re-delivered job that already finished must not redo the
       // (paid) pipeline or capture again.
@@ -67,9 +70,10 @@ export function startAnalysisWorker(input: {
             where: { id: row.id },
             data: { status: "fetching_profile", stage: "fetching_profile", startedAt: new Date() }
           });
-          await safeNotify(
+          progressMessageId = await safeEditOrNotify(
             input.bot,
             Number(row.telegramChatId),
+            progressMessageId,
             messages.progress(messages.progressStages.fetchingProfile, 1, 4),
             (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
           );
@@ -106,9 +110,10 @@ export function startAnalysisWorker(input: {
             progressTotal: 4
           }
         });
-        await safeNotify(
+        progressMessageId = await safeEditOrNotify(
           input.bot,
           Number(row.telegramChatId),
+          progressMessageId,
           messages.progress(messages.progressStages.analyzingSignals, 2, 4),
           (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
         );
@@ -149,9 +154,11 @@ export function startAnalysisWorker(input: {
             progressTotal: 4
           }
         });
-        await safeNotify(
+        // Last progress update for this job, so the returned id is not reused.
+        await safeEditOrNotify(
           input.bot,
           Number(row.telegramChatId),
+          progressMessageId,
           messages.progress(messages.progressStages.generatingExports, 3, 4),
           (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
         );
@@ -247,7 +254,13 @@ export function startAnalysisWorker(input: {
             finishedAt: new Date()
           }
         });
-        await safeNotify(input.bot, Number(row.telegramChatId), messages.genericError());
+        await safeNotify(
+          input.bot,
+          Number(row.telegramChatId),
+          messages.analysisFailed(),
+          undefined,
+          backMenuKeyboard(messages)
+        );
         throw error;
       }
     },

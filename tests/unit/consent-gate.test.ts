@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { consentGate } from "../../src/telegram/middleware/consent-gate.js";
+import { ru } from "../../src/telegram/locales/ru.js";
 
 describe("consentGate", () => {
   it("blocks non-start interactions until consent is accepted", async () => {
@@ -16,7 +17,7 @@ describe("consentGate", () => {
     );
 
     expect(next).not.toHaveBeenCalled();
-    expect(reply).toHaveBeenCalledWith(expect.stringContaining("Бот"), expect.any(Object));
+    expect(reply).toHaveBeenCalledWith(expect.stringContaining(ru.brand), expect.any(Object));
   });
 
   it("allows /start before consent", async () => {

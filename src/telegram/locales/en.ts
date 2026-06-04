@@ -1,10 +1,11 @@
+import { env } from "../../config/env.js";
 import { AnalysisMode } from "../constants.js";
 import { escapeHtml, formatCredits, percent } from "../formatters/html.js";
 import type { PackageView } from "../../modules/billing/packages.js";
 import type { ReportMetrics, ReportSummaryView } from "../../modules/reports/types.js";
 
 export const en = {
-  brand: "Bot",
+  brand: env.BRAND_NAME,
   buttons: {
     analyze: "🔎 Profile analysis",
     photo: "🖼 Photo search",
@@ -32,7 +33,11 @@ export const en = {
     chat: "💬 Ask a question",
     sources: "🔗 Sources",
     repeat: "🔁 Repeat analysis",
-    confirmDelete: "🗑 Yes, delete permanently"
+    confirmDelete: "🗑 Yes, delete permanently",
+    openInstagram: "🔗 Open in Instagram",
+    prevSection: "◀️ Prev",
+    nextSection: "Next ▶️",
+    toSections: "📚 Sections"
   },
   modeTitle(mode: AnalysisMode): string {
     const titles: Record<AnalysisMode, string> = {
@@ -45,7 +50,7 @@ export const en = {
   },
   startNeedsConsent(): string {
     return (
-      "👁 <b>Bot</b> analyzes public Instagram data only.\n\n" +
+      `👁 <b>${escapeHtml(this.brand)}</b> analyzes public Instagram data only.\n\n` +
       "Do not use the bot for harassment, doxing, threats, pressure, or privacy bypass. " +
       "Photo search requires that you have the right to use the image.\n\n" +
       "Choose a language, then tap “I accept”."
@@ -57,9 +62,16 @@ export const en = {
     grantedUnits: number;
     language: string;
     photoSearchEnabled?: boolean;
+    welcomeBonusCredits?: number;
   }): string {
     const photoLine = input.photoSearchEnabled ? "• find possible profiles by photo\n" : "";
+    const photoTariff = input.photoSearchEnabled ? " · photo 1" : "";
+    const bonusLine =
+      input.welcomeBonusCredits && input.welcomeBonusCredits > 0
+        ? `🎁 <b>Welcome bonus: ${formatCredits(input.welcomeBonusCredits * 100)} 💎</b> — enough for your first report.\n\n`
+        : "";
     return (
+      bonusLine +
       "👁 <b>Public Instagram profile analysis</b>\n\n" +
       "Send an @username or link — I will turn open data into a clear strategic report.\n\n" +
       "<b>You will get:</b>\n" +
@@ -68,19 +80,20 @@ export const en = {
       "• practical takeaways for HR, creator work, or personal strategy\n" +
       photoLine +
       "• PDF/Markdown export and chat with the finished report\n\n" +
-      `💎 Balance: <b>${formatCredits(input.totalUnits)}</b> · reports from <b>1</b> 💎\n` +
+      `💎 Balance: <b>${formatCredits(input.totalUnits)}</b> · pricing: standard 1 · influencer/HR 2${photoTariff}\n` +
       `🌐 Report language: <b>${escapeHtml(input.language)}</b>\n\n` +
       "Start with “Analyze profile”."
     );
   },
   capabilities(): string {
     return (
-      "✨ <b>Bot capabilities</b>\n\n" +
+      `✨ <b>What ${escapeHtml(this.brand)} can do</b>\n\n` +
       "• Collects public posts and profile metadata.\n" +
-      "• Analyzes up to 30 latest posts, visual patterns and Digital Circle.\n" +
-      "• Produces Telegram summary, report sections, PDF/Markdown/HTML exports.\n" +
+      "• Analyzes up to 30 latest posts, visual patterns and the connection map (Digital Circle).\n" +
+      "• Produces a Telegram summary, report sections, and PDF/Markdown/HTML exports.\n" +
       "• Lets you ask follow-up questions about a completed report.\n\n" +
-      "The bot does not analyze private profiles or help with harassment, doxing, or pressure."
+      "<b>Pricing:</b> standard 1 💎 · influencer/HR 2 💎 · OSINT 3 💎 · photo 1 💎 · chat question 0.05 💎\n\n" +
+      `${escapeHtml(this.brand)} does not analyze private profiles or help with harassment, doxing, or pressure.`
     );
   },
   profile(input: {
@@ -111,15 +124,20 @@ export const en = {
     purchasedUnits: number;
     grantedUnits: number;
     photoSearchEnabled?: boolean;
+    osintEnabled?: boolean;
   }): string {
-    const photoLine = input.photoSearchEnabled ? "\nPhoto search: <b>1</b> 💎" : "";
+    const photoLine = input.photoSearchEnabled ? "\n• photo search: <b>1</b> 💎" : "";
+    const osintLine = input.osintEnabled ? "\n• OSINT check: <b>3</b> 💎" : "";
     return (
       `💎 <b>Your credits: ${formatCredits(input.totalUnits)}</b>\n` +
       `• purchased: ${formatCredits(input.purchasedUnits)}\n` +
       `• grants/promo: ${formatCredits(input.grantedUnits)}\n\n` +
-      "Standard analysis: <b>1</b> 💎\n" +
-      "Influencer/HR: <b>2</b> 💎" +
-      photoLine
+      "<b>Pricing:</b>\n" +
+      "• standard analysis: <b>1</b> 💎\n" +
+      "• influencer audit / HR context: <b>2</b> 💎" +
+      osintLine +
+      photoLine +
+      "\n• report chat question: <b>0.05</b> 💎"
     );
   },
   insufficientCredits(input: { costUnits: number; availableUnits: number }): string {
@@ -160,7 +178,7 @@ export const en = {
       `Profile: <b>@${escapeHtml(input.username)}</b>\n` +
       `Mode: <b>${this.modeTitle(input.mode)}</b>\n` +
       `Cost: <b>${formatCredits(input.costUnits)}</b> 💎\n` +
-      "Analysis usually takes 3-8 minutes."
+      "Analysis usually takes 3–8 minutes."
     );
   },
   jobQueued(username: string): string {
@@ -191,7 +209,7 @@ export const en = {
       `• analyzed posts: ${m.analyzedPosts}\n` +
       `• avg likes: ${Math.round(m.avgLikes).toLocaleString("en-US")}\n` +
       `• avg comments: ${Math.round(m.avgComments).toLocaleString("en-US")}\n` +
-      `• ER: ${percent(m.engagementRate)}\n` +
+      `• engagement (ER): ${percent(m.engagementRate)}\n` +
       `• frequency: every ${m.frequencyDays.toFixed(1)} days\n\n` +
       "<b>Short take:</b>\n" +
       input.summary.bullets.map((item) => `• ${escapeHtml(item)}`).join("\n")
@@ -202,6 +220,9 @@ export const en = {
   },
   section(title: string, content: string): string {
     return `📌 <b>${escapeHtml(title)}</b>\n\n${escapeHtml(content)}`;
+  },
+  sectionProgress(position: number, total: number): string {
+    return `Section ${position} of ${total}`;
   },
   reportSources(input: {
     username: string;
@@ -220,10 +241,19 @@ export const en = {
       : `🔗 <b>Sources for @${escapeHtml(input.username)}</b>\n\nNo sources were found for this report.`;
   },
   historyTitle(): string {
-    return "🗂 <b>Recent reports</b>";
+    return "🗂 <b>Recent reports</b>\nPick a report to open its sections and exports.";
   },
   historyEmpty(): string {
-    return "History is empty.";
+    return "History is empty. Run your first analysis with “Profile analysis”.";
+  },
+  relativeDate(date: Date): string {
+    const days = Math.floor((Date.now() - date.getTime()) / 86400000);
+    if (days <= 0) return "today";
+    if (days === 1) return "yesterday";
+    if (days < 7) return `${days}d ago`;
+    if (days < 30) return `${Math.floor(days / 7)}w ago`;
+    if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+    return `${Math.floor(days / 365)}y ago`;
   },
   artifactCaption(type: "pdf" | "markdown" | "html"): string {
     const titles = { pdf: "PDF report", markdown: "Markdown report", html: "HTML report" };
@@ -297,7 +327,8 @@ export const en = {
       "⚙️ <b>Settings</b>\n\n" +
       `🌐 Interface and report language: <b>${escapeHtml(input.language)}</b>\n` +
       `📄 Default export format: <b>${escapeHtml(input.exportFormat.toUpperCase())}</b>\n` +
-      `🧹 Report retention: <b>${input.retentionDays} days</b>`
+      `🧹 Report retention: <b>${input.retentionDays} days</b>\n\n` +
+      "Current values are marked with a check."
     );
   },
   settingsUpdated(): string {
@@ -342,11 +373,11 @@ export const en = {
   },
   photoMatches(matches: Array<{ username: string }>): string {
     return matches.length
-      ? "Possible Instagram candidates found. This is not identity confirmation, only a list of possible matches."
-      : "No Instagram candidates were found for this photo.";
+      ? "🔎 <b>Possible Instagram candidates</b>\n\nThis is not identity confirmation, only a list of possible matches. The percentage is an estimate of visual similarity. Pick a candidate to run a profile analysis."
+      : "No Instagram candidates were found for this photo. Try another image or send a username manually.";
   },
   chatIntro(): string {
-    return "💬 <b>Report chat</b>\n\nAsk a question or choose a quick option.";
+    return "💬 <b>Report chat</b>\n\nAsk a question or choose a quick option. Each question costs 0.05 💎.";
   },
   chatQuick: {
     introLabel: "Start a conversation",
@@ -388,23 +419,31 @@ export const en = {
     const privacy = privacyUrl ? `\n🔒 <a href="${escapeHtml(privacyUrl)}">Privacy</a>` : "";
     return (
       "ℹ️ <b>Help</b>\n\n" +
-      "1. Tap Profile analysis and send a public username.\n" +
-      "2. Choose mode and confirm cost.\n" +
-      "3. Receive summary, sections and PDF/Markdown.\n\n" +
-      "The bot does not analyze private profiles or help with harassment, doxing or privacy bypass. Use /delete_me to delete your data." +
+      "<b>Profile analysis.</b> Tap “Profile analysis” and send a public @username (or just send a username in chat). Choose a mode, confirm the cost — you get a summary, sections and PDF/Markdown.\n" +
+      "<b>Photo search.</b> When enabled, finds possible profiles by an image (you must have the right to the photo).\n" +
+      "<b>Report chat.</b> Open a report → “Ask a question” and ask about the public data.\n" +
+      "<b>History.</b> Completed reports and exports are always available in History.\n\n" +
+      `${escapeHtml(this.brand)} does not analyze private profiles or help with harassment, doxing or privacy bypass. Use /delete_me to delete your data.` +
       support +
       terms +
       privacy
     );
   },
   cancelled(): string {
-    return "✖️ Cancelled. Returning to menu.";
+    return "✖️ Cancelled. The current step was reset — you are back in the menu.";
   },
   deleteMeWarning(): string {
     return "⚠️ <b>Delete account</b>\n\nThis is irreversible: your profile, all reports and working data will be deleted or anonymized, and any remaining credits will be lost. Financial records are kept per accounting requirements.\n\nProceed?";
   },
   deleteMeDone(): string {
     return "🧹 Profile, reports and working data have been deleted or anonymized. Financial records may be retained without unnecessary personal fields according to accounting requirements and the retention policy.";
+  },
+  analysisFailed(): string {
+    return (
+      "⚠️ <b>Could not finish the analysis</b>\n\n" +
+      "We tried several times but could not build the report. " +
+      "💎 The reserved credits were returned to your balance — try again later or contact support."
+    );
   },
   genericError(): string {
     return "⚠️ Could not process the request. Please try again later or contact support.";

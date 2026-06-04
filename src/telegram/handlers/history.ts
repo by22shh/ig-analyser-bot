@@ -5,10 +5,14 @@ import { InputFile } from "grammy";
 import { ANALYSIS_MODES, CB, type AnalysisMode } from "../constants.js";
 import type { MyContext } from "../context.js";
 import { confirmAnalysisKeyboard } from "../keyboards/analysis.js";
-import { sectionListKeyboard, reportActionsKeyboard } from "../keyboards/reports.js";
+import {
+  sectionListKeyboard,
+  sectionViewKeyboard,
+  reportActionsKeyboard
+} from "../keyboards/reports.js";
 import { MODE_COST_UNITS } from "../../modules/billing/packages.js";
 import { t } from "../locales/index.js";
-import { sendHtml } from "./helpers.js";
+import { editOrSendHtml, sendHtml } from "./helpers.js";
 
 export function registerHistoryHandlers(bot: import("grammy").Bot<MyContext>) {
   bot.command("history", async (ctx) => showHistory(ctx));
@@ -23,7 +27,7 @@ export function registerHistoryHandlers(bot: import("grammy").Bot<MyContext>) {
     if (!report) return;
     const messages = t(ctx.user.language);
     await ctx.answerCallbackQuery();
-    await sendHtml(
+    await editOrSendHtml(
       ctx,
       messages.sectionsIntro(report.analysisJob.targetUsername),
       sectionListKeyboard(
@@ -45,11 +49,25 @@ export function registerHistoryHandlers(bot: import("grammy").Bot<MyContext>) {
       include: { report: true }
     });
     if (!section || section.report.userId !== ctx.user.id) return;
+    const messages = t(ctx.user.language);
+    // Ordered siblings so the section view can offer one-tap prev/next navigation.
+    const siblings = await ctx.services.prisma.reportSection.findMany({
+      where: { reportId: section.reportId },
+      orderBy: { position: "asc" },
+      select: { id: true }
+    });
+    const index = siblings.findIndex((item) => item.id === section.id);
+    const prevId = index > 0 ? siblings[index - 1]?.id : undefined;
+    const nextId = index >= 0 && index < siblings.length - 1 ? siblings[index + 1]?.id : undefined;
+    const progress =
+      siblings.length > 1
+        ? `\n\n<i>${messages.sectionProgress(index + 1, siblings.length)}</i>`
+        : "";
     await ctx.answerCallbackQuery();
-    await sendHtml(
+    await editOrSendHtml(
       ctx,
-      t(ctx.user.language).section(section.title, section.content),
-      reportActionsKeyboard(t(ctx.user.language), section.reportId)
+      messages.section(section.title, section.content) + progress,
+      sectionViewKeyboard(messages, section.reportId, { prevId, nextId })
     );
   });
 
@@ -71,7 +89,7 @@ export function registerHistoryHandlers(bot: import("grammy").Bot<MyContext>) {
     if (!report) return;
     const messages = t(ctx.user.language);
     await ctx.answerCallbackQuery();
-    await sendHtml(
+    await editOrSendHtml(
       ctx,
       messages.reportSources({
         username: report.analysisJob.targetUsername,
@@ -94,7 +112,7 @@ export function registerHistoryHandlers(bot: import("grammy").Bot<MyContext>) {
       requestId
     });
     await ctx.answerCallbackQuery();
-    await sendHtml(
+    await editOrSendHtml(
       ctx,
       `${messages.repeatAnalysis(report.analysisJob.targetUsername)}\n\n${messages.confirmAnalysis({
         username: report.analysisJob.targetUsername,
@@ -108,23 +126,19 @@ export function registerHistoryHandlers(bot: import("grammy").Bot<MyContext>) {
 
 async function showHistory(ctx: MyContext) {
   if (!ctx.user) return;
+  const messages = t(ctx.user.language);
   const reports = await ctx.services.reports.latestReports(ctx.user.id, 10);
   const kb = new InlineKeyboard();
   for (const report of reports) {
-    const mode = isAnalysisMode(report.mode)
-      ? t(ctx.user.language).modeTitle(report.mode)
-      : report.mode;
+    const mode = isAnalysisMode(report.mode) ? messages.modeTitle(report.mode) : report.mode;
+    const when = messages.relativeDate(new Date(report.createdAt));
     kb.text(
-      `@${report.analysisJob.targetUsername} · ${mode}`,
+      `@${report.analysisJob.targetUsername} · ${mode} · ${when}`,
       `${CB.REPORT_SECTIONS}:${report.id}`
     ).row();
   }
-  kb.text(t(ctx.user.language).buttons.menu, CB.BACK_MAIN);
-  await sendHtml(
-    ctx,
-    reports.length ? t(ctx.user.language).historyTitle() : t(ctx.user.language).historyEmpty(),
-    kb
-  );
+  kb.text(messages.buttons.menu, CB.BACK_MAIN);
+  await editOrSendHtml(ctx, reports.length ? messages.historyTitle() : messages.historyEmpty(), kb);
 }
 
 type ArtifactType = "pdf" | "markdown" | "html";

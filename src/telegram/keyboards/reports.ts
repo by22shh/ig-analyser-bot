@@ -33,6 +33,23 @@ export function sectionListKeyboard(
     .text(messages.buttons.menu, CB.BACK_MAIN);
 }
 
+export function sectionViewKeyboard(
+  messages: LocaleMessages,
+  reportId: string,
+  nav: { prevId?: string; nextId?: string }
+): InlineKeyboard {
+  const kb = new InlineKeyboard();
+  if (nav.prevId) kb.text(messages.buttons.prevSection, `${CB.REPORT_SECTION}:${nav.prevId}`);
+  kb.text(messages.buttons.toSections, `${CB.REPORT_SECTIONS}:${reportId}`);
+  if (nav.nextId) kb.text(messages.buttons.nextSection, `${CB.REPORT_SECTION}:${nav.nextId}`);
+  return kb
+    .row()
+    .text(messages.buttons.pdf, `${CB.REPORT_PDF}:${reportId}`)
+    .text(messages.buttons.chat, `${CB.REPORT_CHAT}:${reportId}`)
+    .row()
+    .text(messages.buttons.menu, CB.BACK_MAIN);
+}
+
 export function reportChatKeyboard(messages: LocaleMessages, reportId: string): InlineKeyboard {
   return new InlineKeyboard()
     .text(messages.chatQuick.introLabel, `${CB.CHAT_QUICK}:${reportId}:intro`)

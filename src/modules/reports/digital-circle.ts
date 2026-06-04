@@ -93,9 +93,27 @@ function add(
   acc.set(username, created);
 }
 
+const EMOJI_SYMBOL_RE = /\p{Extended_Pictographic}/u;
+const EMOJI_SYMBOLS_RE = /\p{Extended_Pictographic}/gu;
+const EMOJI_MODIFIERS_RE = /\p{Emoji_Modifier}/gu;
+const ZERO_WIDTH_JOINERS_RE = /\u200d/gu;
+const VARIATION_SELECTORS_RE = /\ufe0f/gu;
+
 function isSpam(text: string): boolean {
   const normalized = text.trim().toLowerCase();
   if (normalized.length < 3) return true;
   if (SPAM.has(normalized)) return true;
-  return /^\p{Emoji}+$/u.test(normalized);
+  return isEmojiOnly(normalized);
+}
+
+function isEmojiOnly(value: string): boolean {
+  if (!EMOJI_SYMBOL_RE.test(value)) return false;
+  return (
+    value
+      .replace(EMOJI_SYMBOLS_RE, "")
+      .replace(EMOJI_MODIFIERS_RE, "")
+      .replace(ZERO_WIDTH_JOINERS_RE, "")
+      .replace(VARIATION_SELECTORS_RE, "")
+      .trim().length === 0
+  );
 }

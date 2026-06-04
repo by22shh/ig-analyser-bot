@@ -43,7 +43,8 @@ export class RealFaceCheckAdapter implements FaceCheckAdapter {
     const upload = await fetch("https://facecheck.id/api/upload_pic", {
       method: "POST",
       headers: { Authorization: `Bearer ${this.token}` },
-      body: form
+      body: form,
+      signal: AbortSignal.timeout(30000)
     });
     if (!upload.ok) throw new Error(`FACECHECK_UPLOAD_${upload.status}`);
     const uploaded = (await upload.json()) as { id_search?: string };
@@ -56,7 +57,8 @@ export class RealFaceCheckAdapter implements FaceCheckAdapter {
           Authorization: `Bearer ${this.token}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ id_search: uploaded.id_search })
+        body: JSON.stringify({ id_search: uploaded.id_search }),
+        signal: AbortSignal.timeout(30000)
       });
       if (!response.ok) throw new Error(`FACECHECK_SEARCH_${response.status}`);
       const result = (await response.json()) as {

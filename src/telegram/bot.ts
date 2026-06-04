@@ -3,6 +3,7 @@ import { env } from "../config/env.js";
 import type { Services } from "../modules/container.js";
 import type { MyContext } from "./context.js";
 import { registerHandlers } from "./handlers/index.js";
+import { consentGate } from "./middleware/consent-gate.js";
 import { updateDedup } from "./middleware/update-dedup.js";
 import { userContext } from "./middleware/user-context.js";
 
@@ -16,8 +17,9 @@ export function createBot(services: Services): Bot<MyContext> {
     ctx.services = services;
     await next();
   });
-  bot.use(userContext);
   bot.use(updateDedup);
+  bot.use(userContext);
+  bot.use(consentGate);
   registerHandlers(bot);
 
   bot.catch((err) => {

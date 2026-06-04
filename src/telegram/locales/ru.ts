@@ -283,6 +283,9 @@ export const ru = {
   starsInvoiceDescription(pkg: PackageView): string {
     return `Пакет кредитов ZRETI ${pkg.title}`;
   },
+  starsInvoiceAlreadyPending(): string {
+    return "⭐ У вас уже есть активный счет Telegram Stars для этого пакета. Откройте предыдущее сообщение со счетом или подождите, пока он истечет.";
+  },
   preCheckoutPayloadInvalid(): string {
     return "Цена устарела. Откройте пополнение заново.";
   },

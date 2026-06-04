@@ -45,6 +45,7 @@ export async function updateDedup(ctx: MyContext, next: NextFunction) {
       await ctx.services.prisma.telegramUpdate.update({
         where: { updateId: updateKey },
         data: {
+          userId: ctx.user?.id,
           status: "processed",
           processedAt: new Date(),
           failedAt: null,
@@ -58,6 +59,7 @@ export async function updateDedup(ctx: MyContext, next: NextFunction) {
         .update({
           where: { updateId: updateKey },
           data: {
+            userId: ctx.user?.id,
             status: "failed",
             failedAt: new Date(),
             errorMessage:

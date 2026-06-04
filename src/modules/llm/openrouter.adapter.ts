@@ -142,8 +142,10 @@ export class OpenRouterLlmProvider implements LlmProvider {
     if (response.status === 402) throw new Error("ACCESS_DENIED_CREDITS");
     if (!response.ok) throw new Error(`OPENROUTER_${response.status}`);
     const payload = (await response.json()) as OpenRouterResponse;
+    const text = payload.choices?.[0]?.message?.content?.trim() ?? "";
+    if (!text) throw new Error("LLM_EMPTY_RESPONSE");
     return {
-      text: payload.choices?.[0]?.message?.content?.trim() ?? "",
+      text,
       tokensIn: payload.usage?.prompt_tokens,
       tokensOut: payload.usage?.completion_tokens,
       latencyMs: Date.now() - started

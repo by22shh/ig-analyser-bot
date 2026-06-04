@@ -10,6 +10,10 @@ export function normalizeInstagramUsername(input: string): string {
       ? new URL(value.startsWith("http") ? value : `https://${value}`)
       : null;
     if (maybeUrl) {
+      const hostname = maybeUrl.hostname.toLowerCase();
+      if (hostname !== "instagram.com" && !hostname.endsWith(".instagram.com")) {
+        throw new Error("USERNAME_INVALID_URL");
+      }
       const parts = maybeUrl.pathname.split("/").filter(Boolean);
       value = parts[0] ?? "";
     }

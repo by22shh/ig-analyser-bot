@@ -82,7 +82,9 @@ export function startPhotoSearchWorker(input: {
             env.FACECHECK_API_TOKEN && !env.FACECHECK_TESTING_MODE ? "facecheck" : "mock_facecheck",
           operation: "photo_search",
           status: "success"
-        });
+        }).catch((usageError) =>
+          log.warn({ error: usageError, jobId: row.id }, "photo_search_usage_record_failed")
+        );
         if (input.bot) {
           const kb = new InlineKeyboard();
           for (const match of matches) {
@@ -159,7 +161,9 @@ async function downloadTelegramFile(
   const file = await bot.api.getFile(fileId);
   if (!file.file_path) throw new Error("TELEGRAM_FILE_PATH_MISSING");
   const apiRoot = env.TELEGRAM_API_ROOT.replace(/\/$/, "");
-  const response = await fetch(`${apiRoot}/file/bot${env.TELEGRAM_BOT_TOKEN}/${file.file_path}`);
+  const response = await fetch(`${apiRoot}/file/bot${env.TELEGRAM_BOT_TOKEN}/${file.file_path}`, {
+    signal: AbortSignal.timeout(30000)
+  });
   if (!response.ok) throw new Error(`TELEGRAM_FILE_DOWNLOAD_${response.status}`);
   return Buffer.from(await response.arrayBuffer());
 }

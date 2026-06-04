@@ -14,6 +14,9 @@ describe("normalizeInstagramUsername", () => {
     expect(() => normalizeInstagramUsername("https://instagram.com/p/abc")).toThrow(
       "USERNAME_RESERVED_PATH"
     );
+    expect(() => normalizeInstagramUsername("https://instagram.com.evil.test/someone")).toThrow(
+      "USERNAME_INVALID_URL"
+    );
     expect(() => normalizeInstagramUsername("bad name")).toThrow("USERNAME_HAS_SPACES");
     expect(() => normalizeInstagramUsername("too-long-too-long-too-long-too-long")).toThrow(
       "USERNAME_INVALID_CHARS"

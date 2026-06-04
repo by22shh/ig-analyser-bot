@@ -88,7 +88,8 @@ export class ApifyInstagramProfileProvider implements InstagramProfileProvider {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.token}`
       },
-      body: JSON.stringify(actorInput)
+      body: JSON.stringify(actorInput),
+      signal: AbortSignal.timeout(30000)
     });
     if (response.status === 401) throw new Error("APIFY_INVALID_TOKEN");
     if (response.status === 402) throw new Error("APIFY_CREDITS_EXHAUSTED");
@@ -100,7 +101,8 @@ export class ApifyInstagramProfileProvider implements InstagramProfileProvider {
   private async pollRun(runId: string): Promise<ApifyRun> {
     for (let attempt = 0; attempt < 60; attempt += 1) {
       const response = await fetch(`https://api.apify.com/v2/actor-runs/${runId}`, {
-        headers: { Authorization: `Bearer ${this.token}` }
+        headers: { Authorization: `Bearer ${this.token}` },
+        signal: AbortSignal.timeout(15000)
       });
       if (!response.ok) throw new Error(`APIFY_POLL_FAILED_${response.status}`);
       const payload = (await response.json()) as { data: ApifyRun };
@@ -117,7 +119,8 @@ export class ApifyInstagramProfileProvider implements InstagramProfileProvider {
     const response = await fetch(
       `https://api.apify.com/v2/datasets/${datasetId}/items?clean=true`,
       {
-        headers: { Authorization: `Bearer ${this.token}` }
+        headers: { Authorization: `Bearer ${this.token}` },
+        signal: AbortSignal.timeout(30000)
       }
     );
     if (!response.ok) throw new Error(`APIFY_DATASET_FAILED_${response.status}`);
@@ -137,6 +140,39 @@ function stringArray(value: unknown): string[] {
   return Array.isArray(value)
     ? value.filter((item): item is string => typeof item === "string")
     : [];
+}
+
+// The real apify~instagram-scraper returns taggedUsers / relatedProfiles /
+// mentions as either bare strings or objects ({ username, ... }). Accept both so
+// the Digital Circle and related-profile metrics populate on real data.
+function usernameArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const usernames = value
+    .map((item) => {
+      if (typeof item === "string") return item;
+      if (item && typeof item === "object") {
+        const record = item as Record<string, unknown>;
+        return str(record.username ?? record.ownerUsername ?? record.fullName ?? record.full_name);
+      }
+      return undefined;
+    })
+    .filter((item): item is string => typeof item === "string" && item.length > 0);
+  return [...new Set(usernames)];
+}
+
+// childPosts arrive as strings or objects ({ id, shortCode }); keep their ids.
+function idArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => {
+      if (typeof item === "string") return item;
+      if (item && typeof item === "object") {
+        const record = item as Record<string, unknown>;
+        return str(record.id ?? record.shortCode ?? record.code);
+      }
+      return undefined;
+    })
+    .filter((item): item is string => typeof item === "string" && item.length > 0);
 }
 
 export function mapApifyItems(
@@ -168,7 +204,7 @@ export function mapApifyItems(
         type: str(item.type) ?? "Image",
         caption: str(item.caption),
         hashtags: stringArray(item.hashtags),
-        mentions: stringArray(item.mentions),
+        mentions: usernameArray(item.mentions),
         likesCount: num(item.likesCount),
         commentsCount: num(item.commentsCount),
         latestComments: comments,
@@ -187,8 +223,8 @@ export function mapApifyItems(
           item.musicInfo && typeof item.musicInfo === "object"
             ? (item.musicInfo as Record<string, unknown>)
             : undefined,
-        childPosts: stringArray(item.childPosts),
-        taggedUsers: stringArray(item.taggedUsers)
+        childPosts: idArray(item.childPosts),
+        taggedUsers: usernameArray(item.taggedUsers)
       };
     })
     .sort((a, b) => Date.parse(b.timestamp ?? "0") - Date.parse(a.timestamp ?? "0"))
@@ -206,7 +242,7 @@ export function mapApifyItems(
     profilePicUrl: str(profileSource.profilePicUrl ?? first.profilePicUrl),
     externalUrl: str(profileSource.externalUrl),
     isVerified: Boolean(profileSource.isVerified ?? first.isVerified),
-    relatedProfiles: stringArray(profileSource.relatedProfiles ?? first.relatedProfiles),
+    relatedProfiles: usernameArray(profileSource.relatedProfiles ?? first.relatedProfiles),
     posts,
     providerDatasetId: datasetId
   };

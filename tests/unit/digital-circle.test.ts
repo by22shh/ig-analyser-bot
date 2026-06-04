@@ -31,4 +31,28 @@ describe("digital circle", () => {
     expect(result.some((item) => item.username === "friend")).toBe(true);
     expect(result.some((item) => item.username === "spam")).toBe(false);
   });
+
+  it("keeps numeric comments (digits are not emoji-only spam)", () => {
+    const posts: InstagramPost[] = [
+      {
+        id: "1",
+        type: "Image",
+        hashtags: [],
+        mentions: [],
+        likesCount: 10,
+        commentsCount: 2,
+        latestComments: [
+          { ownerUsername: "numguy", text: "2024", timestamp: "2026-06-01T00:00:00Z" },
+          { ownerUsername: "emojiguy", text: "🔥🔥🔥" }
+        ],
+        timestamp: "2026-06-01T00:00:00Z",
+        isPinned: false,
+        childPosts: [],
+        taggedUsers: []
+      }
+    ];
+    const result = computeDigitalCircle(posts);
+    expect(result.some((item) => item.username === "numguy")).toBe(true);
+    expect(result.some((item) => item.username === "emojiguy")).toBe(false);
+  });
 });

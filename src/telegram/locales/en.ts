@@ -279,6 +279,9 @@ export const en = {
   starsInvoiceDescription(pkg: PackageView): string {
     return `ZRETI credit package ${pkg.title}`;
   },
+  starsInvoiceAlreadyPending(): string {
+    return "⭐ You already have an active Telegram Stars invoice for this package. Open the previous invoice message or wait until it expires.";
+  },
   preCheckoutPayloadInvalid(): string {
     return "The price has expired. Open top-up again.";
   },

@@ -53,7 +53,7 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
     const pkg = ctx.services.payments
       .packages("telegram_stars")
       .find((item) => item.code === ctx.match![1]);
-    await ctx.services.payments.createTelegramStarsInvoice({
+    const invoice = await ctx.services.payments.createTelegramStarsInvoice({
       api: ctx.api,
       userId: ctx.user.id,
       telegramUserId: ctx.from!.id,
@@ -63,6 +63,13 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
       title: pkg ? t(ctx.user.language).starsInvoiceTitle(pkg) : undefined,
       description: pkg ? t(ctx.user.language).starsInvoiceDescription(pkg) : undefined
     });
+    if (invoice.reused) {
+      await sendHtml(
+        ctx,
+        t(ctx.user.language).starsInvoiceAlreadyPending(),
+        backMenuKeyboard(t(ctx.user.language))
+      );
+    }
   });
 
   bot.callbackQuery(new RegExp(`^${CB.BUY_YOOKASSA}:([a-z_]+)$`), async (ctx) => {

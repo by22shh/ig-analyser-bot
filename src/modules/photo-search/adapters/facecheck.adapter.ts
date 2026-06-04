@@ -62,8 +62,13 @@ export class RealFaceCheckAdapter implements FaceCheckAdapter {
       });
       if (!response.ok) throw new Error(`FACECHECK_SEARCH_${response.status}`);
       const result = (await response.json()) as {
+        code?: unknown;
+        error?: unknown;
+        message?: unknown;
         output?: { items?: Array<{ score?: number; url?: string }> };
       };
+      const providerError = faceCheckProviderError(result);
+      if (providerError) throw new Error(providerError);
       const items = result.output?.items;
       if (Array.isArray(items)) {
         return items
@@ -87,6 +92,31 @@ export class RealFaceCheckAdapter implements FaceCheckAdapter {
     }
     throw new Error("FACECHECK_TIMEOUT");
   }
+}
+
+function faceCheckProviderError(result: { code?: unknown; error?: unknown; message?: unknown }) {
+  const rawError = result.error ?? (isPendingFaceCheckCode(result.code) ? undefined : result.code);
+  if (rawError == null) return undefined;
+  const code =
+    typeof rawError === "string" || typeof rawError === "number"
+      ? String(rawError)
+      : typeof rawError === "object" && "code" in rawError
+        ? String((rawError as { code?: unknown }).code)
+        : "ERROR";
+  const message =
+    typeof result.message === "string"
+      ? result.message
+      : typeof rawError === "object" && rawError && "message" in rawError
+        ? String((rawError as { message?: unknown }).message)
+        : undefined;
+  return `FACECHECK_${code.toUpperCase()}${message ? `: ${message}` : ""}`;
+}
+
+function isPendingFaceCheckCode(code: unknown): boolean {
+  if (typeof code !== "string") return false;
+  return ["pending", "processing", "queued", "running", "searching", "in_progress"].includes(
+    code.toLowerCase()
+  );
 }
 
 function extractInstagramUsername(url: string): string | null {

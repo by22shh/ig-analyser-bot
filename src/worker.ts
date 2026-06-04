@@ -32,7 +32,7 @@ async function shutdown(signal: string) {
   if (shuttingDown) return;
   shuttingDown = true;
   logger.info({ signal }, "workers_shutting_down");
-  clearInterval(retentionTimer);
+  retentionTimer.stop();
   try {
     // Worker.close() waits for the active job to finish before resolving, so an
     // in-flight analysis/photo search is not killed mid-pipeline on redeploy.

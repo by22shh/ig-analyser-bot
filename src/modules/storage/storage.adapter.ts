@@ -1,6 +1,7 @@
 import {
   DeleteObjectsCommand,
   GetObjectCommand,
+  ListObjectsV2Command,
   PutObjectCommand,
   S3Client
 } from "@aws-sdk/client-s3";
@@ -19,6 +20,7 @@ export interface StorageAdapter {
   putObject(input: { key: string; bytes: Buffer; contentType: string }): Promise<StoredObject>;
   signedUrl(key: string, expiresSeconds?: number): Promise<string | undefined>;
   deleteObjects(keys: string[]): Promise<void>;
+  deletePrefix?(prefix: string): Promise<void>;
 }
 
 export class LocalStorageAdapter implements StorageAdapter {
@@ -43,6 +45,10 @@ export class LocalStorageAdapter implements StorageAdapter {
     await Promise.all(
       keys.map((key) => rm(join(this.root, key), { force: true }).catch(() => undefined))
     );
+  }
+
+  async deletePrefix(prefix: string): Promise<void> {
+    await rm(join(this.root, prefix), { recursive: true, force: true });
   }
 }
 
@@ -97,6 +103,24 @@ export class S3StorageAdapter implements StorageAdapter {
         })
       );
     }
+  }
+
+  async deletePrefix(prefix: string): Promise<void> {
+    let continuationToken: string | undefined;
+    do {
+      const listed = await this.client.send(
+        new ListObjectsV2Command({
+          Bucket: env.S3_BUCKET,
+          Prefix: prefix,
+          ContinuationToken: continuationToken
+        })
+      );
+      const keys = listed.Contents?.map((object) => object.Key).filter(
+        (key): key is string => typeof key === "string" && key.length > 0
+      );
+      if (keys?.length) await this.deleteObjects(keys);
+      continuationToken = listed.NextContinuationToken;
+    } while (continuationToken);
   }
 }
 

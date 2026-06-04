@@ -22,4 +22,23 @@ describe("RealFaceCheckAdapter", () => {
       adapter.search({ bytes: Buffer.from("image"), mimeType: "image/jpeg" })
     ).resolves.toEqual([]);
   });
+
+  it("surfaces provider errors returned in a 200 search response", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ id_search: "search_1" }), { status: 200 })
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ error: { code: "rate_limit", message: "Slow down" } }), {
+          status: 200
+        })
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const adapter = new RealFaceCheckAdapter("token");
+    await expect(
+      adapter.search({ bytes: Buffer.from("image"), mimeType: "image/jpeg" })
+    ).rejects.toThrow("FACECHECK_RATE_LIMIT: Slow down");
+  });
 });

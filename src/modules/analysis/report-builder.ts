@@ -3,7 +3,7 @@ import type { InstagramProfile } from "../instagram/types.js";
 import type { LlmProvider } from "../llm/types.js";
 import { computeReportMetrics } from "../reports/metrics.js";
 import { parseReportSections, validateRequiredSections } from "../reports/parser.js";
-import type { StrategicReportView } from "../reports/types.js";
+import type { StrategicReportView, VisionAnalysisItemView } from "../reports/types.js";
 
 export async function buildStrategicReport(input: {
   mode: AnalysisMode;
@@ -12,9 +12,10 @@ export async function buildStrategicReport(input: {
   llm: LlmProvider;
   targetPosition?: string;
   goal?: string;
+  vision?: VisionAnalysisItemView[];
 }): Promise<StrategicReportView> {
   const posts = input.profile.posts;
-  const vision = await input.llm.analyzeVision({ profile: input.profile, posts });
+  const vision = input.vision ?? (await input.llm.analyzeVision({ profile: input.profile, posts }));
   const generated = await input.llm.generateReport({
     mode: input.mode,
     language: input.language,

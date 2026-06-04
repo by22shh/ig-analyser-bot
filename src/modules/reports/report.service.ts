@@ -109,9 +109,10 @@ export class ReportService {
         }
       });
     } catch (error) {
-      await this.storage
-        .deleteObjects(storedObjects.map((stored) => stored.key))
-        .catch(() => undefined);
+      await this.deleteReportObjects(
+        reportId,
+        storedObjects.map((stored) => stored.key)
+      ).catch(() => undefined);
       throw error;
     }
   }
@@ -123,9 +124,7 @@ export class ReportService {
     });
     if (!report) return false;
     const keys = report.artifacts.map((artifact) => artifact.storageKey);
-    if (keys.length) {
-      await this.storage.deleteObjects(keys).catch(() => undefined);
-    }
+    await this.deleteReportObjects(report.id, keys);
     await this.prisma.report.delete({ where: { id: report.id } });
     return true;
   }
@@ -156,5 +155,13 @@ export class ReportService {
     } catch {
       return undefined;
     }
+  }
+
+  private async deleteReportObjects(reportId: string, keys: string[]) {
+    if (this.storage.deletePrefix) {
+      await this.storage.deletePrefix(`reports/${reportId}/`);
+      return;
+    }
+    if (keys.length) await this.storage.deleteObjects(keys);
   }
 }

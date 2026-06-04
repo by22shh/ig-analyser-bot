@@ -149,11 +149,11 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
   });
 
   bot.on("message:successful_payment", async (ctx) => {
-    if (!ctx.user || !ctx.message?.successful_payment) return;
+    if (!ctx.message?.successful_payment || !ctx.from || !ctx.chat) return;
     const payment = ctx.message.successful_payment;
     const result = await ctx.services.payments.handleTelegramSuccessfulPayment({
-      telegramUserId: ctx.from!.id,
-      chatId: ctx.chat!.id,
+      telegramUserId: ctx.from.id,
+      chatId: ctx.chat.id,
       messageId: ctx.message.message_id,
       currency: payment.currency,
       totalAmount: payment.total_amount,
@@ -163,13 +163,11 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
       raw: payment as never
     });
     if (result.processed) {
+      const messages = t(result.language === "en" ? "en" : ctx.user?.language);
       await sendHtml(
         ctx,
-        t(ctx.user.language).paymentSuccess(
-          result.creditsUnitsGranted ?? 0,
-          result.balanceUnits ?? 0
-        ),
-        backMenuKeyboard(t(ctx.user.language))
+        messages.paymentSuccess(result.creditsUnitsGranted ?? 0, result.balanceUnits ?? 0),
+        backMenuKeyboard(messages)
       );
     }
   });

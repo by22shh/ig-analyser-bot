@@ -2,6 +2,11 @@ import type { NextFunction } from "grammy";
 import type { MyContext } from "../context.js";
 
 export async function userContext(ctx: MyContext, next: NextFunction) {
+  if (ctx.preCheckoutQuery || ctx.message?.successful_payment) {
+    await next();
+    return;
+  }
+
   const from = ctx.from;
   if (from) {
     const allowReactivate = ctx.message?.text?.trim().startsWith("/start") ?? false;

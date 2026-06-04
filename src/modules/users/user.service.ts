@@ -1,4 +1,5 @@
 import { Prisma, type PrismaClient, type User } from "@prisma/client";
+import { createHash } from "node:crypto";
 import { adminTelegramIds, env } from "../../config/env.js";
 import type { Locale } from "../../telegram/constants.js";
 import type { StorageAdapter } from "../storage/storage.adapter.js";
@@ -175,6 +176,7 @@ export class UserService {
   }
 
   async deleteMe(userId: string): Promise<void> {
+    const now = new Date();
     const artifacts = await this.prisma.reportArtifact.findMany({
       where: { report: { userId } },
       select: { storageKey: true }
@@ -195,7 +197,15 @@ export class UserService {
         data: { metadata: Prisma.JsonNull }
       });
       await tx.paymentOrder.updateMany({
-        where: { userId },
+        where: {
+          userId,
+          OR: [
+            { provider: { not: "telegram_stars" } },
+            { status: { not: "pending_payment" } },
+            { expiresAt: null },
+            { expiresAt: { lte: now } }
+          ]
+        },
         data: {
           userEmail: null,
           telegramChatId: null,
@@ -207,10 +217,34 @@ export class UserService {
         data: { payload: Prisma.JsonNull }
       });
       await tx.telegramStarPayment.updateMany({
-        where: { paymentOrder: { userId } },
+        where: {
+          paymentOrder: {
+            userId,
+            OR: [
+              { status: { not: "pending_payment" } },
+              { expiresAt: null },
+              { expiresAt: { lte: now } }
+            ]
+          }
+        },
         data: {
-          telegramUserId: BigInt(0),
           telegramChatId: BigInt(0),
+          invoiceMessageId: null,
+          preCheckoutQueryId: null,
+          successfulPayment: Prisma.JsonNull,
+          rawPreCheckoutQuery: Prisma.JsonNull,
+          rawSuccessfulPayment: Prisma.JsonNull
+        }
+      });
+      await tx.telegramStarPayment.updateMany({
+        where: {
+          paymentOrder: {
+            userId,
+            status: "pending_payment",
+            expiresAt: { gt: now }
+          }
+        },
+        data: {
           invoiceMessageId: null,
           preCheckoutQueryId: null,
           successfulPayment: Prisma.JsonNull,
@@ -242,7 +276,7 @@ export class UserService {
           referralCode: null,
           consentVersion: null,
           consentAcceptedAt: null,
-          deletedAt: new Date()
+          deletedAt: now
         }
       });
       await tx.auditLog.create({
@@ -259,6 +293,7 @@ export class UserService {
 }
 
 function anonymizedTelegramId(userId: string): bigint {
-  const hex = userId.replaceAll("-", "").slice(0, 15) || "0";
-  return -BigInt(`0x${hex}`);
+  const digest = createHash("sha256").update(userId).digest("hex");
+  const positiveSigned64 = BigInt(`0x${digest.slice(0, 16)}`) & ((1n << 63n) - 1n);
+  return -(positiveSigned64 || 1n);
 }

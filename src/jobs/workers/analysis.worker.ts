@@ -6,10 +6,16 @@ import { childLogger } from "../../config/logger.js";
 import { redisConnection, type AnalysisJobPayload } from "../queues.js";
 import { isFinalAttempt } from "../retry.js";
 import { CreditsService } from "../../modules/billing/credits.service.js";
-import type { InstagramProfileProvider } from "../../modules/instagram/types.js";
+import type {
+  InstagramComment,
+  InstagramPost,
+  InstagramProfile,
+  InstagramProfileProvider
+} from "../../modules/instagram/types.js";
 import type { LlmProvider } from "../../modules/llm/types.js";
 import { buildStrategicReport } from "../../modules/analysis/report-builder.js";
 import { ReportService } from "../../modules/reports/report.service.js";
+import type { VisionAnalysisItemView } from "../../modules/reports/types.js";
 import { recordUsage, recordUsageSafe } from "../../modules/observability/usage.js";
 import { safeNotify } from "./notify.js";
 import { t } from "../../telegram/locales/index.js";
@@ -47,45 +53,49 @@ export function startAnalysisWorker(input: {
 
       try {
         // Clear any partial state left by a previous failed attempt so unique
-        // (analysisJobId) constraints on the snapshot/report do not break retries.
+        // (analysisJobId) constraints on the report do not break retries. Profile
+        // and vision snapshots are retained as paid-step cache between attempts.
         await input.reportService.cleanupByAnalysisJob(row.id);
-        await input.prisma.visionAnalysisItem.deleteMany({ where: { analysisJobId: row.id } });
-        await input.prisma.instagramProfileSnapshot.deleteMany({
-          where: { analysisJobId: row.id }
-        });
+        const cachedProfile = await loadPersistedProfile(input.prisma, row.id);
+        let profile: InstagramProfile;
+        let postSnapshotIds: Map<string, string>;
+        if (cachedProfile) {
+          profile = cachedProfile.profile;
+          postSnapshotIds = cachedProfile.postSnapshotIds;
+        } else {
+          await input.prisma.analysisJob.update({
+            where: { id: row.id },
+            data: { status: "fetching_profile", stage: "fetching_profile", startedAt: new Date() }
+          });
+          await safeNotify(
+            input.bot,
+            Number(row.telegramChatId),
+            messages.progress(messages.progressStages.fetchingProfile, 1, 4),
+            (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
+          );
 
-        await input.prisma.analysisJob.update({
-          where: { id: row.id },
-          data: { status: "fetching_profile", stage: "fetching_profile", startedAt: new Date() }
-        });
-        await safeNotify(
-          input.bot,
-          Number(row.telegramChatId),
-          messages.progress(messages.progressStages.fetchingProfile, 1, 4),
-          (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
-        );
-
-        const profile = await input.instagram.fetchProfile({
-          username: row.targetUsername,
-          postLimit: env.ANALYSIS_POST_LIMIT ?? 30,
-          includeParentData: true
-        });
-        // Best-effort usage logging: a transient failure here must not throw out
-        // of the success path, or the job would fail and retry would re-run the
-        // already-paid Apify fetch above.
-        await recordUsageSafe(
-          input.prisma,
-          {
-            userId: row.userId,
-            analysisJobId: row.id,
-            provider: env.APIFY_TOKEN ? "apify" : "mock_instagram",
-            operation: "fetch_profile",
-            status: "success",
-            costEstimateRub: env.APIFY_TOKEN ? (env.ECON_APIFY_PROFILE_COST_RUB ?? null) : null
-          },
-          (error) => log.warn({ error, jobId: row.id }, "analysis_usage_record_failed")
-        );
-        const postSnapshotIds = await persistProfile(input.prisma, row.id, profile);
+          profile = await input.instagram.fetchProfile({
+            username: row.targetUsername,
+            postLimit: env.ANALYSIS_POST_LIMIT ?? 30,
+            includeParentData: true
+          });
+          // Best-effort usage logging: a transient failure here must not throw out
+          // of the success path, or the job would fail and retry would re-run the
+          // already-paid Apify fetch above.
+          await recordUsageSafe(
+            input.prisma,
+            {
+              userId: row.userId,
+              analysisJobId: row.id,
+              provider: env.APIFY_TOKEN ? "apify" : "mock_instagram",
+              operation: "fetch_profile",
+              status: "success",
+              costEstimateRub: env.APIFY_TOKEN ? (env.ECON_APIFY_PROFILE_COST_RUB ?? null) : null
+            },
+            (error) => log.warn({ error, jobId: row.id }, "analysis_usage_record_failed")
+          );
+          postSnapshotIds = await persistProfile(input.prisma, row.id, profile);
+        }
 
         await input.prisma.analysisJob.update({
           where: { id: row.id },
@@ -103,15 +113,18 @@ export function startAnalysisWorker(input: {
           (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
         );
 
+        const cachedVision = await loadReusableVision(input.prisma, row.id, profile.posts);
         const strategicReport = await buildStrategicReport({
           mode: row.mode as never,
           language: locale,
           profile,
           llm: input.llm,
           targetPosition: row.targetPosition ?? undefined,
-          goal: row.goal ?? undefined
+          goal: row.goal ?? undefined,
+          vision: cachedVision
         });
-        await persistVision(input.prisma, row.id, strategicReport.vision, postSnapshotIds);
+        if (!cachedVision)
+          await persistVision(input.prisma, row.id, strategicReport.vision, postSnapshotIds);
         // Best-effort: a logging hiccup must not throw out of the success path and
         // trigger a retry that re-runs the already-paid Apify + OpenRouter work.
         await recordUsageSafe(
@@ -242,6 +255,92 @@ export function startAnalysisWorker(input: {
   );
 }
 
+async function loadPersistedProfile(
+  prisma: PrismaClient,
+  analysisJobId: string
+): Promise<{ profile: InstagramProfile; postSnapshotIds: Map<string, string> } | null> {
+  const snapshot = await prisma.instagramProfileSnapshot.findUnique({
+    where: { analysisJobId },
+    include: { posts: { orderBy: { sortOrder: "asc" } } }
+  });
+  if (!snapshot) return null;
+
+  const posts: InstagramPost[] = snapshot.posts.map((post) => ({
+    id: post.postId,
+    type: post.type,
+    caption: post.caption ?? undefined,
+    hashtags: post.hashtags,
+    mentions: post.mentions,
+    likesCount: post.likesCount,
+    commentsCount: post.commentsCount,
+    latestComments: commentsArray(post.latestComments),
+    timestamp: post.timestamp?.toISOString(),
+    displayUrl: post.displayUrl ?? undefined,
+    url: post.url ?? undefined,
+    videoViewCount: post.videoViewCount ?? undefined,
+    videoDuration: post.videoDuration == null ? undefined : Number(post.videoDuration),
+    location: recordValue(post.location),
+    isPinned: post.isPinned,
+    productType: post.productType ?? undefined,
+    musicInfo: recordValue(post.musicInfo),
+    childPosts: post.childPosts,
+    taggedUsers: post.taggedUsers
+  }));
+
+  return {
+    profile: {
+      username: snapshot.username,
+      fullName: snapshot.fullName ?? undefined,
+      biography: snapshot.biography ?? undefined,
+      followersCount: snapshot.followersCount,
+      followsCount: snapshot.followsCount,
+      postsCount: snapshot.postsCount,
+      profilePicUrl: snapshot.profilePicUrl ?? undefined,
+      externalUrl: snapshot.externalUrl ?? undefined,
+      isVerified: snapshot.isVerified,
+      relatedProfiles: stringArray(snapshot.relatedProfiles),
+      posts,
+      providerDatasetId: snapshot.providerDatasetId ?? undefined,
+      rawDebug: snapshot.rawDebug ?? undefined
+    },
+    postSnapshotIds: new Map(snapshot.posts.map((post) => [post.postId, post.id]))
+  };
+}
+
+async function loadReusableVision(
+  prisma: PrismaClient,
+  analysisJobId: string,
+  posts: InstagramPost[]
+): Promise<VisionAnalysisItemView[] | undefined> {
+  const expectedCount = Math.min(posts.length, env.ANALYSIS_MAX_IMAGES_ANALYZED ?? 30);
+  if (expectedCount === 0) return [];
+
+  const items = await prisma.visionAnalysisItem.findMany({
+    where: { analysisJobId },
+    orderBy: { createdAt: "asc" }
+  });
+  if (!items.length) return undefined;
+
+  const byPostId = new Map(items.map((item) => [item.postId, item]));
+  const ordered = posts
+    .slice(0, expectedCount)
+    .map((post) => byPostId.get(post.id))
+    .filter((item): item is (typeof items)[number] => item != null);
+  if (ordered.length === expectedCount) {
+    return ordered.map((item) => ({
+      postId: item.postId,
+      status: visionStatus(item.status),
+      description: item.description,
+      model: item.model,
+      promptVersion: item.promptVersion,
+      errorCode: item.errorCode ?? undefined
+    }));
+  }
+
+  await prisma.visionAnalysisItem.deleteMany({ where: { analysisJobId } });
+  return undefined;
+}
+
 async function persistProfile(
   prisma: PrismaClient,
   analysisJobId: string,
@@ -316,4 +415,36 @@ async function persistVision(
       errorCode: item.errorCode
     }))
   });
+}
+
+function commentsArray(value: unknown): InstagramComment[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item): InstagramComment | null => {
+      if (!item || typeof item !== "object") return null;
+      const record = item as Record<string, unknown>;
+      const text = typeof record.text === "string" ? record.text : "";
+      return {
+        ownerUsername: typeof record.ownerUsername === "string" ? record.ownerUsername : undefined,
+        text,
+        timestamp: typeof record.timestamp === "string" ? record.timestamp : undefined
+      };
+    })
+    .filter((item): item is InstagramComment => item != null);
+}
+
+function recordValue(value: unknown): Record<string, unknown> | undefined {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : undefined;
+}
+
+function stringArray(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : [];
+}
+
+function visionStatus(status: string): VisionAnalysisItemView["status"] {
+  return status === "completed" || status === "skipped" || status === "failed" ? status : "failed";
 }

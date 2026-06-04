@@ -3,6 +3,7 @@ import { CreditsService } from "../../src/modules/billing/credits.service.js";
 import { MockYooKassaAdapter } from "../../src/modules/payments/adapters/yookassa.adapter.js";
 import { encodeInvoicePayload } from "../../src/modules/payments/invoice-payload.js";
 import { PaymentService } from "../../src/modules/payments/payment.service.js";
+import { UserService } from "../../src/modules/users/user.service.js";
 import { dbAvailable, deleteUsers, prisma, seedUser, uniqueBigInt } from "./_db.js";
 
 type WebhookResult = { processed: boolean; creditsUnitsGranted?: number };
@@ -12,6 +13,7 @@ const createdUserIds: string[] = [];
 describe.skipIf(!dbAvailable)("Payment webhooks (integration)", () => {
   const credits = new CreditsService(prisma);
   const payments = new PaymentService(prisma, credits, new MockYooKassaAdapter());
+  const users = new UserService(prisma, { deleteObjects: async () => undefined });
   let startPackageId = "";
 
   beforeAll(async () => {
@@ -147,6 +149,68 @@ describe.skipIf(!dbAvailable)("Payment webhooks (integration)", () => {
 
     const second = (await payments.handleTelegramSuccessfulPayment(payload)) as WebhookResult;
     expect(second.processed).toBe(false);
+    expect((await credits.snapshot(u.id)).balanceUnits).toBe(300);
+  });
+
+  it("recovers a deleted user account when a pending Telegram Stars invoice is paid", async () => {
+    const u = await user(0);
+    const chatId = Number(uniqueBigInt() % 1_000_000_000n);
+    const telegramUserId = Number(uniqueBigInt() % 1_000_000_000n);
+    await prisma.user.update({ where: { id: u.id }, data: { telegramId: BigInt(telegramUserId) } });
+    const order = await prisma.paymentOrder.create({
+      data: {
+        userId: u.id,
+        packageId: startPackageId,
+        status: "pending_payment",
+        amountMinor: 690,
+        currency: "XTR",
+        creditsUnits: 300,
+        provider: "telegram_stars",
+        idempotencyKey: `it-${uniqueBigInt()}`,
+        telegramChatId: BigInt(chatId),
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000)
+      }
+    });
+    const invoicePayload = encodeInvoicePayload({
+      v: 1,
+      provider: "telegram_stars",
+      orderId: order.id,
+      userId: u.id,
+      packageCode: "start",
+      currency: "XTR",
+      amountMinor: 690
+    });
+    await prisma.telegramStarPayment.create({
+      data: {
+        paymentOrderId: order.id,
+        telegramUserId: BigInt(telegramUserId),
+        telegramChatId: BigInt(chatId),
+        invoicePayload,
+        status: "pre_checkout_approved",
+        starsAmount: 690,
+        currency: "XTR"
+      }
+    });
+
+    await users.deleteMe(u.id);
+    expect((await prisma.user.findUniqueOrThrow({ where: { id: u.id } })).status).toBe("deleted");
+
+    const result = (await payments.handleTelegramSuccessfulPayment({
+      telegramUserId,
+      chatId,
+      messageId: 1,
+      currency: "XTR",
+      totalAmount: 690,
+      invoicePayload,
+      telegramPaymentChargeId: `charge_${uniqueBigInt()}`,
+      raw: {}
+    })) as WebhookResult;
+
+    expect(result.processed).toBe(true);
+    expect(result.creditsUnitsGranted).toBe(300);
+    const restored = await prisma.user.findUniqueOrThrow({ where: { id: u.id } });
+    expect(restored.status).toBe("active");
+    expect(restored.telegramId).toBe(BigInt(telegramUserId));
     expect((await credits.snapshot(u.id)).balanceUnits).toBe(300);
   });
 });

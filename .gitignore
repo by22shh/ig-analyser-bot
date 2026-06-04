@@ -39,3 +39,4 @@ test-results/
 
 # Agent tooling
 .serena/
+.claude/

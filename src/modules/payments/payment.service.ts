@@ -220,8 +220,9 @@ export class PaymentService {
       };
     const order = await this.prisma.paymentOrder.findUnique({
       where: { id: payload.orderId },
-      include: { telegramStarPayment: true }
+      include: { telegramStarPayment: true, user: { select: { status: true } } }
     });
+    const deletedOrderUser = order?.user.status === "deleted";
     if (
       !order ||
       order.provider !== "telegram_stars" ||
@@ -230,7 +231,11 @@ export class PaymentService {
       order.amountMinor !== input.totalAmount ||
       order.userId !== payload.userId ||
       !order.telegramStarPayment ||
-      order.telegramStarPayment.telegramUserId !== BigInt(input.telegramUserId) ||
+      !telegramStarsIdentityMatches(
+        order.telegramStarPayment.telegramUserId,
+        BigInt(input.telegramUserId),
+        deletedOrderUser
+      ) ||
       (order.expiresAt && order.expiresAt < new Date())
     ) {
       return {
@@ -310,7 +315,7 @@ export class PaymentService {
 
       const order = await tx.paymentOrder.findUniqueOrThrow({
         where: { id: payload.orderId },
-        include: { telegramStarPayment: true }
+        include: { telegramStarPayment: true, user: { select: { language: true, status: true } } }
       });
       if (order.status === "paid") {
         await tx.paymentEvent.update({
@@ -323,20 +328,37 @@ export class PaymentService {
         });
         return { processed: false, orderId: order.id };
       }
+      const deletedOrderUser = order.user.status === "deleted";
       if (
         order.userId !== payload.userId ||
         order.amountMinor !== input.totalAmount ||
         order.currency !== input.currency ||
         !order.telegramStarPayment ||
-        order.telegramStarPayment.telegramUserId !== BigInt(input.telegramUserId) ||
-        order.telegramStarPayment.telegramChatId !== BigInt(input.chatId) ||
+        !telegramStarsIdentityMatches(
+          order.telegramStarPayment.telegramUserId,
+          BigInt(input.telegramUserId),
+          deletedOrderUser
+        ) ||
+        !telegramStarsIdentityMatches(
+          order.telegramStarPayment.telegramChatId,
+          BigInt(input.chatId),
+          deletedOrderUser
+        ) ||
         order.telegramStarPayment.invoicePayload !== input.invoicePayload
       ) {
         throw new Error("PAYMENT_MISMATCH");
       }
+      const recipient = await this.resolveTelegramStarsRecipient(tx, {
+        orderUserId: order.userId,
+        orderUserStatus: order.user.status,
+        orderUserLanguage: order.user.language,
+        telegramUserId: input.telegramUserId
+      });
       await tx.telegramStarPayment.update({
         where: { paymentOrderId: order.id },
         data: {
+          telegramUserId: BigInt(input.telegramUserId),
+          telegramChatId: BigInt(input.chatId),
           telegramPaymentChargeId: input.telegramPaymentChargeId,
           providerPaymentChargeId: input.providerPaymentChargeId,
           status: "paid",
@@ -347,25 +369,37 @@ export class PaymentService {
       await tx.paymentOrder.update({
         where: { id: order.id },
         data: {
+          userId: recipient.userId,
           status: "paid",
           providerPaymentId: input.telegramPaymentChargeId,
+          telegramChatId: BigInt(input.chatId),
           paidAt: new Date()
         }
       });
-      await tx.$queryRaw`SELECT id FROM credit_accounts WHERE "userId" = CAST(${order.userId} AS uuid) FOR UPDATE`;
+      await tx.creditAccount.upsert({
+        where: { userId: recipient.userId },
+        create: { userId: recipient.userId },
+        update: {}
+      });
+      await tx.$queryRaw`SELECT id FROM credit_accounts WHERE "userId" = CAST(${recipient.userId} AS uuid) FOR UPDATE`;
       const account = await tx.creditAccount.update({
-        where: { userId: order.userId },
+        where: { userId: recipient.userId },
         data: { balanceUnits: { increment: order.creditsUnits } }
       });
       await tx.creditTransaction.create({
         data: {
-          userId: order.userId,
+          userId: recipient.userId,
           type: "purchase",
           amountUnits: order.creditsUnits,
           balanceAfterUnits: account.balanceUnits,
           provider: "telegram_stars",
           providerPaymentId: input.telegramPaymentChargeId,
-          metadata: { orderId: order.id }
+          metadata: {
+            orderId: order.id,
+            ...(recipient.recovery
+              ? { recovery: recipient.recovery, originalUserId: order.userId }
+              : {})
+          }
         }
       });
       await tx.paymentEvent.update({
@@ -380,9 +414,63 @@ export class PaymentService {
         processed: true,
         orderId: order.id,
         creditsUnitsGranted: order.creditsUnits,
-        balanceUnits: account.balanceUnits
+        balanceUnits: account.balanceUnits,
+        language: recipient.language
       };
     });
+  }
+
+  private async resolveTelegramStarsRecipient(
+    tx: Prisma.TransactionClient,
+    input: {
+      orderUserId: string;
+      orderUserStatus: string;
+      orderUserLanguage: string;
+      telegramUserId: number;
+    }
+  ): Promise<{ userId: string; language: string; recovery?: string }> {
+    if (input.orderUserStatus !== "deleted") {
+      return { userId: input.orderUserId, language: input.orderUserLanguage };
+    }
+
+    const telegramId = BigInt(input.telegramUserId);
+    const currentUser = await tx.user.findUnique({
+      where: { telegramId },
+      select: { id: true, language: true, status: true }
+    });
+    if (currentUser && currentUser.id !== input.orderUserId) {
+      if (currentUser.status === "deleted") {
+        await tx.user.update({
+          where: { id: currentUser.id },
+          data: { status: "active", deletedAt: null }
+        });
+      }
+      return {
+        userId: currentUser.id,
+        language: currentUser.language,
+        recovery: "transferred_to_recreated_user"
+      };
+    }
+
+    const restored = await tx.user.update({
+      where: { id: input.orderUserId },
+      data: { telegramId, status: "active", deletedAt: null },
+      select: { id: true, language: true }
+    });
+    await tx.userSettings.upsert({
+      where: { userId: restored.id },
+      create: {
+        userId: restored.id,
+        defaultReportLanguage: env.DEFAULT_LANGUAGE,
+        reportRetentionDays: env.REPORT_RETENTION_DAYS ?? 30
+      },
+      update: {}
+    });
+    return {
+      userId: restored.id,
+      language: restored.language,
+      recovery: "reactivated_deleted_user"
+    };
   }
 
   async createYooKassaOrder(input: {
@@ -703,4 +791,12 @@ export class PaymentService {
     }
     return { refundId: refund.id, status: "succeeded" as const };
   }
+}
+
+function telegramStarsIdentityMatches(
+  stored: bigint,
+  actual: bigint,
+  allowDeletedAccountPlaceholder: boolean
+): boolean {
+  return stored === actual || (allowDeletedAccountPlaceholder && stored === 0n);
 }

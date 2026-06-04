@@ -9,7 +9,7 @@ import { startRetentionLoop } from "./jobs/workers/retention.worker.js";
 const services = createServices();
 const bot = env.TELEGRAM_BOT_TOKEN ? createBot(services) : undefined;
 
-startAnalysisWorker({
+const analysisWorker = startAnalysisWorker({
   prisma: services.prisma,
   bot,
   instagram: services.instagram,
@@ -17,12 +17,34 @@ startAnalysisWorker({
   reportService: services.reports
 });
 
-startPhotoSearchWorker({
+const photoSearchWorker = startPhotoSearchWorker({
   prisma: services.prisma,
   bot,
   facecheck: services.facecheck
 });
 
-startRetentionLoop(services);
+const retentionTimer = startRetentionLoop(services);
 
 logger.info("workers_started");
+
+let shuttingDown = false;
+async function shutdown(signal: string) {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  logger.info({ signal }, "workers_shutting_down");
+  clearInterval(retentionTimer);
+  try {
+    // Worker.close() waits for the active job to finish before resolving, so an
+    // in-flight analysis/photo search is not killed mid-pipeline on redeploy.
+    await Promise.allSettled([analysisWorker.close(), photoSearchWorker.close()]);
+    await services.prisma.$disconnect();
+  } catch (error) {
+    logger.error({ error }, "workers_shutdown_error");
+  } finally {
+    logger.info("workers_shutdown_complete");
+    process.exit(0);
+  }
+}
+
+process.on("SIGTERM", () => void shutdown("SIGTERM"));
+process.on("SIGINT", () => void shutdown("SIGINT"));

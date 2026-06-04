@@ -31,7 +31,8 @@ export const en = {
     markdown: "📝 Markdown",
     chat: "💬 Ask a question",
     sources: "🔗 Sources",
-    repeat: "🔁 Repeat analysis"
+    repeat: "🔁 Repeat analysis",
+    confirmDelete: "🗑 Yes, delete permanently"
   },
   modeTitle(mode: AnalysisMode): string {
     const titles: Record<AnalysisMode, string> = {
@@ -394,6 +395,9 @@ export const en = {
   },
   cancelled(): string {
     return "✖️ Cancelled. Returning to menu.";
+  },
+  deleteMeWarning(): string {
+    return "⚠️ <b>Delete account</b>\n\nThis is irreversible: your profile, all reports and working data will be deleted or anonymized, and any remaining credits will be lost. Financial records are kept per accounting requirements.\n\nProceed?";
   },
   deleteMeDone(): string {
     return "🧹 Profile, reports and working data have been deleted or anonymized. Financial records may be retained without unnecessary personal fields according to accounting requirements and the retention policy.";

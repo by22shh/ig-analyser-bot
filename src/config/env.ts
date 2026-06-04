@@ -63,7 +63,6 @@ const schema = z.object({
   TELEGRAM_STARS_TEST_MODE: boolFromString.default(true),
   TELEGRAM_STARS_DEFAULT_CURRENCY: z.literal("XTR").default("XTR"),
   TELEGRAM_STARS_REFUNDS_ENABLED: boolFromString.default(true),
-  TELEGRAM_STARS_RECONCILIATION_ENABLED: boolFromString.default(false),
 
   ECON_USD_TO_RUB_BUFFER: optionalNumber(90),
   ECON_PAYMENT_FEE_RESERVE: optionalNumber(0.2),

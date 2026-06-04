@@ -21,6 +21,7 @@ export const CB = {
   CHAT_QUICK: "chat:q",
   PROFILE: "u:profile",
   SETTINGS: "u:settings",
+  DELETE_ME_CONFIRM: "u:del",
   SET_LANGUAGE: "set:ui_lang",
   SET_RETENTION: "set:ret",
   SET_EXPORT: "set:fmt",

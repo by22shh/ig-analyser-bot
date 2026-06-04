@@ -170,6 +170,10 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
       await showConfirm(ctx, { ...state.payload, mode: "hr", targetPosition });
       return;
     }
+    // Intentional UX (kept per audit decision): with no active wizard step, a
+    // consented user can send a bare Instagram username (any space-free token)
+    // to jump straight into mode selection. Flows like report-chat set a wizard
+    // state, so they take precedence over this free-text fallback.
     if (!state && ctx.user.consentAcceptedAt) {
       try {
         const username = normalizeInstagramUsername(ctx.message.text);

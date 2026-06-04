@@ -1,3 +1,4 @@
+import { InlineKeyboard } from "grammy";
 import { env } from "../../config/env.js";
 import { CB } from "../constants.js";
 import type { MyContext } from "../context.js";
@@ -23,8 +24,26 @@ export function registerProfileHandlers(bot: import("grammy").Bot<MyContext>) {
   });
   bot.command("delete_me", async (ctx) => {
     if (!ctx.user) return;
+    const messages = t(ctx.user.language);
+    // Destructive + irreversible: require an explicit confirmation tap before
+    // anonymizing the account and deleting reports/artifacts.
+    await sendHtml(
+      ctx,
+      messages.deleteMeWarning(),
+      new InlineKeyboard()
+        .text(messages.buttons.confirmDelete, CB.DELETE_ME_CONFIRM)
+        .row()
+        .text(messages.buttons.cancel, CB.CANCEL)
+        .text(messages.buttons.menu, CB.BACK_MAIN)
+    );
+  });
+
+  bot.callbackQuery(CB.DELETE_ME_CONFIRM, async (ctx) => {
+    if (!ctx.user) return;
+    const messages = t(ctx.user.language);
     await ctx.services.users.deleteMe(ctx.user.id);
-    await sendHtml(ctx, t(ctx.user.language).deleteMeDone());
+    await ctx.answerCallbackQuery();
+    await sendHtml(ctx, messages.deleteMeDone());
   });
 
   bot.callbackQuery(CB.PROFILE, async (ctx) => {

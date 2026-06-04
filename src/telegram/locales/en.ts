@@ -58,18 +58,19 @@ export const en = {
     language: string;
     photoSearchEnabled?: boolean;
   }): string {
-    const photoLine = input.photoSearchEnabled ? "• search possible profiles by photo\n" : "";
+    const photoLine = input.photoSearchEnabled ? "• find possible profiles by photo\n" : "";
     return (
-      "👁 <b>Bot</b> — strategic analysis of public Instagram profiles.\n\n" +
-      `💎 Credits: <b>${formatCredits(input.totalUnits)}</b>\n` +
-      `• purchased: ${formatCredits(input.purchasedUnits)}\n` +
-      `• grants/promo: ${formatCredits(input.grantedUnits)}\n` +
-      `🌐 Report language: <b>${escapeHtml(input.language)}</b>\n\n` +
-      "<b>What you can do:</b>\n" +
-      "• analyze a public profile by username or URL\n" +
+      "👁 <b>Public Instagram profile analysis</b>\n\n" +
+      "Send an @username or link — I will turn open data into a clear strategic report.\n\n" +
+      "<b>You will get:</b>\n" +
+      "• positioning and visible profile signals\n" +
+      "• themes, visual style, and recurring patterns\n" +
+      "• practical takeaways for HR, creator work, or personal strategy\n" +
       photoLine +
-      "• export PDF/Markdown and chat with the report\n\n" +
-      "Choose an action below."
+      "• PDF/Markdown export and chat with the finished report\n\n" +
+      `💎 Balance: <b>${formatCredits(input.totalUnits)}</b> · reports from <b>1</b> 💎\n` +
+      `🌐 Report language: <b>${escapeHtml(input.language)}</b>\n\n` +
+      "Start with “Analyze profile”."
     );
   },
   capabilities(): string {

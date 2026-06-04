@@ -58,18 +58,19 @@ export const ru = {
     language: string;
     photoSearchEnabled?: boolean;
   }): string {
-    const photoLine = input.photoSearchEnabled ? "• поиск возможного профиля по фото\n" : "";
+    const photoLine = input.photoSearchEnabled ? "• найти возможный профиль по фото\n" : "";
     return (
-      "👁 <b>Бот</b> — стратегический анализ публичного Instagram-профиля.\n\n" +
-      `💎 Кредиты: <b>${formatCredits(input.totalUnits)}</b>\n` +
-      `• куплено: ${formatCredits(input.purchasedUnits)}\n` +
-      `• выдано/промо: ${formatCredits(input.grantedUnits)}\n` +
-      `🌐 Язык отчета: <b>${escapeHtml(input.language)}</b>\n\n` +
-      "<b>Что можно сделать:</b>\n" +
-      "• анализ публичного профиля по username или ссылке\n" +
+      "👁 <b>Разбор публичного Instagram-профиля</b>\n\n" +
+      "Пришлите @username или ссылку — я соберу открытые данные и превращу их в понятный стратегический отчет.\n\n" +
+      "<b>Вы получите:</b>\n" +
+      "• позиционирование и заметные сигналы профиля\n" +
+      "• темы, визуальный стиль и повторяющиеся паттерны\n" +
+      "• практические выводы для HR, блогинга или личной стратегии\n" +
       photoLine +
-      "• PDF/Markdown-отчет и чат по готовому отчету\n\n" +
-      "Выберите действие ниже."
+      "• PDF/Markdown и чат по готовому отчету\n\n" +
+      `💎 Баланс: <b>${formatCredits(input.totalUnits)}</b> · отчет от <b>1</b> 💎\n` +
+      `🌐 Язык отчета: <b>${escapeHtml(input.language)}</b>\n\n` +
+      "Начните с кнопки «Анализ профиля»."
     );
   },
   capabilities(): string {

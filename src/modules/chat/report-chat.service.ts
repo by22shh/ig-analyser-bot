@@ -59,9 +59,6 @@ export class ReportChatService {
       metadata: { type: "report_chat", reportId: report.id }
     });
     try {
-      await this.prisma.reportChatMessage.create({
-        data: { sessionId: session.id, role: "user", content: input.question }
-      });
       const reportText = [
         report.rawText,
         ...report.sections.map((section) => `${section.title}\n${section.content}`)
@@ -85,14 +82,21 @@ export class ReportChatService {
         tokensIn: answer.tokensIn,
         tokensOut: answer.tokensOut
       });
-      // Capture credits and persist the answer (keyed for idempotency) in one
-      // transaction: a crash between them would either re-charge on a retry or
-      // leave a keyed answer that a retry hands out for free.
+      // Capture credits and persist the question + answer (answer keyed for
+      // idempotency) in one transaction: a crash between them would either
+      // re-charge on a retry or leave a keyed answer that a retry hands out for
+      // free. Writing the question here (rather than before the LLM call) also
+      // means a webhook retry can never duplicate it: a retry that re-enters
+      // before this commits recomputes from scratch, and one that re-enters
+      // after it short-circuits on the cached answer above.
       await this.credits.captureReserve({
         userId: input.userId,
         amountUnits: MODE_COST_UNITS.chat_message,
         metadata: { type: "report_chat", reportId: report.id },
         within: async (tx) => {
+          await tx.reportChatMessage.create({
+            data: { sessionId: session.id, role: "user", content: input.question }
+          });
           await tx.reportChatMessage.create({
             data: {
               sessionId: session.id,

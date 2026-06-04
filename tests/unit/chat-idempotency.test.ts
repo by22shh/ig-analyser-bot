@@ -80,4 +80,49 @@ describe("ReportChatService.ask idempotency", () => {
       })
     );
   });
+
+  it("persists the user question inside the capture transaction, never as a standalone insert", async () => {
+    const txCreate = vi.fn().mockResolvedValue({});
+    const topLevelCreate = vi.fn().mockResolvedValue({});
+    const prisma = {
+      report: {
+        findFirstOrThrow: vi.fn().mockResolvedValue({ id: "r1", rawText: "report", sections: [] })
+      },
+      reportChatMessage: { findUnique: vi.fn().mockResolvedValue(null), create: topLevelCreate },
+      reportChatSession: { upsert: vi.fn().mockResolvedValue({ id: "s1" }) },
+      apiUsageEvent: { create: vi.fn().mockResolvedValue({}) }
+    } as never;
+    const llm = {
+      chat: vi.fn().mockResolvedValue({ text: "fresh", model: "m", tokensIn: 1, tokensOut: 2 })
+    } as never;
+    const captureReserve = vi
+      .fn()
+      .mockImplementation(async (input: { within?: (tx: unknown) => Promise<void> }) => {
+        if (input.within) await input.within({ reportChatMessage: { create: txCreate } });
+      });
+    const credits = {
+      reserve: vi.fn().mockResolvedValue({ id: "reserve-1" }),
+      captureReserve,
+      releaseReserve: vi.fn()
+    } as never;
+    const service = new ReportChatService(prisma, llm, credits);
+
+    await service.ask({
+      userId: "u1",
+      reportId: "r1",
+      question: "q",
+      language: "ru",
+      requestId: "100"
+    });
+
+    // The question must be written transactionally with the capture (alongside
+    // the assistant answer), never as a standalone pre-LLM insert: otherwise a
+    // webhook retry that re-enters before the assistant answer is cached would
+    // store the same question twice.
+    expect(topLevelCreate).not.toHaveBeenCalled();
+    const roles = (txCreate.mock.calls as Array<[{ data: { role: string } }]>).map(
+      (call) => call[0].data.role
+    );
+    expect(roles).toEqual(["user", "assistant"]);
+  });
 });

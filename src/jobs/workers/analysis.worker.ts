@@ -11,6 +11,7 @@ import type { LlmProvider } from "../../modules/llm/types.js";
 import { buildStrategicReport } from "../../modules/analysis/report-builder.js";
 import { ReportService } from "../../modules/reports/report.service.js";
 import { recordUsage, recordUsageSafe } from "../../modules/observability/usage.js";
+import { safeNotify } from "./notify.js";
 import { t } from "../../telegram/locales/index.js";
 import { reportActionsKeyboard } from "../../telegram/keyboards/reports.js";
 import type { MyContext } from "../../telegram/context.js";
@@ -57,10 +58,11 @@ export function startAnalysisWorker(input: {
           where: { id: row.id },
           data: { status: "fetching_profile", stage: "fetching_profile", startedAt: new Date() }
         });
-        await notify(
+        await safeNotify(
           input.bot,
           Number(row.telegramChatId),
-          messages.progress(messages.progressStages.fetchingProfile, 1, 4)
+          messages.progress(messages.progressStages.fetchingProfile, 1, 4),
+          (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
         );
 
         const profile = await input.instagram.fetchProfile({
@@ -94,10 +96,11 @@ export function startAnalysisWorker(input: {
             progressTotal: 4
           }
         });
-        await notify(
+        await safeNotify(
           input.bot,
           Number(row.telegramChatId),
-          messages.progress(messages.progressStages.analyzingSignals, 2, 4)
+          messages.progress(messages.progressStages.analyzingSignals, 2, 4),
+          (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
         );
 
         const strategicReport = await buildStrategicReport({
@@ -133,10 +136,11 @@ export function startAnalysisWorker(input: {
             progressTotal: 4
           }
         });
-        await notify(
+        await safeNotify(
           input.bot,
           Number(row.telegramChatId),
-          messages.progress(messages.progressStages.generatingExports, 3, 4)
+          messages.progress(messages.progressStages.generatingExports, 3, 4),
+          (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
         );
 
         const retentionDays =
@@ -177,21 +181,18 @@ export function startAnalysisWorker(input: {
         });
         // Work is done and credits captured; a delivery hiccup must not fail the
         // job (a retry would re-bill Apify/OpenRouter and re-run everything).
-        try {
-          await notify(
-            input.bot,
-            Number(row.telegramChatId),
-            messages.reportReady({
-              username: row.targetUsername,
-              mode: row.mode as never,
-              metrics: strategicReport.metrics,
-              summary: strategicReport.summary
-            }),
-            reportActionsKeyboard(messages, report.id)
-          );
-        } catch (notifyError) {
-          log.warn({ error: notifyError, jobId: row.id }, "analysis_completed_notify_failed");
-        }
+        await safeNotify(
+          input.bot,
+          Number(row.telegramChatId),
+          messages.reportReady({
+            username: row.targetUsername,
+            mode: row.mode as never,
+            metrics: strategicReport.metrics,
+            summary: strategicReport.summary
+          }),
+          (error) => log.warn({ error, jobId: row.id }, "analysis_completed_notify_failed"),
+          reportActionsKeyboard(messages, report.id)
+        );
       } catch (error) {
         log.error({ error, jobId: row.id, finalAttempt }, "analysis_failed");
         await recordUsage(input.prisma, {
@@ -233,28 +234,12 @@ export function startAnalysisWorker(input: {
             finishedAt: new Date()
           }
         });
-        await notify(input.bot, Number(row.telegramChatId), messages.genericError()).catch(
-          () => undefined
-        );
+        await safeNotify(input.bot, Number(row.telegramChatId), messages.genericError());
         throw error;
       }
     },
     { connection: redisConnection, concurrency: 2 }
   );
-}
-
-async function notify(
-  bot: Bot<MyContext> | undefined,
-  chatId: number,
-  text: string,
-  replyMarkup?: any
-) {
-  if (!bot) return;
-  await bot.api.sendMessage(chatId, text, {
-    parse_mode: "HTML",
-    reply_markup: replyMarkup,
-    link_preview_options: { is_disabled: true }
-  });
 }
 
 async function persistProfile(

@@ -108,6 +108,9 @@ export class OpenRouterLlmProvider implements LlmProvider {
   }
 
   async chat(input: ChatInput) {
+    // LLM_CHAT_INPUT_TOKEN_BUDGET is applied as a *character* cap (not a token
+    // count): a deliberately conservative bound (~4 chars/token keeps us well
+    // under the model context window) that needs no tokenizer.
     const content = await this.chatCompletion({
       model: env.MODEL_CHAT,
       system: prompts.chat.system,
@@ -165,6 +168,9 @@ function buildReportUserMessage(input: ReportInput): string {
     mentions: post.mentions,
     latestComments: post.latestComments.slice(0, 5)
   }));
+  // LLM_FINAL_INPUT_TOKEN_BUDGET is applied as a *character* cap (not a token
+  // count): a deliberately conservative bound (~4 chars/token keeps us well
+  // under the model context window) that needs no tokenizer.
   return JSON.stringify(
     {
       language: input.language,

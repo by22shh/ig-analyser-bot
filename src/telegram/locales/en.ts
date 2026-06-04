@@ -45,7 +45,7 @@ export const en = {
   },
   startNeedsConsent(): string {
     return (
-      "👁 <b>ZRETI</b> analyzes public Instagram data only.\n\n" +
+      "👁 <b>Bot</b> analyzes public Instagram data only.\n\n" +
       "Do not use the bot for harassment, doxing, threats, pressure, or privacy bypass. " +
       "Photo search requires that you have the right to use the image.\n\n" +
       "Choose a language, then tap “I accept”."

@@ -16,7 +16,7 @@ describe("consentGate", () => {
     );
 
     expect(next).not.toHaveBeenCalled();
-    expect(reply).toHaveBeenCalledWith(expect.stringContaining("ZRETI"), expect.any(Object));
+    expect(reply).toHaveBeenCalledWith(expect.stringContaining("Бот"), expect.any(Object));
   });
 
   it("allows /start before consent", async () => {

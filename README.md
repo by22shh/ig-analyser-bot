@@ -1,6 +1,6 @@
-# ZRETI Telegram Bot
+# Instagram Analyzer Telegram Bot
 
-Production-ready MVP implementation of the ZRETI Telegram bot based on `ig-analyser-site`.
+Production-ready MVP implementation of a Telegram bot based on `ig-analyser-site`.
 
 The bot is backend-first: Telegram handlers are thin, long work is queued in BullMQ, state lives in PostgreSQL, provider-specific code sits behind adapters, and local mock mode works without external secrets.
 
@@ -89,4 +89,4 @@ Use `pnpm run ci` to run the full local CI script with the same economics variab
 
 ## Safety
 
-ZRETI analyzes public data only. HR mode is feature-flagged, OSINT/compliance is role-gated, photo search requires user confirmation, and risky outputs are phrased as hypotheses/signals/checks. The bot refuses harassment, doxing, pressure tactics, privacy bypass and private-profile analysis.
+The bot analyzes public data only. HR mode is feature-flagged, OSINT/compliance is role-gated, photo search requires user confirmation, and risky outputs are phrased as hypotheses/signals/checks. The bot refuses harassment, doxing, pressure tactics, privacy bypass and private-profile analysis.

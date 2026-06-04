@@ -1,4 +1,4 @@
-# Спецификация Telegram-бота ZRETI
+# Спецификация Telegram-бота для Instagram-анализа
 
 Версия: 0.6.
 
@@ -8,7 +8,7 @@
 
 ## 1. Краткое резюме
 
-Нужно разработать Telegram-бота, который переносит ключевую ценность сайта ZRETI в формат Telegram:
+Нужно разработать Telegram-бота, который переносит ключевую ценность веб-аналитики Instagram в формат Telegram:
 
 - анализ публичного Instagram-профиля по username;
 - поиск возможного Instagram-профиля по фото;
@@ -49,7 +49,7 @@
 3. Затем заменить моки реальными adapters по одному: Apify, image fetch/vision, final report, PDF, FaceCheck.
 4. Только после этого включать credits capture/refund и admin инструменты.
 5. Перед включением реальных платежей добавить economics guardrails: лимиты токенов/постов/изображений, учет `api_usage_events`, расчет себестоимости и CI-проверку pricing.
-6. UX, формат сообщений, меню, paywall, профиль и базовые пользовательские сценарии делать максимально похожими на sibling-бот `/Users/Bayramov_N/Desktop/Other/ai-assistant-bot`, если это не конфликтует с аналитической/OSINT-спецификой ZRETI.
+6. UX, формат сообщений, меню, paywall, профиль и базовые пользовательские сценарии делать максимально похожими на sibling-бот `/Users/Bayramov_N/Desktop/Other/ai-assistant-bot`, если это не конфликтует с аналитической/OSINT-спецификой этого бота.
 
 ### 1.2. Functional parity with the source site
 
@@ -115,7 +115,7 @@ Parity definition:
 
 Бот должен:
 
-1. Упростить доступ к ZRETI без веб-интерфейса.
+1. Упростить доступ к Instagram-анализу без веб-интерфейса.
 2. Поддерживать платную модель: credits, packages, subscription или Telegram Stars.
 3. Дать управляемый backend для затратных AI/API операций.
 4. Снизить риск злоупотреблений OSINT-функциями.
@@ -156,7 +156,7 @@ Parity definition:
 6. Бот не должен помогать преследованию, доксингу, угрозам, давлению на третьих лиц, обходу приватности.
 7. Любой внешний API может упасть; система должна деградировать понятно.
 8. Бот должен ощущаться частью той же группы продуктов, что и `ai-assistant-bot`: похожие меню, tone of voice, credit/paywall flow, profile screen, support/help сценарии и структура кнопок.
-9. UX-сходство не должно ухудшать безопасность: ZRETI-specific compliance, публичные источники и ограничения анализа имеют приоритет над дружелюбностью формулировок.
+9. UX-сходство не должно ухудшать безопасность: domain-specific compliance, публичные источники и ограничения анализа имеют приоритет над дружелюбностью формулировок.
 
 ## 5. Персоны пользователей
 
@@ -352,7 +352,7 @@ Parity definition:
 
 ### 7.0. UX alignment with `ai-assistant-bot`
 
-ZRETI and `ai-assistant-bot` belong to one product group. Therefore ZRETI should reuse the sibling bot's Telegram-native UX patterns where they fit the domain.
+This bot and `ai-assistant-bot` belong to one product group. Therefore this bot should reuse the sibling bot's Telegram-native UX patterns where they fit the domain.
 
 Reference document: [docs/sibling-bot-ux-reference.md](./docs/sibling-bot-ux-reference.md).
 
@@ -372,10 +372,10 @@ Shared UX requirements:
 
 Sibling patterns to adapt, not copy blindly:
 
-- `ai-assistant-bot` lets users choose LLM models; ZRETI should not expose free model selection in MVP because report quality and economics depend on a controlled pipeline.
-- `ai-assistant-bot` has daily free credits; ZRETI may use admin/trial grants, but daily free expensive reports must be disabled unless `audit-economics` approves it as acquisition spend.
-- `Regenerate` and `Continue` are cheap chat actions in sibling bot; ZRETI re-analysis is expensive and must be priced or admin-only.
-- Custom credit amount is useful in sibling bot; ZRETI should postpone arbitrary custom packages until the package catalog and economics audit are implemented.
+- `ai-assistant-bot` lets users choose LLM models; this bot should not expose free model selection in MVP because report quality and economics depend on a controlled pipeline.
+- `ai-assistant-bot` has daily free credits; this bot may use admin/trial grants, but daily free expensive reports must be disabled unless `audit-economics` approves it as acquisition spend.
+- `Regenerate` and `Continue` are cheap chat actions in sibling bot; re-analysis is expensive and must be priced or admin-only.
+- Custom credit amount is useful in sibling bot; this bot should postpone arbitrary custom packages until the package catalog and economics audit are implemented.
 
 ### 7.1. Команды
 
@@ -455,7 +455,7 @@ Menu layout should follow sibling bot's compact row logic:
 Welcome message shape:
 
 ```text
-<icon> <b>ZRETI</b> - короткое описание ценности.
+<icon> <b>Бот</b> - короткое описание ценности.
 
 💎 Кредиты: <b>{total}</b>
 🌐 Язык отчета: <b>{language}</b>
@@ -508,7 +508,7 @@ Implementation note: exact icons/text can change, but message density and accoun
 
 ### 7.5. Profile and credits screen
 
-Profile screen should follow `ai-assistant-bot` structure, adapted for ZRETI.
+Profile screen should follow `ai-assistant-bot` structure, adapted for Instagram analysis.
 
 Required profile fields:
 
@@ -3422,7 +3422,7 @@ Before launch:
 
 ## 24. Open questions
 
-1. Какой финальный бренд бота: `ZRETI`, `ZRETI AI`, другое имя?
+1. Какой финальный бренд бота: обезличенный вариант или другое имя?
 2. Нужен ли Telegram Mini App в первой версии или достаточно чистого бота?
 3. Какие режимы включать публично в MVP: только standard/influencer/HR или также compliance OSINT?
 4. Подтверждаем ли launch-пакеты после strict guardrail: Start 690 ₽, Pro 1 990 ₽, Agency 5 490 ₽, Scale 15 900 ₽, или Pro/Agency/Scale повышаем/скрываем?

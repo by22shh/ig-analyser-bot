@@ -4,7 +4,7 @@ import { env } from "./env.js";
 export const logger = pino({
   level: env.LOG_LEVEL,
   base: {
-    app: "zreti-telegram-bot",
+    app: "ig-analyser-telegram-bot",
     env: env.APP_ENV
   },
   redact: {

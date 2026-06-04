@@ -2,15 +2,15 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: zreti_bot
-      POSTGRES_USER: zreti
-      POSTGRES_PASSWORD: zreti
+      POSTGRES_DB: ig_analyser_bot
+      POSTGRES_USER: ig_analyser
+      POSTGRES_PASSWORD: ig_analyser
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U zreti -d zreti_bot"]
+      test: ["CMD-SHELL", "pg_isready -U ig_analyser -d ig_analyser_bot"]
       interval: 5s
       timeout: 5s
       retries: 20

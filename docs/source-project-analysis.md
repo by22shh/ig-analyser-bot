@@ -13,7 +13,7 @@ Git-состояние исходного проекта на момент ан�
 
 ## 1. Назначение продукта
 
-`ZRETI Instagram Analyzer` - веб-приложение для глубокого анализа публичного Instagram-профиля.
+`Instagram Analyzer` - веб-приложение для глубокого анализа публичного Instagram-профиля.
 
 Продуктовая идея:
 
@@ -156,7 +156,7 @@ Backend как отдельное приложение отсутствует. �
 
 `utils/storage.ts`
 
-- localStorage key: `zreti_recent_searches_v1`.
+- localStorage key: `ig_analyser_recent_searches_v1`.
 - Хранит максимум 5 последних анализов.
 - Может сохранять весь `profileData` и `reportData`.
 

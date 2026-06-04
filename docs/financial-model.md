@@ -1,4 +1,4 @@
-# Финансовая модель ZRETI Telegram Bot
+# Финансовая модель Telegram-бота для Instagram-анализа
 
 Версия: 0.3.
 

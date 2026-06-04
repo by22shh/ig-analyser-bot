@@ -4,7 +4,7 @@ import type { PackageView } from "../../modules/billing/packages.js";
 import type { ReportMetrics, ReportSummaryView } from "../../modules/reports/types.js";
 
 export const ru = {
-  brand: "ZRETI",
+  brand: "Бот",
   buttons: {
     analyze: "🔎 Анализ профиля",
     photo: "🖼 Поиск по фото",
@@ -60,7 +60,7 @@ export const ru = {
   }): string {
     const photoLine = input.photoSearchEnabled ? "• поиск возможного профиля по фото\n" : "";
     return (
-      "👁 <b>ZRETI</b> — стратегический анализ публичного Instagram-профиля.\n\n" +
+      "👁 <b>Бот</b> — стратегический анализ публичного Instagram-профиля.\n\n" +
       `💎 Кредиты: <b>${formatCredits(input.totalUnits)}</b>\n` +
       `• куплено: ${formatCredits(input.purchasedUnits)}\n` +
       `• выдано/промо: ${formatCredits(input.grantedUnits)}\n` +
@@ -74,7 +74,7 @@ export const ru = {
   },
   capabilities(): string {
     return (
-      "✨ <b>Что умеет ZRETI</b>\n\n" +
+      "✨ <b>Что умеет бот</b>\n\n" +
       "• Собирает публичные посты и профильные метаданные.\n" +
       "• Анализирует до 30 последних постов, визуальные паттерны и Digital Circle.\n" +
       "• Делает краткий вывод в Telegram, подробные секции, PDF/Markdown/HTML.\n" +
@@ -281,7 +281,7 @@ export const ru = {
     return `${pkg.title}: ${formatCredits(pkg.creditsUnits)} кредитов`;
   },
   starsInvoiceDescription(pkg: PackageView): string {
-    return `Пакет кредитов ZRETI ${pkg.title}`;
+    return `Пакет кредитов ${pkg.title}`;
   },
   starsInvoiceAlreadyPending(): string {
     return "⭐ У вас уже есть активный счет Telegram Stars для этого пакета. Откройте предыдущее сообщение со счетом или подождите, пока он истечет.";

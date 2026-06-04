@@ -4,7 +4,7 @@ import type { PackageView } from "../../modules/billing/packages.js";
 import type { ReportMetrics, ReportSummaryView } from "../../modules/reports/types.js";
 
 export const en = {
-  brand: "ZRETI",
+  brand: "Bot",
   buttons: {
     analyze: "🔎 Profile analysis",
     photo: "🖼 Photo search",
@@ -60,7 +60,7 @@ export const en = {
   }): string {
     const photoLine = input.photoSearchEnabled ? "• search possible profiles by photo\n" : "";
     return (
-      "👁 <b>ZRETI</b> — strategic analysis of public Instagram profiles.\n\n" +
+      "👁 <b>Bot</b> — strategic analysis of public Instagram profiles.\n\n" +
       `💎 Credits: <b>${formatCredits(input.totalUnits)}</b>\n` +
       `• purchased: ${formatCredits(input.purchasedUnits)}\n` +
       `• grants/promo: ${formatCredits(input.grantedUnits)}\n` +
@@ -74,7 +74,7 @@ export const en = {
   },
   capabilities(): string {
     return (
-      "✨ <b>ZRETI capabilities</b>\n\n" +
+      "✨ <b>Bot capabilities</b>\n\n" +
       "• Collects public posts and profile metadata.\n" +
       "• Analyzes up to 30 latest posts, visual patterns and Digital Circle.\n" +
       "• Produces Telegram summary, report sections, PDF/Markdown/HTML exports.\n" +
@@ -277,7 +277,7 @@ export const en = {
     return `${pkg.title}: ${formatCredits(pkg.creditsUnits)} credits`;
   },
   starsInvoiceDescription(pkg: PackageView): string {
-    return `ZRETI credit package ${pkg.title}`;
+    return `Credit package ${pkg.title}`;
   },
   starsInvoiceAlreadyPending(): string {
     return "⭐ You already have an active Telegram Stars invoice for this package. Open the previous invoice message or wait until it expires.";

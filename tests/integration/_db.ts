@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 // These suites exercise the real ledger/payment code against Postgres. They run
 // in CI (which provisions and migrates a DB) and locally when a migrated DB is
 // reachable; otherwise they skip so `pnpm test` stays green without a database.
-process.env.DATABASE_URL ??= "postgresql://zreti:zreti@localhost:5432/zreti_bot";
+process.env.DATABASE_URL ??= "postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot";
 process.env.DIRECT_URL ??= process.env.DATABASE_URL;
 
 export const prisma = new PrismaClient();

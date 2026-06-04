@@ -4,7 +4,7 @@
 
 ```bash
 docker compose up -d
-DIRECT_URL=postgresql://zreti:zreti@localhost:5432/zreti_bot pnpm prisma:migrate
+DIRECT_URL=postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot pnpm prisma:migrate
 pnpm prisma:generate
 ```
 
@@ -12,8 +12,8 @@ If local ports are already occupied:
 
 ```bash
 POSTGRES_PORT=55432 REDIS_PORT=56379 docker compose up -d
-DATABASE_URL=postgresql://zreti:zreti@localhost:55432/zreti_bot \
-DIRECT_URL=postgresql://zreti:zreti@localhost:55432/zreti_bot \
+DATABASE_URL=postgresql://ig_analyser:ig_analyser@localhost:55432/ig_analyser_bot \
+DIRECT_URL=postgresql://ig_analyser:ig_analyser@localhost:55432/ig_analyser_bot \
 pnpm prisma:migrate
 ```
 

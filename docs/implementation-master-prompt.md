@@ -1,11 +1,11 @@
 # Master prompt for full implementation
 
-Ниже готовый промпт для coding agent / нейросети-разработчика, которая должна взять этот репозиторий и довести Telegram-бота ZRETI до production-ready реализации по имеющимся спецификациям.
+Ниже готовый промпт для coding agent / нейросети-разработчика, которая должна взять этот репозиторий и довести Telegram-бота для Instagram-анализа до production-ready реализации по имеющимся спецификациям.
 
 Скопируй промпт целиком и передай агенту в корне репозитория `/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot`.
 
 ````text
-Ты senior full-stack/backend engineer и coding agent. Твоя задача - полностью реализовать Telegram-бота ZRETI в репозитории:
+Ты senior full-stack/backend engineer и coding agent. Твоя задача - полностью реализовать Telegram-бота для Instagram-анализа в репозитории:
 
 /Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot
 
@@ -45,7 +45,7 @@
 
 ## 1. Главная цель
 
-Разработать Telegram-бота, который переносит содержательный функционал сайта ZRETI в Telegram:
+Разработать Telegram-бота, который переносит содержательный функционал Instagram-аналитики в Telegram:
 
 - анализ публичного Instagram username / profile URL;
 - поиск возможного Instagram-профиля по фото;

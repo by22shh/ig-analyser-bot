@@ -10,7 +10,7 @@ export type InvoicePayload = {
 
 export function encodeInvoicePayload(payload: InvoicePayload): string {
   const raw = [
-    "zreti",
+    "igbot",
     payload.v,
     payload.provider,
     payload.orderId,
@@ -24,7 +24,7 @@ export function encodeInvoicePayload(payload: InvoicePayload): string {
 
 export function decodeInvoicePayload(value: string): InvoicePayload | null {
   const parts = value.split(":");
-  if (parts.length !== 8 || parts[0] !== "zreti") return null;
+  if (parts.length !== 8 || parts[0] !== "igbot") return null;
   const amountMinor = Number(parts[7]);
   if (!Number.isSafeInteger(amountMinor) || amountMinor <= 0) return null;
   if (parts[1] !== "1") return null;

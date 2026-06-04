@@ -21,7 +21,7 @@ export class MockInstagramProfileProvider implements InstagramProfileProvider {
           "Travel notes, coffee, and a quiet reminder that consistency wins.",
           "Client work, behind the scenes, and lessons from a launch."
         ][index % 3],
-        hashtags: ["zreti", "growth", "work"].slice(0, (index % 3) + 1),
+        hashtags: ["growth", "work", "public"].slice(0, (index % 3) + 1),
         mentions: index % 2 === 0 ? ["partner_account"] : [],
         likesCount: 250 + index * 37,
         commentsCount: 12 + index * 3,
@@ -45,7 +45,7 @@ export class MockInstagramProfileProvider implements InstagramProfileProvider {
     return {
       username: input.username,
       fullName: "Mock Public Profile",
-      biography: "Founder, builder, public profile used for local ZRETI tests.",
+      biography: "Founder, builder, public profile used for local tests.",
       followersCount: 14502,
       followsCount: 812,
       postsCount: 124,

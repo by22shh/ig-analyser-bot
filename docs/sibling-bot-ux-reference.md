@@ -4,7 +4,7 @@
 
 Источник: `/Users/Bayramov_N/Desktop/Other/ai-assistant-bot`.
 
-Цель: зафиксировать переносимые UX-паттерны из sibling-бота той же группы для ZRETI Telegram Bot. Это не требование копировать функциональность AI Assistant, а требование сохранить узнаваемый формат сообщений, платежных сценариев, профиля, меню и общей логики Telegram-взаимодействия там, где это уместно.
+Цель: зафиксировать переносимые UX-паттерны из sibling-бота той же группы для Telegram-бота Instagram-анализа. Это не требование копировать функциональность AI Assistant, а требование сохранить узнаваемый формат сообщений, платежных сценариев, профиля, меню и общей логики Telegram-взаимодействия там, где это уместно.
 
 ## 1. Изученные файлы
 
@@ -17,7 +17,7 @@
 - `app/handlers/helpers.py` - welcome payload, chunking, insufficient credits -> paywall.
 - `app/constants.py` - callback namespaces and payment provider/status enums.
 
-## 2. Что переносим в ZRETI
+## 2. Что переносим в бота
 
 ### 2.1. Стиль сообщений
 
@@ -32,7 +32,7 @@
 - Для длинных инструкций допускаются `<blockquote>...</blockquote>`.
 - Ошибки говорят, что делать дальше, а не только что пошло не так.
 
-ZRETI-адаптация:
+Адаптация для Instagram-анализа:
 
 - Тот же HTML-подход и централизованные `locales/ru` / message helpers.
 - Не использовать Markdown в пользовательских сообщениях, если выбран HTML parse mode.
@@ -49,7 +49,7 @@ ZRETI-адаптация:
 - URL-кнопки добавляются только если ссылки настроены.
 - Back-кнопка возвращает в главное меню и очищает FSM state.
 
-ZRETI-адаптация:
+Адаптация для Instagram-анализа:
 
 - `/start` должен сразу показывать:
   - бренд;
@@ -57,7 +57,7 @@ ZRETI-адаптация:
   - баланс credits;
   - доступные режимы;
   - главное меню.
-- Главное меню ZRETI:
+- Главное меню бота:
   - `Анализ профиля`;
   - `Поиск по фото`;
   - `История`;
@@ -74,7 +74,7 @@ ZRETI-адаптация:
 - Экран профиля показывает имя, Telegram/user ID, текущую настройку, total credits, free/purchased credits, referral info.
 - Есть кнопки: пригласить друга, скопировать ссылку, пополнить кредиты, назад.
 
-ZRETI-адаптация:
+Адаптация для Instagram-анализа:
 
 - Профиль должен показывать:
   - имя/username;
@@ -107,7 +107,7 @@ ZRETI-адаптация:
 - Для YooKassa receipt email запрашивается отдельно и запоминается.
 - Test mode показывается явным badge.
 
-ZRETI-адаптация:
+Адаптация для Instagram-анализа:
 
 - Default payment method в Telegram UX: Stars.
 - YooKassa/RUB показывать только если `FEATURE_YOOKASSA_PAYMENTS=true` и policy разрешает этот канал.
@@ -120,7 +120,7 @@ ZRETI-адаптация:
   - доступный баланс;
   - кнопку пополнения;
   - кнопку назад/изменить режим.
-- Custom amount для ZRETI лучше отложить до v1.1, потому что экономика отчетов крупнее и должна проходить `audit-economics`.
+- Custom amount для этого бота лучше отложить до v1.1, потому что экономика отчетов крупнее и должна проходить `audit-economics`.
 
 ### 2.5. Платежная идемпотентность
 
@@ -132,14 +132,14 @@ ZRETI-адаптация:
 - Duplicate payment игнорируется по external charge ID.
 - YooKassa создает pending-row, credits начисляются из webhook/reconciliation.
 
-ZRETI-адаптация:
+Адаптация для Instagram-анализа:
 
 - Полностью переносим принцип:
   - no credits on pre-checkout;
   - no credits from unchecked YooKassa body;
   - unique charge/payment IDs;
   - idempotent grant exactly once.
-- Для ZRETI payload должен дополнительно связывать `order_id`, `user_id`, `package_price_id`.
+- Для этого бота payload должен дополнительно связывать `order_id`, `user_id`, `package_price_id`.
 
 ### 2.6. Cancel/back/reset
 
@@ -150,12 +150,12 @@ ZRETI-адаптация:
 - `back:main` очищает state и возвращает главное меню.
 - `/reset` очищает диалоговый контекст.
 
-ZRETI-адаптация:
+Адаптация для Instagram-анализа:
 
 - `/cancel` должен отменять текущий wizard: username input, photo upload, HR target position, OSINT confirmation, email collection.
 - `Назад` возвращает на предыдущий экран wizard или в главное меню.
 - `В меню` всегда очищает FSM и возвращает актуальный welcome payload.
-- `/reset` в ZRETI не должен удалять отчеты; он очищает только текущий report-chat контекст.
+- `/reset` в этом боте не должен удалять отчеты; он очищает только текущий report-chat контекст.
 
 ### 2.7. Action buttons after result
 
@@ -164,7 +164,7 @@ ZRETI-адаптация:
 - После ответа есть действия: regenerate, continue, TTS.
 - Кнопки компактные, в 1-2 ряда.
 
-ZRETI-адаптация:
+Адаптация для Instagram-анализа:
 
 - После готового отчета показывать action row:
   - `Секции`;
@@ -188,7 +188,7 @@ ZRETI-адаптация:
 - Длинный LLM output отправляется chunked, keyboard только на последнем chunk.
 - Для streaming/partial text используется plain text, чтобы не ломать entity parsing.
 
-ZRETI-адаптация:
+Адаптация для Instagram-анализа:
 
 - Summary и секции chunked helper-ами.
 - Полные большие отчеты отправлять PDF/Markdown artifact.
@@ -203,7 +203,7 @@ ZRETI-адаптация:
 - Support/channel URL добавляются в меню только если configured.
 - Есть optional force-subscription gate с кнопкой проверки.
 
-ZRETI-адаптация:
+Адаптация для Instagram-анализа:
 
 - `/help` должен включать:
   - что бот делает;
@@ -216,10 +216,10 @@ ZRETI-адаптация:
 
 ## 3. Что не переносим напрямую
 
-- Выбор LLM-модели пользователем: для ZRETI модели должны быть backend config, потому что качество отчета зависит от pipeline, а не от свободного выбора модели.
+- Выбор LLM-модели пользователем: для этого бота модели должны быть backend config, потому что качество отчета зависит от pipeline, а не от свободного выбора модели.
 - Daily free credits как обязательная механика: можно использовать admin/trial grants, но daily allowance для дорогих отчетов может ломать экономику.
-- Regenerate/continue как бесплатные кнопки: ZRETI-анализ дорогой и должен повторно проходить credit policy.
-- TTS/voice/image-generation сценарии AI Assistant: они не относятся к core ZRETI.
+- Regenerate/continue как бесплатные кнопки: Instagram-анализ дорогой и должен повторно проходить credit policy.
+- TTS/voice/image-generation сценарии AI Assistant: они не относятся к core этого бота.
 - Arbitrary custom credits в MVP: сначала нужны стабильные пакеты и `audit-economics`.
 
 ## 4. Implementation rules
@@ -233,4 +233,4 @@ ZRETI-адаптация:
 7. Stars-first UX, YooKassa as configured external/RUB option.
 8. Every payment grant is idempotent.
 9. Every long output is chunked and escaped.
-10. ZRETI-specific compliance text has priority over sibling-bot friendliness.
+10. Domain-specific compliance text has priority over sibling-bot friendliness.

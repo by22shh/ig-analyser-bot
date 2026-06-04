@@ -189,7 +189,7 @@ async function sendArtifact(ctx: MyContext, reportId: string, type: ArtifactType
 
 function artifactFileName(type: ArtifactType): string {
   const extensions = { pdf: "pdf", markdown: "md", html: "html" };
-  return `zreti-report.${extensions[type]}`;
+  return `instagram-report.${extensions[type]}`;
 }
 
 function collectSources(

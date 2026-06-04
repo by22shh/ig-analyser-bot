@@ -3,7 +3,7 @@ import type { StrategicReportView } from "./types.js";
 
 export function renderReportMarkdown(report: StrategicReportView): string {
   const lines = [
-    `# ZRETI report: @${report.username}`,
+    `# Instagram report: @${report.username}`,
     "",
     `Mode: ${report.mode}`,
     `Generated language: ${report.language}`,
@@ -57,7 +57,7 @@ export function renderReportHtml(report: StrategicReportView): string {
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>ZRETI report @${escapeHtml(report.username)}</title>
+  <title>Instagram report @${escapeHtml(report.username)}</title>
   <style>
     body { font-family: Inter, Arial, sans-serif; color: #151515; line-height: 1.5; }
     header { border-bottom: 2px solid #111; margin-bottom: 24px; padding-bottom: 12px; }
@@ -70,7 +70,7 @@ export function renderReportHtml(report: StrategicReportView): string {
 </head>
 <body>
   <header>
-    <h1>ZRETI report: @${escapeHtml(report.username)}</h1>
+    <h1>Instagram report: @${escapeHtml(report.username)}</h1>
     <div>Mode: ${escapeHtml(report.mode)} · Language: ${escapeHtml(report.language)}</div>
   </header>
   <h2>Summary</h2>

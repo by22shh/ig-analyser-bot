@@ -1,4 +1,4 @@
-# Fly.io app config for ZRETI Telegram Bot.
+# Fly.io app config for the Instagram analyzer Telegram bot.
 # Change `app` to your real Fly app name after `fly launch` or before first deploy.
 app = "ig-analyser-bot"
 primary_region = "fra"

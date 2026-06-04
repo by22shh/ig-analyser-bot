@@ -20,6 +20,6 @@ describe("invoice payload", () => {
 
   it("rejects malformed payloads", () => {
     expect(decodeInvoicePayload("bad")).toBeNull();
-    expect(decodeInvoicePayload("zreti:1:telegram_stars:o:u:start:XTR:0")).toBeNull();
+    expect(decodeInvoicePayload("igbot:1:telegram_stars:o:u:start:XTR:0")).toBeNull();
   });
 });

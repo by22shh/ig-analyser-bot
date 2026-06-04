@@ -37,8 +37,12 @@ const schema = z.object({
   TOS_URL: z.string().url().default("https://teletype.in/@homiebot/policy"),
   PRIVACY_URL: z.string().url().default("https://telegram.org/privacy-tpa"),
 
-  DATABASE_URL: z.string().default("postgresql://zreti:zreti@localhost:5432/zreti_bot"),
-  DIRECT_URL: z.string().default("postgresql://zreti:zreti@localhost:5432/zreti_bot"),
+  DATABASE_URL: z
+    .string()
+    .default("postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot"),
+  DIRECT_URL: z
+    .string()
+    .default("postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot"),
   REDIS_URL: z.string().default("redis://localhost:6379/0"),
 
   APIFY_TOKEN: optionalString,

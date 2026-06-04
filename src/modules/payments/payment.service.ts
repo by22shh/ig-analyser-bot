@@ -165,7 +165,7 @@ export class PaymentService {
       .sendInvoice(
         input.chatId,
         input.title ?? `${pkg.title}: ${pkg.creditsUnits / 100} credits`,
-        input.description ?? `ZRETI credit package ${pkg.title}`,
+        input.description ?? `Credit package ${pkg.title}`,
         invoicePayload,
         "XTR",
         [{ label: pkg.title, amount: price.amountMinor }],
@@ -535,7 +535,7 @@ export class PaymentService {
       .createPayment({
         idempotencyKey: order.id,
         amountMinor: price.amountMinor,
-        description: `ZRETI ${pkg.title}: ${pkg.creditsUnits / 100} credits`,
+        description: `${pkg.title}: ${pkg.creditsUnits / 100} credits`,
         returnUrl: env.YOOKASSA_RETURN_URL,
         metadata: { order_id: order.id, user_id: input.userId, package_code: pkg.code },
         email: input.userEmail

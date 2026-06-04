@@ -129,7 +129,7 @@ exports[`message snapshots > renders report actions 1`] = `
 `;
 
 exports[`message snapshots > renders start payload 1`] = `
-"👁 <b>ZRETI</b> — стратегический анализ публичного Instagram-профиля.
+"👁 <b>Бот</b> — стратегический анализ публичного Instagram-профиля.
 
 💎 Кредиты: <b>3</b>
 • куплено: 3

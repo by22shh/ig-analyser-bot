@@ -69,7 +69,7 @@ export function createApp(input: { services: Services; bot: Bot<MyContext> }) {
 
   app.get("/payments/yookassa/return", async (_request, reply) => {
     reply.type("text/html; charset=utf-8");
-    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZRETI payment</title></head><body><main style="font-family:system-ui,sans-serif;max-width:560px;margin:64px auto;padding:0 20px;line-height:1.5"><h1>ZRETI</h1><p>Оплата обрабатывается. Вернитесь в Telegram: кредиты начислятся автоматически после подтверждения платежа.</p><p>Your payment is being processed. Return to Telegram: credits will be granted automatically after confirmation.</p></main></body></html>';
+    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Payment</title></head><body><main style="font-family:system-ui,sans-serif;max-width:560px;margin:64px auto;padding:0 20px;line-height:1.5"><h1>Оплата</h1><p>Оплата обрабатывается. Вернитесь в Telegram: кредиты начислятся автоматически после подтверждения платежа.</p><p>Your payment is being processed. Return to Telegram: credits will be granted automatically after confirmation.</p></main></body></html>';
   });
 
   if (env.APP_ENV !== "production") {

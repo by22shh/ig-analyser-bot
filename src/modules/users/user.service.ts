@@ -89,7 +89,7 @@ export class UserService {
       where: { id: userId },
       data: {
         language,
-        consentVersion: "zreti-mvp-2026-06-03",
+        consentVersion: "public-instagram-bot-2026-06-04",
         consentAcceptedAt: new Date()
       }
     });

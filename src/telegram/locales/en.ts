@@ -22,6 +22,7 @@ export const en = {
     menu: "🏠 Menu",
     accept: "✅ I accept",
     run: "▶️ Start",
+    confirmLawfulBasis: "✅ Confirm lawful basis",
     stars: "⭐ Telegram Stars",
     yookassa: "💳 Card / SBP",
     pay: "Pay",
@@ -30,7 +31,8 @@ export const en = {
     markdown: "📝 Markdown",
     chat: "💬 Ask a question",
     sources: "🔗 Sources",
-    repeat: "🔁 Repeat analysis"
+    repeat: "🔁 Repeat analysis",
+    confirmDelete: "🗑 Yes, delete permanently"
   },
   modeTitle(mode: AnalysisMode): string {
     const titles: Record<AnalysisMode, string> = {
@@ -49,7 +51,13 @@ export const en = {
       "Choose a language, then tap “I accept”."
     );
   },
-  welcome(input: { totalUnits: number; purchasedUnits: number; grantedUnits: number; language: string; photoSearchEnabled?: boolean }): string {
+  welcome(input: {
+    totalUnits: number;
+    purchasedUnits: number;
+    grantedUnits: number;
+    language: string;
+    photoSearchEnabled?: boolean;
+  }): string {
     const photoLine = input.photoSearchEnabled ? "• search possible profiles by photo\n" : "";
     return (
       "👁 <b>ZRETI</b> — strategic analysis of public Instagram profiles.\n\n" +
@@ -97,7 +105,12 @@ export const en = {
       `🧹 Report retention: <b>${input.retentionDays} days</b>`
     );
   },
-  balance(input: { totalUnits: number; purchasedUnits: number; grantedUnits: number; photoSearchEnabled?: boolean }): string {
+  balance(input: {
+    totalUnits: number;
+    purchasedUnits: number;
+    grantedUnits: number;
+    photoSearchEnabled?: boolean;
+  }): string {
     const photoLine = input.photoSearchEnabled ? "\nPhoto search: <b>1</b> 💎" : "";
     return (
       `💎 <b>Your credits: ${formatCredits(input.totalUnits)}</b>\n` +
@@ -131,6 +144,15 @@ export const en = {
   osintRestricted(): string {
     return "OSINT / Compliance is available only to compliance/admin roles with a lawful basis confirmation.";
   },
+  modeUnavailable(): string {
+    return "This mode is unavailable right now. Return to the menu and choose an available mode.";
+  },
+  askOsintLawfulBasis(): string {
+    return (
+      "⚖️ <b>Lawful basis confirmation</b>\n\n" +
+      "OSINT / Compliance may be used only for lawful verification of public facts. Confirm that you have a lawful basis, will not use the report for pressure, harassment, doxing or privacy bypass, and will treat findings as hypotheses to verify."
+    );
+  },
   confirmAnalysis(input: { username: string; mode: AnalysisMode; costUnits: number }): string {
     return (
       "✅ <b>Check the task</b>\n\n" +
@@ -143,11 +165,22 @@ export const en = {
   jobQueued(username: string): string {
     return `⏳ Job for <b>@${escapeHtml(username)}</b> is queued. I will post progress and the report here.`;
   },
+  jobAlreadyQueued(username: string): string {
+    return `⏳ Job for <b>@${escapeHtml(username)}</b> is already queued. I will post progress and the report here.`;
+  },
+  staleConfirmation(): string {
+    return "This confirmation is stale. Open analysis again and confirm the current task.";
+  },
   progress(stage: string, current: number, total: number): string {
     const suffix = total > 0 ? ` ${current}/${total}` : "";
     return `⏳ <b>${escapeHtml(stage)}</b>${suffix}`;
   },
-  reportReady(input: { username: string; mode: AnalysisMode; metrics: ReportMetrics; summary: ReportSummaryView }): string {
+  reportReady(input: {
+    username: string;
+    mode: AnalysisMode;
+    metrics: ReportMetrics;
+    summary: ReportSummaryView;
+  }): string {
     const m = input.metrics;
     return (
       `✅ <b>Report for @${escapeHtml(input.username)} is ready</b>\n` +
@@ -169,12 +202,18 @@ export const en = {
   section(title: string, content: string): string {
     return `📌 <b>${escapeHtml(title)}</b>\n\n${escapeHtml(content)}`;
   },
-  reportSources(input: { username: string; sources: Array<{ label: string; url?: string }> }): string {
+  reportSources(input: {
+    username: string;
+    sources: Array<{ label: string; url?: string }>;
+  }): string {
     const items = input.sources.slice(0, 20).map((source, index) => {
       const label = escapeHtml(source.label || `Source ${index + 1}`);
-      return source.url ? `${index + 1}. <a href="${escapeHtml(source.url)}">${label}</a>` : `${index + 1}. ${label}`;
+      return source.url
+        ? `${index + 1}. <a href="${escapeHtml(source.url)}">${label}</a>`
+        : `${index + 1}. ${label}`;
     });
-    const suffix = input.sources.length > 20 ? `\n\nShowing first 20 of ${input.sources.length}.` : "";
+    const suffix =
+      input.sources.length > 20 ? `\n\nShowing first 20 of ${input.sources.length}.` : "";
     return items.length
       ? `🔗 <b>Sources for @${escapeHtml(input.username)}</b>\n\n${items.join("\n")}${suffix}`
       : `🔗 <b>Sources for @${escapeHtml(input.username)}</b>\n\nNo sources were found for this report.`;
@@ -310,8 +349,10 @@ export const en = {
     sincerityLabel: "Check sincerity",
     portraitLabel: "Communication profile",
     introQuestion: "What is a good way to start a conversation with this person?",
-    sincerityQuestion: "Which sincerity or staged-content signals can be checked carefully from the report?",
-    portraitQuestion: "Form cautious hypotheses about the communication style based on public data.",
+    sincerityQuestion:
+      "Which sincerity or staged-content signals can be checked carefully from the report?",
+    portraitQuestion:
+      "Form cautious hypotheses about the communication style based on public data.",
     fallbackQuestion: "What is important to check in this report?"
   },
   progressStages: {
@@ -355,8 +396,11 @@ export const en = {
   cancelled(): string {
     return "✖️ Cancelled. Returning to menu.";
   },
+  deleteMeWarning(): string {
+    return "⚠️ <b>Delete account</b>\n\nThis is irreversible: your profile, all reports and working data will be deleted or anonymized, and any remaining credits will be lost. Financial records are kept per accounting requirements.\n\nProceed?";
+  },
   deleteMeDone(): string {
-    return "🧹 User data has been anonymized or deleted according to the retention policy.";
+    return "🧹 Profile, reports and working data have been deleted or anonymized. Financial records may be retained without unnecessary personal fields according to accounting requirements and the retention policy.";
   },
   genericError(): string {
     return "⚠️ Could not process the request. Please try again later or contact support.";

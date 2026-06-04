@@ -1,6 +1,11 @@
 import { env } from "../../config/env.js";
+import { mapWithConcurrency } from "../../util/concurrency.js";
 import { reportPromptForMode, prompts } from "./prompts.js";
-import { buildChatCompletionBody, buildVisionUserContent, type ChatUserContent } from "./request.js";
+import {
+  buildChatCompletionBody,
+  buildVisionUserContent,
+  type ChatUserContent
+} from "./request.js";
 import type { ChatInput, LlmProvider, ReportInput, VisionInput } from "./types.js";
 
 type OpenRouterResponse = {
@@ -51,35 +56,40 @@ export class OpenRouterLlmProvider implements LlmProvider {
   constructor(private readonly apiKey = env.OPENROUTER_API_KEY) {}
 
   async analyzeVision(input: VisionInput) {
-    const batches = input.posts.slice(0, env.ANALYSIS_MAX_IMAGES_ANALYZED ?? 30);
-    const output = [];
-    for (const post of batches) {
+    const posts = input.posts.slice(0, env.ANALYSIS_MAX_IMAGES_ANALYZED ?? 30);
+    // Bounded concurrency: analyze up to VISION_BATCH_SIZE images at once rather
+    // than strictly one-by-one. Each post is wrapped so a single failure yields a
+    // "failed" item instead of rejecting the batch; result order is preserved.
+    return mapWithConcurrency(posts, env.VISION_BATCH_SIZE ?? 5, async (post) => {
       try {
         const content = await this.chatCompletion({
           model: env.MODEL_VISION,
           system: prompts.vision.system,
-          user: buildVisionUserContent({ postId: post.id, caption: post.caption, imageUrl: post.displayUrl }),
+          user: buildVisionUserContent({
+            postId: post.id,
+            caption: post.caption,
+            imageUrl: post.displayUrl
+          }),
           maxTokens: env.LLM_FINAL_OUTPUT_TOKEN_BUDGET ?? 4096
         });
-        output.push({
+        return {
           postId: post.id,
           status: "completed" as const,
           description: `[Image ID: ${post.id}] ${content.text}`,
           model: env.MODEL_VISION,
           promptVersion: prompts.vision.key
-        });
+        };
       } catch (error) {
-        output.push({
+        return {
           postId: post.id,
           status: "failed" as const,
           description: null,
           model: env.MODEL_VISION,
           promptVersion: prompts.vision.key,
           errorCode: error instanceof Error ? error.message : "VISION_FAILED"
-        });
+        };
       }
-    }
-    return output;
+    });
   }
 
   async generateReport(input: ReportInput) {
@@ -104,10 +114,20 @@ export class OpenRouterLlmProvider implements LlmProvider {
       user: `Language: ${input.language}\nReport context:\n${input.reportText.slice(0, env.LLM_CHAT_INPUT_TOKEN_BUDGET ?? 12000)}\n\nQuestion:\n${input.question}`,
       maxTokens: env.LLM_CHAT_OUTPUT_TOKEN_BUDGET ?? 2048
     });
-    return { text: content.text, model: env.MODEL_CHAT, tokensIn: content.tokensIn, tokensOut: content.tokensOut };
+    return {
+      text: content.text,
+      model: env.MODEL_CHAT,
+      tokensIn: content.tokensIn,
+      tokensOut: content.tokensOut
+    };
   }
 
-  private async chatCompletion(input: { model: string; system: string; user: ChatUserContent; maxTokens: number }) {
+  private async chatCompletion(input: {
+    model: string;
+    system: string;
+    user: ChatUserContent;
+    maxTokens: number;
+  }) {
     if (!this.apiKey) throw new Error("OPENROUTER_API_KEY_MISSING");
     const started = Date.now();
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {

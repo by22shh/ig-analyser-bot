@@ -1,37 +1,46 @@
 import { env } from "../../config/env.js";
-import type { FetchInstagramProfileInput, InstagramPost, InstagramProfile, InstagramProfileProvider } from "./types.js";
+import type {
+  FetchInstagramProfileInput,
+  InstagramPost,
+  InstagramProfile,
+  InstagramProfileProvider
+} from "./types.js";
 
 type ApifyRun = { id: string; status: string; defaultDatasetId?: string };
 
 export class MockInstagramProfileProvider implements InstagramProfileProvider {
   async fetchProfile(input: FetchInstagramProfileInput): Promise<InstagramProfile> {
     const now = Date.now();
-    const posts: InstagramPost[] = Array.from({ length: Math.min(input.postLimit, 8) }, (_, index) => ({
-      id: `mock_${index + 1}`,
-      type: index % 3 === 0 ? "Carousel" : "Image",
-      caption: [
-        "Building something useful with a small team and a lot of focus.",
-        "Travel notes, coffee, and a quiet reminder that consistency wins.",
-        "Client work, behind the scenes, and lessons from a launch."
-      ][index % 3],
-      hashtags: ["zreti", "growth", "work"].slice(0, (index % 3) + 1),
-      mentions: index % 2 === 0 ? ["partner_account"] : [],
-      likesCount: 250 + index * 37,
-      commentsCount: 12 + index * 3,
-      latestComments: [
-        { ownerUsername: "friend_one", text: "Great work" },
-        { ownerUsername: "partner_account", text: "This was a strong collaboration" }
-      ],
-      timestamp: new Date(now - index * 86400000 * 3).toISOString(),
-      displayUrl: "https://example.com/mock-image.jpg",
-      url: `https://www.instagram.com/p/mock${index + 1}/`,
-      location: index % 2 === 0 ? { name: "Dubai" } : undefined,
-      isPinned: index === 0,
-      productType: "feed",
-      musicInfo: index % 2 === 1 ? { songName: "Quiet Drive", artistName: "Mock Artist" } : undefined,
-      childPosts: [],
-      taggedUsers: index % 2 === 0 ? ["friend_one"] : []
-    }));
+    const posts: InstagramPost[] = Array.from(
+      { length: Math.min(input.postLimit, 8) },
+      (_, index) => ({
+        id: `mock_${index + 1}`,
+        type: index % 3 === 0 ? "Carousel" : "Image",
+        caption: [
+          "Building something useful with a small team and a lot of focus.",
+          "Travel notes, coffee, and a quiet reminder that consistency wins.",
+          "Client work, behind the scenes, and lessons from a launch."
+        ][index % 3],
+        hashtags: ["zreti", "growth", "work"].slice(0, (index % 3) + 1),
+        mentions: index % 2 === 0 ? ["partner_account"] : [],
+        likesCount: 250 + index * 37,
+        commentsCount: 12 + index * 3,
+        latestComments: [
+          { ownerUsername: "friend_one", text: "Great work" },
+          { ownerUsername: "partner_account", text: "This was a strong collaboration" }
+        ],
+        timestamp: new Date(now - index * 86400000 * 3).toISOString(),
+        displayUrl: "https://example.com/mock-image.jpg",
+        url: `https://www.instagram.com/p/mock${index + 1}/`,
+        location: index % 2 === 0 ? { name: "Dubai" } : undefined,
+        isPinned: index === 0,
+        productType: "feed",
+        musicInfo:
+          index % 2 === 1 ? { songName: "Quiet Drive", artistName: "Mock Artist" } : undefined,
+        childPosts: [],
+        taggedUsers: index % 2 === 0 ? ["friend_one"] : []
+      })
+    );
 
     return {
       username: input.username,
@@ -105,9 +114,12 @@ export class ApifyInstagramProfileProvider implements InstagramProfileProvider {
   }
 
   private async fetchDataset(datasetId: string): Promise<unknown[]> {
-    const response = await fetch(`https://api.apify.com/v2/datasets/${datasetId}/items?clean=true`, {
-      headers: { Authorization: `Bearer ${this.token}` }
-    });
+    const response = await fetch(
+      `https://api.apify.com/v2/datasets/${datasetId}/items?clean=true`,
+      {
+        headers: { Authorization: `Bearer ${this.token}` }
+      }
+    );
     if (!response.ok) throw new Error(`APIFY_DATASET_FAILED_${response.status}`);
     return (await response.json()) as unknown[];
   }
@@ -122,14 +134,23 @@ function num(value: unknown): number {
 }
 
 function stringArray(value: unknown): string[] {
-  return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : [];
 }
 
-export function mapApifyItems(username: string, items: unknown[], postLimit: number, datasetId?: string): InstagramProfile {
+export function mapApifyItems(
+  username: string,
+  items: unknown[],
+  postLimit: number,
+  datasetId?: string
+): InstagramProfile {
   if (!items.length) throw new Error("PROFILE_NOT_FOUND_OR_PRIVATE");
   const records = items as Array<Record<string, unknown>>;
   const first = records[0] ?? {};
-  const owner = (first.ownerUsername ?? first.username ?? first.ownerFullName) as string | undefined;
+  const owner = (first.ownerUsername ?? first.username ?? first.ownerFullName) as
+    | string
+    | undefined;
   if (owner && owner.toLowerCase() !== username.toLowerCase()) {
     throw new Error("IDENTITY_MISMATCH");
   }
@@ -156,10 +177,16 @@ export function mapApifyItems(username: string, items: unknown[], postLimit: num
         url: str(item.url),
         videoViewCount: num(item.videoViewCount) || undefined,
         videoDuration: num(item.videoDuration) || undefined,
-        location: item.location && typeof item.location === "object" ? (item.location as Record<string, unknown>) : undefined,
+        location:
+          item.location && typeof item.location === "object"
+            ? (item.location as Record<string, unknown>)
+            : undefined,
         isPinned: Boolean(item.isPinned),
         productType: str(item.productType),
-        musicInfo: item.musicInfo && typeof item.musicInfo === "object" ? (item.musicInfo as Record<string, unknown>) : undefined,
+        musicInfo:
+          item.musicInfo && typeof item.musicInfo === "object"
+            ? (item.musicInfo as Record<string, unknown>)
+            : undefined,
         childPosts: stringArray(item.childPosts),
         taggedUsers: stringArray(item.taggedUsers)
       };
@@ -167,7 +194,8 @@ export function mapApifyItems(username: string, items: unknown[], postLimit: num
     .sort((a, b) => Date.parse(b.timestamp ?? "0") - Date.parse(a.timestamp ?? "0"))
     .slice(0, postLimit);
 
-  const profileSource = ((first.owner ?? first.ownerData ?? first) as Record<string, unknown>) || {};
+  const profileSource =
+    ((first.owner ?? first.ownerData ?? first) as Record<string, unknown>) || {};
   return {
     username,
     fullName: str(profileSource.fullName ?? first.ownerFullName),

@@ -24,7 +24,12 @@ export type YooKassaPaymentView = {
 export interface YooKassaAdapter {
   createPayment(input: CreateYooKassaPaymentInput): Promise<YooKassaPaymentView>;
   getPayment(paymentId: string): Promise<YooKassaPaymentView>;
-  createRefund(input: { paymentId: string; amountMinor: number; idempotencyKey: string; reason: string }): Promise<{ id: string; status: string; raw?: unknown }>;
+  createRefund(input: {
+    paymentId: string;
+    amountMinor: number;
+    idempotencyKey: string;
+    reason: string;
+  }): Promise<{ id: string; status: string; raw?: unknown }>;
 }
 
 export class MockYooKassaAdapter implements YooKassaAdapter {
@@ -56,7 +61,10 @@ export class MockYooKassaAdapter implements YooKassaAdapter {
     };
   }
 
-  async createRefund(input: { paymentId: string; idempotencyKey: string }): Promise<{ id: string; status: string; raw?: unknown }> {
+  async createRefund(input: {
+    paymentId: string;
+    idempotencyKey: string;
+  }): Promise<{ id: string; status: string; raw?: unknown }> {
     return { id: `mock_refund_${input.idempotencyKey}`, status: "succeeded", raw: { mock: true } };
   }
 }
@@ -73,7 +81,9 @@ export class RealYooKassaAdapter implements YooKassaAdapter {
     if (env.YOOKASSA_USE_RECEIPTS && input.email) {
       payload.receipt = {
         customer: { email: input.email },
-        ...(env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE ? { tax_system_code: Number(env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE) } : {}),
+        ...(env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE
+          ? { tax_system_code: Number(env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE) }
+          : {}),
         items: [
           {
             description: input.description.slice(0, 120),
@@ -109,7 +119,12 @@ export class RealYooKassaAdapter implements YooKassaAdapter {
     return mapPayment(await response.json());
   }
 
-  async createRefund(input: { paymentId: string; amountMinor: number; idempotencyKey: string; reason: string }) {
+  async createRefund(input: {
+    paymentId: string;
+    amountMinor: number;
+    idempotencyKey: string;
+    reason: string;
+  }) {
     const response = await fetch(`${env.YOOKASSA_API_BASE_URL}/refunds`, {
       method: "POST",
       headers: {

@@ -359,4 +359,3 @@ Timeouts:
 8. Текущий сайт не имеет ролей, тарифов, rate limits и audit trail.
 9. Нет backend-level retries/circuit breakers по внешним API, кроме простых retry в Apify/OpenRouter.
 10. Нет централизованной observability.
-

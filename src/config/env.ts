@@ -1,26 +1,25 @@
 import "dotenv/config";
 import { z } from "zod";
 
-const boolFromString = z
-  .union([z.boolean(), z.string(), z.undefined()])
-  .transform((value) => {
-    if (typeof value === "boolean") return value;
-    if (value === undefined || value === "") return false;
-    return ["1", "true", "yes", "on"].includes(value.toLowerCase());
-  });
+const boolFromString = z.union([z.boolean(), z.string(), z.undefined()]).transform((value) => {
+  if (typeof value === "boolean") return value;
+  if (value === undefined || value === "") return false;
+  return ["1", "true", "yes", "on"].includes(value.toLowerCase());
+});
 
 const optionalNumber = (fallback?: number) =>
-  z
-    .union([z.string(), z.number(), z.undefined()])
-    .transform((value) => {
-      if (value === undefined || value === "") return fallback;
-      const parsed = Number(value);
-      if (!Number.isFinite(parsed)) return fallback;
-      return parsed;
-    });
+  z.union([z.string(), z.number(), z.undefined()]).transform((value) => {
+    if (value === undefined || value === "") return fallback;
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) return fallback;
+    return parsed;
+  });
 
 const optionalString = z.string().optional().default("");
-const optionalUrl = z.union([z.literal(""), z.string().url()]).optional().default("");
+const optionalUrl = z
+  .union([z.literal(""), z.string().url()])
+  .optional()
+  .default("");
 
 const schema = z.object({
   APP_ENV: z.enum(["development", "test", "staging", "production"]).default("development"),
@@ -64,7 +63,6 @@ const schema = z.object({
   TELEGRAM_STARS_TEST_MODE: boolFromString.default(true),
   TELEGRAM_STARS_DEFAULT_CURRENCY: z.literal("XTR").default("XTR"),
   TELEGRAM_STARS_REFUNDS_ENABLED: boolFromString.default(true),
-  TELEGRAM_STARS_RECONCILIATION_ENABLED: boolFromString.default(false),
 
   ECON_USD_TO_RUB_BUFFER: optionalNumber(90),
   ECON_PAYMENT_FEE_RESERVE: optionalNumber(0.2),
@@ -117,6 +115,8 @@ const schema = z.object({
   MODEL_CHAT: z.string().default("google/gemini-2.5-flash")
 });
 
+type ParsedEnv = z.infer<typeof schema>;
+
 const parsed = schema.safeParse(process.env);
 
 if (!parsed.success) {
@@ -124,11 +124,14 @@ if (!parsed.success) {
   throw new Error("Invalid environment configuration");
 }
 
+assertProductionConfiguration(parsed.data);
+
 const publicBaseUrl = parsed.data.APP_BASE_URL.replace(/\/+$/, "");
 
 export const env = {
   ...parsed.data,
-  YOOKASSA_RETURN_URL: parsed.data.YOOKASSA_RETURN_URL || `${publicBaseUrl}/payments/yookassa/return`
+  YOOKASSA_RETURN_URL:
+    parsed.data.YOOKASSA_RETURN_URL || `${publicBaseUrl}/payments/yookassa/return`
 };
 
 export type AppEnv = typeof env;
@@ -146,3 +149,125 @@ export const providerMode = {
   yookassa: env.YOOKASSA_SHOP_ID && env.YOOKASSA_SECRET_KEY ? "real" : "mock",
   storage: env.S3_BUCKET && env.S3_ACCESS_KEY_ID && env.S3_SECRET_ACCESS_KEY ? "s3" : "local"
 } as const;
+
+function assertProductionConfiguration(data: ParsedEnv) {
+  if (data.APP_ENV !== "production") return;
+
+  const errors: string[] = [];
+  const requireString = (
+    key: keyof ParsedEnv,
+    message = `${String(key)} is required in production`
+  ) => {
+    if (typeof data[key] !== "string" || !(data[key] as string).trim()) errors.push(message);
+  };
+  const requireNumber = (
+    key: keyof ParsedEnv,
+    message = `${String(key)} is required in production`
+  ) => {
+    if (
+      typeof data[key] !== "number" ||
+      !Number.isFinite(data[key] as number) ||
+      (data[key] as number) <= 0
+    )
+      errors.push(message);
+  };
+  const requireUrl = (key: keyof ParsedEnv) => {
+    requireString(key);
+    const value = data[key];
+    if (typeof value === "string" && value.trim()) {
+      try {
+        new URL(value);
+      } catch {
+        errors.push(`${String(key)} must be a valid URL in production`);
+      }
+    }
+  };
+  const requireConnectionUrl = (key: keyof ParsedEnv) => {
+    requireString(key);
+    const value = data[key];
+    if (typeof value !== "string" || !value.trim()) return;
+    try {
+      const url = new URL(value);
+      if (isLocalhost(url.hostname)) {
+        errors.push(`${String(key)} must not point to localhost in production`);
+      }
+    } catch {
+      errors.push(`${String(key)} must be a valid connection URL in production`);
+    }
+  };
+  const forbidLocalhostUrl = (key: keyof ParsedEnv) => {
+    const value = data[key];
+    if (typeof value !== "string" || !value.trim()) return;
+    try {
+      const url = new URL(value);
+      if (isLocalhost(url.hostname)) {
+        errors.push(`${String(key)} must not point to localhost in production`);
+      }
+    } catch {
+      // requireUrl/requireConnectionUrl reports the invalid URL.
+    }
+  };
+
+  requireUrl("APP_BASE_URL");
+  forbidLocalhostUrl("APP_BASE_URL");
+  requireConnectionUrl("DATABASE_URL");
+  requireConnectionUrl("DIRECT_URL");
+  requireConnectionUrl("REDIS_URL");
+
+  requireString("TELEGRAM_BOT_TOKEN");
+  requireUrl("TELEGRAM_WEBHOOK_URL");
+  requireString("TELEGRAM_WEBHOOK_SECRET");
+  if (data.TELEGRAM_WEBHOOK_SECRET && data.TELEGRAM_WEBHOOK_SECRET.length < 16) {
+    errors.push("TELEGRAM_WEBHOOK_SECRET must be at least 16 characters in production");
+  }
+  if (data.TELEGRAM_USE_LONG_POLLING) {
+    errors.push("TELEGRAM_USE_LONG_POLLING must be false in production webhook mode");
+  }
+
+  requireString("APIFY_TOKEN");
+  requireString("OPENROUTER_API_KEY");
+  requireString("S3_BUCKET");
+  requireString("S3_ACCESS_KEY_ID");
+  requireString("S3_SECRET_ACCESS_KEY");
+
+  requireNumber("ECON_STANDARD_REPORT_COST_P75_RUB");
+  requireNumber("ECON_CHAT_MESSAGE_COST_P75_RUB");
+  requireNumber("ECON_APIFY_PROFILE_COST_RUB");
+  requireNumber("ECON_SUPPORT_RESERVE_RUB");
+
+  if (data.FEATURE_YOOKASSA_PAYMENTS) {
+    requireString("YOOKASSA_SHOP_ID");
+    requireString("YOOKASSA_SECRET_KEY");
+    requireString("YOOKASSA_WEBHOOK_ALLOWED_IPS");
+  }
+
+  if (data.FEATURE_PHOTO_SEARCH) {
+    requireString("FACECHECK_API_TOKEN");
+    requireNumber("ECON_PHOTO_SEARCH_COST_P75_RUB");
+    requireNumber("ECON_FACECHECK_SEARCH_COST_RUB");
+    requireNumber("FACECHECK_MAX_COST_RUB");
+    // The declared cost cap must actually bound the budgeted per-search cost,
+    // otherwise FACECHECK_MAX_COST_RUB is required but constrains nothing.
+    if (
+      typeof data.ECON_FACECHECK_SEARCH_COST_RUB === "number" &&
+      typeof data.FACECHECK_MAX_COST_RUB === "number" &&
+      data.ECON_FACECHECK_SEARCH_COST_RUB > data.FACECHECK_MAX_COST_RUB
+    ) {
+      errors.push("ECON_FACECHECK_SEARCH_COST_RUB must not exceed FACECHECK_MAX_COST_RUB");
+    }
+    if (data.FACECHECK_TESTING_MODE) {
+      errors.push(
+        "FACECHECK_TESTING_MODE must be false when photo search is enabled in production"
+      );
+    }
+  }
+
+  if (errors.length) {
+    console.error({ productionConfigErrors: errors });
+    throw new Error("Unsafe production environment configuration");
+  }
+}
+
+function isLocalhost(hostname: string): boolean {
+  return ["localhost", "127.0.0.1", "::1", "[::1]"].includes(hostname.toLowerCase());
+}

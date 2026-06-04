@@ -30,7 +30,10 @@ export function registerStartHandlers(bot: import("grammy").Bot<MyContext>) {
 
   bot.callbackQuery(CB.ACCEPT_RULES, async (ctx) => {
     if (!ctx.user) return;
-    ctx.user = await ctx.services.users.acceptConsent(ctx.user.id, ctx.user.language as "ru" | "en");
+    ctx.user = await ctx.services.users.acceptConsent(
+      ctx.user.id,
+      ctx.user.language as "ru" | "en"
+    );
     await ctx.answerCallbackQuery();
     await renderMainMenu(ctx);
   });

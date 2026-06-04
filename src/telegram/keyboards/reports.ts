@@ -23,9 +23,14 @@ export function sectionListKeyboard(
 ): InlineKeyboard {
   const kb = new InlineKeyboard();
   for (const section of sections) {
-    kb.text(`${section.position}. ${section.title.slice(0, 28)}`, `${CB.REPORT_SECTION}:${section.id}`).row();
+    kb.text(
+      `${section.position}. ${section.title.slice(0, 28)}`,
+      `${CB.REPORT_SECTION}:${section.id}`
+    ).row();
   }
-  return kb.text(messages.buttons.pdf, `${CB.REPORT_PDF}:${reportId}`).text(messages.buttons.menu, CB.BACK_MAIN);
+  return kb
+    .text(messages.buttons.pdf, `${CB.REPORT_PDF}:${reportId}`)
+    .text(messages.buttons.menu, CB.BACK_MAIN);
 }
 
 export function reportChatKeyboard(messages: LocaleMessages, reportId: string): InlineKeyboard {

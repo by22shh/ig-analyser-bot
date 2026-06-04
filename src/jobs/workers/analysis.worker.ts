@@ -10,6 +10,7 @@ import type { InstagramProfileProvider } from "../../modules/instagram/types.js"
 import type { LlmProvider } from "../../modules/llm/types.js";
 import { buildStrategicReport } from "../../modules/analysis/report-builder.js";
 import { ReportService } from "../../modules/reports/report.service.js";
+import { recordUsage } from "../../modules/observability/usage.js";
 import { t } from "../../telegram/locales/index.js";
 import { reportActionsKeyboard } from "../../telegram/keyboards/reports.js";
 import type { MyContext } from "../../telegram/context.js";
@@ -38,32 +39,58 @@ export function startAnalysisWorker(input: {
       // (paid) pipeline or capture again.
       if (row.status === "completed") return;
 
-      const finalAttempt = isFinalAttempt({ attemptsMade: job.attemptsMade, attempts: job.opts.attempts });
+      const finalAttempt = isFinalAttempt({
+        attemptsMade: job.attemptsMade,
+        attempts: job.opts.attempts
+      });
 
       try {
         // Clear any partial state left by a previous failed attempt so unique
         // (analysisJobId) constraints on the snapshot/report do not break retries.
-        await input.prisma.report.deleteMany({ where: { analysisJobId: row.id } });
-        await input.prisma.instagramProfileSnapshot.deleteMany({ where: { analysisJobId: row.id } });
+        await input.reportService.cleanupByAnalysisJob(row.id);
+        await input.prisma.visionAnalysisItem.deleteMany({ where: { analysisJobId: row.id } });
+        await input.prisma.instagramProfileSnapshot.deleteMany({
+          where: { analysisJobId: row.id }
+        });
 
         await input.prisma.analysisJob.update({
           where: { id: row.id },
           data: { status: "fetching_profile", stage: "fetching_profile", startedAt: new Date() }
         });
-        await notify(input.bot, Number(row.telegramChatId), messages.progress(messages.progressStages.fetchingProfile, 1, 4));
+        await notify(
+          input.bot,
+          Number(row.telegramChatId),
+          messages.progress(messages.progressStages.fetchingProfile, 1, 4)
+        );
 
         const profile = await input.instagram.fetchProfile({
           username: row.targetUsername,
           postLimit: env.ANALYSIS_POST_LIMIT ?? 30,
           includeParentData: true
         });
-        await persistProfile(input.prisma, row.id, profile);
+        await recordUsage(input.prisma, {
+          userId: row.userId,
+          analysisJobId: row.id,
+          provider: env.APIFY_TOKEN ? "apify" : "mock_instagram",
+          operation: "fetch_profile",
+          status: "success"
+        });
+        const postSnapshotIds = await persistProfile(input.prisma, row.id, profile);
 
         await input.prisma.analysisJob.update({
           where: { id: row.id },
-          data: { status: "analyzing_images", stage: "analyzing_images", progressCurrent: 2, progressTotal: 4 }
+          data: {
+            status: "analyzing_images",
+            stage: "analyzing_images",
+            progressCurrent: 2,
+            progressTotal: 4
+          }
         });
-        await notify(input.bot, Number(row.telegramChatId), messages.progress(messages.progressStages.analyzingSignals, 2, 4));
+        await notify(
+          input.bot,
+          Number(row.telegramChatId),
+          messages.progress(messages.progressStages.analyzingSignals, 2, 4)
+        );
 
         const strategicReport = await buildStrategicReport({
           mode: row.mode as never,
@@ -73,26 +100,66 @@ export function startAnalysisWorker(input: {
           targetPosition: row.targetPosition ?? undefined,
           goal: row.goal ?? undefined
         });
+        await persistVision(input.prisma, row.id, strategicReport.vision, postSnapshotIds);
+        await recordUsage(input.prisma, {
+          userId: row.userId,
+          analysisJobId: row.id,
+          provider: env.OPENROUTER_API_KEY ? "openrouter" : "mock_llm",
+          operation: "generate_report",
+          model: strategicReport.model,
+          status: "success"
+        });
 
         await input.prisma.analysisJob.update({
           where: { id: row.id },
-          data: { status: "generating_exports", stage: "generating_exports", progressCurrent: 3, progressTotal: 4 }
+          data: {
+            status: "generating_exports",
+            stage: "generating_exports",
+            progressCurrent: 3,
+            progressTotal: 4
+          }
         });
-        await notify(input.bot, Number(row.telegramChatId), messages.progress(messages.progressStages.generatingExports, 3, 4));
+        await notify(
+          input.bot,
+          Number(row.telegramChatId),
+          messages.progress(messages.progressStages.generatingExports, 3, 4)
+        );
 
-        const retentionDays = row.user.settings?.reportRetentionDays ?? env.REPORT_RETENTION_DAYS ?? 30;
-        const report = await input.reportService.persist(row.id, row.userId, strategicReport, retentionDays);
-        await input.reportService.createArtifacts(report.id, strategicReport, report.expiresAt ?? new Date(Date.now() + retentionDays * 86400000));
+        const retentionDays =
+          row.user.settings?.reportRetentionDays ?? env.REPORT_RETENTION_DAYS ?? 30;
+        const report = await input.reportService.persist(
+          row.id,
+          row.userId,
+          strategicReport,
+          retentionDays
+        );
+        await input.reportService.createArtifacts(
+          report.id,
+          strategicReport,
+          report.expiresAt ?? new Date(Date.now() + retentionDays * 86400000)
+        );
+        // Capture credits and mark the job completed in the same transaction:
+        // a crash between the two would otherwise leave a captured job that is
+        // not "completed", so a retry would re-run the paid pipeline and the
+        // second capture would fail with RESERVE_NOT_FOUND.
         await credits.captureReserve({
           userId: row.userId,
           analysisJobId: row.id,
           amountUnits: row.costCreditUnits,
-          metadata: { mode: row.mode, username: row.targetUsername }
-        });
-
-        await input.prisma.analysisJob.update({
-          where: { id: row.id },
-          data: { status: "completed", stage: "completed", progressCurrent: 4, progressTotal: 4, progressPercent: 100, finishedAt: new Date() }
+          metadata: { mode: row.mode, username: row.targetUsername },
+          within: async (tx) => {
+            await tx.analysisJob.update({
+              where: { id: row.id },
+              data: {
+                status: "completed",
+                stage: "completed",
+                progressCurrent: 4,
+                progressTotal: 4,
+                progressPercent: 100,
+                finishedAt: new Date()
+              }
+            });
+          }
         });
         // Work is done and credits captured; a delivery hiccup must not fail the
         // job (a retry would re-bill Apify/OpenRouter and re-run everything).
@@ -113,6 +180,14 @@ export function startAnalysisWorker(input: {
         }
       } catch (error) {
         log.error({ error, jobId: row.id, finalAttempt }, "analysis_failed");
+        await recordUsage(input.prisma, {
+          userId: row.userId,
+          analysisJobId: row.id,
+          provider: "analysis_pipeline",
+          operation: "analysis",
+          status: "failed",
+          errorCode: error instanceof Error ? error.message : "ANALYSIS_FAILED"
+        }).catch(() => undefined);
         if (!finalAttempt) {
           // More retries remain: keep the reserve intact so a successful retry can
           // capture it, and mark the job as retrying.
@@ -127,6 +202,7 @@ export function startAnalysisWorker(input: {
           });
           throw error;
         }
+        await input.reportService.cleanupByAnalysisJob(row.id).catch(() => undefined);
         await credits.releaseReserve({
           userId: row.userId,
           analysisJobId: row.id,
@@ -143,7 +219,9 @@ export function startAnalysisWorker(input: {
             finishedAt: new Date()
           }
         });
-        await notify(input.bot, Number(row.telegramChatId), messages.genericError()).catch(() => undefined);
+        await notify(input.bot, Number(row.telegramChatId), messages.genericError()).catch(
+          () => undefined
+        );
         throw error;
       }
     },
@@ -151,7 +229,12 @@ export function startAnalysisWorker(input: {
   );
 }
 
-async function notify(bot: Bot<MyContext> | undefined, chatId: number, text: string, replyMarkup?: any) {
+async function notify(
+  bot: Bot<MyContext> | undefined,
+  chatId: number,
+  text: string,
+  replyMarkup?: any
+) {
   if (!bot) return;
   await bot.api.sendMessage(chatId, text, {
     parse_mode: "HTML",
@@ -160,7 +243,11 @@ async function notify(bot: Bot<MyContext> | undefined, chatId: number, text: str
   });
 }
 
-async function persistProfile(prisma: PrismaClient, analysisJobId: string, profile: Awaited<ReturnType<InstagramProfileProvider["fetchProfile"]>>) {
+async function persistProfile(
+  prisma: PrismaClient,
+  analysisJobId: string,
+  profile: Awaited<ReturnType<InstagramProfileProvider["fetchProfile"]>>
+) {
   const snapshot = await prisma.instagramProfileSnapshot.create({
     data: {
       analysisJobId,
@@ -202,6 +289,32 @@ async function persistProfile(prisma: PrismaClient, analysisJobId: string, profi
       childPosts: post.childPosts,
       taggedUsers: post.taggedUsers,
       sortOrder: index
+    }))
+  });
+  const posts = await prisma.instagramPostSnapshot.findMany({
+    where: { profileSnapshotId: snapshot.id },
+    select: { id: true, postId: true }
+  });
+  return new Map(posts.map((post) => [post.postId, post.id]));
+}
+
+async function persistVision(
+  prisma: PrismaClient,
+  analysisJobId: string,
+  vision: Awaited<ReturnType<LlmProvider["analyzeVision"]>>,
+  postSnapshotIds: Map<string, string>
+) {
+  if (!vision.length) return;
+  await prisma.visionAnalysisItem.createMany({
+    data: vision.map((item) => ({
+      analysisJobId,
+      postSnapshotId: postSnapshotIds.get(item.postId),
+      postId: item.postId,
+      status: item.status,
+      description: item.description,
+      model: item.model,
+      promptVersion: item.promptVersion,
+      errorCode: item.errorCode
     }))
   });
 }

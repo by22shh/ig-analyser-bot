@@ -22,6 +22,7 @@ export const ru = {
     menu: "🏠 В меню",
     accept: "✅ Принимаю правила",
     run: "▶️ Запустить",
+    confirmLawfulBasis: "✅ Подтверждаю lawful basis",
     stars: "⭐ Telegram Stars",
     yookassa: "💳 Банковская карта / СБП",
     pay: "Оплатить",
@@ -30,7 +31,8 @@ export const ru = {
     markdown: "📝 Markdown",
     chat: "💬 Задать вопрос",
     sources: "🔗 Источники",
-    repeat: "🔁 Повторить анализ"
+    repeat: "🔁 Повторить анализ",
+    confirmDelete: "🗑 Да, удалить навсегда"
   },
   modeTitle(mode: AnalysisMode): string {
     const titles: Record<AnalysisMode, string> = {
@@ -49,7 +51,13 @@ export const ru = {
       "Выберите язык, затем нажмите «Принимаю правила»."
     );
   },
-  welcome(input: { totalUnits: number; purchasedUnits: number; grantedUnits: number; language: string; photoSearchEnabled?: boolean }): string {
+  welcome(input: {
+    totalUnits: number;
+    purchasedUnits: number;
+    grantedUnits: number;
+    language: string;
+    photoSearchEnabled?: boolean;
+  }): string {
     const photoLine = input.photoSearchEnabled ? "• поиск возможного профиля по фото\n" : "";
     return (
       "👁 <b>ZRETI</b> — стратегический анализ публичного Instagram-профиля.\n\n" +
@@ -97,7 +105,12 @@ export const ru = {
       `🧹 Хранение отчетов: <b>${input.retentionDays} дн.</b>`
     );
   },
-  balance(input: { totalUnits: number; purchasedUnits: number; grantedUnits: number; photoSearchEnabled?: boolean }): string {
+  balance(input: {
+    totalUnits: number;
+    purchasedUnits: number;
+    grantedUnits: number;
+    photoSearchEnabled?: boolean;
+  }): string {
     const photoLine = input.photoSearchEnabled ? "\nПоиск по фото: <b>1</b> 💎" : "";
     return (
       `💎 <b>Ваши кредиты: ${formatCredits(input.totalUnits)}</b>\n` +
@@ -135,6 +148,15 @@ export const ru = {
   osintRestricted(): string {
     return "OSINT / Compliance доступен только пользователям с ролью compliance/admin и отдельным подтверждением lawful basis.";
   },
+  modeUnavailable(): string {
+    return "Этот режим сейчас недоступен. Вернитесь в меню и выберите доступный режим.";
+  },
+  askOsintLawfulBasis(): string {
+    return (
+      "⚖️ <b>Подтверждение lawful basis</b>\n\n" +
+      "OSINT / Compliance можно использовать только для законной проверки публичных фактов. Подтвердите, что у вас есть правовое основание, вы не будете использовать отчет для давления, преследования, доксинга или обхода приватности, а выводы будут проверяться как гипотезы."
+    );
+  },
   confirmAnalysis(input: { username: string; mode: AnalysisMode; costUnits: number }): string {
     return (
       "✅ <b>Проверьте задачу</b>\n\n" +
@@ -147,11 +169,22 @@ export const ru = {
   jobQueued(username: string): string {
     return `⏳ Задача по <b>@${escapeHtml(username)}</b> принята. Я пришлю прогресс и отчет сюда.`;
   },
+  jobAlreadyQueued(username: string): string {
+    return `⏳ Задача по <b>@${escapeHtml(username)}</b> уже поставлена в очередь. Я пришлю прогресс и отчет сюда.`;
+  },
+  staleConfirmation(): string {
+    return "Это подтверждение устарело. Откройте анализ заново и подтвердите актуальную задачу.";
+  },
   progress(stage: string, current: number, total: number): string {
     const suffix = total > 0 ? ` ${current}/${total}` : "";
     return `⏳ <b>${escapeHtml(stage)}</b>${suffix}`;
   },
-  reportReady(input: { username: string; mode: AnalysisMode; metrics: ReportMetrics; summary: ReportSummaryView }): string {
+  reportReady(input: {
+    username: string;
+    mode: AnalysisMode;
+    metrics: ReportMetrics;
+    summary: ReportSummaryView;
+  }): string {
     const m = input.metrics;
     return (
       `✅ <b>Отчет по @${escapeHtml(input.username)} готов</b>\n` +
@@ -173,12 +206,18 @@ export const ru = {
   section(title: string, content: string): string {
     return `📌 <b>${escapeHtml(title)}</b>\n\n${escapeHtml(content)}`;
   },
-  reportSources(input: { username: string; sources: Array<{ label: string; url?: string }> }): string {
+  reportSources(input: {
+    username: string;
+    sources: Array<{ label: string; url?: string }>;
+  }): string {
     const items = input.sources.slice(0, 20).map((source, index) => {
       const label = escapeHtml(source.label || `Источник ${index + 1}`);
-      return source.url ? `${index + 1}. <a href="${escapeHtml(source.url)}">${label}</a>` : `${index + 1}. ${label}`;
+      return source.url
+        ? `${index + 1}. <a href="${escapeHtml(source.url)}">${label}</a>`
+        : `${index + 1}. ${label}`;
     });
-    const suffix = input.sources.length > 20 ? `\n\nПоказаны первые 20 из ${input.sources.length}.` : "";
+    const suffix =
+      input.sources.length > 20 ? `\n\nПоказаны первые 20 из ${input.sources.length}.` : "";
     return items.length
       ? `🔗 <b>Источники отчета @${escapeHtml(input.username)}</b>\n\n${items.join("\n")}${suffix}`
       : `🔗 <b>Источники отчета @${escapeHtml(input.username)}</b>\n\nВ этом отчете источники не найдены.`;
@@ -314,8 +353,10 @@ export const ru = {
     sincerityLabel: "Проверить искренность",
     portraitLabel: "Коммуникационный портрет",
     introQuestion: "Как лучше начать разговор с этим человеком?",
-    sincerityQuestion: "Какие сигналы искренности или постановочности можно осторожно проверить по отчету?",
-    portraitQuestion: "Сформулируй осторожные гипотезы о коммуникационном стиле по публичным данным.",
+    sincerityQuestion:
+      "Какие сигналы искренности или постановочности можно осторожно проверить по отчету?",
+    portraitQuestion:
+      "Сформулируй осторожные гипотезы о коммуникационном стиле по публичным данным.",
     fallbackQuestion: "Что важно проверить по отчету?"
   },
   progressStages: {
@@ -343,8 +384,12 @@ export const ru = {
   },
   help(supportUrl: string, termsUrl: string, privacyUrl: string): string {
     const support = supportUrl ? `\n🛟 <a href="${escapeHtml(supportUrl)}">Поддержка</a>` : "";
-    const terms = termsUrl ? `\n☑️ <a href="${escapeHtml(termsUrl)}">Пользовательское соглашение</a>` : "";
-    const privacy = privacyUrl ? `\n🔒 <a href="${escapeHtml(privacyUrl)}">Политика конфиденциальности</a>` : "";
+    const terms = termsUrl
+      ? `\n☑️ <a href="${escapeHtml(termsUrl)}">Пользовательское соглашение</a>`
+      : "";
+    const privacy = privacyUrl
+      ? `\n🔒 <a href="${escapeHtml(privacyUrl)}">Политика конфиденциальности</a>`
+      : "";
     return (
       "ℹ️ <b>Помощь</b>\n\n" +
       "1. Нажмите «Анализ профиля» и пришлите публичный username.\n" +
@@ -359,8 +404,11 @@ export const ru = {
   cancelled(): string {
     return "✖️ Отменено. Возвращаю в меню.";
   },
+  deleteMeWarning(): string {
+    return "⚠️ <b>Удаление аккаунта</b>\n\nЭто действие необратимо: профиль, все отчеты и рабочие данные будут удалены или анонимизированы, а оставшиеся кредиты сгорят. Финансовые записи сохраняются согласно требованиям учета.\n\nПродолжить?";
+  },
   deleteMeDone(): string {
-    return "🧹 Данные пользователя анонимизированы или удалены согласно политике хранения.";
+    return "🧹 Профиль, отчеты и рабочие данные удалены или анонимизированы. Финансовые записи могут храниться без лишних персональных полей согласно требованиям учета и политике хранения.";
   },
   genericError(): string {
     return "⚠️ Не удалось обработать запрос. Попробуйте позже или напишите в поддержку.";

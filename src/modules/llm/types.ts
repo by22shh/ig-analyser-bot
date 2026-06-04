@@ -25,6 +25,10 @@ export type ChatInput = {
 
 export interface LlmProvider {
   analyzeVision(input: VisionInput): Promise<VisionAnalysisItemView[]>;
-  generateReport(input: ReportInput): Promise<{ rawText: string; model: string; promptVersion: string }>;
-  chat(input: ChatInput): Promise<{ text: string; model: string; tokensIn?: number; tokensOut?: number }>;
+  generateReport(
+    input: ReportInput
+  ): Promise<{ rawText: string; model: string; promptVersion: string }>;
+  chat(
+    input: ChatInput
+  ): Promise<{ text: string; model: string; tokensIn?: number; tokensOut?: number }>;
 }

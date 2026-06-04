@@ -13,6 +13,9 @@ if (env.TELEGRAM_USE_LONG_POLLING) {
   bot.start();
   logger.info("telegram_long_polling_started");
 } else if (env.TELEGRAM_WEBHOOK_URL && env.TELEGRAM_BOT_TOKEN) {
+  // Required before handleUpdate() can run in webhook mode: grammy throws
+  // "Bot not initialized!" otherwise. (Long polling inits inside bot.start().)
+  await bot.init();
   await bot.api.setWebhook(env.TELEGRAM_WEBHOOK_URL, {
     ...(env.TELEGRAM_WEBHOOK_SECRET ? { secret_token: env.TELEGRAM_WEBHOOK_SECRET } : {})
   });
@@ -22,3 +25,23 @@ if (env.TELEGRAM_USE_LONG_POLLING) {
 const port = env.PORT ?? 3000;
 await app.listen({ port, host: "0.0.0.0" });
 logger.info({ port }, "server_started");
+
+let shuttingDown = false;
+async function shutdown(signal: string) {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  logger.info({ signal }, "server_shutting_down");
+  try {
+    if (env.TELEGRAM_USE_LONG_POLLING) await bot.stop();
+    await app.close();
+    await services.prisma.$disconnect();
+  } catch (error) {
+    logger.error({ error }, "server_shutdown_error");
+  } finally {
+    logger.info("server_shutdown_complete");
+    process.exit(0);
+  }
+}
+
+process.on("SIGTERM", () => void shutdown("SIGTERM"));
+process.on("SIGINT", () => void shutdown("SIGINT"));

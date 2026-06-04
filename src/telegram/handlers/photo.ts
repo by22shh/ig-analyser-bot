@@ -19,7 +19,13 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
     if (!ctx.user) return;
     await ctx.services.wizard.set(ctx.user.id, "waiting_photo");
     await ctx.answerCallbackQuery();
-    await sendHtml(ctx, t(ctx.user.language).photoAsk(), new InlineKeyboard().text(t(ctx.user.language).buttons.cancel, CB.CANCEL).text(t(ctx.user.language).buttons.menu, CB.BACK_MAIN));
+    await sendHtml(
+      ctx,
+      t(ctx.user.language).photoAsk(),
+      new InlineKeyboard()
+        .text(t(ctx.user.language).buttons.cancel, CB.CANCEL)
+        .text(t(ctx.user.language).buttons.menu, CB.BACK_MAIN)
+    );
   });
   bot.on(["message:photo", "message:document"], async (ctx, next) => {
     if (!ctx.user) {
@@ -48,6 +54,7 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
     try {
       await ctx.services.photoSearch.createJob({
         userId: ctx.user.id,
+        chatId: ctx.chat?.id,
         telegramFileId: fileId,
         telegramFileUniqueId: fileUniqueId,
         mimeType,
@@ -55,7 +62,11 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
       });
     } catch (error) {
       if (error instanceof InsufficientCreditsError) {
-        await sendHtml(ctx, t(ctx.user.language).insufficientCredits(error), paymentMethodsKeyboard(t(ctx.user.language)));
+        await sendHtml(
+          ctx,
+          t(ctx.user.language).insufficientCredits(error),
+          paymentMethodsKeyboard(t(ctx.user.language))
+        );
         return;
       }
       throw error;
@@ -67,7 +78,11 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
     if (!ctx.user || !ctx.match?.[1]) return;
     await ctx.services.wizard.set(ctx.user.id, "selecting_mode", { username: ctx.match[1] });
     await ctx.answerCallbackQuery();
-    await sendHtml(ctx, t(ctx.user.language).chooseMode(ctx.match[1]), modeKeyboard(t(ctx.user.language), ctx.services.users.isCompliance(ctx.user)));
+    await sendHtml(
+      ctx,
+      t(ctx.user.language).chooseMode(ctx.match[1]),
+      modeKeyboard(t(ctx.user.language), ctx.services.users.isCompliance(ctx.user))
+    );
   });
 }
 
@@ -80,6 +95,10 @@ async function openPhoto(ctx: MyContext) {
   await sendHtml(
     ctx,
     messages.photoIntro(),
-    new InlineKeyboard().text(messages.photoRightConfirm(), CB.PHOTO_ACK).row().text(messages.buttons.cancel, CB.CANCEL).text(messages.buttons.menu, CB.BACK_MAIN)
+    new InlineKeyboard()
+      .text(messages.photoRightConfirm(), CB.PHOTO_ACK)
+      .row()
+      .text(messages.buttons.cancel, CB.CANCEL)
+      .text(messages.buttons.menu, CB.BACK_MAIN)
   );
 }

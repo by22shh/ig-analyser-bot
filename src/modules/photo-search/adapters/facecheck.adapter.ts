@@ -35,7 +35,11 @@ export class RealFaceCheckAdapter implements FaceCheckAdapter {
   async search(input: { bytes: Buffer; mimeType: string }): Promise<PhotoSearchMatchView[]> {
     if (!this.token) throw new Error("FACECHECK_API_TOKEN_MISSING");
     const form = new FormData();
-    form.append("images", new Blob([new Uint8Array(input.bytes)], { type: input.mimeType }), "photo.jpg");
+    form.append(
+      "images",
+      new Blob([new Uint8Array(input.bytes)], { type: input.mimeType }),
+      "photo.jpg"
+    );
     const upload = await fetch("https://facecheck.id/api/upload_pic", {
       method: "POST",
       headers: { Authorization: `Bearer ${this.token}` },
@@ -55,9 +59,11 @@ export class RealFaceCheckAdapter implements FaceCheckAdapter {
         body: JSON.stringify({ id_search: uploaded.id_search })
       });
       if (!response.ok) throw new Error(`FACECHECK_SEARCH_${response.status}`);
-      const result = (await response.json()) as { output?: { items?: Array<{ score?: number; url?: string }> } };
-      const items = result.output?.items ?? [];
-      if (items.length) {
+      const result = (await response.json()) as {
+        output?: { items?: Array<{ score?: number; url?: string }> };
+      };
+      const items = result.output?.items;
+      if (Array.isArray(items)) {
         return items
           .map((item): PhotoSearchMatchView | null => {
             const username = extractInstagramUsername(item.url ?? "");

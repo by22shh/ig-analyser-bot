@@ -1,3 +1,4 @@
+import { InlineKeyboard } from "grammy";
 import { env } from "../../config/env.js";
 import { CB } from "../constants.js";
 import type { MyContext } from "../context.js";
@@ -23,8 +24,26 @@ export function registerProfileHandlers(bot: import("grammy").Bot<MyContext>) {
   });
   bot.command("delete_me", async (ctx) => {
     if (!ctx.user) return;
+    const messages = t(ctx.user.language);
+    // Destructive + irreversible: require an explicit confirmation tap before
+    // anonymizing the account and deleting reports/artifacts.
+    await sendHtml(
+      ctx,
+      messages.deleteMeWarning(),
+      new InlineKeyboard()
+        .text(messages.buttons.confirmDelete, CB.DELETE_ME_CONFIRM)
+        .row()
+        .text(messages.buttons.cancel, CB.CANCEL)
+        .text(messages.buttons.menu, CB.BACK_MAIN)
+    );
+  });
+
+  bot.callbackQuery(CB.DELETE_ME_CONFIRM, async (ctx) => {
+    if (!ctx.user) return;
+    const messages = t(ctx.user.language);
     await ctx.services.users.deleteMe(ctx.user.id);
-    await sendHtml(ctx, t(ctx.user.language).deleteMeDone());
+    await ctx.answerCallbackQuery();
+    await sendHtml(ctx, messages.deleteMeDone());
   });
 
   bot.callbackQuery(CB.PROFILE, async (ctx) => {
@@ -75,7 +94,10 @@ export function registerProfileHandlers(bot: import("grammy").Bot<MyContext>) {
 
   bot.callbackQuery(new RegExp(`^${CB.SET_EXPORT}:(pdf|markdown|html)$`), async (ctx) => {
     if (!ctx.user || !ctx.match?.[1]) return;
-    await ctx.services.users.updateExportFormat(ctx.user.id, ctx.match[1] as "pdf" | "markdown" | "html");
+    await ctx.services.users.updateExportFormat(
+      ctx.user.id,
+      ctx.match[1] as "pdf" | "markdown" | "html"
+    );
     await ctx.answerCallbackQuery();
     await sendHtml(ctx, t(ctx.user.language).settingsUpdated());
     await showSettings(ctx);
@@ -111,18 +133,30 @@ async function showPaywall(ctx: MyContext) {
   const messages = t(ctx.user.language);
   await ctx.services.payments.ensureCatalog();
   if (env.FEATURE_TELEGRAM_STARS && !env.FEATURE_YOOKASSA_PAYMENTS) {
-    await sendHtml(ctx, messages.starsIntro(), packageKeyboard(messages, "telegram_stars", ctx.services.payments.packages("telegram_stars")));
+    await sendHtml(
+      ctx,
+      messages.starsIntro(),
+      packageKeyboard(messages, "telegram_stars", ctx.services.payments.packages("telegram_stars"))
+    );
     return;
   }
   if (!env.FEATURE_TELEGRAM_STARS && env.FEATURE_YOOKASSA_PAYMENTS) {
-    await sendHtml(ctx, messages.yookassaIntro(env.YOOKASSA_TEST_MODE), packageKeyboard(messages, "yookassa", ctx.services.payments.packages("yookassa")));
+    await sendHtml(
+      ctx,
+      messages.yookassaIntro(env.YOOKASSA_TEST_MODE),
+      packageKeyboard(messages, "yookassa", ctx.services.payments.packages("yookassa"))
+    );
     return;
   }
   if (!env.FEATURE_TELEGRAM_STARS && !env.FEATURE_YOOKASSA_PAYMENTS) {
     await sendHtml(ctx, messages.paymentMethodUnavailable(), backMenuKeyboard(messages));
     return;
   }
-  await sendHtml(ctx, messages.paywallIntro(env.TELEGRAM_STARS_TEST_MODE || env.YOOKASSA_TEST_MODE), paymentMethodsKeyboard(messages));
+  await sendHtml(
+    ctx,
+    messages.paywallIntro(env.TELEGRAM_STARS_TEST_MODE || env.YOOKASSA_TEST_MODE),
+    paymentMethodsKeyboard(messages)
+  );
 }
 
 async function showSettings(ctx: MyContext) {
@@ -142,5 +176,9 @@ async function showSettings(ctx: MyContext) {
 
 async function showHelp(ctx: MyContext) {
   const messages = t(ctx.user?.language);
-  await sendHtml(ctx, messages.help(env.SUPPORT_URL, env.TOS_URL, env.PRIVACY_URL), helpKeyboard(messages));
+  await sendHtml(
+    ctx,
+    messages.help(env.SUPPORT_URL, env.TOS_URL, env.PRIVACY_URL),
+    helpKeyboard(messages)
+  );
 }

@@ -20,7 +20,9 @@ export function link(label: string, url: string): string {
 
 export function formatCredits(units: number): string {
   const credits = units / 100;
-  return Number.isInteger(credits) ? String(credits) : credits.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+  return Number.isInteger(credits)
+    ? String(credits)
+    : credits.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
 }
 
 export function percent(value: number): string {

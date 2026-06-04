@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { env } from "../../config/env.js";
 import { InsufficientCreditsError } from "../../modules/billing/credits.service.js";
 import { CB } from "../constants.js";
@@ -17,7 +18,9 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
   });
   bot.callbackQuery(CB.PHOTO_ACK, async (ctx) => {
     if (!ctx.user) return;
-    await ctx.services.wizard.set(ctx.user.id, "waiting_photo");
+    // Stable per-session id: every photo sent during this waiting_photo step
+    // shares it, so an album/media-group or double-send collapses to one search.
+    await ctx.services.wizard.set(ctx.user.id, "waiting_photo", { requestId: randomUUID() });
     await ctx.answerCallbackQuery();
     await sendHtml(
       ctx,
@@ -32,7 +35,7 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
       await next();
       return;
     }
-    const state = await ctx.services.wizard.get(ctx.user.id);
+    const state = await ctx.services.wizard.get<{ requestId?: string }>(ctx.user.id);
     if (state?.state !== "waiting_photo") {
       await next();
       return;
@@ -51,6 +54,7 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
       await sendHtml(ctx, t(ctx.user.language).photoTooLarge(env.PHOTO_UPLOAD_MAX_MB ?? 10));
       return;
     }
+    const idempotencyKey = `photo:${ctx.user.id}:${state.payload.requestId ?? fileUniqueId ?? fileId}`;
     try {
       await ctx.services.photoSearch.createJob({
         userId: ctx.user.id,
@@ -58,7 +62,8 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
         telegramFileId: fileId,
         telegramFileUniqueId: fileUniqueId,
         mimeType,
-        sizeBytes: size
+        sizeBytes: size,
+        idempotencyKey
       });
     } catch (error) {
       if (error instanceof InsufficientCreditsError) {

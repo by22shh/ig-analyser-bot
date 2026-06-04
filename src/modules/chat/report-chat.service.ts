@@ -4,7 +4,7 @@ import type { Locale } from "../../telegram/constants.js";
 import { MODE_COST_UNITS } from "../billing/packages.js";
 import type { CreditsService } from "../billing/credits.service.js";
 import type { LlmProvider } from "../llm/types.js";
-import { recordUsage } from "../observability/usage.js";
+import { recordUsage, recordUsageSafe } from "../observability/usage.js";
 
 export class ReportChatService {
   constructor(
@@ -57,7 +57,9 @@ export class ReportChatService {
           tokensOut: answer.tokensOut
         }
       });
-      await recordUsage(this.prisma, {
+      // Best-effort: usage logging must not throw, or the catch below would
+      // release the reserve and hand out a paid LLM answer for free.
+      await recordUsageSafe(this.prisma, {
         userId: input.userId,
         provider: env.OPENROUTER_API_KEY ? "openrouter" : "mock_llm",
         operation: "report_chat",

@@ -470,6 +470,7 @@ model PhotoSearchJob {
   telegramChatId       BigInt?
   telegramFileId       String
   telegramFileUniqueId String?
+  idempotencyKey       String?   @unique
   inputMimeType        String?
   inputSizeBytes       Int?
   status               String

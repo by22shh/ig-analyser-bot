@@ -31,3 +31,22 @@ export async function recordUsage(prisma: PrismaClient, event: UsageEventInput) 
     }
   });
 }
+
+/**
+ * Best-effort usage logging. Usage events are observability, never a correctness
+ * dependency, so a transient DB failure must never propagate: on a paid success
+ * path an unguarded throw would fail the job and trigger a costly re-run
+ * (re-billing Apify/OpenRouter/FaceCheck). Returns undefined on failure.
+ */
+export async function recordUsageSafe(
+  prisma: PrismaClient,
+  event: UsageEventInput,
+  onError?: (error: unknown) => void
+) {
+  try {
+    return await recordUsage(prisma, event);
+  } catch (error) {
+    onError?.(error);
+    return undefined;
+  }
+}

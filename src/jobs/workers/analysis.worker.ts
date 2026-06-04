@@ -10,7 +10,7 @@ import type { InstagramProfileProvider } from "../../modules/instagram/types.js"
 import type { LlmProvider } from "../../modules/llm/types.js";
 import { buildStrategicReport } from "../../modules/analysis/report-builder.js";
 import { ReportService } from "../../modules/reports/report.service.js";
-import { recordUsage } from "../../modules/observability/usage.js";
+import { recordUsage, recordUsageSafe } from "../../modules/observability/usage.js";
 import { t } from "../../telegram/locales/index.js";
 import { reportActionsKeyboard } from "../../telegram/keyboards/reports.js";
 import type { MyContext } from "../../telegram/context.js";
@@ -68,13 +68,20 @@ export function startAnalysisWorker(input: {
           postLimit: env.ANALYSIS_POST_LIMIT ?? 30,
           includeParentData: true
         });
-        await recordUsage(input.prisma, {
-          userId: row.userId,
-          analysisJobId: row.id,
-          provider: env.APIFY_TOKEN ? "apify" : "mock_instagram",
-          operation: "fetch_profile",
-          status: "success"
-        });
+        // Best-effort usage logging: a transient failure here must not throw out
+        // of the success path, or the job would fail and retry would re-run the
+        // already-paid Apify fetch above.
+        await recordUsageSafe(
+          input.prisma,
+          {
+            userId: row.userId,
+            analysisJobId: row.id,
+            provider: env.APIFY_TOKEN ? "apify" : "mock_instagram",
+            operation: "fetch_profile",
+            status: "success"
+          },
+          (error) => log.warn({ error, jobId: row.id }, "analysis_usage_record_failed")
+        );
         const postSnapshotIds = await persistProfile(input.prisma, row.id, profile);
 
         await input.prisma.analysisJob.update({
@@ -101,14 +108,20 @@ export function startAnalysisWorker(input: {
           goal: row.goal ?? undefined
         });
         await persistVision(input.prisma, row.id, strategicReport.vision, postSnapshotIds);
-        await recordUsage(input.prisma, {
-          userId: row.userId,
-          analysisJobId: row.id,
-          provider: env.OPENROUTER_API_KEY ? "openrouter" : "mock_llm",
-          operation: "generate_report",
-          model: strategicReport.model,
-          status: "success"
-        });
+        // Best-effort: a logging hiccup must not throw out of the success path and
+        // trigger a retry that re-runs the already-paid Apify + OpenRouter work.
+        await recordUsageSafe(
+          input.prisma,
+          {
+            userId: row.userId,
+            analysisJobId: row.id,
+            provider: env.OPENROUTER_API_KEY ? "openrouter" : "mock_llm",
+            operation: "generate_report",
+            model: strategicReport.model,
+            status: "success"
+          },
+          (error) => log.warn({ error, jobId: row.id }, "analysis_usage_record_failed")
+        );
 
         await input.prisma.analysisJob.update({
           where: { id: row.id },

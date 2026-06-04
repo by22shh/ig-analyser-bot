@@ -1,6 +1,6 @@
 # Fly.io app config for ZRETI Telegram Bot.
 # Change `app` to your real Fly app name after `fly launch` or before first deploy.
-app = "zreti-telegram-bot"
+app = "ig-analyser-bot"
 primary_region = "fra"
 
 [build]
@@ -24,7 +24,7 @@ primary_region = "fra"
   PRIVACY_URL = "https://telegram.org/privacy-tpa"
   TELEGRAM_STARS_DEFAULT_CURRENCY = "XTR"
   FEATURE_TELEGRAM_STARS = "true"
-  FEATURE_YOOKASSA_PAYMENTS = "true"
+  FEATURE_YOOKASSA_PAYMENTS = "false"
   YOOKASSA_WEBHOOK_ALLOWED_IPS = "185.71.76.0/27,185.71.77.0/27,77.75.153.0/25,77.75.156.11,77.75.156.35,77.75.154.128/25,2a02:5180::/32"
   FEATURE_INFLUENCER_MODE = "true"
   FEATURE_HR_MODE = "false"

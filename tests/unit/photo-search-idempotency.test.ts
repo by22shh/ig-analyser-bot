@@ -36,7 +36,9 @@ describe("PhotoSearchService.createJob idempotency", () => {
     });
 
     expect(result).toBe(existing);
-    expect((credits as unknown as { reserve: ReturnType<typeof vi.fn> }).reserve).not.toHaveBeenCalled();
+    expect(
+      (credits as unknown as { reserve: ReturnType<typeof vi.fn> }).reserve
+    ).not.toHaveBeenCalled();
     expect(
       (prisma as unknown as { photoSearchJob: { create: ReturnType<typeof vi.fn> } }).photoSearchJob
         .create

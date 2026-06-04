@@ -78,7 +78,8 @@ export function startAnalysisWorker(input: {
             analysisJobId: row.id,
             provider: env.APIFY_TOKEN ? "apify" : "mock_instagram",
             operation: "fetch_profile",
-            status: "success"
+            status: "success",
+            costEstimateRub: env.APIFY_TOKEN ? (env.ECON_APIFY_PROFILE_COST_RUB ?? null) : null
           },
           (error) => log.warn({ error, jobId: row.id }, "analysis_usage_record_failed")
         );

@@ -37,6 +37,31 @@ export function registerAdminHandlers(bot: import("grammy").Bot<MyContext>) {
     });
     await sendHtml(ctx, messages.adminGrantDone({ credits, telegramId }));
   });
+
+  bot.command("admin_refund_stars", async (ctx) => {
+    if (!ctx.user || !ctx.services.users.isAdmin(ctx.user)) return;
+    const orderId = ctx.message?.text?.split(/\s+/)[1];
+    if (!orderId || !/^[0-9a-f-]{36}$/i.test(orderId)) {
+      await sendHtml(ctx, "Usage: /admin_refund_stars <paymentOrderId>");
+      return;
+    }
+    try {
+      const result = await ctx.services.payments.refundTelegramStarsPayment({
+        api: ctx.api,
+        paymentOrderId: orderId,
+        adminUserId: ctx.user.id,
+        reason: "admin_manual_refund"
+      });
+      const note =
+        "alreadyProcessed" in result && result.alreadyProcessed ? " (already processed)" : "";
+      await sendHtml(ctx, `Refund ${result.status}${note}: ${result.refundId}`);
+    } catch (error) {
+      await sendHtml(
+        ctx,
+        `Refund failed: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+  });
 }
 
 async function showAdmin(ctx: MyContext) {

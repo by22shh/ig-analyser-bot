@@ -81,7 +81,11 @@ export function startPhotoSearchWorker(input: {
           provider:
             env.FACECHECK_API_TOKEN && !env.FACECHECK_TESTING_MODE ? "facecheck" : "mock_facecheck",
           operation: "photo_search",
-          status: "success"
+          status: "success",
+          costEstimateRub:
+            env.FACECHECK_API_TOKEN && !env.FACECHECK_TESTING_MODE
+              ? (env.ECON_FACECHECK_SEARCH_COST_RUB ?? null)
+              : null
         }).catch((usageError) =>
           log.warn({ error: usageError, jobId: row.id }, "photo_search_usage_record_failed")
         );

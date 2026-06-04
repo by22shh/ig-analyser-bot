@@ -521,14 +521,15 @@ model ReportChatSession {
 }
 
 model ReportChatMessage {
-  id        String   @id @default(uuid()) @db.Uuid
-  sessionId String   @db.Uuid
-  role      String
-  content   String
-  model     String?
-  tokensIn  Int?
-  tokensOut Int?
-  createdAt DateTime @default(now())
+  id             String   @id @default(uuid()) @db.Uuid
+  sessionId      String   @db.Uuid
+  role           String
+  content        String
+  model          String?
+  tokensIn       Int?
+  tokensOut      Int?
+  idempotencyKey String?  @unique
+  createdAt      DateTime @default(now())
 
   session ReportChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 

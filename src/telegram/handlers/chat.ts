@@ -55,20 +55,13 @@ async function ask(ctx: MyContext, reportId: string, question: string) {
       userId: ctx.user.id,
       reportId,
       question,
-      language: ctx.user.language === "en" ? "en" : "ru"
+      language: ctx.user.language === "en" ? "en" : "ru",
+      // Idempotency: the same Telegram update id is reused across webhook retries,
+      // so a delivery failure re-delivers the cached answer instead of re-charging
+      // and re-calling the (paid) LLM.
+      requestId: String(ctx.update.update_id)
     });
-    try {
-      await sendHtml(ctx, escapeHtml(answer.text), reportChatKeyboard(messages, reportId));
-    } catch (deliveryError) {
-      await ctx.services.chat
-        .refundUndeliveredAnswer({
-          userId: ctx.user.id,
-          reportId,
-          reason: deliveryError instanceof Error ? deliveryError.message : String(deliveryError)
-        })
-        .catch(() => undefined);
-      throw deliveryError;
-    }
+    await sendHtml(ctx, escapeHtml(answer.text), reportChatKeyboard(messages, reportId));
   } catch (error) {
     if (error instanceof InsufficientCreditsError) {
       await sendHtml(ctx, messages.insufficientCredits(error), paymentMethodsKeyboard(messages));

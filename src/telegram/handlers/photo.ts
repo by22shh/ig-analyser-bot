@@ -50,7 +50,11 @@ export function registerPhotoHandlers(bot: import("grammy").Bot<MyContext>) {
       await sendHtml(ctx, t(ctx.user.language).photoInvalidType());
       return;
     }
-    if (!fileId || size > (env.PHOTO_UPLOAD_MAX_MB ?? 10) * 1024 * 1024) {
+    if (!fileId) {
+      await sendHtml(ctx, t(ctx.user.language).photoInvalidType());
+      return;
+    }
+    if (size > (env.PHOTO_UPLOAD_MAX_MB ?? 10) * 1024 * 1024) {
       await sendHtml(ctx, t(ctx.user.language).photoTooLarge(env.PHOTO_UPLOAD_MAX_MB ?? 10));
       return;
     }

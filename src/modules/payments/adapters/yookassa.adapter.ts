@@ -103,7 +103,8 @@ export class RealYooKassaAdapter implements YooKassaAdapter {
         "Content-Type": "application/json",
         "Idempotence-Key": input.idempotencyKey
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(30000)
     });
     if (!response.ok) throw new Error(`YOOKASSA_CREATE_${response.status}`);
     return mapPayment(await response.json());
@@ -113,7 +114,8 @@ export class RealYooKassaAdapter implements YooKassaAdapter {
     const response = await fetch(`${env.YOOKASSA_API_BASE_URL}/payments/${paymentId}`, {
       headers: {
         Authorization: `Basic ${Buffer.from(`${env.YOOKASSA_SHOP_ID}:${env.YOOKASSA_SECRET_KEY}`).toString("base64")}`
-      }
+      },
+      signal: AbortSignal.timeout(30000)
     });
     if (!response.ok) throw new Error(`YOOKASSA_GET_${response.status}`);
     return mapPayment(await response.json());
@@ -136,7 +138,8 @@ export class RealYooKassaAdapter implements YooKassaAdapter {
         payment_id: input.paymentId,
         amount: { value: (input.amountMinor / 100).toFixed(2), currency: "RUB" },
         description: input.reason
-      })
+      }),
+      signal: AbortSignal.timeout(30000)
     });
     if (!response.ok) throw new Error(`YOOKASSA_REFUND_${response.status}`);
     const raw = await response.json();

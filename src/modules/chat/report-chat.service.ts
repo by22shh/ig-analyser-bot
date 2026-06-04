@@ -13,11 +13,35 @@ export class ReportChatService {
     private readonly credits: CreditsService
   ) {}
 
-  async ask(input: { userId: string; reportId: string; question: string; language: Locale }) {
+  async ask(input: {
+    userId: string;
+    reportId: string;
+    question: string;
+    language: Locale;
+    requestId?: string;
+  }) {
     const report = await this.prisma.report.findFirstOrThrow({
       where: { id: input.reportId, userId: input.userId },
       include: { sections: { orderBy: { position: "asc" } } }
     });
+    // Idempotency: the webhook returns HTTP 500 on a handler throw, so Telegram
+    // re-delivers the same update and claimUpdate reprocesses it. If we already
+    // produced an answer for this update, return it so the handler just re-sends
+    // it — no second reserve, no second (paid) LLM call, no second capture.
+    const answerKey = input.requestId ? `chat:${input.userId}:${input.requestId}` : undefined;
+    if (answerKey) {
+      const existing = await this.prisma.reportChatMessage.findUnique({
+        where: { idempotencyKey: answerKey }
+      });
+      if (existing) {
+        return {
+          text: existing.content,
+          model: existing.model ?? "",
+          tokensIn: existing.tokensIn ?? undefined,
+          tokensOut: existing.tokensOut ?? undefined
+        };
+      }
+    }
     const session = await this.prisma.reportChatSession
       .upsert({
         where: { id: `${report.id}` },
@@ -47,16 +71,6 @@ export class ReportChatService {
         reportText,
         question: input.question
       });
-      await this.prisma.reportChatMessage.create({
-        data: {
-          sessionId: session.id,
-          role: "assistant",
-          content: answer.text,
-          model: answer.model,
-          tokensIn: answer.tokensIn,
-          tokensOut: answer.tokensOut
-        }
-      });
       // Best-effort: usage logging must not throw, or the catch below would
       // release the reserve and hand out a paid LLM answer for free.
       await recordUsageSafe(this.prisma, {
@@ -65,13 +79,32 @@ export class ReportChatService {
         operation: "report_chat",
         model: answer.model,
         status: "success",
+        costEstimateRub: env.OPENROUTER_API_KEY
+          ? (env.ECON_CHAT_MESSAGE_COST_P75_RUB ?? null)
+          : null,
         tokensIn: answer.tokensIn,
         tokensOut: answer.tokensOut
       });
+      // Capture credits and persist the answer (keyed for idempotency) in one
+      // transaction: a crash between them would either re-charge on a retry or
+      // leave a keyed answer that a retry hands out for free.
       await this.credits.captureReserve({
         userId: input.userId,
         amountUnits: MODE_COST_UNITS.chat_message,
-        metadata: { type: "report_chat", reportId: report.id }
+        metadata: { type: "report_chat", reportId: report.id },
+        within: async (tx) => {
+          await tx.reportChatMessage.create({
+            data: {
+              sessionId: session.id,
+              role: "assistant",
+              content: answer.text,
+              model: answer.model,
+              tokensIn: answer.tokensIn,
+              tokensOut: answer.tokensOut,
+              idempotencyKey: answerKey
+            }
+          });
+        }
       });
       return answer;
     } catch (error) {
@@ -95,19 +128,5 @@ export class ReportChatService {
       }).catch(() => undefined);
       throw error;
     }
-  }
-
-  async refundUndeliveredAnswer(input: { userId: string; reportId: string; reason?: string }) {
-    return this.credits.grant({
-      userId: input.userId,
-      amountUnits: MODE_COST_UNITS.chat_message,
-      provider: "report_chat",
-      metadata: {
-        type: "report_chat_delivery_refund",
-        reportId: input.reportId,
-        reason: input.reason ?? "delivery_failed"
-      },
-      type: "admin_adjustment"
-    });
   }
 }

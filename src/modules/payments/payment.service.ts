@@ -675,7 +675,7 @@ export class PaymentService {
       type: "refund"
     });
     try {
-      await (input.api as any).refundStarPayment(
+      await input.api.refundStarPayment(
         Number(order.telegramStarPayment.telegramUserId),
         order.telegramStarPayment.telegramPaymentChargeId
       );

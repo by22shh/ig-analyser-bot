@@ -12,10 +12,25 @@ export function paymentMethodsKeyboard(messages: LocaleMessages): InlineKeyboard
   return kb.text(messages.buttons.menu, CB.BACK_MAIN);
 }
 
+export function enabledPaymentMethodCount(): number {
+  return [env.FEATURE_TELEGRAM_STARS, env.FEATURE_YOOKASSA_PAYMENTS].filter(Boolean).length;
+}
+
+/**
+ * Back target for the package screen. With a single enabled payment method the
+ * paywall renders packages directly (no method chooser), so "Back" must return
+ * to the main menu — pointing it at CB.PAYWALL would re-render the same package
+ * screen and trap the user (the reported Stars back-loop).
+ */
+export function packageBackTarget(enabledMethodCount: number): string {
+  return enabledMethodCount > 1 ? CB.PAYWALL : CB.BACK_MAIN;
+}
+
 export function packageKeyboard(
   messages: LocaleMessages,
   provider: "telegram_stars" | "yookassa",
-  packages: PackageView[]
+  packages: PackageView[],
+  enabledMethodCount: number = enabledPaymentMethodCount()
 ): InlineKeyboard {
   const kb = new InlineKeyboard();
   for (const pkg of packages) {
@@ -26,5 +41,8 @@ export function packageKeyboard(
       `${provider === "telegram_stars" ? CB.BUY_STARS : CB.BUY_YOOKASSA}:${pkg.code}`
     ).row();
   }
-  return kb.text(messages.buttons.back, CB.PAYWALL).text(messages.buttons.menu, CB.BACK_MAIN);
+  if (packageBackTarget(enabledMethodCount) === CB.PAYWALL) {
+    return kb.text(messages.buttons.back, CB.PAYWALL).text(messages.buttons.menu, CB.BACK_MAIN);
+  }
+  return kb.text(messages.buttons.back, CB.BACK_MAIN);
 }

@@ -1,6 +1,6 @@
 import { InlineKeyboard } from "grammy";
 import { env } from "../../config/env.js";
-import { CB, type Locale } from "../constants.js";
+import { CB } from "../constants.js";
 import type { LocaleMessages } from "../locales/index.js";
 
 function mark(label: string, active: boolean): string {
@@ -41,12 +41,28 @@ export function profileKeyboard(messages: LocaleMessages): InlineKeyboard {
     .text(messages.buttons.menu, CB.BACK_MAIN);
 }
 
-export function consentKeyboard(messages: LocaleMessages, current: Locale = "ru"): InlineKeyboard {
+export function languageKeyboard(): InlineKeyboard {
   return new InlineKeyboard()
-    .text(mark("Русский", current === "ru"), `${CB.LANG}:ru`)
-    .text(mark("English", current === "en"), `${CB.LANG}:en`)
-    .row()
-    .text(messages.buttons.accept, CB.ACCEPT_RULES);
+    .text("🇷🇺 Русский", `${CB.LANG}:ru`)
+    .text("🇬🇧 English", `${CB.LANG}:en`);
+}
+
+export function consentKeyboard(messages: LocaleMessages): InlineKeyboard {
+  const kb = new InlineKeyboard()
+    .text(messages.buttons.accept, CB.ACCEPT_RULES)
+    .text(messages.buttons.decline, CB.DECLINE_RULES);
+  if (env.TOS_URL) kb.row().url(messages.buttons.terms, env.TOS_URL);
+  return kb;
+}
+
+export function declinedKeyboard(messages: LocaleMessages): InlineKeyboard {
+  return new InlineKeyboard().text(messages.buttons.restart, CB.RESTART_ONBOARDING);
+}
+
+export function subscriptionGateKeyboard(messages: LocaleMessages): InlineKeyboard {
+  const kb = new InlineKeyboard();
+  if (env.CHANNEL_URL) kb.url(messages.buttons.subscribe, env.CHANNEL_URL).row();
+  return kb.text(messages.buttons.checkSubscription, CB.CHECK_SUB);
 }
 
 export function helpKeyboard(messages: LocaleMessages): InlineKeyboard {

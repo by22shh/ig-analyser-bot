@@ -34,6 +34,9 @@ const schema = z.object({
   TELEGRAM_USE_LONG_POLLING: boolFromString.default(false),
   TELEGRAM_API_ROOT: z.string().url().default("https://api.telegram.org"),
   CHANNEL_URL: z.string().url().default("https://t.me/homie_tech"),
+  // Channel users must join when FEATURE_REQUIRE_CHANNEL_SUB is on. Accepts a
+  // public @username or a numeric -100… id. Empty → derived from CHANNEL_URL.
+  REQUIRED_CHANNEL_ID: optionalString,
   SUPPORT_URL: z.string().url().default("https://t.me/homie_tech"),
   TOS_URL: z.string().url().default("https://teletype.in/@homiebot/policy"),
   PRIVACY_URL: z.string().url().default("https://telegram.org/privacy-tpa"),
@@ -117,6 +120,9 @@ const schema = z.object({
   FEATURE_PHOTO_SEARCH: boolFromString.default(false),
   FEATURE_TELEGRAM_STARS: boolFromString.default(true),
   FEATURE_YOOKASSA_PAYMENTS: boolFromString.default(true),
+  // Require channel membership to use the bot. Off by default so dev/tests stay
+  // inert; enable in production where the bot is an admin of the channel.
+  FEATURE_REQUIRE_CHANNEL_SUB: boolFromString.default(false),
 
   LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
   SENTRY_DSN: optionalString,
@@ -143,7 +149,11 @@ const publicBaseUrl = parsed.data.APP_BASE_URL.replace(/\/+$/, "");
 export const env = {
   ...parsed.data,
   YOOKASSA_RETURN_URL:
-    parsed.data.YOOKASSA_RETURN_URL || `${publicBaseUrl}/payments/yookassa/return`
+    parsed.data.YOOKASSA_RETURN_URL || `${publicBaseUrl}/payments/yookassa/return`,
+  // Effective channel identifier for membership checks: explicit override or the
+  // @username parsed from CHANNEL_URL ("" when it cannot be derived).
+  REQUIRED_CHANNEL_ID:
+    parsed.data.REQUIRED_CHANNEL_ID || channelUsernameFromUrl(parsed.data.CHANNEL_URL)
 };
 
 export type AppEnv = typeof env;
@@ -282,4 +292,18 @@ function assertProductionConfiguration(data: ParsedEnv) {
 
 function isLocalhost(hostname: string): boolean {
   return ["localhost", "127.0.0.1", "::1", "[::1]"].includes(hostname.toLowerCase());
+}
+
+// Derives a public @username from a t.me URL for channel membership checks.
+// Returns "" for private invite links (t.me/+hash, /joinchat/…) or non-t.me URLs.
+function channelUsernameFromUrl(url: string): string {
+  try {
+    const parsedUrl = new URL(url);
+    if (!/(^|\.)t\.me$/i.test(parsedUrl.hostname)) return "";
+    const segment = parsedUrl.pathname.replace(/^\/+/, "").split("/")[0] ?? "";
+    if (!segment || segment.startsWith("+") || segment.toLowerCase() === "joinchat") return "";
+    return `@${segment}`;
+  } catch {
+    return "";
+  }
 }

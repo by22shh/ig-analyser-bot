@@ -13,11 +13,10 @@ export async function consentGate(ctx: MyContext, next: NextFunction) {
   }
 
   const messages = t(ctx.user.language);
-  const current = ctx.user.language === "en" ? "en" : "ru";
   if (ctx.callbackQuery) await ctx.answerCallbackQuery().catch(() => undefined);
   await ctx.reply(messages.startNeedsConsent(), {
     parse_mode: "HTML",
-    reply_markup: consentKeyboard(messages, current),
+    reply_markup: consentKeyboard(messages),
     link_preview_options: { is_disabled: true }
   });
 }
@@ -26,8 +25,11 @@ function isAllowedBeforeConsent(ctx: MyContext): boolean {
   const text = ctx.message?.text?.trim();
   const command = text?.split(/\s+/, 1)[0];
   if (command && ALLOWED_COMMANDS.has(command)) return true;
-  if (ctx.callbackQuery?.data === CB.ACCEPT_RULES) return true;
-  if (ctx.callbackQuery?.data?.startsWith(`${CB.LANG}:`)) return true;
+  const data = ctx.callbackQuery?.data;
+  if (data === CB.ACCEPT_RULES || data === CB.DECLINE_RULES || data === CB.RESTART_ONBOARDING) {
+    return true;
+  }
+  if (data?.startsWith(`${CB.LANG}:`)) return true;
   if (ctx.preCheckoutQuery || ctx.message?.successful_payment) return true;
   return false;
 }

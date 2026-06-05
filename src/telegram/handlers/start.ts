@@ -1,7 +1,17 @@
 import { CB } from "../constants.js";
 import type { MyContext } from "../context.js";
-import { backMenuKeyboard, consentKeyboard } from "../keyboards/main-menu.js";
+import {
+  backMenuKeyboard,
+  consentKeyboard,
+  declinedKeyboard,
+  languageKeyboard
+} from "../keyboards/main-menu.js";
 import { t } from "../locales/index.js";
+import {
+  proceedAfterConsent,
+  renderSubscriptionGate,
+  userIsSubscribed
+} from "../middleware/subscription-gate.js";
 import { editOrSendHtml, renderMainMenu, sendHtml } from "./helpers.js";
 
 export function registerStartHandlers(bot: import("grammy").Bot<MyContext>) {
@@ -10,10 +20,12 @@ export function registerStartHandlers(bot: import("grammy").Bot<MyContext>) {
     await ctx.services.wizard.clear(ctx.user.id);
     const messages = t(ctx.user.language);
     if (!ctx.user.consentAcceptedAt) {
-      await sendHtml(ctx, messages.startNeedsConsent(), consentKeyboard(messages, locale(ctx)));
+      // Step 1 of onboarding: language choice (advances to the rules step).
+      await sendHtml(ctx, messages.chooseLanguage(), languageKeyboard());
       return;
     }
-    await renderMainMenu(ctx);
+    // Already onboarded: show the menu, or the subscription gate if they left.
+    await proceedAfterConsent(ctx, { force: true });
   });
 
   bot.callbackQuery(new RegExp(`^${CB.LANG}:(ru|en)$`), async (ctx) => {
@@ -22,11 +34,8 @@ export function registerStartHandlers(bot: import("grammy").Bot<MyContext>) {
     const messages = t(ctx.user.language);
     await ctx.answerCallbackQuery();
     if (!ctx.user.consentAcceptedAt) {
-      await editOrSendHtml(
-        ctx,
-        messages.startNeedsConsent(),
-        consentKeyboard(messages, locale(ctx))
-      );
+      // Step 2: show the rules in the chosen language.
+      await editOrSendHtml(ctx, messages.startNeedsConsent(), consentKeyboard(messages));
       return;
     }
     await sendHtml(ctx, messages.languageUpdated(ctx.user.language));
@@ -39,7 +48,35 @@ export function registerStartHandlers(bot: import("grammy").Bot<MyContext>) {
       ctx.user.language as "ru" | "en"
     );
     await ctx.answerCallbackQuery();
-    await renderMainMenu(ctx);
+    // Step 3: enforce channel subscription (or show the menu when satisfied).
+    await proceedAfterConsent(ctx, { force: true });
+  });
+
+  bot.callbackQuery(CB.DECLINE_RULES, async (ctx) => {
+    if (!ctx.user) return;
+    const messages = t(ctx.user.language);
+    await ctx.answerCallbackQuery();
+    // Soft block: consent stays unset, so the rest of the bot remains gated and
+    // /start (or "Start over") reopens the flow.
+    await editOrSendHtml(ctx, messages.consentDeclined(), declinedKeyboard(messages));
+  });
+
+  bot.callbackQuery(CB.RESTART_ONBOARDING, async (ctx) => {
+    if (!ctx.user) return;
+    const messages = t(ctx.user.language);
+    await ctx.answerCallbackQuery();
+    await editOrSendHtml(ctx, messages.chooseLanguage(), languageKeyboard());
+  });
+
+  bot.callbackQuery(CB.CHECK_SUB, async (ctx) => {
+    if (!ctx.user) return;
+    await ctx.answerCallbackQuery();
+    // Force a fresh check so the user gets instant feedback after subscribing.
+    if (await userIsSubscribed(ctx, { force: true })) {
+      await renderMainMenu(ctx);
+      return;
+    }
+    await renderSubscriptionGate(ctx, { note: true });
   });
 
   bot.callbackQuery(CB.BACK_MAIN, async (ctx) => {
@@ -54,8 +91,4 @@ export function registerStartHandlers(bot: import("grammy").Bot<MyContext>) {
     await ctx.answerCallbackQuery();
     await editOrSendHtml(ctx, messages.capabilities(), backMenuKeyboard(messages));
   });
-}
-
-function locale(ctx: MyContext): "ru" | "en" {
-  return ctx.user?.language === "en" ? "en" : "ru";
 }

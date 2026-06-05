@@ -22,6 +22,10 @@ export const en = {
     cancel: "✖️ Cancel",
     menu: "🏠 Menu",
     accept: "✅ I accept",
+    decline: "❌ Decline",
+    subscribe: "📢 Subscribe",
+    checkSubscription: "✅ I subscribed",
+    restart: "🔁 Start over",
     run: "▶️ Start",
     confirmLawfulBasis: "✅ Confirm lawful basis",
     stars: "⭐ Telegram Stars",
@@ -48,13 +52,35 @@ export const en = {
     };
     return titles[mode];
   },
+  chooseLanguage(): string {
+    return (
+      "🌐 <b>Выберите язык</b> / <b>Choose your language</b>\n\n" +
+      "На выбранном языке будут меню бота и отчёты. / Menus and reports will use the language you pick."
+    );
+  },
   startNeedsConsent(): string {
     return (
       `👁 <b>${escapeHtml(this.brand)}</b> analyzes public Instagram data only.\n\n` +
       "Do not use the bot for harassment, doxing, threats, pressure, or privacy bypass. " +
       "Photo search requires that you have the right to use the image.\n\n" +
-      "Choose a language, then tap “I accept”."
+      "Tap “I accept” to continue, or “Decline”."
     );
+  },
+  consentDeclined(): string {
+    return (
+      "🚫 <b>Access closed</b>\n\n" +
+      "You cannot use the bot without accepting the rules. Changed your mind? Tap “Start over” or send /start."
+    );
+  },
+  subscriptionRequired(channelUrl: string): string {
+    const link = channelUrl ? `<a href="${escapeHtml(channelUrl)}">our channel</a>` : "our channel";
+    return (
+      "📢 <b>One last step</b>\n\n" +
+      `To use the bot, subscribe to ${link}. After subscribing, tap “I subscribed”.`
+    );
+  },
+  subscriptionStillMissing(): string {
+    return "I can't see your subscription yet. Subscribe to the channel and tap “I subscribed” again.";
   },
   welcome(input: {
     totalUnits: number;
@@ -73,6 +99,9 @@ export const en = {
     return (
       bonusLine +
       "👁 <b>Public Instagram profile analysis</b>\n\n" +
+      "💘 Like someone and want to know what they're into and how to break the ice?\n" +
+      "🕵️ Just met someone and want to check who they really are?\n" +
+      "🤝 Got a business partner and want to read them as a person?\n\n" +
       "Send an @username or link — I will turn open data into a clear strategic report.\n\n" +
       "<b>You will get:</b>\n" +
       "• positioning and visible profile signals\n" +

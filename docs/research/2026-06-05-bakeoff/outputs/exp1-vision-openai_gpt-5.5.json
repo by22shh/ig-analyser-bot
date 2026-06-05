@@ -1,0 +1,67 @@
+{
+  "model": "openai/gpt-5.5",
+  "rendered": "Post ID: TEST_POST_1\n\n- На изображении два человека на набережной у моря/воды, на фоне видны прибрежные здания, деревья, люди и башня, похожая на маяк или часть морского вокзала.\n- Сцена снята на открытом воздухе в дневное время при ясной погоде.\n- Слева человек в тёмно-синем свитшоте с жёлтой надписью “AUTOMNE …”, джинсах и с часами/браслетом на руке.\n- Справа человек в коричневой поло-футболке, светлых брюках и солнцезащитных очках, держит телефон.\n- Фон выглядит как морская прогулочная зона: каменистый берег, вода, ограждения/пирс, небольшие группы людей.\n- Из подписи следует контекст прогулки вдоль моря; хэштеги указывают на Сочи и морвокзал, но точное место по одному изображению не подтверждаю.",
+  "ok": true,
+  "tier": "no-structured",
+  "text": "Post ID: TEST_POST_1\n\n- На изображении два человека на набережной у моря/воды, на фоне видны прибрежные здания, деревья, люди и башня, похожая на маяк или часть морского вокзала.\n- Сцена снята на открытом воздухе в дневное время при ясной погоде.\n- Слева человек в тёмно-синем свитшоте с жёлтой надписью “AUTOMNE …”, джинсах и с часами/браслетом на руке.\n- Справа человек в коричневой поло-футболке, светлых брюках и солнцезащитных очках, держит телефон.\n- Фон выглядит как морская прогулочная зона: каменистый берег, вода, ограждения/пирс, небольшие группы людей.\n- Из подписи следует контекст прогулки вдоль моря; хэштеги указывают на Сочи и морвокзал, но точное место по одному изображению не подтверждаю.",
+  "raw": {
+    "id": "gen-1780632230-6swJqoaFpya3uL5OvR1f",
+    "object": "chat.completion",
+    "created": 1780632230,
+    "model": "openai/gpt-5.5-20260423",
+    "provider": "OpenAI",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "completed",
+        "message": {
+          "role": "assistant",
+          "content": "Post ID: TEST_POST_1\n\n- На изображении два человека на набережной у моря/воды, на фоне видны прибрежные здания, деревья, люди и башня, похожая на маяк или часть морского вокзала.\n- Сцена снята на открытом воздухе в дневное время при ясной погоде.\n- Слева человек в тёмно-синем свитшоте с жёлтой надписью “AUTOMNE …”, джинсах и с часами/браслетом на руке.\n- Справа человек в коричневой поло-футболке, светлых брюках и солнцезащитных очках, держит телефон.\n- Фон выглядит как морская прогулочная зона: каменистый берег, вода, ограждения/пирс, небольшие группы людей.\n- Из подписи следует контекст прогулки вдоль моря; хэштеги указывают на Сочи и морвокзал, но точное место по одному изображению не подтверждаю.",
+          "refusal": null,
+          "reasoning": null,
+          "reasoning_details": [
+            {
+              "type": "reasoning.encrypted",
+              "data": "gAAAAABqIkqqu8V8AhqcYZ3cP0DmAqcv43a5schhKJLZjHWmzO5HmIkmHeI78vy6llbybVc3pSD1grVUHnAh3E0DHgne6aeF4L0_bcbIx6VBa5PIQBOOTg2SyQ9HZBzA6qFOOQvrfGNbrxMBNsDPA33Cb0pZqKY6u5dN7ZsN1ajfRA5mPJ9GyVDiai-g3ZMe-SpQfVPIIkuI24hi1Uj_MjIG6tohJIlhW8koZmhv4bW00l1ek4SSnTeEmcP15oRbrc9FAYoA6etiqa96LnOkmDW5mZv2KTpcdVHjPqaOD3ormCqD6PxsnOEugkJ9rzs1rNTiQex8ArF8cgC0yp6uCv0JT1g1CK7KHSeQ2ozO2HdPh5zo7OestQ0YkS4LxfJsqYFrqB6I5OV9ZgzrdQFYHv1FhOsVhr57u_5enPpcrCNeI9z_a4mxazINEVej7X9MC-wEgwAVelkL6LwMaFjw6THLqFvGwCb05BRsV8daIq1Xu20206MmBzsIWQs_2wbDcDyZhnDlXcMnpm1npGpiQRgdZT2AbLYku_q8vYfQ4-ThjP7KbWxXGKCnUa9Pz8Is6UTar4PdttJyUhEm0NjOQBcn9aqynuNNaBS9e1jmLoVGL-RsmZEek1jlzoHCWPCgI1pmgwhMYDgM4MVE7fGE-5i8po4JI84WXo972r6dJNOp7SgGPC6cyYTF2_xiBfsMtidEs8dCmVpBBRCrpR5aQAhgPpFXhfCfexHp7_0kJkBJ9hmWyHYY1YS7r_d5xR1s7U9yZ6n8ApMNdSc-VztaSO2mE8eNjAaBvJeOeI-YOeF_bK1rJOhsBpEMcyIi0IlQ-nHyg64xQddO-yZumJ98aAX1r0uW4Hi0ez-CQjtQ0rCHHv21dTQE7DKtfYj6QhC7995V7c72g2bt0Biei_B_qenk0eTlTzS-_k-YPwtMHcYaiJJEPKA72Y08GeLQ4tEE0R11jrfpHKkQS08HQ1yKeYrrweScEmHce8zNigcIDsC1xjl3dJIEP2F80YaDAjr9PjhuIbX3We-4mZPOd97IK1YwcmsTTi3I-3Dp34kmR4KnmsixlodjNhmoxK5zuReek_h_zydajKbZ1i0ixJgEzpojyAUFh-6zNtvAfensNbmOVPiZH7BMy1lgGyEVdZyDhntWpWKkIjBap8ehDe1mjvxYjQ-xhTvLhAnhF8u_d5k7BzUurrt5A3uif8AZ3j6tmweqq6owgqnMra6hRGnHwconDm89sWsVG5lQVSFc9G42hpuW0DYfVZFoikCOUVkjLFKCz8qSgPR8RXKLM2jG9M3jZDgWK9e2tCp6_UduX1baSaSrP0UHF6Znw8NPEq_REINDwCaAH8SQTkz06hE9Xn0dHHbISGjKbmcDSLBNF7noBJVIT_k9C9OKkSQDbzyLlJvOE4H4xRlfgck9xJlk3BK2T3sIzHykr68l1Bt5BDlzVEyxbsiN2oHTficmkoRLm8r1p9AIab7zlwaVCD7k8xdKmIjdvUTqfvZa8z_yv-qbuzy7QPTTFV-JiSF7i9plpn4bX32f5N9Bv2F84F7pWmOy8bLw-pF9mVsSEd2L9zEzGCHU308AF80KdpOXtgceenr4S6aw-ji0MupeBLirnrjuuPwzTUnflw==",
+              "format": "openai-responses-v1",
+              "id": "rs_093ed5be6508fa74016a224aa7c16c819680c48b826928db7a",
+              "index": 0
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1066,
+      "completion_tokens": 341,
+      "total_tokens": 1407,
+      "cost": 0.01556,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.01556,
+        "upstream_inference_prompt_cost": 0.00533,
+        "upstream_inference_completions_cost": 0.01023
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 104,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "promptTokens": 1066,
+  "completionTokens": 341,
+  "reasoningTokens": 104,
+  "costUsd": 0.01556,
+  "latencyMs": 10077
+}

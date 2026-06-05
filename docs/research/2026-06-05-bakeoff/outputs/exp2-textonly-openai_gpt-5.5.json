@@ -1,0 +1,10 @@
+{
+  "model": "openai/gpt-5.5",
+  "withImage": false,
+  "ok": false,
+  "tier": "failed",
+  "text": "",
+  "latencyMs": 1747,
+  "error": "EMPTY_RESPONSE",
+  "costUsd": 0
+}

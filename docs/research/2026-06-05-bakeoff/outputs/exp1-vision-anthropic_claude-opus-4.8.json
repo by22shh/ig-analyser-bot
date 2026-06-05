@@ -1,0 +1,58 @@
+{
+  "model": "anthropic/claude-opus-4.8",
+  "rendered": "**Post ID: TEST_POST_1 — Visible facts**\n\n**People (two visible):**\n- Left: a person in a navy quarter-zip sweatshirt with yellow text reading \"AUTOMNE-H...,\" \"FALL/WINTER 24-25 COLLECTION,\" and \"Heavy Cotton.\" Wearing wide-leg light blue jeans and a wristwatch with a dark band. Long dark hair.\n- Right: a person in a brown short-sleeve polo shirt and tan/beige trousers, wearing sunglasses, with short dark hair and a beard. Holding a smartphone and wearing a wrist accessory.\n\n**Setting / background:**\n- Outdoor waterfront scene with water visible on the left.\n- A stone or paved walkway/embankment.\n- A light-colored building with a tower/lighthouse-like structure on the left in the background.\n- Trees, additional buildings, and what appears to be a pavilion or terminal structure mid-ground.\n- A vertical advertising banner with text and a circular graphic on the right side.\n- Clear blue sky with light clouds.\n\n**Composition:**\n- Vertical phone photo; thick black bars top and bottom (screenshot framing).\n- Two subjects centered, photographed from roughly waist/full-body level.\n- Daylight, natural lighting.\n\n**Caption context (not verified by image):**\n- Russian text translating to \"The best walks — along the sea,\" with hashtags #сочи (Sochi) and #морвокзал (sea port/marine terminal). This suggests a seaside marine-terminal location, but exact place cannot be confirmed from the image alone.\n\nI can't confirm identities, relationships, or any personal traits from the image.",
+  "ok": true,
+  "tier": "no-structured",
+  "text": "**Post ID: TEST_POST_1 — Visible facts**\n\n**People (two visible):**\n- Left: a person in a navy quarter-zip sweatshirt with yellow text reading \"AUTOMNE-H...,\" \"FALL/WINTER 24-25 COLLECTION,\" and \"Heavy Cotton.\" Wearing wide-leg light blue jeans and a wristwatch with a dark band. Long dark hair.\n- Right: a person in a brown short-sleeve polo shirt and tan/beige trousers, wearing sunglasses, with short dark hair and a beard. Holding a smartphone and wearing a wrist accessory.\n\n**Setting / background:**\n- Outdoor waterfront scene with water visible on the left.\n- A stone or paved walkway/embankment.\n- A light-colored building with a tower/lighthouse-like structure on the left in the background.\n- Trees, additional buildings, and what appears to be a pavilion or terminal structure mid-ground.\n- A vertical advertising banner with text and a circular graphic on the right side.\n- Clear blue sky with light clouds.\n\n**Composition:**\n- Vertical phone photo; thick black bars top and bottom (screenshot framing).\n- Two subjects centered, photographed from roughly waist/full-body level.\n- Daylight, natural lighting.\n\n**Caption context (not verified by image):**\n- Russian text translating to \"The best walks — along the sea,\" with hashtags #сочи (Sochi) and #морвокзал (sea port/marine terminal). This suggests a seaside marine-terminal location, but exact place cannot be confirmed from the image alone.\n\nI can't confirm identities, relationships, or any personal traits from the image.",
+  "raw": {
+    "id": "gen-1780632240-nuvG2tJ78JgdEgWUK13Z",
+    "object": "chat.completion",
+    "created": 1780632240,
+    "model": "anthropic/claude-4.8-opus-20260528",
+    "provider": "Anthropic",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "end_turn",
+        "message": {
+          "role": "assistant",
+          "content": "**Post ID: TEST_POST_1 — Visible facts**\n\n**People (two visible):**\n- Left: a person in a navy quarter-zip sweatshirt with yellow text reading \"AUTOMNE-H...,\" \"FALL/WINTER 24-25 COLLECTION,\" and \"Heavy Cotton.\" Wearing wide-leg light blue jeans and a wristwatch with a dark band. Long dark hair.\n- Right: a person in a brown short-sleeve polo shirt and tan/beige trousers, wearing sunglasses, with short dark hair and a beard. Holding a smartphone and wearing a wrist accessory.\n\n**Setting / background:**\n- Outdoor waterfront scene with water visible on the left.\n- A stone or paved walkway/embankment.\n- A light-colored building with a tower/lighthouse-like structure on the left in the background.\n- Trees, additional buildings, and what appears to be a pavilion or terminal structure mid-ground.\n- A vertical advertising banner with text and a circular graphic on the right side.\n- Clear blue sky with light clouds.\n\n**Composition:**\n- Vertical phone photo; thick black bars top and bottom (screenshot framing).\n- Two subjects centered, photographed from roughly waist/full-body level.\n- Daylight, natural lighting.\n\n**Caption context (not verified by image):**\n- Russian text translating to \"The best walks — along the sea,\" with hashtags #сочи (Sochi) and #морвокзал (sea port/marine terminal). This suggests a seaside marine-terminal location, but exact place cannot be confirmed from the image alone.\n\nI can't confirm identities, relationships, or any personal traits from the image.",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1259,
+      "completion_tokens": 563,
+      "total_tokens": 1822,
+      "cost": 0.02037,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.02037,
+        "upstream_inference_prompt_cost": 0.006295,
+        "upstream_inference_completions_cost": 0.014075
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "promptTokens": 1259,
+  "completionTokens": 563,
+  "reasoningTokens": 0,
+  "costUsd": 0.02037,
+  "latencyMs": 11052
+}

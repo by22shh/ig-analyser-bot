@@ -1,0 +1,58 @@
+{
+  "model": "google/gemini-2.5-flash",
+  "rendered": "[Image ID: TEST_POST_1]\n- Visible fact: Two individuals are walking outdoors, with a body of water to their left.\n- Visible fact: The person on the left is wearing a navy blue quarter-zip sweatshirt with yellow text and light blue jeans.\n- Visible fact: The person on the right is wearing a brown polo shirt and light brown pants.\n- Visible fact: A white lighthouse with a red top is visible in the background, situated on a hill.\n- Visible fact: Buildings and trees are also visible on the hill behind the individuals.\n- Visible fact: The sky is light blue with some clouds.\n- Visible fact: The person on the right is holding a smartphone in their left hand.\n- Visible fact: The person on the left has a black watch on their left wrist.\n- Setting: Outdoor, possibly a pier or promenade by the sea, with a town or city in the background.\n- Objects/signals: quarter-zip sweatshirt, jeans, polo shirt, pants, smartphone, watch, lighthouse, buildings, trees, body of water\n- Text in image: AUTOMNE-H | FALL/WINTER 24-25 COLLECTION | Heavy Cotton\n- Visual style: Outdoor shot, Daylight photography, Casual attire, Eye-level shot",
+  "ok": true,
+  "tier": "full",
+  "text": "{\n  \"visibleFacts\": [\n    \"Two individuals are walking outdoors, with a body of water to their left.\",\n    \"The person on the left is wearing a navy blue quarter-zip sweatshirt with yellow text and light blue jeans.\",\n    \"The person on the right is wearing a brown polo shirt and light brown pants.\",\n    \"A white lighthouse with a red top is visible in the background, situated on a hill.\",\n    \"Buildings and trees are also visible on the hill behind the individuals.\",\n    \"The sky is light blue with some clouds.\",\n    \"The person on the right is holding a smartphone in their left hand.\",\n    \"The person on the left has a black watch on their left wrist.\"\n  ],\n  \"setting\": \"Outdoor, possibly a pier or promenade by the sea, with a town or city in the background.\",\n  \"objects\": [\n    \"quarter-zip sweatshirt\",\n    \"jeans\",\n    \"polo shirt\",\n    \"pants\",\n    \"smartphone\",\n    \"watch\",\n    \"lighthouse\",\n    \"buildings\",\n    \"trees\",\n    \"body of water\"\n  ],\n  \"textOverlays\": [\n    \"AUTOMNE-H\",\n    \"FALL/WINTER 24-25 COLLECTION\",\n    \"Heavy Cotton\"\n  ],\n  \"visualStyle\": [\n    \"Outdoor shot\",\n    \"Daylight photography\",\n    \"Casual attire\",\n    \"Eye-level shot\"\n  ],\n  \"uncertainty\": []\n}",
+  "raw": {
+    "id": "gen-1780632251-8hNGwwOwzlcbmHZmRmbR",
+    "object": "chat.completion",
+    "created": 1780632251,
+    "model": "google/gemini-2.5-flash",
+    "provider": "Google",
+    "system_fingerprint": null,
+    "service_tier": "provisioned",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "STOP",
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"visibleFacts\": [\n    \"Two individuals are walking outdoors, with a body of water to their left.\",\n    \"The person on the left is wearing a navy blue quarter-zip sweatshirt with yellow text and light blue jeans.\",\n    \"The person on the right is wearing a brown polo shirt and light brown pants.\",\n    \"A white lighthouse with a red top is visible in the background, situated on a hill.\",\n    \"Buildings and trees are also visible on the hill behind the individuals.\",\n    \"The sky is light blue with some clouds.\",\n    \"The person on the right is holding a smartphone in their left hand.\",\n    \"The person on the left has a black watch on their left wrist.\"\n  ],\n  \"setting\": \"Outdoor, possibly a pier or promenade by the sea, with a town or city in the background.\",\n  \"objects\": [\n    \"quarter-zip sweatshirt\",\n    \"jeans\",\n    \"polo shirt\",\n    \"pants\",\n    \"smartphone\",\n    \"watch\",\n    \"lighthouse\",\n    \"buildings\",\n    \"trees\",\n    \"body of water\"\n  ],\n  \"textOverlays\": [\n    \"AUTOMNE-H\",\n    \"FALL/WINTER 24-25 COLLECTION\",\n    \"Heavy Cotton\"\n  ],\n  \"visualStyle\": [\n    \"Outdoor shot\",\n    \"Daylight photography\",\n    \"Casual attire\",\n    \"Eye-level shot\"\n  ],\n  \"uncertainty\": []\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 2464,
+      "completion_tokens": 334,
+      "total_tokens": 2798,
+      "cost": 0.0015742,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0015742,
+        "upstream_inference_prompt_cost": 0.0007392,
+        "upstream_inference_completions_cost": 0.000835
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "promptTokens": 2464,
+  "completionTokens": 334,
+  "reasoningTokens": 0,
+  "costUsd": 0.0015742,
+  "latencyMs": 2608
+}

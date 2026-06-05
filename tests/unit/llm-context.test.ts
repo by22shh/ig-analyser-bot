@@ -69,4 +69,43 @@ describe("buildReportUserMessage", () => {
     expect(context.posts[0]).toMatchObject({ pinned: true, location: "Dubai" });
     expect(context.qualityRules.join(" ")).toContain("Every non-obvious claim");
   });
+
+  it("injects section guides for the standard mode", () => {
+    const post: InstagramPost = {
+      id: "p1",
+      type: "Image",
+      caption: "c",
+      hashtags: [],
+      mentions: [],
+      likesCount: 1,
+      commentsCount: 0,
+      latestComments: [],
+      timestamp: "2026-06-01T00:00:00Z",
+      url: "https://www.instagram.com/p/p1/",
+      isPinned: false,
+      childPosts: [],
+      taggedUsers: []
+    };
+    const profile: InstagramProfile = {
+      username: "alice",
+      followersCount: 10,
+      followsCount: 5,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts: [post]
+    };
+
+    const message = buildReportUserMessage({
+      mode: "standard",
+      language: "ru",
+      profile,
+      posts: [post],
+      vision: [],
+      metrics: computeReportMetrics(profile, [post])
+    });
+    const context = JSON.parse(message) as { sectionGuides: Record<string, string> };
+
+    expect(context.sectionGuides["Основные темы и приоритеты"]).toBeTruthy();
+  });
 });

@@ -105,12 +105,24 @@ const schema = z.object({
   ANALYSIS_MAX_IMAGES_ANALYZED: optionalNumber(30),
   ANALYSIS_MAX_IMAGE_DOWNLOAD_MB: optionalNumber(8),
   LLM_STRUCTURED_OUTPUTS: boolFromString.default(true),
-  LLM_FINAL_INPUT_TOKEN_BUDGET: optionalNumber(24000),
-  LLM_FINAL_OUTPUT_TOKEN_BUDGET: optionalNumber(4096),
-  LLM_REPAIR_OUTPUT_TOKEN_BUDGET: optionalNumber(4096),
+  // Applied as a *character* cap on the JSON report context. Reasoning models
+  // (gpt-5.5 / claude-opus-4.8 / gemini-2.5-pro) all have ≥1M-token context, so
+  // the old 24000 cap was needlessly truncating the raw evidence.
+  LLM_FINAL_INPUT_TOKEN_BUDGET: optionalNumber(90000),
+  // Output budget for the reasoning call. Reasoning tokens are billed against
+  // this cap, so 4096 risked an empty/truncated 17-section report once thinking
+  // was enabled. 8000 leaves room for both thinking and the full report.
+  LLM_FINAL_OUTPUT_TOKEN_BUDGET: optionalNumber(8000),
+  LLM_REPAIR_OUTPUT_TOKEN_BUDGET: optionalNumber(8000),
   LLM_VISION_OUTPUT_TOKEN_BUDGET: optionalNumber(700),
   LLM_CHAT_INPUT_TOKEN_BUDGET: optionalNumber(12000),
   LLM_CHAT_OUTPUT_TOKEN_BUDGET: optionalNumber(2048),
+  // Per-request HTTP timeout for OpenRouter calls. Reasoning calls were measured
+  // at 60–120 s; 120 s sat right on the abort limit, so default to 180 s.
+  LLM_REQUEST_TIMEOUT_MS: optionalNumber(180000),
+  // Deterministic grounding (source-existence + forbidden-inference) always runs;
+  // this flag gates the optional extra LLM grounding pass on MODEL_GROUNDING.
+  LLM_GROUNDING_CHECK: boolFromString.default(true),
   FACECHECK_TIMEOUT_SECONDS: optionalNumber(90),
   FACECHECK_MAX_COST_RUB: optionalNumber(),
   PDF_RENDER_TIMEOUT_SECONDS: optionalNumber(60),
@@ -129,8 +141,18 @@ const schema = z.object({
   OTEL_EXPORTER_OTLP_ENDPOINT: optionalString,
 
   MODEL_VISION: z.string().default("google/gemini-2.5-flash"),
-  MODEL_REASONING: z.string().default("google/gemini-2.5-pro"),
-  MODEL_CHAT: z.string().default("google/gemini-2.5-flash")
+  // Default reasoning model. Swapped from gemini-2.5-pro to gpt-5.5 after the
+  // 2026-06-05 bake-off: gemini-2.5-pro violated the relationship/identity
+  // guardrail (inferred romantic status); gpt-5.5 respects it, supports
+  // structured outputs, and stays within the per-report cost budget for one
+  // call. A/B alternatives: anthropic/claude-opus-4.8, google/gemini-2.5-pro.
+  MODEL_REASONING: z.string().default("openai/gpt-5.5"),
+  // Reasoning effort passed through to the reasoning model. medium balances
+  // latency (~85 s for a full standard report) against depth.
+  MODEL_REASONING_EFFORT: z.enum(["low", "medium", "high"]).default("medium"),
+  MODEL_CHAT: z.string().default("google/gemini-2.5-flash"),
+  // Cheap model for the optional LLM grounding pass (defaults to the chat model).
+  MODEL_GROUNDING: z.string().default("google/gemini-2.5-flash")
 });
 
 type ParsedEnv = z.infer<typeof schema>;

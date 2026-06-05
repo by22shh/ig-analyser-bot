@@ -1,0 +1,4 @@
+# Research/evidence artifacts: raw model outputs and wide-table findings docs
+# from the 2026-06-05 model bake-off. These are data, not maintained source, and
+# prettier reflows the wide comparison tables non-idempotently.
+docs/research/

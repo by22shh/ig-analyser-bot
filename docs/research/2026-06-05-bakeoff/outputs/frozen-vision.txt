@@ -1,0 +1,13 @@
+[Image ID: TEST_POST_1]
+- Visible fact: Two individuals are walking outdoors, with a body of water to their left.
+- Visible fact: The person on the left is wearing a navy blue quarter-zip sweatshirt with yellow text and light blue jeans.
+- Visible fact: The person on the right is wearing a brown polo shirt and light brown pants.
+- Visible fact: A white lighthouse with a red top is visible in the background, situated on a hill.
+- Visible fact: Buildings and trees are also visible on the hill behind the individuals.
+- Visible fact: The sky is light blue with some clouds.
+- Visible fact: The person on the right is holding a smartphone in their left hand.
+- Visible fact: The person on the left has a black watch on their left wrist.
+- Setting: Outdoor, possibly a pier or promenade by the sea, with a town or city in the background.
+- Objects/signals: quarter-zip sweatshirt, jeans, polo shirt, pants, smartphone, watch, lighthouse, buildings, trees, body of water
+- Text in image: AUTOMNE-H | FALL/WINTER 24-25 COLLECTION | Heavy Cotton
+- Visual style: Outdoor shot, Daylight photography, Casual attire, Eye-level shot

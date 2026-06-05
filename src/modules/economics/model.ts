@@ -26,13 +26,17 @@ export type EconomicsSettings = {
   };
 };
 
+// Cost-model assumptions for the runtime caps. Raised for the final reasoning
+// call (input 24000→90000 chars, output 4096→8000 tokens) alongside the
+// gpt-5.5 swap: measured per-report cost stays ≈38–50 ₽, under the 55 ₽ P75
+// (the reasoning step is a single call). Keep these in sync with env defaults.
 export const MODELED_CAPS = {
   postLimit: 30,
   visionBatchSize: 5,
   maxImagesAnalyzed: 30,
   maxImageDownloadMb: 8,
-  finalInputTokens: 24000,
-  finalOutputTokens: 4096,
+  finalInputTokens: 90000,
+  finalOutputTokens: 8000,
   chatInputTokens: 12000,
   chatOutputTokens: 2048,
   facecheckTimeoutSeconds: 90,

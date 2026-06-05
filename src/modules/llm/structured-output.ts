@@ -6,7 +6,9 @@ export type StructuredVisionOutput = {
   setting: string | null;
   objects: string[];
   textOverlays: string[];
+  textVerbatim: string[];
   visualStyle: string[];
+  isLikelyScreenshot: boolean;
   uncertainty: string[];
 };
 
@@ -63,11 +65,23 @@ export const visionResponseFormat: JsonSchemaResponseFormat = {
           maxItems: 6,
           description: "Readable text visible in the image, if any."
         },
+        textVerbatim: {
+          type: "array",
+          items: { type: "string" },
+          maxItems: 8,
+          description:
+            "Every readable text string transcribed VERBATIM (brand names, captions, signs, stickers). Empty if none."
+        },
         visualStyle: {
           type: "array",
           items: { type: "string" },
           maxItems: 6,
           description: "Observable style signals such as composition, palette, production value."
+        },
+        isLikelyScreenshot: {
+          type: "boolean",
+          description:
+            "True if the image looks like a screenshot/repost (e.g. black letterbox bars, UI chrome) rather than an original upload."
         },
         uncertainty: {
           type: "array",
@@ -76,7 +90,16 @@ export const visionResponseFormat: JsonSchemaResponseFormat = {
           description: "What cannot be confirmed from the public image."
         }
       },
-      required: ["visibleFacts", "setting", "objects", "textOverlays", "visualStyle", "uncertainty"]
+      required: [
+        "visibleFacts",
+        "setting",
+        "objects",
+        "textOverlays",
+        "textVerbatim",
+        "visualStyle",
+        "isLikelyScreenshot",
+        "uncertainty"
+      ]
     }
   }
 };
@@ -158,7 +181,9 @@ export function parseStructuredVision(text: string): StructuredVisionOutput {
     setting: stringOrNull(value.setting),
     objects: stringArray(value.objects).slice(0, 10),
     textOverlays: stringArray(value.textOverlays).slice(0, 6),
+    textVerbatim: stringArray(value.textVerbatim).slice(0, 8),
     visualStyle: stringArray(value.visualStyle).slice(0, 6),
+    isLikelyScreenshot: value.isLikelyScreenshot === true,
     uncertainty: stringArray(value.uncertainty).slice(0, 5)
   };
 }
@@ -171,7 +196,11 @@ export function renderVisionDescription(postId: string, output: StructuredVision
   if (output.setting) lines.push(`- Setting: ${output.setting}`);
   if (output.objects.length) lines.push(`- Objects/signals: ${output.objects.join(", ")}`);
   if (output.textOverlays.length) lines.push(`- Text in image: ${output.textOverlays.join(" | ")}`);
+  if (output.textVerbatim.length)
+    lines.push(`- Text (verbatim): ${output.textVerbatim.join(" | ")}`);
   if (output.visualStyle.length) lines.push(`- Visual style: ${output.visualStyle.join(", ")}`);
+  if (output.isLikelyScreenshot)
+    lines.push("- Note: likely a screenshot/repost, not an original upload.");
   if (output.uncertainty.length) lines.push(`- Uncertainty: ${output.uncertainty.join("; ")}`);
   return lines.join("\n");
 }
@@ -192,7 +221,14 @@ export function parseStructuredReport(text: string): StructuredReportOutput {
 export function renderStructuredReport(output: StructuredReportOutput): string {
   return output.sections
     .map((section) => {
-      const parts = ["[[SECTION]]", section.title, section.content.trim()];
+      // Defensive: a model may echo the literal [[SECTION]] marker inside the
+      // structured title/content fields. Strip it so each rendered section
+      // produces exactly one marker and does not split into phantom sections.
+      const parts = [
+        "[[SECTION]]",
+        stripSectionMarker(section.title),
+        stripSectionMarker(section.content)
+      ];
       if (section.evidence.length) {
         parts.push(
           "Evidence:",
@@ -289,4 +325,8 @@ function stringOrNull(value: unknown): string | null {
 
 function confidenceValue(value: unknown): "low" | "medium" | "high" {
   return value === "low" || value === "medium" || value === "high" ? value : "medium";
+}
+
+function stripSectionMarker(value: string): string {
+  return value.replace(/\[\[SECTION\]\]/gi, "").trim();
 }

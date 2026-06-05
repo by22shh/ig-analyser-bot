@@ -1,4 +1,5 @@
 import { env } from "../../config/env.js";
+import { sectionGuidesForMode } from "../../prompts/section-guides.js";
 import { mapWithConcurrency } from "../../util/concurrency.js";
 import { REQUIRED_SECTIONS } from "../reports/parser.js";
 import { reportPromptForMode, prompts } from "./prompts.js";
@@ -11,6 +12,11 @@ import {
   type ReasoningConfig
 } from "./request.js";
 import {
+  groundingResponseFormat,
+  parseGroundingResponse,
+  type GroundingResult
+} from "./grounding.js";
+import {
   parseStructuredReport,
   parseStructuredVision,
   renderStructuredReport,
@@ -20,6 +26,7 @@ import {
 } from "./structured-output.js";
 import type {
   ChatInput,
+  GroundingVerifyInput,
   LlmProvider,
   ReportInput,
   ReportRepairInput,
@@ -29,6 +36,10 @@ import type {
 type OpenRouterResponse = {
   choices?: Array<{ message?: { content?: string } }>;
   usage?: { prompt_tokens?: number; completion_tokens?: number };
+  // OpenRouter sometimes returns HTTP 200 with an embedded provider error (e.g.
+  // Anthropic rejecting response_format). Surface it so structured calls can
+  // fall back to text mode instead of failing as an empty response.
+  error?: { message?: string; code?: number };
 };
 
 export class MockLlmProvider implements LlmProvider {
@@ -133,11 +144,11 @@ export class OpenRouterLlmProvider implements LlmProvider {
           model: env.MODEL_REASONING,
           system: prompt.system,
           user: buildReportUserMessage(input),
-          maxTokens: env.LLM_FINAL_OUTPUT_TOKEN_BUDGET ?? 4096,
+          maxTokens: env.LLM_FINAL_OUTPUT_TOKEN_BUDGET ?? 8000,
           responseFormat: reportResponseFormat(REQUIRED_SECTIONS[input.mode]),
           provider: structuredProvider(),
-          reasoning: { enabled: true, exclude: true },
-          temperature: 0.2
+          // No temperature: gpt-5.5 (a reasoning model) rejects temperature≠1.
+          reasoning: reasoningConfig()
         });
         const structured = parseStructuredReport(content.text);
         return {
@@ -154,8 +165,8 @@ export class OpenRouterLlmProvider implements LlmProvider {
       model: env.MODEL_REASONING,
       system: prompt.system,
       user: buildReportUserMessage(input),
-      maxTokens: env.LLM_FINAL_OUTPUT_TOKEN_BUDGET ?? 4096,
-      temperature: 0.2
+      maxTokens: env.LLM_FINAL_OUTPUT_TOKEN_BUDGET ?? 8000,
+      reasoning: reasoningConfig()
     });
     return {
       rawText: content.text,
@@ -168,18 +179,17 @@ export class OpenRouterLlmProvider implements LlmProvider {
     const prompt = reportPromptForMode(input.mode);
     const system = `${prompt.system}
 
-You are repairing a report that was already generated. Preserve supported content, add missing required sections, and attach evidence URLs/post IDs from the supplied source catalog. Do not invent facts. Return the complete repaired report.`;
+You are repairing a report that was already generated. Preserve supported content, add missing required sections, and attach evidence URLs/post IDs from the supplied source catalog. Do not invent facts. If repair.groundingFindings are present, fix each one: remove or clearly down-confidence forbidden_inference claims (e.g. relationship/identity/health), rephrase unsupported_claim items as hedged hypotheses or drop them, and delete any fabricated_source citation not in the source catalog. Return the complete repaired report.`;
     if (env.LLM_STRUCTURED_OUTPUTS) {
       try {
         const content = await this.chatCompletion({
           model: env.MODEL_REASONING,
           system,
           user: buildReportRepairUserMessage(input),
-          maxTokens: env.LLM_REPAIR_OUTPUT_TOKEN_BUDGET ?? 4096,
+          maxTokens: env.LLM_REPAIR_OUTPUT_TOKEN_BUDGET ?? 8000,
           responseFormat: reportResponseFormat(REQUIRED_SECTIONS[input.mode]),
           provider: structuredProvider(),
-          reasoning: { enabled: true, exclude: true },
-          temperature: 0.1
+          reasoning: reasoningConfig()
         });
         const structured = parseStructuredReport(content.text);
         return {
@@ -196,8 +206,8 @@ You are repairing a report that was already generated. Preserve supported conten
       model: env.MODEL_REASONING,
       system,
       user: buildReportRepairUserMessage(input),
-      maxTokens: env.LLM_REPAIR_OUTPUT_TOKEN_BUDGET ?? 4096,
-      temperature: 0.1
+      maxTokens: env.LLM_REPAIR_OUTPUT_TOKEN_BUDGET ?? 8000,
+      reasoning: reasoningConfig()
     });
     return {
       rawText: content.text,
@@ -225,6 +235,36 @@ You are repairing a report that was already generated. Preserve supported conten
     };
   }
 
+  async verifyGrounding(input: GroundingVerifyInput): Promise<GroundingResult> {
+    if (!env.LLM_GROUNDING_CHECK) return { findings: [] };
+    const payload = JSON.stringify({
+      language: input.language,
+      sourceCatalog: input.sourceCatalog,
+      sections: input.sections.map((section) => ({
+        title: section.title,
+        content: section.content.slice(0, 1500),
+        citedSources: section.sources
+          .map((source) => source.url ?? source.postId)
+          .filter((value): value is string => Boolean(value))
+      }))
+    });
+    try {
+      const content = await this.chatCompletion({
+        model: env.MODEL_GROUNDING,
+        system: prompts.grounding.system,
+        user: payload,
+        maxTokens: 1500,
+        responseFormat: env.LLM_STRUCTURED_OUTPUTS ? groundingResponseFormat : undefined,
+        provider: structuredProvider(),
+        temperature: 0.1
+      });
+      return parseGroundingResponse(content.text);
+    } catch {
+      // Grounding is advisory; a failed pass must not fail the report.
+      return { findings: [] };
+    }
+  }
+
   private async chatCompletion(input: {
     model: string;
     system: string;
@@ -244,11 +284,12 @@ You are repairing a report that was already generated. Preserve supported conten
         "Content-Type": "application/json"
       },
       body: JSON.stringify(buildChatCompletionBody(input)),
-      signal: AbortSignal.timeout(120000)
+      signal: AbortSignal.timeout(env.LLM_REQUEST_TIMEOUT_MS ?? 180000)
     });
     if (response.status === 402) throw new Error("ACCESS_DENIED_CREDITS");
     if (!response.ok) throw new Error(`OPENROUTER_${response.status}`);
     const payload = (await response.json()) as OpenRouterResponse;
+    if (payload.error) throw new Error("OPENROUTER_PROVIDER_ERROR");
     const text = payload.choices?.[0]?.message?.content?.trim() ?? "";
     if (!text) throw new Error("LLM_EMPTY_RESPONSE");
     return {
@@ -270,7 +311,8 @@ export function buildReportRepairUserMessage(input: ReportRepairInput): string {
     repair: true,
     rawText: input.rawText,
     missingSections: input.missingSections,
-    weakSourceSections: input.weakSourceSections
+    weakSourceSections: input.weakSourceSections,
+    groundingFindings: input.groundingFindings
   });
 }
 
@@ -281,6 +323,7 @@ function buildBudgetedReportContext(
     rawText?: string;
     missingSections?: string[];
     weakSourceSections?: string[];
+    groundingFindings?: string[];
   }
 ): string {
   const budget = env.LLM_FINAL_INPUT_TOKEN_BUDGET ?? 24000;
@@ -307,6 +350,7 @@ function buildReportContext(
     rawText?: string;
     missingSections?: string[];
     weakSourceSections?: string[];
+    groundingFindings?: string[];
   },
   limits: { captionChars: number; commentCount: number; commentChars: number; visionChars: number }
 ) {
@@ -340,6 +384,7 @@ function buildReportContext(
     targetPosition: input.targetPosition,
     goal: input.goal,
     requiredSections: prompt.requiredSections,
+    sectionGuides: sectionGuidesForMode(input.mode),
     qualityRules: [
       "Every non-obvious claim needs evidence from sourceCatalog, post metadata, comments, metrics, or vision.",
       "Prefer specific observable facts over generic personality claims.",
@@ -375,6 +420,7 @@ function buildReportContext(
       ? {
           missingSections: repair.missingSections,
           weakSourceSections: repair.weakSourceSections,
+          groundingFindings: repair.groundingFindings,
           previousReport: truncate(repair.rawText, 8000)
         }
       : undefined
@@ -391,6 +437,10 @@ function structuredProvider(): ProviderPreferences | undefined {
   return { require_parameters: true, data_collection: "deny" };
 }
 
+function reasoningConfig(): ReasoningConfig {
+  return { enabled: true, exclude: true, effort: env.MODEL_REASONING_EFFORT };
+}
+
 function tryRenderStructuredVision(postId: string, text: string): string {
   try {
     return renderVisionDescription(postId, parseStructuredVision(text));
@@ -404,7 +454,12 @@ function canFallbackFromStructuredError(error: unknown): boolean {
   return (
     error.message === "STRUCTURED_JSON_PARSE_FAILED" ||
     error.message === "STRUCTURED_REPORT_PARSE_FAILED" ||
+    // A provider that does not support response_format (e.g. Anthropic via
+    // OpenRouter returns an embedded "Provider returned error" or a 404 route)
+    // must degrade to text [[SECTION]] mode rather than fail the whole report.
+    error.message === "OPENROUTER_PROVIDER_ERROR" ||
     error.message.startsWith("OPENROUTER_400") ||
+    error.message.startsWith("OPENROUTER_404") ||
     error.message.startsWith("OPENROUTER_422")
   );
 }

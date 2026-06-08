@@ -1,4 +1,6 @@
 import { Buffer } from "node:buffer";
+import { lookup as dnsLookup } from "node:dns/promises";
+import { isIP } from "node:net";
 import { env } from "../../config/env.js";
 import { sectionGuidesForMode } from "../../prompts/section-guides.js";
 import { mapWithConcurrency } from "../../util/concurrency.js";
@@ -44,6 +46,37 @@ type OpenRouterResponse = {
 };
 
 const IMAGE_DOWNLOAD_TIMEOUT_MS = 30_000;
+const IMAGE_DOWNLOAD_MAX_REDIRECTS = 3;
+const BLOCKED_IMAGE_HOSTS = new Set(["localhost", "localhost.localdomain"]);
+const BLOCKED_IPV4_CIDRS = [
+  ["0.0.0.0", 8],
+  ["10.0.0.0", 8],
+  ["100.64.0.0", 10],
+  ["127.0.0.0", 8],
+  ["169.254.0.0", 16],
+  ["172.16.0.0", 12],
+  ["192.0.0.0", 24],
+  ["192.0.2.0", 24],
+  ["192.88.99.0", 24],
+  ["192.168.0.0", 16],
+  ["198.18.0.0", 15],
+  ["198.51.100.0", 24],
+  ["203.0.113.0", 24],
+  ["224.0.0.0", 3]
+] as const;
+const BLOCKED_IPV6_CIDRS = [
+  ["::", 128],
+  ["::1", 128],
+  ["::", 96],
+  ["::ffff:0:0", 96],
+  ["100::", 64],
+  ["2001::", 32],
+  ["2001:db8::", 32],
+  ["2002::", 16],
+  ["fc00::", 7],
+  ["fe80::", 10],
+  ["ff00::", 8]
+] as const;
 
 export class MockLlmProvider implements LlmProvider {
   async analyzeVision(input: VisionInput) {
@@ -537,15 +570,12 @@ async function boundedImageDataUrl(imageUrl: string | null | undefined): Promise
   errorCode: string;
 }> {
   if (!imageUrl) return { errorCode: "IMAGE_URL_MISSING" };
-  if (!isHttpUrl(imageUrl)) return { errorCode: "IMAGE_URL_UNSUPPORTED" };
   try {
     const maxBytes = Math.max(
       1,
       Math.floor((env.ANALYSIS_MAX_IMAGE_DOWNLOAD_MB ?? 8) * 1024 * 1024)
     );
-    const response = await fetch(imageUrl, {
-      signal: AbortSignal.timeout(IMAGE_DOWNLOAD_TIMEOUT_MS)
-    });
+    const response = await fetchPublicImage(imageUrl);
     if (!response.ok) throw new Error(`IMAGE_DOWNLOAD_${response.status}`);
     const contentLength = Number(response.headers.get("content-length"));
     if (Number.isFinite(contentLength) && contentLength > maxBytes) {
@@ -587,13 +617,121 @@ async function boundedImageDataUrl(imageUrl: string | null | undefined): Promise
   }
 }
 
-function isHttpUrl(value: string): boolean {
+async function fetchPublicImage(imageUrl: string, redirectCount = 0): Promise<Response> {
+  const url = await validatedPublicHttpUrl(imageUrl);
+  const response = await fetch(url.toString(), {
+    redirect: "manual",
+    signal: AbortSignal.timeout(IMAGE_DOWNLOAD_TIMEOUT_MS)
+  });
+
+  if (!redirectStatus(response.status)) return response;
+  if (redirectCount >= IMAGE_DOWNLOAD_MAX_REDIRECTS) throw new Error("IMAGE_REDIRECT_LIMIT");
+  const location = response.headers.get("location");
+  if (!location) throw new Error("IMAGE_REDIRECT_MISSING_LOCATION");
+  return fetchPublicImage(new URL(location, url).toString(), redirectCount + 1);
+}
+
+function redirectStatus(status: number): boolean {
+  return status >= 300 && status < 400;
+}
+
+async function validatedPublicHttpUrl(value: string): Promise<URL> {
+  let url: URL;
   try {
-    const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:";
+    url = new URL(value);
   } catch {
-    return false;
+    throw new Error("IMAGE_URL_UNSUPPORTED");
   }
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    throw new Error("IMAGE_URL_UNSUPPORTED");
+  }
+  if (url.username || url.password) throw new Error("IMAGE_URL_UNSUPPORTED");
+  await assertPublicHostname(url.hostname);
+  return url;
+}
+
+async function assertPublicHostname(hostname: string): Promise<void> {
+  const normalized = normalizeHostname(hostname);
+  if (!normalized || BLOCKED_IMAGE_HOSTS.has(normalized)) throw new Error("IMAGE_URL_PRIVATE");
+
+  const literalFamily = isIP(normalized);
+  if (literalFamily === 4 || literalFamily === 6) {
+    if (ipIsBlocked(normalized, literalFamily)) throw new Error("IMAGE_URL_PRIVATE");
+    return;
+  }
+
+  const addresses = await dnsLookup(normalized, { all: true, verbatim: true });
+  if (!addresses.length) throw new Error("IMAGE_DNS_EMPTY");
+  if (addresses.some(({ address, family }) => ipIsBlocked(address, family === 6 ? 6 : 4))) {
+    throw new Error("IMAGE_URL_PRIVATE");
+  }
+}
+
+function normalizeHostname(hostname: string): string {
+  return hostname
+    .replace(/^\[(.*)\]$/, "$1")
+    .replace(/\.$/, "")
+    .toLowerCase();
+}
+
+function ipIsBlocked(address: string, family: 4 | 6): boolean {
+  const parsed = family === 4 ? parseIpv4(address) : parseIpv6(address);
+  if (parsed === undefined) return true;
+  const blocks = family === 4 ? BLOCKED_IPV4_CIDRS : BLOCKED_IPV6_CIDRS;
+  return blocks.some(([base, prefix]) =>
+    cidrContains(parsed, parseIp(base, family), prefix, family)
+  );
+}
+
+function parseIp(address: string, family: 4 | 6): bigint {
+  const parsed = family === 4 ? parseIpv4(address) : parseIpv6(address);
+  if (parsed === undefined) throw new Error("IMAGE_IP_PARSE_FAILED");
+  return parsed;
+}
+
+function cidrContains(value: bigint, base: bigint, prefix: number, family: 4 | 6): boolean {
+  const bits = family === 4 ? 32 : 128;
+  if (prefix <= 0) return true;
+  const shift = BigInt(bits - prefix);
+  return value >> shift === base >> shift;
+}
+
+function parseIpv4(address: string): bigint | undefined {
+  const octets = address.split(".");
+  if (octets.length !== 4) return undefined;
+  return octets.reduce<bigint | undefined>((acc, item) => {
+    if (acc === undefined || !/^\d{1,3}$/.test(item)) return undefined;
+    const parsed = Number(item);
+    if (!Number.isInteger(parsed) || parsed < 0 || parsed > 255) return undefined;
+    return (acc << 8n) + BigInt(parsed);
+  }, 0n);
+}
+
+function parseIpv6(address: string): bigint | undefined {
+  let value = address.toLowerCase();
+  if (value.includes("%")) return undefined;
+  if (value.includes(".")) {
+    const lastColon = value.lastIndexOf(":");
+    const embeddedIpv4 = parseIpv4(value.slice(lastColon + 1));
+    if (lastColon < 0 || embeddedIpv4 === undefined) return undefined;
+    value = `${value.slice(0, lastColon)}:${((embeddedIpv4 >> 16n) & 0xffffn).toString(16)}:${(embeddedIpv4 & 0xffffn).toString(16)}`;
+  }
+
+  const sides = value.split("::");
+  if (sides.length > 2) return undefined;
+  const head = sides[0] ? sides[0].split(":") : [];
+  const tail = sides[1] ? sides[1].split(":") : [];
+  if (head.some((part) => !part) || tail.some((part) => !part)) return undefined;
+  const missing = 8 - head.length - tail.length;
+  if (missing < 0 || (sides.length === 1 && missing !== 0)) return undefined;
+
+  const hextets = [...head, ...Array<string>(missing).fill("0"), ...tail].map((part) => {
+    if (!/^[\da-f]{1,4}$/i.test(part)) return undefined;
+    const parsed = Number.parseInt(part, 16);
+    return Number.isInteger(parsed) && parsed >= 0 && parsed <= 0xffff ? parsed : undefined;
+  });
+  if (hextets.some((part) => part === undefined)) return undefined;
+  return hextets.reduce<bigint>((acc, item) => (acc << 16n) + BigInt(item ?? 0), 0n);
 }
 
 function canFallbackFromStructuredError(error: unknown): boolean {

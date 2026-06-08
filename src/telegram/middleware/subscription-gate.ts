@@ -30,6 +30,10 @@ function chatMemberIsSubscribed(member: { status: string; is_member?: boolean })
   return memberStatusIsSubscribed(member.status);
 }
 
+function subscriptionCheckFailsOpen(): boolean {
+  return env.APP_ENV !== "production";
+}
+
 /** Test helper: drop the in-memory membership cache between cases. */
 export function clearMembershipCache(): void {
   membershipCache.clear();
@@ -41,8 +45,9 @@ export async function userIsSubscribed(
 ): Promise<boolean> {
   const channelId = env.REQUIRED_CHANNEL_ID;
   const telegramUserId = ctx.from?.id;
-  // Without a channel id or a user we cannot enforce — allow rather than lock out.
-  if (!channelId || telegramUserId === undefined) return true;
+  // Dev/test stay permissive so local setup mistakes do not lock the app. In
+  // production, a missing channel id is treated as unsafe misconfiguration.
+  if (!channelId || telegramUserId === undefined) return subscriptionCheckFailsOpen();
 
   const key = String(telegramUserId);
   const now = Date.now();
@@ -57,10 +62,10 @@ export async function userIsSubscribed(
     membershipCache.set(key, { subscribed, checkedAt: now });
     return subscribed;
   } catch (error) {
-    // Fail open: a transient error or missing admin rights must never lock every
-    // user out. Do not cache, so the next action retries the check.
+    // Do not cache failures: the next action should retry the check after a
+    // transient Telegram error or after bot admin rights are fixed.
     log.warn({ error, channelId, telegramUserId }, "channel_membership_check_failed");
-    return true;
+    return subscriptionCheckFailsOpen();
   }
 }
 

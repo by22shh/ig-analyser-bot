@@ -1,11 +1,15 @@
+import { createHmac } from "node:crypto";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createApp } from "../../src/app.js";
 import { env } from "../../src/config/env.js";
 
+const telegramBotToken = "123456:test-token";
 const originalEnv = {
+  APP_ENV: env.APP_ENV,
   FEATURE_MINI_APP: env.FEATURE_MINI_APP,
   FEATURE_REQUIRE_CHANNEL_SUB: env.FEATURE_REQUIRE_CHANNEL_SUB,
-  REQUIRED_CHANNEL_ID: env.REQUIRED_CHANNEL_ID
+  REQUIRED_CHANNEL_ID: env.REQUIRED_CHANNEL_ID,
+  TELEGRAM_BOT_TOKEN: env.TELEGRAM_BOT_TOKEN
 };
 
 afterEach(() => {
@@ -88,6 +92,32 @@ describe("Mini App API", () => {
 
     expect(res.statusCode).toBe(403);
     expect(res.json().error.code).toBe("SUBSCRIPTION_REQUIRED");
+    expect(services.analysis.startAnalysis).not.toHaveBeenCalled();
+    await app.close();
+  });
+
+  it("blocks production analysis requests when the subscription check fails", async () => {
+    env.APP_ENV = "production";
+    env.TELEGRAM_BOT_TOKEN = telegramBotToken;
+    env.FEATURE_REQUIRE_CHANNEL_SUB = true;
+    env.REQUIRED_CHANNEL_ID = "@required";
+    const services = makeServices();
+    const bot = makeBot(new Error("CHAT_ADMIN_REQUIRED"));
+    const app = createApp({ services: services as never, bot: bot as never });
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/mini-app/analysis",
+      headers: {
+        authorization: `tma ${signedInitData({ id: 900000001 })}`,
+        "content-type": "application/json"
+      },
+      payload: JSON.stringify({ username: "alice", mode: "standard", requestId: "r1" })
+    });
+
+    expect(res.statusCode).toBe(403);
+    expect(res.json().error.code).toBe("SUBSCRIPTION_REQUIRED");
+    expect(bot.api.getChatMember).toHaveBeenCalledWith("@required", 900000001);
     expect(services.analysis.startAnalysis).not.toHaveBeenCalled();
     await app.close();
   });
@@ -235,9 +265,35 @@ function makeServices(user = makeUser()) {
   };
 }
 
-function makeBot(member: Record<string, unknown> = { status: "member" }) {
+function makeBot(member: Record<string, unknown> | Error = { status: "member" }) {
+  const getChatMember =
+    member instanceof Error
+      ? vi.fn(async () => {
+          throw member;
+        })
+      : vi.fn(async () => member);
   return {
     handleUpdate: vi.fn(),
-    api: { getChatMember: vi.fn(async () => member) }
+    api: { getChatMember }
   };
+}
+
+function signedInitData(user: { id: number }): string {
+  const params = new URLSearchParams({
+    auth_date: "1893456000",
+    user: JSON.stringify({
+      id: user.id,
+      first_name: "Local",
+      username: "local_mini_app",
+      language_code: "ru"
+    })
+  });
+  const dataCheckString = Array.from(params.entries())
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([key, value]) => `${key}=${value}`)
+    .join("\n");
+  const secretKey = createHmac("sha256", "WebAppData").update(telegramBotToken).digest();
+  const hash = createHmac("sha256", secretKey).update(dataCheckString).digest("hex");
+  params.set("hash", hash);
+  return params.toString();
 }

@@ -188,7 +188,7 @@ export const env = {
   // Effective channel identifier for membership checks: explicit override or the
   // @username parsed from CHANNEL_URL ("" when it cannot be derived).
   REQUIRED_CHANNEL_ID:
-    parsed.data.REQUIRED_CHANNEL_ID || channelUsernameFromUrl(parsed.data.CHANNEL_URL)
+    parsed.data.REQUIRED_CHANNEL_ID.trim() || channelUsernameFromUrl(parsed.data.CHANNEL_URL)
 };
 
 export type AppEnv = typeof env;
@@ -285,6 +285,15 @@ function assertProductionConfiguration(data: ParsedEnv) {
     errors.push(
       "TELEGRAM_STARS_TEST_MODE must be false when Telegram Stars are enabled in production"
     );
+  }
+  if (data.FEATURE_REQUIRE_CHANNEL_SUB) {
+    const requiredChannelId =
+      data.REQUIRED_CHANNEL_ID.trim() || channelUsernameFromUrl(data.CHANNEL_URL);
+    if (!requiredChannelId) {
+      errors.push(
+        "REQUIRED_CHANNEL_ID must be set or derivable from CHANNEL_URL when FEATURE_REQUIRE_CHANNEL_SUB is true in production"
+      );
+    }
   }
 
   requireString("APIFY_TOKEN");

@@ -926,9 +926,19 @@ function showFatal(error) {
 }
 
 function openExternal(url) {
-  if (!url) return;
-  if (tg?.openLink) tg.openLink(url);
-  else window.open(url, "_blank", "noopener,noreferrer");
+  const safeUrl = safeExternalUrl(url);
+  if (!safeUrl) return;
+  if (tg?.openLink) tg.openLink(safeUrl);
+  else window.open(safeUrl, "_blank", "noopener,noreferrer");
+}
+
+function safeExternalUrl(value) {
+  try {
+    const url = new URL(String(value || ""), window.location.origin);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.href : "";
+  } catch {
+    return "";
+  }
 }
 
 function haptic(type) {

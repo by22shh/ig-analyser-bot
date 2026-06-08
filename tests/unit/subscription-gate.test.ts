@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Enable the gate for this file by flipping just the feature flag on the real,
 // fully-parsed env (everything else keeps its default value).
@@ -7,6 +7,7 @@ vi.mock("../../src/config/env.js", async (importOriginal) => {
   return { ...actual, env: { ...actual.env, FEATURE_REQUIRE_CHANNEL_SUB: true } };
 });
 
+import { env } from "../../src/config/env.js";
 import { CB } from "../../src/telegram/constants.js";
 import {
   clearMembershipCache,
@@ -33,7 +34,14 @@ function makeCtx(overrides: Record<string, unknown> = {}) {
   return { ctx, getChatMember, reply };
 }
 
+const originalAppEnv = env.APP_ENV;
+
 beforeEach(() => clearMembershipCache());
+
+afterEach(() => {
+  env.APP_ENV = originalAppEnv;
+  clearMembershipCache();
+});
 
 describe("memberStatusIsSubscribed", () => {
   it("treats creator/administrator/member as subscribed", () => {
@@ -100,12 +108,21 @@ describe("userIsSubscribed", () => {
     expect(getChatMember).toHaveBeenCalledTimes(2);
   });
 
-  it("fails open and does not cache on API errors", async () => {
+  it("fails open outside production and does not cache on API errors", async () => {
     const { ctx, getChatMember } = makeCtx();
     getChatMember.mockRejectedValue(new Error("CHAT_ADMIN_REQUIRED"));
     expect(await userIsSubscribed(ctx)).toBe(true);
     expect(await userIsSubscribed(ctx)).toBe(true);
     expect(getChatMember).toHaveBeenCalledTimes(2); // not cached → retried
+  });
+
+  it("fails closed in production and does not cache on API errors", async () => {
+    env.APP_ENV = "production";
+    const { ctx, getChatMember } = makeCtx();
+    getChatMember.mockRejectedValue(new Error("CHAT_ADMIN_REQUIRED"));
+    expect(await userIsSubscribed(ctx)).toBe(false);
+    expect(await userIsSubscribed(ctx)).toBe(false);
+    expect(getChatMember).toHaveBeenCalledTimes(2);
   });
 });
 

@@ -589,8 +589,16 @@ async function latestJobs(services: Services, userId: string) {
 }
 
 async function subscriptionDto(session: MiniAppSession, services: Services, bot: Bot<MyContext>) {
-  if (!env.FEATURE_REQUIRE_CHANNEL_SUB || !env.REQUIRED_CHANNEL_ID) {
+  if (!env.FEATURE_REQUIRE_CHANNEL_SUB) {
     return { required: false, ok: true, channelUrl: env.CHANNEL_URL };
+  }
+  if (!env.REQUIRED_CHANNEL_ID) {
+    return {
+      required: true,
+      ok: env.APP_ENV !== "production",
+      channelUrl: env.CHANNEL_URL,
+      misconfigured: true
+    };
   }
   if (miniAppUserIsAdmin(services, session.user)) {
     return { required: true, ok: true, channelUrl: env.CHANNEL_URL, bypass: "admin" };
@@ -603,7 +611,12 @@ async function subscriptionDto(session: MiniAppSession, services: Services, bot:
       channelUrl: env.CHANNEL_URL
     };
   } catch {
-    return { required: true, ok: true, channelUrl: env.CHANNEL_URL, failOpen: true };
+    return {
+      required: true,
+      ok: env.APP_ENV !== "production",
+      channelUrl: env.CHANNEL_URL,
+      failOpen: env.APP_ENV !== "production"
+    };
   }
 }
 

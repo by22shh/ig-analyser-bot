@@ -111,6 +111,87 @@ describe("buildReportUserMessage", () => {
     expect(context.sectionGuides["Основные темы и приоритеты"]).toBeTruthy();
   });
 
+  it("strips internal operational goals from report context", () => {
+    const post: InstagramPost = {
+      id: "p1",
+      type: "Image",
+      caption: "c",
+      hashtags: [],
+      mentions: [],
+      likesCount: 1,
+      commentsCount: 0,
+      latestComments: [],
+      timestamp: "2026-06-01T00:00:00Z",
+      url: "https://www.instagram.com/p/p1/",
+      isPinned: false,
+      childPosts: [],
+      taggedUsers: []
+    };
+    const profile: InstagramProfile = {
+      username: "alice",
+      followersCount: 10,
+      followsCount: 5,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts: [post]
+    };
+
+    const message = buildReportUserMessage({
+      mode: "standard",
+      language: "ru",
+      profile,
+      posts: [post],
+      vision: [],
+      metrics: computeReportMetrics(profile, [post]),
+      goal: "Production end-to-end evaluation after deploy"
+    });
+    const context = JSON.parse(message) as { goal?: string; qualityRules: string[] };
+
+    expect(context.goal).toBeUndefined();
+    expect(context.qualityRules.join(" ")).toContain("never mention operational");
+  });
+
+  it("keeps user-facing goals in report context", () => {
+    const post: InstagramPost = {
+      id: "p1",
+      type: "Image",
+      caption: "c",
+      hashtags: [],
+      mentions: [],
+      likesCount: 1,
+      commentsCount: 0,
+      latestComments: [],
+      timestamp: "2026-06-01T00:00:00Z",
+      url: "https://www.instagram.com/p/p1/",
+      isPinned: false,
+      childPosts: [],
+      taggedUsers: []
+    };
+    const profile: InstagramProfile = {
+      username: "alice",
+      followersCount: 10,
+      followsCount: 5,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts: [post]
+    };
+
+    const message = buildReportUserMessage({
+      mode: "standard",
+      language: "ru",
+      profile,
+      posts: [post],
+      vision: [],
+      metrics: computeReportMetrics(profile, [post]),
+      goal: "Подобрать уважительную тему для первого сообщения"
+    });
+    const context = JSON.parse(message) as { goal?: string };
+
+    expect(context.goal).toBe("Подобрать уважительную тему для первого сообщения");
+  });
+
   it("injects compact deterministic analysis context", () => {
     const post: InstagramPost = {
       id: "p1",

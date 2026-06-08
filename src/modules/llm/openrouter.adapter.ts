@@ -445,7 +445,7 @@ function buildMinimalReportContext(
     language: input.language,
     mode: input.mode,
     targetPosition: input.targetPosition,
-    goal: input.goal,
+    goal: publicReportGoal(input.goal),
     requiredSections: prompt.requiredSections,
     sectionGuides: sectionGuidesForMode(input.mode),
     analysisContext: compactAnalysisContext(input.analysisContext),
@@ -453,6 +453,8 @@ function buildMinimalReportContext(
       "Use only the compact profile, metrics, and analysisContext evidence in this payload.",
       "Treat analysisContext.evidenceMap as prioritized deterministic signals, not as extra private data.",
       "Explicitly say when post-level evidence was compressed out of the context.",
+      "Use goal only when it is a user-facing analytical objective; never mention operational test, deploy, pipeline, CI, smoke, or e2e wording in the report.",
+      "Do not expose internal schema names (analysisContext, evidenceMap, contentClusters, profileSignals, audienceSignals, riskSignals, opportunitySignals, sourceCatalog, postIds) in user-facing prose; translate them into natural language.",
       "Do not infer protected traits, private life facts, identity, medical, political, religious, or sensitive attributes."
     ],
     profile: {
@@ -521,15 +523,17 @@ function buildReportContext(
     language: input.language,
     mode: input.mode,
     targetPosition: input.targetPosition,
-    goal: input.goal,
+    goal: publicReportGoal(input.goal),
     requiredSections: prompt.requiredSections,
     sectionGuides: sectionGuidesForMode(input.mode),
     analysisContext: compactAnalysisContext(input.analysisContext),
     qualityRules: [
       "Every non-obvious claim needs evidence from sourceCatalog, post metadata, comments, metrics, or vision.",
       "Use analysisContext.evidenceMap, profileSignals, contentClusters, audienceSignals, riskSignals, opportunitySignals, and modeGuidance to prioritize the strongest deterministic signals.",
+      "Do not expose internal schema names (analysisContext, evidenceMap, contentClusters, profileSignals, audienceSignals, riskSignals, opportunitySignals, sourceCatalog, postIds) in user-facing prose; translate them into natural language.",
       "Prefer specific observable facts over generic personality claims.",
       "Use low/medium/high confidence and say when public data is insufficient.",
+      "Use goal only when it is a user-facing analytical objective; never mention operational test, deploy, pipeline, CI, smoke, or e2e wording in the report.",
       "Do not infer protected traits, private life facts, identity, medical, political, religious, or sensitive attributes."
     ],
     profile: {
@@ -573,6 +577,16 @@ function truncate(value: string | null | undefined, maxLength: number): string |
   if (!value) return undefined;
   return value.length > maxLength ? `${value.slice(0, Math.max(0, maxLength - 1))}…` : value;
 }
+
+function publicReportGoal(goal: string | undefined): string | undefined {
+  const trimmed = goal?.trim();
+  if (!trimmed) return undefined;
+  if (INTERNAL_OPERATIONAL_GOAL_RE.test(trimmed)) return undefined;
+  return trimmed;
+}
+
+const INTERNAL_OPERATIONAL_GOAL_RE =
+  /\b(?:e2e|ci|smoke|deploy(?:ment)?|pipeline|end-to-end\s+(?:eval(?:uation)?|test|smoke)|production\s+(?:eval(?:uation)?|test|smoke)|prod(?:uction)?[-\s]?e2e)\b|(?:пайплайн|депло[йя]|прод(?:овый|е)?\s+тест|e2e|сквозн(?:ой|ого)\s+тест)/iu;
 
 function structuredProvider(): ProviderPreferences | undefined {
   if (!env.LLM_STRUCTURED_OUTPUTS) return undefined;

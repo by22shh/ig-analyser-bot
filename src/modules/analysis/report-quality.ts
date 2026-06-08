@@ -84,6 +84,24 @@ export function evaluateReportQuality(input: {
     });
   }
 
+  if (hasInternalOperationalLeak(input.sections)) {
+    findings.push({
+      id: "report:internal_operational_goal_leak",
+      severity: "high",
+      detail:
+        "Report appears to mention internal test/deploy/pipeline wording instead of user-facing profile analysis."
+    });
+  }
+
+  if (hasInternalSchemaLeak(input.sections)) {
+    findings.push({
+      id: "report:internal_schema_term_leak",
+      severity: "high",
+      detail:
+        "Report exposes internal schema names such as analysisContext/contentClusters instead of user-facing wording."
+    });
+  }
+
   if (input.analysisContext?.riskSignals.some((signal) => signal.id === "risk:vision_gaps")) {
     findings.push({
       id: "report:vision_evidence_gap",
@@ -219,6 +237,20 @@ function looksGeneric(content: string): boolean {
 function normalize(value: string): string {
   return value.replace(/\s+/g, " ").trim();
 }
+
+function hasInternalOperationalLeak(sections: ReportSectionView[]): boolean {
+  return INTERNAL_OPERATIONAL_REPORT_RE.test(sections.map((section) => section.content).join("\n"));
+}
+
+function hasInternalSchemaLeak(sections: ReportSectionView[]): boolean {
+  return INTERNAL_SCHEMA_TERM_RE.test(sections.map((section) => section.content).join("\n"));
+}
+
+const INTERNAL_OPERATIONAL_REPORT_RE =
+  /\b(?:prod(?:uction)?[-\s]?e2e|e2e|ci|smoke\s+test|deploy(?:ment)?|pipeline|production\s+(?:eval(?:uation)?|test|smoke)|end-to-end\s+(?:eval(?:uation)?|test|smoke))\b|(?:пайплайн|депло[йя]|прод(?:овый|е)?\s+тест|сквозн(?:ой|ого)\s+тест)/iu;
+
+const INTERNAL_SCHEMA_TERM_RE =
+  /\b(?:analysisContext|evidenceMap|contentClusters|profileSignals|audienceSignals|riskSignals|opportunitySignals|sourceCatalog|postIds)\b/u;
 
 function wordCount(value: string): number {
   return value.match(/[\p{L}\p{N}]{2,}/gu)?.length ?? 0;

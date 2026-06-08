@@ -200,4 +200,58 @@ describe("buildStrategicReport", () => {
     expect(llm.repairReport).not.toHaveBeenCalled();
     expect(report.summary.warnings).toEqual([]);
   });
+
+  it("cleans internal schema names from summary bullets", async () => {
+    const post: InstagramPost = {
+      id: "p1",
+      type: "Image",
+      caption: "public launch",
+      hashtags: [],
+      mentions: [],
+      likesCount: 10,
+      commentsCount: 1,
+      latestComments: [],
+      timestamp: "2026-06-01T00:00:00Z",
+      url: "https://www.instagram.com/p/p1/",
+      isPinned: false,
+      childPosts: [],
+      taggedUsers: []
+    };
+    const profile: InstagramProfile = {
+      username: "alice",
+      followersCount: 100,
+      followsCount: 20,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts: [post]
+    };
+    const raw = REQUIRED_SECTIONS.standard
+      .map(
+        (title) =>
+          `[[SECTION]]\n${title}\nConfidence: medium. Наблюдение по публичным данным.\nEvidence:\n- [p1] факт https://www.instagram.com/p/p1/`
+      )
+      .join("\n\n");
+    const llm: LlmProvider = {
+      analyzeVision: vi.fn(async () => []),
+      generateReport: vi.fn(async () => ({
+        rawText: raw,
+        model: "reasoning",
+        promptVersion: "report",
+        summaryBullets: ["contentClusters и audienceSignals дают strongest signals по postIds."]
+      })),
+      repairReport: vi.fn(async () => ({
+        rawText: raw,
+        model: "reasoning",
+        promptVersion: "report.repair"
+      })),
+      chat: vi.fn()
+    };
+
+    const report = await buildStrategicReport({ mode: "standard", language: "ru", profile, llm });
+
+    expect(report.summary.bullets[0]).toBe(
+      "тематические кластеры и сигналы аудитории дают самые сильные сигналы по ID постов."
+    );
+  });
 });

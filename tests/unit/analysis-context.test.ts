@@ -93,6 +93,71 @@ describe("analysis context", () => {
     expect(context.evidenceMap.some((item) => item.id === "profile:published_contacts")).toBe(true);
   });
 
+  it("keeps author replies out of audience signals", () => {
+    const posts = [
+      makePost("p1", {
+        commentsCount: 4,
+        latestComments: [
+          { ownerUsername: "alice", text: "thanks for reading" },
+          { ownerUsername: "friend", text: "useful guide" },
+          { ownerUsername: "friend", text: "next workshop please" }
+        ]
+      })
+    ];
+    const profile: InstagramProfile = {
+      username: "Alice",
+      followersCount: 100,
+      followsCount: 10,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts
+    };
+    const selection = selectAnalysisPosts(posts, { limit: 1 });
+    const metrics = computeReportMetrics(profile, selection.posts);
+
+    const context = buildAnalysisContext({
+      mode: "standard",
+      profile,
+      posts: selection.posts,
+      selection,
+      metrics,
+      vision: []
+    });
+
+    expect(context.audienceSignals.frequentCommenters).toEqual([{ username: "friend", count: 2 }]);
+    expect(context.audienceSignals.repeatedCommentTerms.map((item) => item.term)).not.toContain(
+      "thanks"
+    );
+  });
+
+  it("keeps the profile owner out of report digital circle metrics", () => {
+    const posts = [
+      makePost("p1", {
+        mentions: ["alice"],
+        taggedUsers: ["@alice"],
+        latestComments: [
+          { ownerUsername: "alice", text: "author reply" },
+          { ownerUsername: "friend", text: "meaningful outside comment" }
+        ]
+      })
+    ];
+    const profile: InstagramProfile = {
+      username: "Alice",
+      followersCount: 100,
+      followsCount: 10,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts
+    };
+
+    const metrics = computeReportMetrics(profile, posts);
+
+    expect(metrics.digitalCircle.some((item) => item.username === "alice")).toBe(false);
+    expect(metrics.digitalCircle.some((item) => item.username === "friend")).toBe(true);
+  });
+
   it("derives vision candidates from smart-selected posts for retry cache compatibility", () => {
     const posts = [
       makePost("recent", { timestamp: "2026-06-08T00:00:00Z", likesCount: 10 }),

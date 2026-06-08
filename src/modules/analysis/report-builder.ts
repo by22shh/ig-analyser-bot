@@ -136,7 +136,7 @@ export async function buildStrategicReport(input: {
 
   const sourceMap = sections.flatMap((section) => section.sources);
   const bullets = generated.summaryBullets?.length
-    ? generated.summaryBullets
+    ? generated.summaryBullets.map((bullet) => cleanSummaryBullet(bullet, input.language))
     : sections
         .slice(0, 5)
         .map(
@@ -172,6 +172,41 @@ export async function buildStrategicReport(input: {
     analysisContext
   };
 }
+
+function cleanSummaryBullet(bullet: string, language: Locale): string {
+  const replacements =
+    language === "ru" ? INTERNAL_SUMMARY_REPLACEMENTS_RU : INTERNAL_SUMMARY_REPLACEMENTS_EN;
+  return replacements
+    .reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), bullet)
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const INTERNAL_SUMMARY_REPLACEMENTS_RU: Array<[RegExp, string]> = [
+  [/\banalysisContext\b/g, "сводка анализа"],
+  [/\bevidenceMap\b/g, "сводка источников"],
+  [/\bcontentClusters\b/g, "тематические кластеры"],
+  [/\bprofileSignals\b/g, "сигналы профиля"],
+  [/\baudienceSignals\b/g, "сигналы аудитории"],
+  [/\briskSignals\b/g, "сигналы риска"],
+  [/\bopportunitySignals\b/g, "сигналы для зацепок"],
+  [/\bsourceCatalog\b/g, "источники"],
+  [/\bpostIds\b/g, "ID постов"],
+  [/\brecurring commenters\b/gi, "повторяющиеся комментаторы"],
+  [/\bstrongest signals\b/gi, "самые сильные сигналы"]
+];
+
+const INTERNAL_SUMMARY_REPLACEMENTS_EN: Array<[RegExp, string]> = [
+  [/\banalysisContext\b/g, "analysis summary"],
+  [/\bevidenceMap\b/g, "evidence summary"],
+  [/\bcontentClusters\b/g, "content clusters"],
+  [/\bprofileSignals\b/g, "profile signals"],
+  [/\baudienceSignals\b/g, "audience signals"],
+  [/\briskSignals\b/g, "risk signals"],
+  [/\bopportunitySignals\b/g, "conversation-hook signals"],
+  [/\bsourceCatalog\b/g, "sources"],
+  [/\bpostIds\b/g, "posts"]
+];
 
 function weakSourceSectionTitles(sections: Array<{ title: string; sources: unknown[] }>): string[] {
   return sections.filter((section) => !section.sources.length).map((section) => section.title);

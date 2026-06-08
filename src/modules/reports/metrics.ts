@@ -55,7 +55,7 @@ export function computeReportMetrics(
     mentionFrequency: frequency(
       posts.flatMap((post) => post.mentions.map((mention) => mention.toLowerCase()))
     ),
-    digitalCircle: computeDigitalCircle(posts)
+    digitalCircle: computeDigitalCircle(posts, { excludeUsernames: [profile.username] })
   };
 }
 

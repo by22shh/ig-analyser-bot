@@ -12,21 +12,30 @@ type Acc = {
   details: string[];
 };
 
-export function computeDigitalCircle(posts: InstagramPost[]): DigitalCircleItem[] {
+export function computeDigitalCircle(
+  posts: InstagramPost[],
+  options: { excludeUsernames?: string[] } = {}
+): DigitalCircleItem[] {
   const newest = Math.max(
     ...posts.map((post) => Date.parse(post.timestamp ?? "0")).filter(Number.isFinite),
     0
   );
   const acc = new Map<string, Acc>();
+  const excluded = new Set((options.excludeUsernames ?? []).map(normalizeUsername).filter(Boolean));
 
   for (const post of posts) {
     const date = post.timestamp;
-    for (const username of post.taggedUsers)
+    for (const username of post.taggedUsers) {
+      if (excluded.has(normalizeUsername(username))) continue;
       add(acc, username, "tagged", 2.0, post, newest, date, "tagged in post");
-    for (const username of post.mentions)
+    }
+    for (const username of post.mentions) {
+      if (excluded.has(normalizeUsername(username))) continue;
       add(acc, username, "mentioned", 1.5, post, newest, date, "mentioned in caption");
+    }
     for (const comment of post.latestComments) {
       const username = comment.ownerUsername;
+      if (username && excluded.has(normalizeUsername(username))) continue;
       if (!username || isSpam(comment.text)) continue;
       const bonus = Math.min((comment.text.length || 0) * 0.1, 2);
       add(
@@ -59,6 +68,10 @@ export function computeDigitalCircle(posts: InstagramPost[]): DigitalCircleItem[
     .slice(0, 8);
 }
 
+function normalizeUsername(value: string): string {
+  return value.replace(/^@/, "").trim().toLowerCase();
+}
+
 function add(
   acc: Map<string, Acc>,
   rawUsername: string,
@@ -69,7 +82,7 @@ function add(
   date?: string,
   detail?: string
 ) {
-  const username = rawUsername.replace(/^@/, "").toLowerCase();
+  const username = normalizeUsername(rawUsername);
   if (!username) return;
   const created = acc.get(username) ?? {
     username,

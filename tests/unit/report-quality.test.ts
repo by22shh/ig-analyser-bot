@@ -131,4 +131,42 @@ describe("report quality validation", () => {
     );
     expect(qualityFindingsNeedRepair(quality.findings)).toBe(false);
   });
+
+  it("flags internal operational wording leaked into a report", () => {
+    const quality = evaluateReportQuality({
+      mode: "standard",
+      sections: [
+        {
+          title: "Общая оценка ценности профиля",
+          content:
+            "Профиль полезен для production end-to-end evaluation after deploy и проверки pipeline.",
+          sources: [{ postId: "p1", label: "Public post" }]
+        }
+      ]
+    });
+
+    expect(quality.findings.map((finding) => finding.id)).toContain(
+      "report:internal_operational_goal_leak"
+    );
+    expect(quality.score).toBeLessThan(100);
+    expect(qualityFindingsNeedRepair(quality.findings)).toBe(true);
+  });
+
+  it("flags internal schema terms leaked into a report", () => {
+    const quality = evaluateReportQuality({
+      mode: "standard",
+      sections: [
+        {
+          title: "Основные темы и приоритеты",
+          content: "contentClusters и audienceSignals показывают сильные postIds.",
+          sources: [{ postId: "p1", label: "Public post" }]
+        }
+      ]
+    });
+
+    expect(quality.findings.map((finding) => finding.id)).toContain(
+      "report:internal_schema_term_leak"
+    );
+    expect(qualityFindingsNeedRepair(quality.findings)).toBe(true);
+  });
 });

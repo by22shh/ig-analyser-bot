@@ -230,7 +230,7 @@ export function buildAnalysisContext(input: {
 }): AnalysisContext {
   const profileSignals = buildProfileSignals(input.profile, input.posts);
   const contentClusters = buildContentClusters(input.posts, input.vision);
-  const audienceSignals = buildAudienceSignals(input.posts);
+  const audienceSignals = buildAudienceSignals(input.posts, input.profile.username);
   const riskSignals = buildRiskSignals(
     input.profile,
     input.posts,
@@ -442,13 +442,18 @@ function buildContentClusters(
     .sort((a, b) => b.count - a.count);
 }
 
-function buildAudienceSignals(posts: InstagramPost[]): AnalysisContext["audienceSignals"] {
+function buildAudienceSignals(
+  posts: InstagramPost[],
+  ownerUsername: string
+): AnalysisContext["audienceSignals"] {
   const commenters = new Map<string, number>();
   const commentTerms: string[] = [];
+  const owner = normalizeUsername(ownerUsername);
   for (const post of posts) {
     for (const comment of post.latestComments) {
-      if (comment.ownerUsername)
+      if (comment.ownerUsername && normalizeUsername(comment.ownerUsername) !== owner)
         commenters.set(comment.ownerUsername, (commenters.get(comment.ownerUsername) ?? 0) + 1);
+      if (comment.ownerUsername && normalizeUsername(comment.ownerUsername) === owner) continue;
       commentTerms.push(...topTerms(comment.text, 8));
     }
   }
@@ -737,4 +742,8 @@ function frequency(values: string[]): Record<string, number> {
 
 function unique(values: string[]): string[] {
   return [...new Set(values.map((value) => value.trim()).filter(Boolean))];
+}
+
+function normalizeUsername(value: string): string {
+  return value.replace(/^@/, "").trim().toLowerCase();
 }

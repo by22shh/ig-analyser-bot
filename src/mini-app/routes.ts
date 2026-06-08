@@ -270,7 +270,7 @@ export function registerMiniAppRoutes(app: FastifyInstance, input: MiniAppInput)
     });
     if (!session) return;
     if (!(await ensureMiniAppSubscription(session, input.services, input.bot, reply))) return;
-    if (!env.FEATURE_TELEGRAM_STARS) return apiError(reply, 403, "PAYMENT_METHOD_UNAVAILABLE");
+    if (!miniAppTelegramStarsAvailable()) return apiError(reply, 403, "PAYMENT_METHOD_UNAVAILABLE");
     const body = bodyObject(request);
     const packageCode = typeof body.packageCode === "string" ? body.packageCode : "";
     await input.services.payments.ensureCatalog();
@@ -291,7 +291,7 @@ export function registerMiniAppRoutes(app: FastifyInstance, input: MiniAppInput)
     });
     if (!session) return;
     if (!(await ensureMiniAppSubscription(session, input.services, input.bot, reply))) return;
-    if (!env.FEATURE_YOOKASSA_PAYMENTS) return apiError(reply, 403, "PAYMENT_METHOD_UNAVAILABLE");
+    if (!miniAppYooKassaAvailable()) return apiError(reply, 403, "PAYMENT_METHOD_UNAVAILABLE");
     const body = bodyObject(request);
     const packageCode = typeof body.packageCode === "string" ? body.packageCode : "";
     const email =
@@ -468,6 +468,7 @@ async function grantWelcomeBonus(services: Services, userId: string) {
 async function miniAppBootstrap(session: MiniAppSession, services: Services, bot: Bot<MyContext>) {
   const subscription = await subscriptionDto(session, services, bot);
   const base = {
+    brandName: env.BRAND_NAME,
     user: userDto(session.user),
     features: miniAppFeatures(session.user),
     subscription,
@@ -502,8 +503,12 @@ async function miniAppBootstrap(session: MiniAppSession, services: Services, bot
       exportFormat: stats.settings?.defaultExportFormat ?? "pdf"
     },
     packages: {
-      stars: services.payments.packages("telegram_stars").map(packageDto),
-      yookassa: services.payments.packages("yookassa").map(packageDto)
+      stars: miniAppTelegramStarsAvailable()
+        ? services.payments.packages("telegram_stars").map(packageDto)
+        : [],
+      yookassa: miniAppYooKassaAvailable()
+        ? services.payments.packages("yookassa").map(packageDto)
+        : []
     },
     reports: reports.map(reportListItemDto),
     jobs
@@ -516,11 +521,19 @@ function miniAppFeatures(user: User) {
     influencerMode: env.FEATURE_INFLUENCER_MODE,
     osintMode: env.FEATURE_OSINT_COMPLIANCE_MODE && isCompliance(user),
     photoSearch: env.FEATURE_PHOTO_SEARCH,
-    telegramStars: env.FEATURE_TELEGRAM_STARS,
-    yookassa: env.FEATURE_YOOKASSA_PAYMENTS,
-    yookassaReceipts: env.YOOKASSA_USE_RECEIPTS,
+    telegramStars: miniAppTelegramStarsAvailable(),
+    yookassa: miniAppYooKassaAvailable(),
+    yookassaReceipts: miniAppYooKassaAvailable() && env.YOOKASSA_USE_RECEIPTS,
     requireChannelSubscription: env.FEATURE_REQUIRE_CHANNEL_SUB
   };
+}
+
+function miniAppTelegramStarsAvailable(): boolean {
+  return env.FEATURE_TELEGRAM_STARS && Boolean(env.TELEGRAM_BOT_TOKEN);
+}
+
+function miniAppYooKassaAvailable(): boolean {
+  return env.FEATURE_YOOKASSA_PAYMENTS;
 }
 
 function miniAppCosts() {

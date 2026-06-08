@@ -6,7 +6,10 @@ import { env } from "../../src/config/env.js";
 const telegramBotToken = "123456:test-token";
 const originalEnv = {
   APP_ENV: env.APP_ENV,
+  BRAND_NAME: env.BRAND_NAME,
   FEATURE_MINI_APP: env.FEATURE_MINI_APP,
+  FEATURE_TELEGRAM_STARS: env.FEATURE_TELEGRAM_STARS,
+  FEATURE_YOOKASSA_PAYMENTS: env.FEATURE_YOOKASSA_PAYMENTS,
   FEATURE_REQUIRE_CHANNEL_SUB: env.FEATURE_REQUIRE_CHANNEL_SUB,
   REQUIRED_CHANNEL_ID: env.REQUIRED_CHANNEL_ID,
   TELEGRAM_BOT_TOKEN: env.TELEGRAM_BOT_TOKEN
@@ -19,6 +22,7 @@ afterEach(() => {
 
 describe("Mini App API", () => {
   it("serves bootstrap in local development mode", async () => {
+    env.BRAND_NAME = "AuditBot";
     const services = makeServices();
     const bot = makeBot();
     const app = createApp({ services: services as never, bot: bot as never });
@@ -30,6 +34,7 @@ describe("Mini App API", () => {
     });
 
     expect(res.statusCode).toBe(200);
+    expect(res.json().brandName).toBe("AuditBot");
     expect(res.json().user.telegramId).toBe("900000001");
     expect(res.json().credits.available).toBe(1);
     await app.close();
@@ -190,6 +195,45 @@ describe("Mini App API", () => {
     expect(res.statusCode).toBe(200);
     expect(res.json().jobs).toEqual([]);
     expect(bot.api.getChatMember).toHaveBeenCalledWith("@required", 900000001);
+    await app.close();
+  });
+
+  it("hides Mini App Stars packages and rejects invoice creation without a bot token", async () => {
+    env.FEATURE_TELEGRAM_STARS = true;
+    env.TELEGRAM_BOT_TOKEN = "";
+    const services = makeServices();
+    services.payments.packages.mockReturnValue([
+      {
+        code: "start",
+        title: "Start",
+        creditsUnits: 300,
+        isPublic: true,
+        starsAmount: 690
+      }
+    ] as never);
+    const app = createApp({ services: services as never, bot: makeBot() as never });
+
+    const bootstrap = await app.inject({
+      method: "GET",
+      url: "/api/mini-app/bootstrap",
+      headers: { "x-mini-app-dev-user": "900000001" }
+    });
+    const invoice = await app.inject({
+      method: "POST",
+      url: "/api/mini-app/payments/stars",
+      headers: {
+        "content-type": "application/json",
+        "x-mini-app-dev-user": "900000001"
+      },
+      payload: JSON.stringify({ packageCode: "start" })
+    });
+
+    expect(bootstrap.statusCode).toBe(200);
+    expect(bootstrap.json().features.telegramStars).toBe(false);
+    expect(bootstrap.json().packages.stars).toEqual([]);
+    expect(invoice.statusCode).toBe(403);
+    expect(invoice.json().error.code).toBe("PAYMENT_METHOD_UNAVAILABLE");
+    expect(services.payments.createTelegramStarsInvoiceLink).not.toHaveBeenCalled();
     await app.close();
   });
 });

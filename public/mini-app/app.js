@@ -65,6 +65,7 @@ const copy = {
     topup: "Пополнение",
     stars: "Telegram Stars",
     yookassa: "Карта / СБП",
+    noPaymentMethods: "Доступных способов оплаты пока нет",
     buy: "Купить",
     email: "Email для чека",
     settings: "Настройки",
@@ -125,6 +126,7 @@ const copy = {
     topup: "Top up",
     stars: "Telegram Stars",
     yookassa: "Card / SBP",
+    noPaymentMethods: "No payment methods are available yet",
     buy: "Buy",
     email: "Receipt email",
     settings: "Settings",
@@ -295,7 +297,9 @@ function syncChrome() {
     const label = button.querySelector("span:last-child");
     if (label && labels[key]) label.textContent = labels[key];
   });
-  brandName.textContent = state.boot?.user?.name ? "SocialAnalyserBot" : "SocialAnalyserBot";
+  const brand = state.boot?.brandName || "SocialAnalyserBot";
+  brandName.textContent = brand;
+  document.title = `${brand} Mini App`;
   connectionState.textContent = tg?.initData ? t("connected") : t("local");
 }
 
@@ -489,6 +493,35 @@ function renderReportDetail() {
 
 function renderCredits() {
   const boot = state.boot;
+  const starsPackages = boot.features.telegramStars ? boot.packages.stars || [] : [];
+  const yookassaPackages = boot.features.yookassa ? boot.packages.yookassa || [] : [];
+  const paymentSections = [
+    starsPackages.length
+      ? `
+      <section class="panel">
+        <h2>${t("stars")}</h2>
+        <div class="list">
+          ${starsPackages.map((pkg) => packageCard(pkg, "stars")).join("")}
+        </div>
+      </section>
+    `
+      : "",
+    yookassaPackages.length
+      ? `
+      <section class="panel">
+        <h2>${t("yookassa")}</h2>
+        <form id="yookassaForm" class="stack">
+          ${boot.features.yookassaReceipts ? `<label class="field"><span class="label">${t("email")}</span><input class="input" name="email" type="email" value="${escAttr(boot.user.email || "")}" /></label>` : ""}
+          <div class="list">
+            ${yookassaPackages.map((pkg) => packageCard(pkg, "yookassa", true)).join("")}
+          </div>
+        </form>
+      </section>
+    `
+      : ""
+  ]
+    .filter(Boolean)
+    .join("");
   view.innerHTML = `
     <div class="stack">
       <section class="panel">
@@ -500,22 +533,7 @@ function renderCredits() {
         </div>
       </section>
 
-      <section class="panel">
-        <h2>${t("stars")}</h2>
-        <div class="list">
-          ${boot.packages.stars.map((pkg) => packageCard(pkg, "stars")).join("")}
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2>${t("yookassa")}</h2>
-        <form id="yookassaForm" class="stack">
-          ${boot.features.yookassaReceipts ? `<label class="field"><span class="label">${t("email")}</span><input class="input" name="email" type="email" value="${escAttr(boot.user.email || "")}" /></label>` : ""}
-          <div class="list">
-            ${boot.packages.yookassa.map((pkg) => packageCard(pkg, "yookassa", true)).join("")}
-          </div>
-        </form>
-      </section>
+      ${paymentSections || `<section class="panel">${empty(t("noPaymentMethods"))}</section>`}
     </div>
   `;
 }

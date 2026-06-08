@@ -128,7 +128,7 @@ export class ReportService {
 
   async getReportWithSections(reportId: string, userId: string) {
     return this.prisma.report.findFirst({
-      where: { id: reportId, userId },
+      where: { id: reportId, userId, analysisJob: { status: "completed" } },
       include: {
         sections: { orderBy: { position: "asc" } },
         artifacts: true,
@@ -139,7 +139,7 @@ export class ReportService {
 
   async latestReports(userId: string, take = 10) {
     return this.prisma.report.findMany({
-      where: { userId },
+      where: { userId, analysisJob: { status: "completed" } },
       include: { analysisJob: true, artifacts: true },
       orderBy: { createdAt: "desc" },
       take

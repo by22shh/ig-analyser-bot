@@ -4,6 +4,36 @@ import { ReportService } from "../../src/modules/reports/report.service.js";
 import type { StrategicReportView } from "../../src/modules/reports/types.js";
 
 describe("ReportService", () => {
+  it("only returns completed reports with their sections", async () => {
+    const findFirst = vi.fn();
+    const service = new ReportService({ report: { findFirst } } as never, {} as never, {} as never);
+
+    await service.getReportWithSections("report-1", "user-1");
+
+    expect(findFirst).toHaveBeenCalledWith({
+      where: { id: "report-1", userId: "user-1", analysisJob: { status: "completed" } },
+      include: {
+        sections: { orderBy: { position: "asc" } },
+        artifacts: true,
+        analysisJob: true
+      }
+    });
+  });
+
+  it("excludes reports for active or failed analysis jobs from history", async () => {
+    const findMany = vi.fn();
+    const service = new ReportService({ report: { findMany } } as never, {} as never, {} as never);
+
+    await service.latestReports("user-1", 12);
+
+    expect(findMany).toHaveBeenCalledWith({
+      where: { userId: "user-1", analysisJob: { status: "completed" } },
+      include: { analysisJob: true, artifacts: true },
+      orderBy: { createdAt: "desc" },
+      take: 12
+    });
+  });
+
   it("fails artifact creation before storing anything when PDF rendering fails", async () => {
     const transaction = vi.fn();
     const storage = {

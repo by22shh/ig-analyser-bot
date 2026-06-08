@@ -26,6 +26,12 @@ describe("OpenRouterLlmProvider", () => {
   it("falls back to text vision when structured output is not supported", async () => {
     const fetchMock = vi
       .fn()
+      .mockResolvedValueOnce(
+        new Response("image-bytes", {
+          status: 200,
+          headers: { "content-type": "image/jpeg" }
+        })
+      )
       .mockResolvedValueOnce(new Response("{}", { status: 400 }))
       .mockResolvedValueOnce(
         new Response(
@@ -56,6 +62,7 @@ describe("OpenRouterLlmProvider", () => {
           commentsCount: 0,
           latestComments: [],
           timestamp: "2026-06-01T00:00:00Z",
+          displayUrl: "https://cdn.example/post.jpg",
           url: "https://www.instagram.com/p/p1/",
           isPinned: false,
           childPosts: [],
@@ -64,7 +71,7 @@ describe("OpenRouterLlmProvider", () => {
       ]
     });
 
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
     expect(result[0]).toMatchObject({
       postId: "p1",
       status: "completed",
@@ -72,28 +79,21 @@ describe("OpenRouterLlmProvider", () => {
     });
   });
 
-  it("does not send image content to OpenRouter when the download exceeds the configured cap", async () => {
+  it("marks vision as skipped when the image download exceeds the configured cap", async () => {
     env.ANALYSIS_MAX_IMAGE_DOWNLOAD_MB = 1;
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValueOnce(
-        new Response("", {
-          status: 200,
-          headers: {
-            "content-type": "image/jpeg",
-            "content-length": String(2 * 1024 * 1024)
-          }
-        })
-      )
-      .mockResolvedValueOnce(
-        new Response(
-          JSON.stringify({ choices: [{ message: { content: "Visible public facts." } }] })
-        )
-      );
+    const fetchMock = vi.fn().mockResolvedValueOnce(
+      new Response("", {
+        status: 200,
+        headers: {
+          "content-type": "image/jpeg",
+          "content-length": String(2 * 1024 * 1024)
+        }
+      })
+    );
     vi.stubGlobal("fetch", fetchMock);
 
     const provider = new OpenRouterLlmProvider("token");
-    await provider.analyzeVision({
+    const result = await provider.analyzeVision({
       profile: {
         username: "alice",
         followersCount: 1,
@@ -123,13 +123,13 @@ describe("OpenRouterLlmProvider", () => {
       ]
     });
 
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock.mock.calls[0]?.[0]).toBe("https://cdn.example/huge.jpg");
-    const openRouterBody = JSON.parse(
-      String((fetchMock.mock.calls[1]?.[1] as RequestInit).body)
-    ) as { messages: Array<{ content: Array<{ type: string }> }> };
-    expect(openRouterBody.messages[1]?.content).toEqual([
-      expect.objectContaining({ type: "text" })
-    ]);
+    expect(result[0]).toMatchObject({
+      postId: "p1",
+      status: "skipped",
+      description: null,
+      errorCode: "IMAGE_TOO_LARGE"
+    });
   });
 });

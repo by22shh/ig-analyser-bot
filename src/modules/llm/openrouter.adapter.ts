@@ -94,14 +94,24 @@ export class OpenRouterLlmProvider implements LlmProvider {
     // "failed" item instead of rejecting the batch; result order is preserved.
     return mapWithConcurrency(posts, env.VISION_BATCH_SIZE ?? 5, async (post) => {
       try {
-        const imageUrl = await boundedImageDataUrl(post.displayUrl);
+        const image = await boundedImageDataUrl(post.displayUrl);
+        if (!image.dataUrl) {
+          return {
+            postId: post.id,
+            status: "skipped" as const,
+            description: null,
+            model: env.MODEL_VISION,
+            promptVersion: prompts.vision.key,
+            errorCode: image.errorCode
+          };
+        }
         const visionRequest = {
           model: env.MODEL_VISION,
           system: prompts.vision.system,
           user: buildVisionUserContent({
             postId: post.id,
             caption: post.caption,
-            imageUrl
+            imageUrl: image.dataUrl
           }),
           maxTokens: env.LLM_VISION_OUTPUT_TOKEN_BUDGET ?? 700,
           responseFormat: env.LLM_STRUCTURED_OUTPUTS ? visionResponseFormat : undefined,
@@ -522,10 +532,12 @@ function tryRenderStructuredVision(postId: string, text: string): string {
   }
 }
 
-async function boundedImageDataUrl(
-  imageUrl: string | null | undefined
-): Promise<string | undefined> {
-  if (!imageUrl || !isHttpUrl(imageUrl)) return undefined;
+async function boundedImageDataUrl(imageUrl: string | null | undefined): Promise<{
+  dataUrl?: string;
+  errorCode: string;
+}> {
+  if (!imageUrl) return { errorCode: "IMAGE_URL_MISSING" };
+  if (!isHttpUrl(imageUrl)) return { errorCode: "IMAGE_URL_UNSUPPORTED" };
   try {
     const maxBytes = Math.max(
       1,
@@ -566,9 +578,12 @@ async function boundedImageDataUrl(
       chunks.push(bytes);
     }
 
-    return `data:${rawContentType || "image/jpeg"};base64,${Buffer.concat(chunks).toString("base64")}`;
-  } catch {
-    return undefined;
+    return {
+      dataUrl: `data:${rawContentType || "image/jpeg"};base64,${Buffer.concat(chunks).toString("base64")}`,
+      errorCode: "ok"
+    };
+  } catch (error) {
+    return { errorCode: error instanceof Error ? error.message : "IMAGE_DOWNLOAD_FAILED" };
   }
 }
 

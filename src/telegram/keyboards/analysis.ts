@@ -37,3 +37,11 @@ export function osintLawfulBasisKeyboard(messages: LocaleMessages): InlineKeyboa
     .text(messages.buttons.back, CB.ANALYZE)
     .text(messages.buttons.cancel, CB.CANCEL);
 }
+
+export function goalKeyboard(messages: LocaleMessages): InlineKeyboard {
+  return new InlineKeyboard()
+    .text(messages.buttons.skip, CB.SKIP_GOAL)
+    .row()
+    .text(messages.buttons.cancel, CB.CANCEL)
+    .text(messages.buttons.menu, CB.BACK_MAIN);
+}

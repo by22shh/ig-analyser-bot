@@ -127,6 +127,10 @@ export function registerMiniAppRoutes(app: FastifyInstance, input: MiniAppInput)
       mode === "hr" && typeof body.targetPosition === "string"
         ? body.targetPosition.trim().slice(0, 120)
         : undefined;
+    const goal =
+      typeof body.goal === "string" && body.goal.trim()
+        ? body.goal.trim().replace(/\s+/g, " ").slice(0, 500)
+        : undefined;
     const requestId =
       typeof body.requestId === "string" && body.requestId.length <= 80
         ? body.requestId
@@ -141,6 +145,7 @@ export function registerMiniAppRoutes(app: FastifyInstance, input: MiniAppInput)
         mode,
         language: session.user.language === "en" ? "en" : "ru",
         targetPosition,
+        goal,
         idempotencyKey: `miniapp:analysis:${session.user.id}:${requestId}`
       });
       return {

@@ -2,14 +2,14 @@
 
 Production-ready MVP implementation of a Telegram bot based on `ig-analyser-site`.
 
-The bot is backend-first: Telegram handlers are thin, long work is queued in BullMQ, state lives in PostgreSQL, provider-specific code sits behind adapters, and local mock mode works without external secrets.
+The bot is backend-first: Telegram handlers are thin, long work is queued through BullMQ or a Postgres-backed leased queue, state lives in PostgreSQL, provider-specific code sits behind adapters, and local mock mode works without external secrets.
 
 ## What Is Implemented
 
 - Telegram UX with `grammy`: `/start`, `/menu`, `/analyze`, `/photo`, `/history`, `/credits`, `/balance`, `/buy`, `/topup`, `/settings`, `/help`, `/cancel`, `/reset`, `/delete_me`, admin shell.
 - Telegram Mini App at `/mini-app`: profile analysis, job progress, report history, sections, exports, report chat, credits, payments and settings.
 - Public Instagram username normalization and analysis wizard.
-- BullMQ workers for analysis and photo search.
+- Queue workers for analysis and photo search (`bullmq` with Redis or `postgres` with DB leases).
 - Mock and real adapters for Apify, OpenRouter, FaceCheck, YooKassa, storage and PDF.
 - Report generation pipeline: profile snapshots, metrics, Digital Circle, parsed sections, Telegram summary, Markdown/HTML/PDF artifacts, report chat.
 - Credits ledger with transactional reserve/capture/release/grant.
@@ -34,7 +34,7 @@ pnpm dev:worker
 
 Without `APIFY_TOKEN`, `OPENROUTER_API_KEY`, `FACECHECK_API_TOKEN`, `YOOKASSA_SHOP_ID` and `YOOKASSA_SECRET_KEY`, providers run in mock mode. This lets the end-to-end UX complete locally without secrets.
 
-For Neon, use the pooled connection string as `DATABASE_URL` and the direct connection string as `DIRECT_URL`. Redis is still required separately for BullMQ workers; both `redis://` and TLS `rediss://` URLs are supported.
+For Neon, use the pooled connection string as `DATABASE_URL` and the direct connection string as `DIRECT_URL`. Set `JOB_QUEUE_DRIVER=postgres` to use the DB-backed leased queue without Redis. Set `JOB_QUEUE_DRIVER=bullmq` when you want BullMQ; in that mode Redis is required and both `redis://` and TLS `rediss://` URLs are supported.
 
 For Telegram local development, set:
 

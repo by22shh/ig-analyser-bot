@@ -1,9 +1,9 @@
 import { Worker } from "bullmq";
 import type { Bot } from "grammy";
-import type { PrismaClient } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
 import { env } from "../../config/env.js";
 import { childLogger } from "../../config/logger.js";
-import { redisConnection, type PhotoSearchJobPayload } from "../queues.js";
+import { getRedisConnection, type PhotoSearchJobPayload } from "../queues.js";
 import { isFinalAttempt } from "../retry.js";
 import type { FaceCheckAdapter } from "../../modules/photo-search/adapters/facecheck.adapter.js";
 import { CreditsService } from "../../modules/billing/credits.service.js";
@@ -16,157 +16,245 @@ import type { MyContext } from "../../telegram/context.js";
 import { safeNotify } from "./notify.js";
 import { backMenuKeyboard } from "../../telegram/keyboards/main-menu.js";
 
-export function startPhotoSearchWorker(input: {
+export type PhotoSearchProcessorInput = {
   prisma: PrismaClient;
   bot?: Bot<MyContext>;
   facecheck: FaceCheckAdapter;
-}) {
-  const credits = new CreditsService(input.prisma);
-  const log = childLogger("photo-search.worker");
+};
+
+type AttemptInfo = {
+  attemptsMade: number;
+  attempts?: number;
+  lease?: { workerId: string };
+};
+
+export function startPhotoSearchWorker(input: PhotoSearchProcessorInput) {
   return new Worker<PhotoSearchJobPayload>(
     "photo-search",
-    async (job) => {
-      const row = await input.prisma.photoSearchJob.findUniqueOrThrow({
-        where: { id: job.data.photoSearchJobId },
-        include: { user: true }
-      });
-      const messages = t(row.user.language);
-
-      // Idempotency: a re-delivered finished job must not search/capture again.
-      if (row.status === "completed") return;
-
-      const finalAttempt = isFinalAttempt({
+    async (job) =>
+      processPhotoSearchJob(input, job.data.photoSearchJobId, {
         attemptsMade: job.attemptsMade,
         attempts: job.opts.attempts
-      });
-
-      try {
-        // Drop matches from a previous failed attempt so a retry does not duplicate them.
-        await input.prisma.photoSearchMatch.deleteMany({ where: { photoSearchJobId: row.id } });
-        await input.prisma.photoSearchJob.update({
-          where: { id: row.id },
-          data: { status: "searching" }
-        });
-        const bytes = await downloadTelegramFile(input.bot, row.telegramFileId);
-        const matches = await input.facecheck.search({
-          bytes,
-          mimeType: row.inputMimeType ?? "image/jpeg"
-        });
-        await input.prisma.photoSearchMatch.createMany({
-          data: matches.map((match) => ({
-            photoSearchJobId: row.id,
-            username: match.username,
-            profileUrl: match.profileUrl,
-            confidence: match.confidence,
-            source: match.source,
-            sourceUrl: match.sourceUrl,
-            rawScore: match.rawScore
-          }))
-        });
-        // Capture credits and mark the job completed atomically (same reasoning
-        // as the analysis worker): a crash between the two would let a retry
-        // re-run the paid FaceCheck search and then fail the second capture.
-        await credits.captureReserve({
-          userId: row.userId,
-          photoSearchJobId: row.id,
-          amountUnits: MODE_COST_UNITS.photo_search,
-          metadata: { photoSearchJobId: row.id },
-          within: async (tx) => {
-            await tx.photoSearchJob.update({
-              where: { id: row.id },
-              data: { status: "completed", finishedAt: new Date() }
-            });
-          }
-        });
-        await recordUsage(input.prisma, {
-          userId: row.userId,
-          provider:
-            env.FACECHECK_API_TOKEN && !env.FACECHECK_TESTING_MODE ? "facecheck" : "mock_facecheck",
-          operation: "photo_search",
-          status: "success",
-          costEstimateRub:
-            env.FACECHECK_API_TOKEN && !env.FACECHECK_TESTING_MODE
-              ? (env.ECON_FACECHECK_SEARCH_COST_RUB ?? null)
-              : null
-        }).catch((usageError) =>
-          log.warn({ error: usageError, jobId: row.id }, "photo_search_usage_record_failed")
-        );
-        if (input.bot) {
-          const kb = new InlineKeyboard();
-          for (const match of matches) {
-            kb.text(
-              `@${match.username} ${(match.confidence * 100).toFixed(0)}%`,
-              `${CB.PHOTO_ANALYZE}:${match.username}`
-            );
-            if (match.profileUrl) kb.url(messages.buttons.openInstagram, match.profileUrl);
-            kb.row();
-          }
-          kb.text(messages.buttons.menu, CB.BACK_MAIN);
-          // Work is done and captured; a delivery hiccup must not fail the job.
-          try {
-            await input.bot.api.sendMessage(
-              Number(row.telegramChatId ?? row.user.telegramId),
-              messages.photoMatches(matches),
-              {
-                parse_mode: "HTML",
-                reply_markup: kb,
-                link_preview_options: { is_disabled: true }
-              }
-            );
-          } catch (notifyError) {
-            log.warn({ error: notifyError, jobId: row.id }, "photo_search_notify_failed");
-          }
-        }
-      } catch (error) {
-        if (!finalAttempt) {
-          // Keep the reserve for the retry; just mark the job as retrying.
-          await input.prisma.photoSearchJob.update({
-            where: { id: row.id },
-            data: {
-              status: "retrying",
-              errorCode: error instanceof Error ? error.message : "PHOTO_SEARCH_FAILED"
-            }
-          });
-          throw error;
-        }
-        await credits.releaseReserve({
-          userId: row.userId,
-          photoSearchJobId: row.id,
-          amountUnits: MODE_COST_UNITS.photo_search,
-          metadata: {
-            photoSearchJobId: row.id,
-            reason: error instanceof Error ? error.message : "failed"
-          }
-        });
-        await recordUsage(input.prisma, {
-          userId: row.userId,
-          provider:
-            env.FACECHECK_API_TOKEN && !env.FACECHECK_TESTING_MODE ? "facecheck" : "mock_facecheck",
-          operation: "photo_search",
-          status: "failed",
-          errorCode: error instanceof Error ? error.message : "PHOTO_SEARCH_FAILED"
-        }).catch(() => undefined);
-        await input.prisma.photoSearchJob.update({
-          where: { id: row.id },
-          data: {
-            status: "failed",
-            errorCode: error instanceof Error ? error.message : "PHOTO_SEARCH_FAILED",
-            finishedAt: new Date()
-          }
-        });
-        await safeNotify(
-          input.bot,
-          Number(row.telegramChatId ?? row.user.telegramId),
-          messages.photoSearchFailed(),
-          (notifyError) =>
-            log.warn({ error: notifyError, jobId: row.id }, "photo_search_failed_notify_failed"),
-          backMenuKeyboard(messages)
-        );
-        throw error;
-      }
-    },
-    { connection: redisConnection, concurrency: 2 }
+      }),
+    { connection: getRedisConnection(), concurrency: 2 }
   );
+}
+
+type PhotoSearchJobWriteClient = PrismaClient | Prisma.TransactionClient;
+type PhotoSearchJobLease = { workerId: string } | undefined;
+
+const PHOTO_SEARCH_TERMINAL_STATUSES = ["completed", "failed"] as const;
+
+async function assertPhotoSearchJobMutable(
+  prisma: PrismaClient,
+  photoSearchJobId: string,
+  lease: PhotoSearchJobLease
+) {
+  if (await canMutatePhotoSearchJob(prisma, photoSearchJobId, lease)) return;
+  throw new Error("PHOTO_SEARCH_JOB_NOT_ACTIVE");
+}
+
+async function canMutatePhotoSearchJob(
+  prisma: PrismaClient,
+  photoSearchJobId: string,
+  lease: PhotoSearchJobLease
+): Promise<boolean> {
+  const current = await prisma.photoSearchJob.findUnique({
+    where: { id: photoSearchJobId },
+    select: { status: true, queueLockedBy: true }
+  });
+  if (!current || isPhotoSearchTerminalStatus(current.status)) return false;
+  return !lease || current.queueLockedBy === lease.workerId;
+}
+
+async function updateRunningPhotoSearchJob(
+  prisma: PhotoSearchJobWriteClient,
+  photoSearchJobId: string,
+  data: Prisma.PhotoSearchJobUpdateManyMutationInput,
+  lease: PhotoSearchJobLease
+) {
+  const result = await prisma.photoSearchJob.updateMany({
+    where: {
+      id: photoSearchJobId,
+      status: { notIn: [...PHOTO_SEARCH_TERMINAL_STATUSES] },
+      ...(lease ? { queueLockedBy: lease.workerId } : {})
+    },
+    data
+  });
+  if (result.count === 0) throw new Error("PHOTO_SEARCH_JOB_NOT_ACTIVE");
+}
+
+function isPhotoSearchTerminalStatus(status: string): boolean {
+  return PHOTO_SEARCH_TERMINAL_STATUSES.includes(
+    status as (typeof PHOTO_SEARCH_TERMINAL_STATUSES)[number]
+  );
+}
+
+export async function processPhotoSearchJob(
+  input: PhotoSearchProcessorInput,
+  photoSearchJobId: string,
+  attemptInfo: AttemptInfo
+) {
+  const credits = new CreditsService(input.prisma);
+  const log = childLogger("photo-search.worker");
+  const row = await input.prisma.photoSearchJob.findUniqueOrThrow({
+    where: { id: photoSearchJobId },
+    include: { user: true }
+  });
+  const messages = t(row.user.language);
+
+  // Idempotency: a re-delivered finished job must not search/capture again.
+  if (isPhotoSearchTerminalStatus(row.status)) return;
+  await assertPhotoSearchJobMutable(input.prisma, row.id, attemptInfo.lease);
+
+  const finalAttempt = isFinalAttempt({
+    attemptsMade: attemptInfo.attemptsMade,
+    attempts: attemptInfo.attempts
+  });
+
+  try {
+    await updateRunningPhotoSearchJob(
+      input.prisma,
+      row.id,
+      { status: "searching" },
+      attemptInfo.lease
+    );
+    // Drop matches from a previous failed attempt so a retry does not duplicate them.
+    await input.prisma.photoSearchMatch.deleteMany({ where: { photoSearchJobId: row.id } });
+    const bytes = await downloadTelegramFile(input.bot, row.telegramFileId);
+    const matches = await input.facecheck.search({
+      bytes,
+      mimeType: row.inputMimeType ?? "image/jpeg"
+    });
+    await input.prisma.photoSearchMatch.createMany({
+      data: matches.map((match) => ({
+        photoSearchJobId: row.id,
+        username: match.username,
+        profileUrl: match.profileUrl,
+        confidence: match.confidence,
+        source: match.source,
+        sourceUrl: match.sourceUrl,
+        rawScore: match.rawScore
+      }))
+    });
+    // Capture credits and mark the job completed atomically (same reasoning
+    // as the analysis worker): a crash between the two would let a retry
+    // re-run the paid FaceCheck search and then fail the second capture.
+    await credits.captureReserve({
+      userId: row.userId,
+      photoSearchJobId: row.id,
+      amountUnits: MODE_COST_UNITS.photo_search,
+      metadata: { photoSearchJobId: row.id },
+      within: async (tx) => {
+        await updateRunningPhotoSearchJob(
+          tx,
+          row.id,
+          {
+            status: "completed",
+            finishedAt: new Date(),
+            queueLockedBy: null,
+            queueLockedUntil: null
+          },
+          attemptInfo.lease
+        );
+      }
+    });
+    await recordUsage(input.prisma, {
+      userId: row.userId,
+      provider:
+        env.FACECHECK_API_TOKEN && !env.FACECHECK_TESTING_MODE ? "facecheck" : "mock_facecheck",
+      operation: "photo_search",
+      status: "success",
+      costEstimateRub:
+        env.FACECHECK_API_TOKEN && !env.FACECHECK_TESTING_MODE
+          ? (env.ECON_FACECHECK_SEARCH_COST_RUB ?? null)
+          : null
+    }).catch((usageError) =>
+      log.warn({ error: usageError, jobId: row.id }, "photo_search_usage_record_failed")
+    );
+    if (input.bot) {
+      const kb = new InlineKeyboard();
+      for (const match of matches) {
+        kb.text(
+          `@${match.username} ${(match.confidence * 100).toFixed(0)}%`,
+          `${CB.PHOTO_ANALYZE}:${match.username}`
+        );
+        if (match.profileUrl) kb.url(messages.buttons.openInstagram, match.profileUrl);
+        kb.row();
+      }
+      kb.text(messages.buttons.menu, CB.BACK_MAIN);
+      // Work is done and captured; a delivery hiccup must not fail the job.
+      try {
+        await input.bot.api.sendMessage(
+          Number(row.telegramChatId ?? row.user.telegramId),
+          messages.photoMatches(matches),
+          {
+            parse_mode: "HTML",
+            reply_markup: kb,
+            link_preview_options: { is_disabled: true }
+          }
+        );
+      } catch (notifyError) {
+        log.warn({ error: notifyError, jobId: row.id }, "photo_search_notify_failed");
+      }
+    }
+  } catch (error) {
+    if (!(await canMutatePhotoSearchJob(input.prisma, row.id, attemptInfo.lease))) {
+      log.warn({ error, jobId: row.id }, "photo_search_mutation_skipped_after_lost_lease");
+      return;
+    }
+    if (!finalAttempt) {
+      // Keep the reserve for the retry; just mark the job as retrying.
+      await updateRunningPhotoSearchJob(
+        input.prisma,
+        row.id,
+        {
+          status: "retrying",
+          errorCode: error instanceof Error ? error.message : "PHOTO_SEARCH_FAILED"
+        },
+        attemptInfo.lease
+      );
+      throw error;
+    }
+    await credits.releaseReserve({
+      userId: row.userId,
+      photoSearchJobId: row.id,
+      amountUnits: MODE_COST_UNITS.photo_search,
+      metadata: {
+        photoSearchJobId: row.id,
+        reason: error instanceof Error ? error.message : "failed"
+      }
+    });
+    await recordUsage(input.prisma, {
+      userId: row.userId,
+      provider:
+        env.FACECHECK_API_TOKEN && !env.FACECHECK_TESTING_MODE ? "facecheck" : "mock_facecheck",
+      operation: "photo_search",
+      status: "failed",
+      errorCode: error instanceof Error ? error.message : "PHOTO_SEARCH_FAILED"
+    }).catch(() => undefined);
+    await updateRunningPhotoSearchJob(
+      input.prisma,
+      row.id,
+      {
+        status: "failed",
+        errorCode: error instanceof Error ? error.message : "PHOTO_SEARCH_FAILED",
+        finishedAt: new Date(),
+        queueLockedBy: null,
+        queueLockedUntil: null
+      },
+      attemptInfo.lease
+    );
+    await safeNotify(
+      input.bot,
+      Number(row.telegramChatId ?? row.user.telegramId),
+      messages.photoSearchFailed(),
+      (notifyError) =>
+        log.warn({ error: notifyError, jobId: row.id }, "photo_search_failed_notify_failed"),
+      backMenuKeyboard(messages)
+    );
+    throw error;
+  }
 }
 
 async function downloadTelegramFile(

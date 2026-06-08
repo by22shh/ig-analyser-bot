@@ -1,17 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("../../src/jobs/queues.js", () => ({
-  redisConnection: {},
+const queues = vi.hoisted(() => ({
   analysisQueue: { add: vi.fn().mockResolvedValue(undefined) },
   photoSearchQueue: { add: vi.fn().mockResolvedValue(undefined) }
 }));
 
+vi.mock("../../src/jobs/queues.js", () => ({
+  redisConnection: {},
+  getAnalysisQueue: () => queues.analysisQueue,
+  getPhotoSearchQueue: () => queues.photoSearchQueue
+}));
+
 import { AnalysisService } from "../../src/modules/analysis/analysis.service.js";
-import { analysisQueue } from "../../src/jobs/queues.js";
 
 describe("AnalysisService.startAnalysis", () => {
   beforeEach(() => {
-    vi.mocked(analysisQueue.add).mockResolvedValue({} as never);
+    queues.analysisQueue.add.mockResolvedValue({} as never);
   });
 
   it("releases the linked reserve and fails the job when enqueue fails", async () => {
@@ -33,7 +37,7 @@ describe("AnalysisService.startAnalysis", () => {
       reserveWithin: vi.fn().mockResolvedValue({ id: "reserve-1" }),
       releaseReserve
     } as never;
-    vi.mocked(analysisQueue.add).mockRejectedValueOnce(new Error("redis_down"));
+    queues.analysisQueue.add.mockRejectedValueOnce(new Error("redis_down"));
     const service = new AnalysisService(prisma, credits);
 
     await expect(

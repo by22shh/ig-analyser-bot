@@ -27,6 +27,7 @@ export const ru = {
     subscribe: "📢 Подписаться",
     checkSubscription: "✅ Я подписался",
     restart: "🔁 Начать заново",
+    skip: "Пропустить",
     run: "▶️ Запустить",
     confirmLawfulBasis: "✅ Подтверждаю правовое основание",
     stars: "⭐ Telegram Stars",
@@ -194,6 +195,12 @@ export const ru = {
   askHrPosition(): string {
     return "HR-режим включён только как дополнительный публичный контекст. Пришлите позицию кандидата, например <code>Senior backend engineer</code>.";
   },
+  askGoal(username: string): string {
+    return (
+      `🎯 <b>Цель анализа @${escapeHtml(username)}</b>\n\n` +
+      "Пришлите коротко, под какое решение нужен отчёт: партнёрство, найм, знакомство, аудит блога или другой контекст."
+    );
+  },
   osintRestricted(): string {
     return "OSINT-проверка доступна только пользователям с ролью compliance/admin и отдельным подтверждением правового основания.";
   },
@@ -206,11 +213,18 @@ export const ru = {
       "OSINT-проверку можно использовать только для законной проверки публичных фактов. Подтвердите, что у вас есть правовое основание, вы не будете использовать отчёт для давления, преследования, доксинга или обхода приватности, а выводы будут проверяться как гипотезы."
     );
   },
-  confirmAnalysis(input: { username: string; mode: AnalysisMode; costUnits: number }): string {
+  confirmAnalysis(input: {
+    username: string;
+    mode: AnalysisMode;
+    costUnits: number;
+    goal?: string;
+  }): string {
+    const goalLine = input.goal ? `Цель: <i>${escapeHtml(input.goal)}</i>\n` : "";
     return (
       "✅ <b>Проверьте задачу</b>\n\n" +
       `Профиль: <b>@${escapeHtml(input.username)}</b>\n` +
       `Режим: <b>${this.modeTitle(input.mode)}</b>\n` +
+      goalLine +
       `Стоимость: <b>${formatCredits(input.costUnits)}</b> 💎\n` +
       "Обычно анализ занимает 3–8 минут."
     );

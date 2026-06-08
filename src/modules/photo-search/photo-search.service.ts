@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
-import { photoSearchQueue } from "../../jobs/queues.js";
+import { env } from "../../config/env.js";
+import { getPhotoSearchQueue } from "../../jobs/queues.js";
 import { MODE_COST_UNITS } from "../billing/packages.js";
 import { CreditsService } from "../billing/credits.service.js";
 
@@ -54,7 +55,13 @@ export class PhotoSearchService {
       });
       job = created.job;
       reserved = created.reserved;
-      await photoSearchQueue.add("photo-search", { photoSearchJobId: job.id }, { jobId: job.id });
+      if (env.JOB_QUEUE_DRIVER === "bullmq") {
+        await getPhotoSearchQueue().add(
+          "photo-search",
+          { photoSearchJobId: job.id },
+          { jobId: job.id }
+        );
+      }
       return job;
     } catch (error) {
       // Never leave a reserve hanging if the job could not be created/enqueued.

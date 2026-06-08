@@ -9,6 +9,7 @@ export const CB = {
   ANALYZE: "a:start",
   MODE: "a:mode",
   RUN: "a:run",
+  SKIP_GOAL: "a:skip_goal",
   OSINT_LAWFUL_BASIS: "a:osint_basis",
   PHOTO: "p:start",
   PHOTO_ACK: "p:ack",
@@ -47,6 +48,7 @@ export type WizardState =
   | "waiting_username"
   | "selecting_mode"
   | "waiting_hr_position"
+  | "waiting_goal"
   | "confirming_osint"
   | "confirming_analysis"
   | "waiting_photo"

@@ -8,6 +8,7 @@ import { MODE_COST_UNITS } from "../../modules/billing/packages.js";
 import { normalizeInstagramUsername } from "../../modules/instagram/normalize.js";
 import {
   confirmAnalysisKeyboard,
+  goalKeyboard,
   modeKeyboard,
   osintLawfulBasisKeyboard
 } from "../keyboards/analysis.js";
@@ -20,6 +21,7 @@ type AnalyzePayload = {
   username?: string;
   mode?: AnalysisMode;
   targetPosition?: string;
+  goal?: string;
   requestId?: string;
   lawfulBasisAccepted?: boolean;
 };
@@ -77,7 +79,7 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
         );
         return;
       }
-      await showConfirm(ctx, { ...state.payload, mode });
+      await showGoalPrompt(ctx, { ...state.payload, mode });
     }
   );
 
@@ -91,11 +93,19 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
       return;
     }
     await ctx.answerCallbackQuery();
-    await showConfirm(ctx, {
+    await showGoalPrompt(ctx, {
       ...state.payload,
       mode: "osint_compliance",
       lawfulBasisAccepted: true
     });
+  });
+
+  bot.callbackQuery(CB.SKIP_GOAL, async (ctx) => {
+    if (!ctx.user) return;
+    const state = await ctx.services.wizard.get<AnalyzePayload>(ctx.user.id);
+    if (state?.state !== "waiting_goal" || !state.payload.username || !state.payload.mode) return;
+    await ctx.answerCallbackQuery();
+    await showConfirm(ctx, { ...state.payload, goal: undefined });
   });
 
   bot.callbackQuery(new RegExp(`^${CB.RUN}:([A-Za-z0-9-]+)$`), async (ctx) => {
@@ -128,6 +138,7 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
         mode: state.payload.mode,
         language: ctx.user.language === "en" ? "en" : "ru",
         targetPosition: state.payload.targetPosition,
+        goal: state.payload.goal,
         idempotencyKey: `analysis:${ctx.user.id}:${state.payload.requestId}`
       });
       await ctx.services.wizard.clear(ctx.user.id);
@@ -175,7 +186,12 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
     }
     if (state?.state === "waiting_hr_position") {
       const targetPosition = ctx.message.text.trim().slice(0, 120);
-      await showConfirm(ctx, { ...state.payload, mode: "hr", targetPosition });
+      await showGoalPrompt(ctx, { ...state.payload, mode: "hr", targetPosition });
+      return;
+    }
+    if (state?.state === "waiting_goal") {
+      const goal = sanitizeGoal(ctx.message.text);
+      await showConfirm(ctx, { ...state.payload, goal });
       return;
     }
     // Intentional UX (kept per audit decision): with no active wizard step, a
@@ -211,6 +227,13 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
   });
 }
 
+async function showGoalPrompt(ctx: MyContext, payload: AnalyzePayload) {
+  if (!ctx.user || !payload.username || !payload.mode) return;
+  const messages = t(ctx.user.language);
+  await ctx.services.wizard.set(ctx.user.id, "waiting_goal", payload);
+  await editOrSendHtml(ctx, messages.askGoal(payload.username), goalKeyboard(messages));
+}
+
 async function showConfirm(ctx: MyContext, payload: AnalyzePayload) {
   if (!ctx.user || !payload.username || !payload.mode) return;
   const messages = t(ctx.user.language);
@@ -222,10 +245,16 @@ async function showConfirm(ctx: MyContext, payload: AnalyzePayload) {
     messages.confirmAnalysis({
       username: payload.username,
       mode: payload.mode,
-      costUnits: MODE_COST_UNITS[payload.mode]
+      costUnits: MODE_COST_UNITS[payload.mode],
+      goal: payload.goal
     }),
     confirmAnalysisKeyboard(messages, payload.mode, requestId)
   );
+}
+
+function sanitizeGoal(value: string): string | undefined {
+  const goal = value.trim().replace(/\s+/g, " ").slice(0, 500);
+  return goal.length > 0 ? goal : undefined;
 }
 
 function cancelKeyboard(ctx: MyContext) {

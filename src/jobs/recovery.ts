@@ -1,8 +1,8 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
 import { childLogger } from "../config/logger.js";
 import {
-  analysisQueue,
-  photoSearchQueue,
+  getAnalysisQueue,
+  getPhotoSearchQueue,
   type AnalysisJobPayload,
   type PhotoSearchJobPayload
 } from "./queues.js";
@@ -54,11 +54,11 @@ export async function recoverJobs(input: {
   };
   summary.analysisRequeued = await recoverAnalysisJobs(
     input.prisma,
-    input.analysis ?? analysisQueue
+    input.analysis ?? getAnalysisQueue()
   );
   summary.photoSearchRequeued = await recoverPhotoSearchJobs(
     input.prisma,
-    input.photoSearch ?? photoSearchQueue
+    input.photoSearch ?? getPhotoSearchQueue()
   );
   summary.staleReservesReleased = await releaseStaleStartupReserves(
     input.prisma,

@@ -7,7 +7,7 @@ primary_region = "fra"
   dockerfile = "Dockerfile"
 
 [deploy]
-  release_command = "pnpm prisma:migrate"
+  release_command = "sh -lc 'case \"$DATABASE_URL\" in *\\?*) export DATABASE_URL=\"$DATABASE_URL&connect_timeout=15&pool_timeout=15\" ;; *) export DATABASE_URL=\"$DATABASE_URL?connect_timeout=15&pool_timeout=15\" ;; esac; case \"$DIRECT_URL\" in *\\?*) export DIRECT_URL=\"$DIRECT_URL&connect_timeout=15\" ;; *) export DIRECT_URL=\"$DIRECT_URL?connect_timeout=15\" ;; esac; pnpm prisma:migrate'"
 
 [processes]
   web = "node dist/src/server.js"
@@ -16,6 +16,7 @@ primary_region = "fra"
 [env]
   APP_ENV = "production"
   PORT = "3000"
+  JOB_QUEUE_DRIVER = "postgres"
   TELEGRAM_USE_LONG_POLLING = "false"
   TELEGRAM_API_ROOT = "https://api.telegram.org"
   CHANNEL_URL = "https://t.me/homie_tech"
@@ -23,8 +24,10 @@ primary_region = "fra"
   TOS_URL = "https://teletype.in/@homiebot/policy"
   PRIVACY_URL = "https://telegram.org/privacy-tpa"
   TELEGRAM_STARS_DEFAULT_CURRENCY = "XTR"
+  TELEGRAM_STARS_TEST_MODE = "false"
   FEATURE_TELEGRAM_STARS = "true"
   FEATURE_YOOKASSA_PAYMENTS = "false"
+  YOOKASSA_TEST_MODE = "false"
   YOOKASSA_WEBHOOK_ALLOWED_IPS = "185.71.76.0/27,185.71.77.0/27,77.75.153.0/25,77.75.156.11,77.75.156.35,77.75.154.128/25,2a02:5180::/32"
   FEATURE_INFLUENCER_MODE = "true"
   FEATURE_HR_MODE = "false"

@@ -3,9 +3,9 @@
 This repo is prepared for a Fly.io deployment with two process groups:
 
 - `web`: Fastify HTTP server for health checks, Telegram webhook, YooKassa webhook and payment return page.
-- `worker`: BullMQ workers for Instagram analysis, photo search, exports and retention.
+- `worker`: queue workers for Instagram analysis, photo search, exports and retention.
 
-Neon provides PostgreSQL only. BullMQ still needs Redis, so add a managed Redis provider separately. `redis://` and TLS `rediss://` URLs are both supported.
+The default [fly.toml](../../fly.toml) uses `JOB_QUEUE_DRIVER=postgres`, so the worker claims jobs through Postgres leases and does not need Redis. If you switch to `JOB_QUEUE_DRIVER=bullmq`, add a managed Redis provider separately; both `redis://` and TLS `rediss://` URLs are supported.
 
 ## 1. Create Neon Database
 
@@ -28,19 +28,27 @@ datasource db {
 }
 ```
 
-## 2. Create Redis
+## 2. Choose Queue Driver
 
-Use a managed Redis service and copy its URL:
+The checked-in Fly config uses:
+
+```toml
+JOB_QUEUE_DRIVER = "postgres"
+```
+
+In this mode, jobs are leased in Postgres with `queueLockedBy`, `queueLockedUntil`, retry counters and backoff fields. Redis is not required.
+
+If you prefer BullMQ, change `JOB_QUEUE_DRIVER` to `bullmq` and set a Redis URL:
 
 ```bash
-REDIS_URL="rediss://default:password@host:6379"
+fly secrets set REDIS_URL="rediss://default:password@host:6379"
 ```
 
 Plain `redis://` also works for local/private Redis, but production managed Redis is usually `rediss://`.
 
 ## 3. Create Fly App
 
-Edit [fly.toml](/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/fly.toml):
+Edit [fly.toml](../../fly.toml):
 
 ```toml
 app = "your-fly-app-name"
@@ -67,7 +75,6 @@ Replace `your-fly-app-name` and all credentials:
 fly secrets set \
   DATABASE_URL="postgresql://...-pooler.../dbname?sslmode=require&connect_timeout=15&pool_timeout=15" \
   DIRECT_URL="postgresql://.../dbname?sslmode=require&connect_timeout=15" \
-  REDIS_URL="rediss://default:password@host:6379" \
   TELEGRAM_BOT_TOKEN="..." \
   TELEGRAM_WEBHOOK_SECRET="replace-with-long-random-string" \
   TELEGRAM_ADMIN_IDS="123456789" \
@@ -97,7 +104,7 @@ fly secrets set YOOKASSA_RETURN_URL="https://your-domain.example/payments/yookas
 
 ## 5. Set Provider Secrets
 
-The default [fly.toml](/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/fly.toml) enables Telegram Stars and real analysis mode in production, while YooKassa is disabled unless you set `FEATURE_YOOKASSA_PAYMENTS=true`. The app intentionally refuses to start in `APP_ENV=production` if enabled integrations would fall back to mock mode.
+The default [fly.toml](../../fly.toml) enables Telegram Stars and real analysis mode in production, while YooKassa is disabled unless you set `FEATURE_YOOKASSA_PAYMENTS=true`. The app intentionally refuses to start in `APP_ENV=production` if enabled integrations would fall back to mock mode.
 
 ```bash
 fly secrets set \
@@ -179,6 +186,7 @@ Check that:
 - `/help` shows the support/group/docs links.
 - Telegram webhook requests appear in `fly logs`.
 - Analysis jobs move from Telegram into the worker queue.
+- With `JOB_QUEUE_DRIVER=postgres`, active jobs show lease metadata in `analysis_jobs` / `photo_search_jobs` while running and clear it when completed, failed or waiting for retry.
 - YooKassa return URL is your Fly URL, not `example.com`.
 
 ## 9. Scale
@@ -189,10 +197,10 @@ Start conservative:
 fly scale count web=1 worker=1
 ```
 
-If queue backlog grows, scale workers:
+If queue backlog grows, scale workers after confirming the database has enough connection headroom:
 
 ```bash
 fly scale count worker=2
 ```
 
-The worker process has no public HTTP service.
+The Postgres queue uses leases and retry counters, so multiple worker machines are supported. The worker process has no public HTTP service.

@@ -49,6 +49,7 @@ const schema = z.object({
     .string()
     .default("postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot"),
   REDIS_URL: z.string().default("redis://localhost:6379/0"),
+  JOB_QUEUE_DRIVER: z.enum(["bullmq", "postgres"]).default("bullmq"),
 
   APIFY_TOKEN: optionalString,
   OPENROUTER_API_KEY: optionalString,
@@ -170,10 +171,17 @@ if (!parsed.success) {
 
 assertProductionConfiguration(parsed.data);
 
+const databaseUrl = withProductionConnectionDefaults(parsed.data, "DATABASE_URL");
+const directUrl = withProductionConnectionDefaults(parsed.data, "DIRECT_URL");
+process.env.DATABASE_URL = databaseUrl;
+process.env.DIRECT_URL = directUrl;
+
 const publicBaseUrl = parsed.data.APP_BASE_URL.replace(/\/+$/, "");
 
 export const env = {
   ...parsed.data,
+  DATABASE_URL: databaseUrl,
+  DIRECT_URL: directUrl,
   MINI_APP_URL: parsed.data.MINI_APP_URL || `${publicBaseUrl}/mini-app`,
   YOOKASSA_RETURN_URL:
     parsed.data.YOOKASSA_RETURN_URL || `${publicBaseUrl}/payments/yookassa/return`,
@@ -262,7 +270,7 @@ function assertProductionConfiguration(data: ParsedEnv) {
   forbidLocalhostUrl("MINI_APP_URL");
   requireConnectionUrl("DATABASE_URL");
   requireConnectionUrl("DIRECT_URL");
-  requireConnectionUrl("REDIS_URL");
+  if (data.JOB_QUEUE_DRIVER === "bullmq") requireConnectionUrl("REDIS_URL");
 
   requireString("TELEGRAM_BOT_TOKEN");
   requireUrl("TELEGRAM_WEBHOOK_URL");
@@ -272,6 +280,11 @@ function assertProductionConfiguration(data: ParsedEnv) {
   }
   if (data.TELEGRAM_USE_LONG_POLLING) {
     errors.push("TELEGRAM_USE_LONG_POLLING must be false in production webhook mode");
+  }
+  if (data.FEATURE_TELEGRAM_STARS && data.TELEGRAM_STARS_TEST_MODE) {
+    errors.push(
+      "TELEGRAM_STARS_TEST_MODE must be false when Telegram Stars are enabled in production"
+    );
   }
 
   requireString("APIFY_TOKEN");
@@ -289,6 +302,9 @@ function assertProductionConfiguration(data: ParsedEnv) {
     requireString("YOOKASSA_SHOP_ID");
     requireString("YOOKASSA_SECRET_KEY");
     requireString("YOOKASSA_WEBHOOK_ALLOWED_IPS");
+    if (data.YOOKASSA_TEST_MODE) {
+      errors.push("YOOKASSA_TEST_MODE must be false when YooKassa is enabled in production");
+    }
   }
 
   if (data.FEATURE_PHOTO_SEARCH) {
@@ -320,6 +336,24 @@ function assertProductionConfiguration(data: ParsedEnv) {
 
 function isLocalhost(hostname: string): boolean {
   return ["localhost", "127.0.0.1", "::1", "[::1]"].includes(hostname.toLowerCase());
+}
+
+function withProductionConnectionDefaults(
+  data: ParsedEnv,
+  key: "DATABASE_URL" | "DIRECT_URL"
+): string {
+  const value = data[key];
+  if (data.APP_ENV !== "production") return value;
+  try {
+    const url = new URL(value);
+    if (!url.searchParams.has("connect_timeout")) url.searchParams.set("connect_timeout", "15");
+    if (key === "DATABASE_URL" && !url.searchParams.has("pool_timeout")) {
+      url.searchParams.set("pool_timeout", "15");
+    }
+    return url.toString();
+  } catch {
+    return value;
+  }
 }
 
 // Derives a public @username from a t.me URL for channel membership checks.

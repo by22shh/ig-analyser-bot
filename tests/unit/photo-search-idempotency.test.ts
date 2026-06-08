@@ -1,15 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-// The service module imports the BullMQ queues at load time; stub them so no
-// Redis connection is opened during unit tests.
-vi.mock("../../src/jobs/queues.js", () => ({
-  redisConnection: {},
+const queues = vi.hoisted(() => ({
   analysisQueue: { add: vi.fn().mockResolvedValue(undefined) },
   photoSearchQueue: { add: vi.fn().mockResolvedValue(undefined) }
 }));
 
+// Stub lazy BullMQ factories so unit tests never open Redis connections.
+vi.mock("../../src/jobs/queues.js", () => ({
+  redisConnection: {},
+  getAnalysisQueue: () => queues.analysisQueue,
+  getPhotoSearchQueue: () => queues.photoSearchQueue
+}));
+
 import { PhotoSearchService } from "../../src/modules/photo-search/photo-search.service.js";
-import { photoSearchQueue } from "../../src/jobs/queues.js";
 
 function uniqueConstraintError(): Error {
   return Object.assign(new Error("Unique constraint failed on idempotencyKey"), { code: "P2002" });
@@ -17,7 +20,7 @@ function uniqueConstraintError(): Error {
 
 describe("PhotoSearchService.createJob idempotency", () => {
   beforeEach(() => {
-    vi.mocked(photoSearchQueue.add).mockResolvedValue({} as never);
+    queues.photoSearchQueue.add.mockResolvedValue({} as never);
   });
 
   it("returns the existing job without reserving when the key already has a job", async () => {
@@ -103,7 +106,7 @@ describe("PhotoSearchService.createJob idempotency", () => {
       reserveWithin: vi.fn().mockResolvedValue({ id: "reserve-1" }),
       releaseReserve
     } as never;
-    vi.mocked(photoSearchQueue.add).mockRejectedValueOnce(new Error("redis_down"));
+    queues.photoSearchQueue.add.mockRejectedValueOnce(new Error("redis_down"));
     const service = new PhotoSearchService(prisma, credits);
 
     await expect(

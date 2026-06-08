@@ -43,6 +43,8 @@ const copy = {
     analyzeTitle: "Разбор Instagram-профиля",
     analyzeLead: "Профиль, сигналы, метрики, PDF и чат по готовому отчету.",
     username: "Username или ссылка",
+    goal: "Цель анализа",
+    goalPlaceholder: "Например: оценить партнёрство, кандидата, личный бренд",
     mode: "Режим",
     targetPosition: "Позиция кандидата",
     lawful: "Подтверждаю законное основание и безопасное использование OSINT-режима.",
@@ -101,6 +103,8 @@ const copy = {
     analyzeTitle: "Instagram Profile Analysis",
     analyzeLead: "Profile signals, metrics, PDF export, and report chat.",
     username: "Username or link",
+    goal: "Analysis goal",
+    goalPlaceholder: "For example: evaluate a partnership, candidate, or personal brand",
     mode: "Mode",
     targetPosition: "Candidate position",
     lawful: "I confirm lawful basis and safe use of OSINT mode.",
@@ -356,6 +360,10 @@ function renderAnalyze() {
             <span class="label">${t("username")}</span>
             <input class="input" name="username" autocomplete="off" placeholder="@username" required />
           </label>
+          <label class="field">
+            <span class="label">${t("goal")}</span>
+            <textarea class="textarea" name="goal" maxlength="500" placeholder="${t("goalPlaceholder")}"></textarea>
+          </label>
           <div class="field">
             <span class="label">${t("mode")}</span>
             <div class="segmented modes">
@@ -559,6 +567,7 @@ async function startAnalysis(form) {
     username: data.get("username"),
     mode: state.selectedMode,
     targetPosition: data.get("targetPosition"),
+    goal: data.get("goal"),
     lawfulBasisAccepted: data.get("lawfulBasisAccepted") === "on",
     requestId: requestId()
   };

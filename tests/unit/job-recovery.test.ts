@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../../src/jobs/queues.js", () => ({
-  analysisQueue: { getJob: vi.fn(), add: vi.fn() },
-  photoSearchQueue: { getJob: vi.fn(), add: vi.fn() }
+  getAnalysisQueue: () => ({ getJob: vi.fn(), add: vi.fn() }),
+  getPhotoSearchQueue: () => ({ getJob: vi.fn(), add: vi.fn() })
 }));
 
 import { recoverJobs } from "../../src/jobs/recovery.js";

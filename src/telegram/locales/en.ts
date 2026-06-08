@@ -27,6 +27,7 @@ export const en = {
     subscribe: "📢 Subscribe",
     checkSubscription: "✅ I subscribed",
     restart: "🔁 Start over",
+    skip: "Skip",
     run: "▶️ Start",
     confirmLawfulBasis: "✅ Confirm lawful basis",
     stars: "⭐ Telegram Stars",
@@ -190,6 +191,12 @@ export const en = {
   askHrPosition(): string {
     return "HR mode is public-context only. Send the target position, for example <code>Senior backend engineer</code>.";
   },
+  askGoal(username: string): string {
+    return (
+      `🎯 <b>Analysis goal for @${escapeHtml(username)}</b>\n\n` +
+      "Send a short decision context: partnership, hiring, dating, creator audit, or another reason."
+    );
+  },
   osintRestricted(): string {
     return "OSINT / Compliance is available only to compliance/admin roles with a lawful basis confirmation.";
   },
@@ -202,11 +209,18 @@ export const en = {
       "OSINT / Compliance may be used only for lawful verification of public facts. Confirm that you have a lawful basis, will not use the report for pressure, harassment, doxing or privacy bypass, and will treat findings as hypotheses to verify."
     );
   },
-  confirmAnalysis(input: { username: string; mode: AnalysisMode; costUnits: number }): string {
+  confirmAnalysis(input: {
+    username: string;
+    mode: AnalysisMode;
+    costUnits: number;
+    goal?: string;
+  }): string {
+    const goalLine = input.goal ? `Goal: <i>${escapeHtml(input.goal)}</i>\n` : "";
     return (
       "✅ <b>Check the task</b>\n\n" +
       `Profile: <b>@${escapeHtml(input.username)}</b>\n` +
       `Mode: <b>${this.modeTitle(input.mode)}</b>\n` +
+      goalLine +
       `Cost: <b>${formatCredits(input.costUnits)}</b> 💎\n` +
       "Analysis usually takes 3–8 minutes."
     );

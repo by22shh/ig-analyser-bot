@@ -1,9 +1,9 @@
 import { Worker } from "bullmq";
 import type { Bot } from "grammy";
-import type { PrismaClient } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
 import { env } from "../../config/env.js";
 import { childLogger } from "../../config/logger.js";
-import { redisConnection, type AnalysisJobPayload } from "../queues.js";
+import { getRedisConnection, type AnalysisJobPayload } from "../queues.js";
 import { isFinalAttempt } from "../retry.js";
 import { CreditsService } from "../../modules/billing/credits.service.js";
 import type {
@@ -25,248 +25,334 @@ import type { MyContext } from "../../telegram/context.js";
 
 const log = childLogger("analysis.worker");
 
-export function startAnalysisWorker(input: {
+export type AnalysisProcessorInput = {
   prisma: PrismaClient;
   bot?: Bot<MyContext>;
   instagram: InstagramProfileProvider;
   llm: LlmProvider;
   reportService: ReportService;
-}) {
-  const credits = new CreditsService(input.prisma);
+};
+
+type AttemptInfo = {
+  attemptsMade: number;
+  attempts?: number;
+  lease?: { workerId: string };
+};
+
+export function startAnalysisWorker(input: AnalysisProcessorInput) {
   return new Worker<AnalysisJobPayload>(
     "analysis",
-    async (job) => {
-      const row = await input.prisma.analysisJob.findUniqueOrThrow({
-        where: { id: job.data.analysisJobId },
-        include: { user: { include: { settings: true } } }
-      });
-      const locale = row.user.language === "en" ? "en" : "ru";
-      const messages = t(locale);
-      // Progress updates edit one message in place instead of stacking several.
-      let progressMessageId: number | undefined;
-
-      // Idempotency: a re-delivered job that already finished must not redo the
-      // (paid) pipeline or capture again.
-      if (row.status === "completed") return;
-
-      const finalAttempt = isFinalAttempt({
+    async (job) =>
+      processAnalysisJob(input, job.data.analysisJobId, {
         attemptsMade: job.attemptsMade,
         attempts: job.opts.attempts
-      });
-
-      try {
-        // Clear any partial state left by a previous failed attempt so unique
-        // (analysisJobId) constraints on the report do not break retries. Profile
-        // and vision snapshots are retained as paid-step cache between attempts.
-        await input.reportService.cleanupByAnalysisJob(row.id);
-        const cachedProfile = await loadPersistedProfile(input.prisma, row.id);
-        let profile: InstagramProfile;
-        let postSnapshotIds: Map<string, string>;
-        if (cachedProfile) {
-          profile = cachedProfile.profile;
-          postSnapshotIds = cachedProfile.postSnapshotIds;
-        } else {
-          await input.prisma.analysisJob.update({
-            where: { id: row.id },
-            data: { status: "fetching_profile", stage: "fetching_profile", startedAt: new Date() }
-          });
-          progressMessageId = await safeEditOrNotify(
-            input.bot,
-            Number(row.telegramChatId),
-            progressMessageId,
-            messages.progress(messages.progressStages.fetchingProfile, 1, 4),
-            (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
-          );
-
-          profile = await input.instagram.fetchProfile({
-            username: row.targetUsername,
-            postLimit: env.ANALYSIS_POST_LIMIT ?? 30,
-            includeParentData: true
-          });
-          // Best-effort usage logging: a transient failure here must not throw out
-          // of the success path, or the job would fail and retry would re-run the
-          // already-paid Apify fetch above.
-          await recordUsageSafe(
-            input.prisma,
-            {
-              userId: row.userId,
-              analysisJobId: row.id,
-              provider: env.APIFY_TOKEN ? "apify" : "mock_instagram",
-              operation: "fetch_profile",
-              status: "success",
-              costEstimateRub: env.APIFY_TOKEN ? (env.ECON_APIFY_PROFILE_COST_RUB ?? null) : null
-            },
-            (error) => log.warn({ error, jobId: row.id }, "analysis_usage_record_failed")
-          );
-          postSnapshotIds = await persistProfile(input.prisma, row.id, profile);
-        }
-
-        await input.prisma.analysisJob.update({
-          where: { id: row.id },
-          data: {
-            status: "analyzing_images",
-            stage: "analyzing_images",
-            progressCurrent: 2,
-            progressTotal: 4
-          }
-        });
-        progressMessageId = await safeEditOrNotify(
-          input.bot,
-          Number(row.telegramChatId),
-          progressMessageId,
-          messages.progress(messages.progressStages.analyzingSignals, 2, 4),
-          (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
-        );
-
-        const cachedVision = await loadReusableVision(input.prisma, row.id, profile.posts);
-        const strategicReport = await buildStrategicReport({
-          mode: row.mode as never,
-          language: locale,
-          profile,
-          llm: input.llm,
-          targetPosition: row.targetPosition ?? undefined,
-          goal: row.goal ?? undefined,
-          vision: cachedVision
-        });
-        if (!cachedVision)
-          await persistVision(input.prisma, row.id, strategicReport.vision, postSnapshotIds);
-        // Best-effort: a logging hiccup must not throw out of the success path and
-        // trigger a retry that re-runs the already-paid Apify + OpenRouter work.
-        await recordUsageSafe(
-          input.prisma,
-          {
-            userId: row.userId,
-            analysisJobId: row.id,
-            provider: env.OPENROUTER_API_KEY ? "openrouter" : "mock_llm",
-            operation: "generate_report",
-            model: strategicReport.model,
-            status: "success"
-          },
-          (error) => log.warn({ error, jobId: row.id }, "analysis_usage_record_failed")
-        );
-
-        await input.prisma.analysisJob.update({
-          where: { id: row.id },
-          data: {
-            status: "generating_exports",
-            stage: "generating_exports",
-            progressCurrent: 3,
-            progressTotal: 4
-          }
-        });
-        // Last progress update for this job, so the returned id is not reused.
-        await safeEditOrNotify(
-          input.bot,
-          Number(row.telegramChatId),
-          progressMessageId,
-          messages.progress(messages.progressStages.generatingExports, 3, 4),
-          (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
-        );
-
-        const retentionDays =
-          row.user.settings?.reportRetentionDays ?? env.REPORT_RETENTION_DAYS ?? 30;
-        const report = await input.reportService.persist(
-          row.id,
-          row.userId,
-          strategicReport,
-          retentionDays
-        );
-        await input.reportService.createArtifacts(
-          report.id,
-          strategicReport,
-          report.expiresAt ?? new Date(Date.now() + retentionDays * 86400000)
-        );
-        // Capture credits and mark the job completed in the same transaction:
-        // a crash between the two would otherwise leave a captured job that is
-        // not "completed", so a retry would re-run the paid pipeline and the
-        // second capture would fail with RESERVE_NOT_FOUND.
-        await credits.captureReserve({
-          userId: row.userId,
-          analysisJobId: row.id,
-          amountUnits: row.costCreditUnits,
-          metadata: { mode: row.mode, username: row.targetUsername },
-          within: async (tx) => {
-            await tx.analysisJob.update({
-              where: { id: row.id },
-              data: {
-                status: "completed",
-                stage: "completed",
-                progressCurrent: 4,
-                progressTotal: 4,
-                progressPercent: 100,
-                finishedAt: new Date()
-              }
-            });
-          }
-        });
-        // Work is done and credits captured; a delivery hiccup must not fail the
-        // job (a retry would re-bill Apify/OpenRouter and re-run everything).
-        await safeNotify(
-          input.bot,
-          Number(row.telegramChatId),
-          messages.reportReady({
-            username: row.targetUsername,
-            mode: row.mode as never,
-            metrics: strategicReport.metrics,
-            summary: strategicReport.summary
-          }),
-          (error) => log.warn({ error, jobId: row.id }, "analysis_completed_notify_failed"),
-          reportActionsKeyboard(messages, report.id)
-        );
-      } catch (error) {
-        const errorCode = error instanceof Error ? error.message : "ANALYSIS_FAILED";
-        log.error({ error, jobId: row.id, finalAttempt }, "analysis_failed");
-        await recordUsage(input.prisma, {
-          userId: row.userId,
-          analysisJobId: row.id,
-          provider: "analysis_pipeline",
-          operation: "analysis",
-          status: "failed",
-          errorCode
-        }).catch(() => undefined);
-        if (!finalAttempt) {
-          // More retries remain: keep the reserve intact so a successful retry can
-          // capture it, and mark the job as retrying.
-          await input.prisma.analysisJob.update({
-            where: { id: row.id },
-            data: {
-              status: "retrying",
-              stage: "retrying",
-              errorCode,
-              errorMessage: error instanceof Error ? error.message : String(error)
-            }
-          });
-          throw error;
-        }
-        await input.reportService.cleanupByAnalysisJob(row.id).catch(() => undefined);
-        await credits.releaseReserve({
-          userId: row.userId,
-          analysisJobId: row.id,
-          amountUnits: row.costCreditUnits,
-          metadata: { reason: "analysis_failed" }
-        });
-        await input.prisma.analysisJob.update({
-          where: { id: row.id },
-          data: {
-            status: "failed",
-            stage: "failed",
-            errorCode,
-            errorMessage: error instanceof Error ? error.message : String(error),
-            finishedAt: new Date()
-          }
-        });
-        await safeNotify(
-          input.bot,
-          Number(row.telegramChatId),
-          messages.analysisFailed(errorCode),
-          undefined,
-          backMenuKeyboard(messages)
-        );
-        throw error;
-      }
-    },
-    { connection: redisConnection, concurrency: 2 }
+      }),
+    { connection: getRedisConnection(), concurrency: 2 }
   );
+}
+
+type AnalysisJobWriteClient = PrismaClient | Prisma.TransactionClient;
+type AnalysisJobLease = { workerId: string } | undefined;
+
+const ANALYSIS_TERMINAL_STATUSES = ["completed", "failed"] as const;
+
+async function assertAnalysisJobMutable(
+  prisma: PrismaClient,
+  analysisJobId: string,
+  lease: AnalysisJobLease
+) {
+  if (await canMutateAnalysisJob(prisma, analysisJobId, lease)) return;
+  throw new Error("ANALYSIS_JOB_NOT_ACTIVE");
+}
+
+async function canMutateAnalysisJob(
+  prisma: PrismaClient,
+  analysisJobId: string,
+  lease: AnalysisJobLease
+): Promise<boolean> {
+  const current = await prisma.analysisJob.findUnique({
+    where: { id: analysisJobId },
+    select: { status: true, queueLockedBy: true }
+  });
+  if (!current || isAnalysisTerminalStatus(current.status)) return false;
+  return !lease || current.queueLockedBy === lease.workerId;
+}
+
+async function updateRunningAnalysisJob(
+  prisma: AnalysisJobWriteClient,
+  analysisJobId: string,
+  data: Prisma.AnalysisJobUpdateManyMutationInput,
+  lease: AnalysisJobLease
+) {
+  const result = await prisma.analysisJob.updateMany({
+    where: {
+      id: analysisJobId,
+      status: { notIn: [...ANALYSIS_TERMINAL_STATUSES] },
+      ...(lease ? { queueLockedBy: lease.workerId } : {})
+    },
+    data
+  });
+  if (result.count === 0) throw new Error("ANALYSIS_JOB_NOT_ACTIVE");
+}
+
+function isAnalysisTerminalStatus(status: string): boolean {
+  return ANALYSIS_TERMINAL_STATUSES.includes(status as (typeof ANALYSIS_TERMINAL_STATUSES)[number]);
+}
+
+export async function processAnalysisJob(
+  input: AnalysisProcessorInput,
+  analysisJobId: string,
+  attemptInfo: AttemptInfo
+) {
+  const credits = new CreditsService(input.prisma);
+  const row = await input.prisma.analysisJob.findUniqueOrThrow({
+    where: { id: analysisJobId },
+    include: { user: { include: { settings: true } } }
+  });
+  const locale = row.user.language === "en" ? "en" : "ru";
+  const messages = t(locale);
+  // Progress updates edit one message in place instead of stacking several.
+  let progressMessageId: number | undefined;
+
+  // Idempotency: a re-delivered job that already finished must not redo the
+  // (paid) pipeline or capture again.
+  if (isAnalysisTerminalStatus(row.status)) return;
+  await assertAnalysisJobMutable(input.prisma, row.id, attemptInfo.lease);
+
+  const finalAttempt = isFinalAttempt({
+    attemptsMade: attemptInfo.attemptsMade,
+    attempts: attemptInfo.attempts
+  });
+
+  try {
+    // Clear any partial state left by a previous failed attempt so unique
+    // (analysisJobId) constraints on the report do not break retries. Profile
+    // and vision snapshots are retained as paid-step cache between attempts.
+    await input.reportService.cleanupByAnalysisJob(row.id);
+    const cachedProfile = await loadPersistedProfile(input.prisma, row.id);
+    let profile: InstagramProfile;
+    let postSnapshotIds: Map<string, string>;
+    if (cachedProfile) {
+      profile = cachedProfile.profile;
+      postSnapshotIds = cachedProfile.postSnapshotIds;
+    } else {
+      await updateRunningAnalysisJob(
+        input.prisma,
+        row.id,
+        { status: "fetching_profile", stage: "fetching_profile", startedAt: new Date() },
+        attemptInfo.lease
+      );
+      progressMessageId = await safeEditOrNotify(
+        input.bot,
+        Number(row.telegramChatId),
+        progressMessageId,
+        messages.progress(messages.progressStages.fetchingProfile, 1, 4),
+        (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
+      );
+
+      profile = await input.instagram.fetchProfile({
+        username: row.targetUsername,
+        postLimit: env.ANALYSIS_POST_LIMIT ?? 30,
+        includeParentData: true
+      });
+      // Best-effort usage logging: a transient failure here must not throw out
+      // of the success path, or the job would fail and retry would re-run the
+      // already-paid Apify fetch above.
+      await recordUsageSafe(
+        input.prisma,
+        {
+          userId: row.userId,
+          analysisJobId: row.id,
+          provider: env.APIFY_TOKEN ? "apify" : "mock_instagram",
+          operation: "fetch_profile",
+          status: "success",
+          costEstimateRub: env.APIFY_TOKEN ? (env.ECON_APIFY_PROFILE_COST_RUB ?? null) : null
+        },
+        (error) => log.warn({ error, jobId: row.id }, "analysis_usage_record_failed")
+      );
+      postSnapshotIds = await persistProfile(input.prisma, row.id, profile);
+    }
+
+    await updateRunningAnalysisJob(
+      input.prisma,
+      row.id,
+      {
+        status: "analyzing_images",
+        stage: "analyzing_images",
+        progressCurrent: 2,
+        progressTotal: 4
+      },
+      attemptInfo.lease
+    );
+    progressMessageId = await safeEditOrNotify(
+      input.bot,
+      Number(row.telegramChatId),
+      progressMessageId,
+      messages.progress(messages.progressStages.analyzingSignals, 2, 4),
+      (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
+    );
+
+    const cachedVision = await loadReusableVision(input.prisma, row.id, profile.posts);
+    const strategicReport = await buildStrategicReport({
+      mode: row.mode as never,
+      language: locale,
+      profile,
+      llm: input.llm,
+      targetPosition: row.targetPosition ?? undefined,
+      goal: row.goal ?? undefined,
+      vision: cachedVision
+    });
+    if (!cachedVision)
+      await persistVision(input.prisma, row.id, strategicReport.vision, postSnapshotIds);
+    // Best-effort: a logging hiccup must not throw out of the success path and
+    // trigger a retry that re-runs the already-paid Apify + OpenRouter work.
+    await recordUsageSafe(
+      input.prisma,
+      {
+        userId: row.userId,
+        analysisJobId: row.id,
+        provider: env.OPENROUTER_API_KEY ? "openrouter" : "mock_llm",
+        operation: "generate_report",
+        model: strategicReport.model,
+        status: "success"
+      },
+      (error) => log.warn({ error, jobId: row.id }, "analysis_usage_record_failed")
+    );
+
+    await updateRunningAnalysisJob(
+      input.prisma,
+      row.id,
+      {
+        status: "generating_exports",
+        stage: "generating_exports",
+        progressCurrent: 3,
+        progressTotal: 4
+      },
+      attemptInfo.lease
+    );
+    // Last progress update for this job, so the returned id is not reused.
+    await safeEditOrNotify(
+      input.bot,
+      Number(row.telegramChatId),
+      progressMessageId,
+      messages.progress(messages.progressStages.generatingExports, 3, 4),
+      (error) => log.warn({ error, jobId: row.id }, "analysis_progress_notify_failed")
+    );
+
+    const retentionDays = row.user.settings?.reportRetentionDays ?? env.REPORT_RETENTION_DAYS ?? 30;
+    const report = await input.reportService.persist(
+      row.id,
+      row.userId,
+      strategicReport,
+      retentionDays
+    );
+    await input.reportService.createArtifacts(
+      report.id,
+      strategicReport,
+      report.expiresAt ?? new Date(Date.now() + retentionDays * 86400000)
+    );
+    // Capture credits and mark the job completed in the same transaction:
+    // a crash between the two would otherwise leave a captured job that is
+    // not "completed", so a retry would re-run the paid pipeline and the
+    // second capture would fail with RESERVE_NOT_FOUND.
+    await credits.captureReserve({
+      userId: row.userId,
+      analysisJobId: row.id,
+      amountUnits: row.costCreditUnits,
+      metadata: { mode: row.mode, username: row.targetUsername },
+      within: async (tx) => {
+        await updateRunningAnalysisJob(
+          tx,
+          row.id,
+          {
+            status: "completed",
+            stage: "completed",
+            progressCurrent: 4,
+            progressTotal: 4,
+            progressPercent: 100,
+            finishedAt: new Date(),
+            queueLockedBy: null,
+            queueLockedUntil: null
+          },
+          attemptInfo.lease
+        );
+      }
+    });
+    // Work is done and credits captured; a delivery hiccup must not fail the
+    // job (a retry would re-bill Apify/OpenRouter and re-run everything).
+    await safeNotify(
+      input.bot,
+      Number(row.telegramChatId),
+      messages.reportReady({
+        username: row.targetUsername,
+        mode: row.mode as never,
+        metrics: strategicReport.metrics,
+        summary: strategicReport.summary
+      }),
+      (error) => log.warn({ error, jobId: row.id }, "analysis_completed_notify_failed"),
+      reportActionsKeyboard(messages, report.id)
+    );
+  } catch (error) {
+    if (!(await canMutateAnalysisJob(input.prisma, row.id, attemptInfo.lease))) {
+      log.warn({ error, jobId: row.id }, "analysis_mutation_skipped_after_lost_lease");
+      return;
+    }
+    const errorCode = error instanceof Error ? error.message : "ANALYSIS_FAILED";
+    log.error({ error, jobId: row.id, finalAttempt }, "analysis_failed");
+    await recordUsage(input.prisma, {
+      userId: row.userId,
+      analysisJobId: row.id,
+      provider: "analysis_pipeline",
+      operation: "analysis",
+      status: "failed",
+      errorCode
+    }).catch(() => undefined);
+    if (!finalAttempt) {
+      // More retries remain: keep the reserve intact so a successful retry can
+      // capture it, and mark the job as retrying.
+      await updateRunningAnalysisJob(
+        input.prisma,
+        row.id,
+        {
+          status: "retrying",
+          stage: "retrying",
+          errorCode,
+          errorMessage: error instanceof Error ? error.message : String(error)
+        },
+        attemptInfo.lease
+      );
+      throw error;
+    }
+    await input.reportService.cleanupByAnalysisJob(row.id).catch(() => undefined);
+    await credits.releaseReserve({
+      userId: row.userId,
+      analysisJobId: row.id,
+      amountUnits: row.costCreditUnits,
+      metadata: { reason: "analysis_failed" }
+    });
+    await updateRunningAnalysisJob(
+      input.prisma,
+      row.id,
+      {
+        status: "failed",
+        stage: "failed",
+        errorCode,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        finishedAt: new Date(),
+        queueLockedBy: null,
+        queueLockedUntil: null
+      },
+      attemptInfo.lease
+    );
+    await safeNotify(
+      input.bot,
+      Number(row.telegramChatId),
+      messages.analysisFailed(errorCode),
+      undefined,
+      backMenuKeyboard(messages)
+    );
+    throw error;
+  }
 }
 
 async function loadPersistedProfile(

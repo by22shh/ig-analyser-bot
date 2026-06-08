@@ -92,6 +92,36 @@ describe("Mini App API", () => {
     await app.close();
   });
 
+  it("passes optional analysis goal to the analysis service", async () => {
+    const services = makeServices();
+    const app = createApp({ services: services as never, bot: makeBot() as never });
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/mini-app/analysis",
+      headers: {
+        "content-type": "application/json",
+        "x-mini-app-dev-user": "900000001"
+      },
+      payload: JSON.stringify({
+        username: "alice",
+        mode: "standard",
+        goal: "  проверить партнерство\nи риски  ",
+        requestId: "r1"
+      })
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(services.analysis.startAnalysis).toHaveBeenCalledWith(
+      expect.objectContaining({
+        username: "alice",
+        mode: "standard",
+        goal: "проверить партнерство и риски"
+      })
+    );
+    await app.close();
+  });
+
   it("treats a restricted chat member as subscribed only when is_member is true", async () => {
     env.FEATURE_REQUIRE_CHANNEL_SUB = true;
     env.REQUIRED_CHANNEL_ID = "@required";

@@ -6,28 +6,32 @@ import { startAnalysisWorker } from "./jobs/workers/analysis.worker.js";
 import { startPhotoSearchWorker } from "./jobs/workers/photo-search.worker.js";
 import { startRetentionLoop } from "./jobs/workers/retention.worker.js";
 import { startJobRecoveryLoop } from "./jobs/recovery.js";
+import { startPostgresQueueWorkers } from "./jobs/postgres-workers.js";
 
 const services = createServices();
 const bot = env.TELEGRAM_BOT_TOKEN ? createBot(services) : undefined;
 
-const analysisWorker = startAnalysisWorker({
+const queueWorkerInput = {
   prisma: services.prisma,
   bot,
   instagram: services.instagram,
   llm: services.llm,
-  reportService: services.reports
-});
-
-const photoSearchWorker = startPhotoSearchWorker({
-  prisma: services.prisma,
-  bot,
+  reportService: services.reports,
   facecheck: services.facecheck
-});
+};
+
+const queueWorkers =
+  env.JOB_QUEUE_DRIVER === "postgres"
+    ? startPostgresQueueWorkers(queueWorkerInput)
+    : startBullMqWorkers(queueWorkerInput);
 
 const retentionTimer = startRetentionLoop(services);
-const jobRecoveryTimer = startJobRecoveryLoop({ prisma: services.prisma });
+const jobRecoveryTimer =
+  env.JOB_QUEUE_DRIVER === "bullmq"
+    ? startJobRecoveryLoop({ prisma: services.prisma })
+    : { stop() {} };
 
-logger.info("workers_started");
+logger.info({ queueDriver: env.JOB_QUEUE_DRIVER }, "workers_started");
 
 let shuttingDown = false;
 async function shutdown(signal: string) {
@@ -39,7 +43,7 @@ async function shutdown(signal: string) {
   try {
     // Worker.close() waits for the active job to finish before resolving, so an
     // in-flight analysis/photo search is not killed mid-pipeline on redeploy.
-    await Promise.allSettled([analysisWorker.close(), photoSearchWorker.close()]);
+    await queueWorkers.close();
     await services.prisma.$disconnect();
   } catch (error) {
     logger.error({ error }, "workers_shutdown_error");
@@ -51,3 +55,13 @@ async function shutdown(signal: string) {
 
 process.on("SIGTERM", () => void shutdown("SIGTERM"));
 process.on("SIGINT", () => void shutdown("SIGINT"));
+
+function startBullMqWorkers(input: typeof queueWorkerInput) {
+  const analysisWorker = startAnalysisWorker(input);
+  const photoSearchWorker = startPhotoSearchWorker(input);
+  return {
+    async close() {
+      await Promise.allSettled([analysisWorker.close(), photoSearchWorker.close()]);
+    }
+  };
+}

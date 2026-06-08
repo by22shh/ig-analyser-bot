@@ -4,7 +4,7 @@ import type { AnalysisMode, Locale } from "../../telegram/constants.js";
 import { MODE_COST_UNITS } from "../billing/packages.js";
 import { CreditsService } from "../billing/credits.service.js";
 import { normalizeInstagramUsername } from "../instagram/normalize.js";
-import { analysisQueue } from "../../jobs/queues.js";
+import { getAnalysisQueue } from "../../jobs/queues.js";
 
 export type StartAnalysisInput = {
   userId: string;
@@ -66,7 +66,9 @@ export class AnalysisService {
       });
       job = created.job;
       reserved = created.reserved;
-      await analysisQueue.add("analysis", { analysisJobId: job.id }, { jobId: job.id });
+      if (env.JOB_QUEUE_DRIVER === "bullmq") {
+        await getAnalysisQueue().add("analysis", { analysisJobId: job.id }, { jobId: job.id });
+      }
       return analysisStartResult(job, false);
     } catch (error) {
       // Never leave a reserve hanging if the job could not be created/enqueued.

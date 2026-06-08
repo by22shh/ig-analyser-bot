@@ -13,6 +13,7 @@ import type {
   InstagramProfileProvider
 } from "../../modules/instagram/types.js";
 import type { LlmProvider } from "../../modules/llm/types.js";
+import { selectVisionAnalysisPosts } from "../../modules/analysis/context.js";
 import { buildStrategicReport } from "../../modules/analysis/report-builder.js";
 import { ReportService } from "../../modules/reports/report.service.js";
 import type { VisionAnalysisItemView } from "../../modules/reports/types.js";
@@ -418,8 +419,11 @@ async function loadReusableVision(
   analysisJobId: string,
   posts: InstagramPost[]
 ): Promise<VisionAnalysisItemView[] | undefined> {
-  const expectedCount = Math.min(posts.length, env.ANALYSIS_MAX_IMAGES_ANALYZED ?? 30);
-  if (expectedCount === 0) return [];
+  const expectedPosts = selectVisionAnalysisPosts(posts, {
+    postLimit: env.ANALYSIS_POST_LIMIT ?? 30,
+    imageLimit: env.ANALYSIS_MAX_IMAGES_ANALYZED ?? 30
+  });
+  if (!expectedPosts.length) return [];
 
   const items = await prisma.visionAnalysisItem.findMany({
     where: { analysisJobId },
@@ -428,11 +432,10 @@ async function loadReusableVision(
   if (!items.length) return undefined;
 
   const byPostId = new Map(items.map((item) => [item.postId, item]));
-  const ordered = posts
-    .slice(0, expectedCount)
+  const ordered = expectedPosts
     .map((post) => byPostId.get(post.id))
     .filter((item): item is (typeof items)[number] => item != null);
-  if (ordered.length === expectedCount) {
+  if (ordered.length === expectedPosts.length) {
     return ordered.map((item) => ({
       postId: item.postId,
       status: visionStatus(item.status),

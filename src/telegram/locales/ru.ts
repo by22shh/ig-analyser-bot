@@ -249,6 +249,7 @@ export const ru = {
     summary: ReportSummaryView;
   }): string {
     const m = input.metrics;
+    const warnings = renderReportWarnings(input.summary.warnings, "Ограничения качества");
     return (
       `✅ <b>Отчёт по @${escapeHtml(input.username)} готов</b>\n` +
       `Режим: <b>${this.modeTitle(input.mode)}</b>\n\n` +
@@ -260,7 +261,8 @@ export const ru = {
       `• вовлечённость (ER): ${percent(m.engagementRate)}\n` +
       `• частота: раз в ${m.frequencyDays.toFixed(1)} дн.\n\n` +
       "<b>Короткий вывод:</b>\n" +
-      input.summary.bullets.map((item) => `• ${escapeHtml(item)}`).join("\n")
+      input.summary.bullets.map((item) => `• ${escapeHtml(item)}`).join("\n") +
+      warnings
     );
   },
   sectionsIntro(username: string): string {
@@ -533,3 +535,18 @@ export const ru = {
     return "⚠️ Не удалось обработать запрос. Попробуйте позже или напишите в поддержку.";
   }
 };
+
+function renderReportWarnings(warnings: string[], title: string): string {
+  if (!warnings.length) return "";
+  const items = warnings
+    .slice(0, 3)
+    .map((item) => `• ${escapeHtml(truncateWarning(item))}`)
+    .join("\n");
+  const extra = warnings.length > 3 ? `\n• +${warnings.length - 3}` : "";
+  return `\n\n<b>${escapeHtml(title)}:</b>\n${items}${extra}`;
+}
+
+function truncateWarning(value: string): string {
+  const trimmed = value.trim();
+  return trimmed.length > 220 ? `${trimmed.slice(0, 219)}…` : trimmed;
+}

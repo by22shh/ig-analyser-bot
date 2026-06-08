@@ -1,4 +1,5 @@
 import type { AnalysisMode, Locale } from "../../telegram/constants.js";
+import { env } from "../../config/env.js";
 import type { InstagramProfile } from "../instagram/types.js";
 import {
   renderGroundingFindings,
@@ -14,6 +15,14 @@ import type {
   StrategicReportView,
   VisionAnalysisItemView
 } from "../reports/types.js";
+import { analysisContextDigest, buildAnalysisContext, selectAnalysisPosts } from "./context.js";
+import {
+  evaluateReportQuality,
+  qualityFindingsNeedRepair,
+  renderQualityFindings,
+  renderQualityWarning,
+  type SectionQualityFinding
+} from "./report-quality.js";
 
 export async function buildStrategicReport(input: {
   mode: AnalysisMode;
@@ -24,62 +33,99 @@ export async function buildStrategicReport(input: {
   goal?: string;
   vision?: VisionAnalysisItemView[];
 }): Promise<StrategicReportView> {
-  const posts = input.profile.posts;
-  const vision = input.vision ?? (await input.llm.analyzeVision({ profile: input.profile, posts }));
-  const metrics = computeReportMetrics(input.profile, posts);
+  const selection = selectAnalysisPosts(input.profile.posts, {
+    limit: env.ANALYSIS_POST_LIMIT ?? 30
+  });
+  const posts = selection.posts;
+  const selectedPostIds = new Set(posts.map((post) => post.id));
+  const profile = { ...input.profile, posts };
+  const analyzedVision = input.vision ?? (await input.llm.analyzeVision({ profile, posts }));
+  const vision = analyzedVision.filter((item) => selectedPostIds.has(item.postId));
+  const metrics = computeReportMetrics(profile, posts);
+  const analysisContext = buildAnalysisContext({
+    mode: input.mode,
+    profile,
+    posts,
+    selection,
+    metrics,
+    vision
+  });
   let generated = await input.llm.generateReport({
     mode: input.mode,
     language: input.language,
-    profile: input.profile,
+    profile,
     posts,
     vision,
     metrics,
+    analysisContext,
     targetPosition: input.targetPosition,
     goal: input.goal
   });
   let sections = parseReportSections(generated.rawText, input.mode);
   let missing = validateRequiredSections(input.mode, sections);
-  const weakSourceSections = weakSourceSectionTitles(sections);
+  let weakSourceSections = weakSourceSectionTitles(sections);
   const sourceCatalog: SourceCatalogEntry[] = posts.map((post) => ({
     postId: post.id,
     url: post.url
   }));
   let groundingFindings = await runGrounding(input.llm, input.language, sections, sourceCatalog);
+  let qualitySummary = evaluateReportQuality({
+    mode: input.mode,
+    sections,
+    metrics,
+    analysisContext
+  });
 
   if (
     (missing.length ||
       shouldRepairSources(sections, weakSourceSections) ||
-      groundingFindings.length) &&
+      groundingFindings.length ||
+      qualityFindingsNeedRepair(qualitySummary.findings)) &&
     input.llm.repairReport
   ) {
     const repaired = await input.llm
       .repairReport({
         mode: input.mode,
         language: input.language,
-        profile: input.profile,
+        profile,
         posts,
         vision,
         metrics,
+        analysisContext,
         targetPosition: input.targetPosition,
         goal: input.goal,
         rawText: generated.rawText,
         missingSections: missing,
         weakSourceSections,
-        groundingFindings: renderGroundingFindings(groundingFindings)
+        groundingFindings: renderGroundingFindings(groundingFindings),
+        qualityFindings: renderQualityFindings(qualitySummary.findings)
       })
       .catch(() => undefined);
     if (repaired) {
       const repairedSections = parseReportSections(repaired.rawText, input.mode);
       const repairedMissing = validateRequiredSections(input.mode, repairedSections);
       const repairedGrounding = runDeterministicGrounding(repairedSections, sourceCatalog).findings;
+      const repairedWeakSourceSections = weakSourceSectionTitles(repairedSections);
+      const repairedQualitySummary = evaluateReportQuality({
+        mode: input.mode,
+        sections: repairedSections,
+        metrics,
+        analysisContext
+      });
       if (
-        reportIssueScore(repairedSections, repairedMissing, repairedGrounding) <
-        reportIssueScore(sections, missing, groundingFindings)
+        reportIssueScore(
+          repairedSections,
+          repairedMissing,
+          repairedGrounding,
+          repairedQualitySummary.findings
+        ) < reportIssueScore(sections, missing, groundingFindings, qualitySummary.findings)
       ) {
         generated = repaired;
         sections = repairedSections;
         missing = repairedMissing;
+        weakSourceSections = repairedWeakSourceSections;
         groundingFindings = repairedGrounding;
+        qualitySummary = repairedQualitySummary;
       }
     }
   }
@@ -92,31 +138,34 @@ export async function buildStrategicReport(input: {
         .map(
           (section) => `${section.title}: ${section.content.slice(0, 140).replace(/\s+/g, " ")}...`
         );
+  const qualityWarning = renderQualityWarning(qualitySummary);
 
   return {
     mode: input.mode,
-    username: input.profile.username,
+    username: profile.username,
     language: input.language,
     rawText: generated.rawText,
     sections,
     summary: {
-      bullets: bullets.length
-        ? bullets
-        : [`Public profile @${input.profile.username} was analyzed.`],
+      bullets: bullets.length ? bullets : [`Public profile @${profile.username} was analyzed.`],
       warnings: [
         ...(missing.length ? [`Missing/weak sections: ${missing.join(", ")}`] : []),
         ...(groundingFindings.length
           ? [`Unresolved grounding flags: ${groundingFindings.length}`]
-          : [])
-      ]
+          : []),
+        ...(qualityWarning ? [qualityWarning] : [])
+      ],
+      quality: qualitySummary,
+      evidence: analysisContextDigest(analysisContext)
     },
     metrics,
     sourceMap,
     model: generated.model,
     promptVersion: generated.promptVersion,
-    profile: input.profile,
+    profile,
     posts,
-    vision
+    vision,
+    analysisContext
   };
 }
 
@@ -135,12 +184,19 @@ function shouldRepairSources(
 function reportIssueScore(
   sections: Array<{ sources: unknown[] }>,
   missingSections: string[],
-  groundingFindings: GroundingFinding[] = []
+  groundingFindings: GroundingFinding[] = [],
+  qualityFindings: SectionQualityFinding[] = []
 ): number {
+  const qualityPenalty = qualityFindings.reduce((sum, finding) => {
+    if (finding.severity === "high") return sum + 6;
+    if (finding.severity === "medium") return sum + 3;
+    return sum;
+  }, 0);
   return (
     missingSections.length * 10 +
     sections.filter((section) => !section.sources.length).length +
-    groundingFindings.length * 5
+    groundingFindings.length * 5 +
+    qualityPenalty
   );
 }
 

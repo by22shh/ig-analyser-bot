@@ -43,6 +43,48 @@ describe("structured report output", () => {
     });
   });
 
+  it("keeps structured evidence when a source has only a post ID or profile metadata", () => {
+    const structured = parseStructuredReport(
+      JSON.stringify({
+        summaryBullets: ["Pattern with source"],
+        sections: [
+          {
+            title: "Основные темы и приоритеты",
+            content: "Профиль показывает повторяющийся рабочий контекст.",
+            evidence: [
+              {
+                postId: "p2",
+                url: null,
+                label: "post-only signal",
+                fact: "caption mentions a public launch",
+                confidence: "medium"
+              },
+              {
+                postId: null,
+                url: null,
+                label: "bio signal",
+                fact: "profile metadata lists a public role",
+                confidence: "medium"
+              }
+            ],
+            confidence: "medium",
+            caveats: []
+          }
+        ]
+      })
+    );
+
+    const sections = parseReportSections(renderStructuredReport(structured), "standard");
+
+    expect(sections[0]?.sources).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ postId: "p2" }),
+        expect.objectContaining({ label: expect.stringContaining("bio signal") })
+      ])
+    );
+    expect(sections[0]?.sources.some((source) => !source.url && !source.postId)).toBe(true);
+  });
+
   it("strips stray [[SECTION]] markers a model may embed in structured fields", () => {
     const structured = parseStructuredReport(
       JSON.stringify({

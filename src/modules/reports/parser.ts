@@ -165,24 +165,74 @@ function inferKind(title: string): string {
 }
 
 function extractSources(text: string) {
-  const sources: Array<{ url: string; label: string; postId?: string }> = [];
+  const sources: Array<{ url?: string; label: string; postId?: string }> = [];
   const seen = new Set<string>();
-  for (const line of text.split(/\r?\n/)) {
+  let inEvidenceBlock = false;
+
+  const addSource = (source: { url?: string; label: string; postId?: string }) => {
+    const key = source.url
+      ? `url:${normalizeSourceUrl(source.url)}`
+      : source.postId
+        ? `post:${source.postId}`
+        : `label:${source.label.toLowerCase()}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    sources.push(source);
+  };
+
+  for (const rawLine of text.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line) continue;
+    if (/^(evidence|sources?|источники|доказательства)\s*:?$/iu.test(line)) {
+      inEvidenceBlock = true;
+      continue;
+    }
+    if (/^(confidence|caveats?|уверенность|ограничения|оговорки)\s*:/iu.test(line)) {
+      inEvidenceBlock = false;
+    }
+
+    let matchedUrl = false;
     for (const match of line.matchAll(/https?:\/\/[^\s)]+/g)) {
+      matchedUrl = true;
       const url = match[0];
-      if (seen.has(url)) continue;
-      seen.add(url);
-      const postId =
-        line.match(/\[([^\]\s]+)\]/)?.[1] ??
-        line.match(/\bpost(?:Id| ID| id)?[:\s]+([A-Za-z0-9_-]+)/)?.[1];
-      sources.push({
+      addSource({
         url,
-        postId,
+        postId: extractPostId(line),
         label: cleanSourceLabel(line, sources.length + 1)
       });
     }
+
+    if (!matchedUrl && (inEvidenceBlock || looksLikeSourceLine(line))) {
+      const postId = extractPostId(line);
+      const profileMetadata = /profile\s+(?:metadata|data)|метаданн|данн[^\n]{0,20}профил/iu.test(
+        line
+      );
+      if (postId || profileMetadata) {
+        addSource({
+          postId,
+          label: cleanSourceLabel(line, sources.length + 1)
+        });
+      }
+    }
   }
   return sources.slice(0, 8);
+}
+
+function extractPostId(line: string): string | undefined {
+  return (
+    line.match(/\[([^\]\s]+)\]/)?.[1] ??
+    line.match(/\bpost(?:Id| ID| id)?[:\s]+([A-Za-z0-9_-]+)/)?.[1]
+  );
+}
+
+function looksLikeSourceLine(line: string): boolean {
+  return /^[-*]\s*(?:\[[^\]\s]+\]|source\b|evidence\b|post(?:Id| ID| id)?\b|profile\s+(?:metadata|data))/iu.test(
+    line
+  );
+}
+
+function normalizeSourceUrl(url: string): string {
+  return url.trim().replace(/\/+$/, "");
 }
 
 function cleanSourceLabel(line: string, index: number): string {

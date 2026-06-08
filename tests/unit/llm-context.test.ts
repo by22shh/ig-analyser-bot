@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { env } from "../../src/config/env.js";
+import { buildAnalysisContext, selectAnalysisPosts } from "../../src/modules/analysis/context.js";
 import { buildReportUserMessage } from "../../src/modules/llm/openrouter.adapter.js";
 import type { InstagramPost, InstagramProfile } from "../../src/modules/instagram/types.js";
 import { computeReportMetrics } from "../../src/modules/reports/metrics.js";
@@ -108,6 +109,68 @@ describe("buildReportUserMessage", () => {
     const context = JSON.parse(message) as { sectionGuides: Record<string, string> };
 
     expect(context.sectionGuides["Основные темы и приоритеты"]).toBeTruthy();
+  });
+
+  it("injects compact deterministic analysis context", () => {
+    const post: InstagramPost = {
+      id: "p1",
+      type: "Image",
+      caption: "Founder launch guide with public email hello@example.com",
+      hashtags: ["launch"],
+      mentions: [],
+      likesCount: 50,
+      commentsCount: 5,
+      latestComments: [{ ownerUsername: "alex", text: "useful guide" }],
+      timestamp: "2026-06-01T00:00:00Z",
+      url: "https://www.instagram.com/p/p1/",
+      isPinned: true,
+      childPosts: [],
+      taggedUsers: []
+    };
+    const profile: InstagramProfile = {
+      username: "alice",
+      fullName: "Alice Founder",
+      biography: "Founder",
+      followersCount: 1000,
+      followsCount: 100,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts: [post]
+    };
+    const selection = selectAnalysisPosts([post], { limit: 1 });
+    const metrics = computeReportMetrics(profile, selection.posts);
+    const analysisContext = buildAnalysisContext({
+      mode: "standard",
+      profile,
+      posts: selection.posts,
+      selection,
+      metrics,
+      vision: []
+    });
+
+    const message = buildReportUserMessage({
+      mode: "standard",
+      language: "ru",
+      profile,
+      posts: selection.posts,
+      vision: [],
+      metrics,
+      analysisContext
+    });
+    const context = JSON.parse(message) as {
+      analysisContext: {
+        selectedPostIds: string[];
+        profileSignals: { publicContacts: string[] };
+        evidenceMap: Array<{ id: string }>;
+      };
+      qualityRules: string[];
+    };
+
+    expect(context.analysisContext.selectedPostIds).toEqual(["p1"]);
+    expect(context.analysisContext.profileSignals.publicContacts).toContain("hello@example.com");
+    expect(context.analysisContext.evidenceMap.map((item) => item.id)).toContain("post:p1");
+    expect(context.qualityRules.join(" ")).toContain("analysisContext.evidenceMap");
   });
 
   it("keeps oversized report contexts as valid JSON under the configured budget", () => {

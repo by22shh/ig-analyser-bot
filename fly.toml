@@ -7,7 +7,7 @@ primary_region = "fra"
   dockerfile = "Dockerfile"
 
 [deploy]
-  release_command = "sh -lc 'case \"$DATABASE_URL\" in *\\?*) export DATABASE_URL=\"$DATABASE_URL&connect_timeout=15&pool_timeout=15\" ;; *) export DATABASE_URL=\"$DATABASE_URL?connect_timeout=15&pool_timeout=15\" ;; esac; case \"$DIRECT_URL\" in *\\?*) export DIRECT_URL=\"$DIRECT_URL&connect_timeout=15\" ;; *) export DIRECT_URL=\"$DIRECT_URL?connect_timeout=15\" ;; esac; pnpm prisma:migrate'"
+  release_command = "sh -lc 'add_param() { url=\"$1\"; key=\"$2\"; value=\"$3\"; case \"$url\" in *\"$key=\"*) printf \"%s\" \"$url\" ;; *\\?*) printf \"%s&%s=%s\" \"$url\" \"$key\" \"$value\" ;; *) printf \"%s?%s=%s\" \"$url\" \"$key\" \"$value\" ;; esac; }; export DATABASE_URL=\"$(add_param \"$(add_param \"$DATABASE_URL\" connect_timeout 15)\" pool_timeout 15)\"; export DIRECT_URL=\"$(add_param \"$DIRECT_URL\" connect_timeout 15)\"; pnpm prisma:migrate'"
 
 [processes]
   web = "node dist/src/server.js"

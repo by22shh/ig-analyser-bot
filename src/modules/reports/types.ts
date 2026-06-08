@@ -1,4 +1,6 @@
 import type { AnalysisMode } from "../../telegram/constants.js";
+import type { AnalysisContext, AnalysisContextDigest } from "../analysis/context.js";
+import type { ReportQualitySummary } from "../analysis/report-quality.js";
 import type { InstagramPost, InstagramProfile } from "../instagram/types.js";
 
 export type VisionAnalysisItemView = {
@@ -57,6 +59,8 @@ export type DigitalCircleItem = {
 export type ReportSummaryView = {
   bullets: string[];
   warnings: string[];
+  quality?: ReportQualitySummary;
+  evidence?: AnalysisContextDigest;
 };
 
 export type StrategicReportView = {
@@ -73,4 +77,5 @@ export type StrategicReportView = {
   profile: InstagramProfile;
   posts: InstagramPost[];
   vision: VisionAnalysisItemView[];
+  analysisContext?: AnalysisContext;
 };

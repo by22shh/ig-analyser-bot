@@ -7,6 +7,7 @@ import type { LookupFunction } from "node:net";
 import { env } from "../../config/env.js";
 import { sectionGuidesForMode } from "../../prompts/section-guides.js";
 import { mapWithConcurrency } from "../../util/concurrency.js";
+import { compactAnalysisContext } from "../analysis/context.js";
 import { REQUIRED_SECTIONS } from "../reports/parser.js";
 import { reportPromptForMode, prompts } from "./prompts.js";
 import {
@@ -241,7 +242,7 @@ export class OpenRouterLlmProvider implements LlmProvider {
     const prompt = reportPromptForMode(input.mode);
     const system = `${prompt.system}
 
-You are repairing a report that was already generated. Preserve supported content, add missing required sections, and attach evidence URLs/post IDs from the supplied source catalog. Do not invent facts. If repair.groundingFindings are present, fix each one: remove or clearly down-confidence forbidden_inference claims (e.g. relationship/identity/health), rephrase unsupported_claim items as hedged hypotheses or drop them, and delete any fabricated_source citation not in the source catalog. Return the complete repaired report.`;
+You are repairing a report that was already generated. Preserve supported content, add missing required sections, and attach evidence URLs/post IDs from the supplied source catalog. Do not invent facts. If repair.groundingFindings are present, fix each one: remove or clearly down-confidence forbidden_inference claims (e.g. relationship/identity/health), rephrase unsupported_claim items as hedged hypotheses or drop them, and delete any fabricated_source citation not in the source catalog. If repair.qualityFindings are present, strengthen thin/generic/under-sourced sections with supplied analysisContext evidence and explicit confidence limits. Return the complete repaired report.`;
     if (env.LLM_STRUCTURED_OUTPUTS) {
       try {
         const content = await this.chatCompletion({
@@ -374,7 +375,8 @@ export function buildReportRepairUserMessage(input: ReportRepairInput): string {
     rawText: input.rawText,
     missingSections: input.missingSections,
     weakSourceSections: input.weakSourceSections,
-    groundingFindings: input.groundingFindings
+    groundingFindings: input.groundingFindings,
+    qualityFindings: input.qualityFindings
   });
 }
 
@@ -386,6 +388,7 @@ function buildBudgetedReportContext(
     missingSections?: string[];
     weakSourceSections?: string[];
     groundingFindings?: string[];
+    qualityFindings?: string[];
   }
 ): string {
   const budget = env.LLM_FINAL_INPUT_TOKEN_BUDGET ?? 24000;
@@ -433,6 +436,7 @@ function buildMinimalReportContext(
     missingSections?: string[];
     weakSourceSections?: string[];
     groundingFindings?: string[];
+    qualityFindings?: string[];
   }
 ) {
   const prompt = reportPromptForMode(input.mode);
@@ -444,8 +448,10 @@ function buildMinimalReportContext(
     goal: input.goal,
     requiredSections: prompt.requiredSections,
     sectionGuides: sectionGuidesForMode(input.mode),
+    analysisContext: compactAnalysisContext(input.analysisContext),
     qualityRules: [
-      "Use only the compact profile and metric evidence in this payload.",
+      "Use only the compact profile, metrics, and analysisContext evidence in this payload.",
+      "Treat analysisContext.evidenceMap as prioritized deterministic signals, not as extra private data.",
       "Explicitly say when post-level evidence was compressed out of the context.",
       "Do not infer protected traits, private life facts, identity, medical, political, religious, or sensitive attributes."
     ],
@@ -468,6 +474,7 @@ function buildMinimalReportContext(
           missingSections: repair.missingSections,
           weakSourceSections: repair.weakSourceSections,
           groundingFindings: repair.groundingFindings,
+          qualityFindings: repair.qualityFindings,
           previousReport: truncate(repair.rawText, 1200)
         }
       : undefined
@@ -482,6 +489,7 @@ function buildReportContext(
     missingSections?: string[];
     weakSourceSections?: string[];
     groundingFindings?: string[];
+    qualityFindings?: string[];
   },
   limits: { captionChars: number; commentCount: number; commentChars: number; visionChars: number }
 ) {
@@ -516,8 +524,10 @@ function buildReportContext(
     goal: input.goal,
     requiredSections: prompt.requiredSections,
     sectionGuides: sectionGuidesForMode(input.mode),
+    analysisContext: compactAnalysisContext(input.analysisContext),
     qualityRules: [
       "Every non-obvious claim needs evidence from sourceCatalog, post metadata, comments, metrics, or vision.",
+      "Use analysisContext.evidenceMap, profileSignals, contentClusters, audienceSignals, riskSignals, opportunitySignals, and modeGuidance to prioritize the strongest deterministic signals.",
       "Prefer specific observable facts over generic personality claims.",
       "Use low/medium/high confidence and say when public data is insufficient.",
       "Do not infer protected traits, private life facts, identity, medical, political, religious, or sensitive attributes."
@@ -552,6 +562,7 @@ function buildReportContext(
           missingSections: repair.missingSections,
           weakSourceSections: repair.weakSourceSections,
           groundingFindings: repair.groundingFindings,
+          qualityFindings: repair.qualityFindings,
           previousReport: truncate(repair.rawText, 8000)
         }
       : undefined

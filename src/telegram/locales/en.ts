@@ -245,6 +245,7 @@ export const en = {
     summary: ReportSummaryView;
   }): string {
     const m = input.metrics;
+    const warnings = renderReportWarnings(input.summary.warnings, "Quality limits");
     return (
       `✅ <b>Report for @${escapeHtml(input.username)} is ready</b>\n` +
       `Mode: <b>${this.modeTitle(input.mode)}</b>\n\n` +
@@ -256,7 +257,8 @@ export const en = {
       `• engagement (ER): ${percent(m.engagementRate)}\n` +
       `• frequency: every ${m.frequencyDays.toFixed(1)} days\n\n` +
       "<b>Short take:</b>\n" +
-      input.summary.bullets.map((item) => `• ${escapeHtml(item)}`).join("\n")
+      input.summary.bullets.map((item) => `• ${escapeHtml(item)}`).join("\n") +
+      warnings
     );
   },
   sectionsIntro(username: string): string {
@@ -525,3 +527,18 @@ export const en = {
     return "⚠️ Could not process the request. Please try again later or contact support.";
   }
 };
+
+function renderReportWarnings(warnings: string[], title: string): string {
+  if (!warnings.length) return "";
+  const items = warnings
+    .slice(0, 3)
+    .map((item) => `• ${escapeHtml(truncateWarning(item))}`)
+    .join("\n");
+  const extra = warnings.length > 3 ? `\n• +${warnings.length - 3}` : "";
+  return `\n\n<b>${escapeHtml(title)}:</b>\n${items}${extra}`;
+}
+
+function truncateWarning(value: string): string {
+  const trimmed = value.trim();
+  return trimmed.length > 220 ? `${trimmed.slice(0, 219)}…` : trimmed;
+}

@@ -65,7 +65,7 @@ The current `fly.toml` uses:
 
 - `[processes]` for `web` and `worker`.
 - `[http_service] processes = ["web"]` so only the web machine receives public HTTP traffic.
-- `[deploy] release_command = "pnpm prisma:migrate"` so migrations run once before the new release starts.
+- `[deploy] release_command` adds missing Neon timeout parameters and runs `pnpm prisma:migrate` once before the new release starts.
 
 ## 4. Set Required Secrets
 

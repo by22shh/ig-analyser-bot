@@ -1,4 +1,5 @@
 import type { AnalysisMode, Locale } from "../../telegram/constants.js";
+import type { AnalysisContext } from "../analysis/context.js";
 import type { InstagramPost, InstagramProfile } from "../instagram/types.js";
 import type { ReportMetrics, ReportSectionView, VisionAnalysisItemView } from "../reports/types.js";
 import type { GroundingResult, SourceCatalogEntry } from "./grounding.js";
@@ -15,6 +16,7 @@ export type ReportInput = {
   posts: InstagramPost[];
   vision: VisionAnalysisItemView[];
   metrics?: ReportMetrics;
+  analysisContext?: AnalysisContext;
   targetPosition?: string;
   goal?: string;
 };
@@ -26,6 +28,9 @@ export type ReportRepairInput = ReportInput & {
   // Rendered grounding findings (fabricated sources / forbidden inferences) the
   // repair pass must remove or down-confidence.
   groundingFindings?: string[];
+  // Rendered quality findings (thin/generic/under-sourced sections) the repair
+  // pass should strengthen without inventing new facts.
+  qualityFindings?: string[];
 };
 
 export type GroundingVerifyInput = {

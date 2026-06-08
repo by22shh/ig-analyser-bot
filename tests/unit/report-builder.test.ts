@@ -70,12 +70,16 @@ describe("buildStrategicReport", () => {
     expect(llm.repairReport).toHaveBeenCalledWith(
       expect.objectContaining({
         missingSections: expect.arrayContaining(["Повторяющиеся визуальные и текстовые паттерны"]),
-        metrics: expect.objectContaining({ analyzedPosts: 1 })
+        metrics: expect.objectContaining({ analyzedPosts: 1 }),
+        analysisContext: expect.objectContaining({ selectedPostIds: ["p1"] }),
+        qualityFindings: expect.any(Array)
       })
     );
     expect(report.sections).toHaveLength(REQUIRED_SECTIONS.standard.length);
     expect(report.summary.bullets).toEqual(["Резюме из structured output."]);
     expect(report.summary.warnings).toEqual([]);
+    expect(report.summary.evidence?.selectedPostIds).toEqual(["p1"]);
+    expect(report.analysisContext?.evidenceMap.length).toBeGreaterThan(0);
     expect(report.promptVersion).toBe("report.repair");
   });
 

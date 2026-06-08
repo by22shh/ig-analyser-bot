@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { renderReportHtml, renderReportMarkdown } from "../../src/modules/reports/export.js";
 import { ReportService } from "../../src/modules/reports/report.service.js";
 import type { StrategicReportView } from "../../src/modules/reports/types.js";
 
@@ -57,6 +58,21 @@ describe("ReportService", () => {
     expect(storage.putObject).not.toHaveBeenCalled();
     expect(storage.deleteObjects).not.toHaveBeenCalled();
     expect(transaction).not.toHaveBeenCalled();
+  });
+
+  it("renders report warnings and post-ID-only sources into downloadable artifacts", () => {
+    const report = minimalReport();
+    report.summary.warnings = ["Quality flags: score 72/100, 4 medium/high findings"];
+    report.sections[0]!.sources = [{ postId: "p1", label: "post-only evidence" }];
+
+    const markdown = renderReportMarkdown(report);
+    const html = renderReportHtml(report);
+
+    expect(markdown).toContain("## Quality Warnings");
+    expect(markdown).toContain("Quality flags");
+    expect(html).toContain("Quality Warnings");
+    expect(html).toContain("post-only evidence");
+    expect(html).toContain("p1");
   });
 });
 

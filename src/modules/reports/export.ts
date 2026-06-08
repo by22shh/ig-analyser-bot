@@ -10,6 +10,7 @@ export function renderReportMarkdown(report: StrategicReportView): string {
     "",
     "## Summary",
     ...report.summary.bullets.map((item) => `- ${item}`),
+    ...markdownWarnings(report.summary.warnings),
     "",
     "## Metrics",
     `- Followers: ${report.metrics.followersCount}`,
@@ -47,7 +48,7 @@ export function renderReportHtml(report: StrategicReportView): string {
           <p>${escapeHtml(section.content).replaceAll("\n", "<br>")}</p>
           ${
             section.sources.length
-              ? `<ul>${section.sources.map((source) => `<li>${escapeHtml(source.label)} ${source.url ? `<a href="${escapeHtml(source.url)}">${escapeHtml(source.url)}</a>` : ""}</li>`).join("")}</ul>`
+              ? `<ul>${section.sources.map((source) => `<li>${escapeHtml(source.label)} ${renderHtmlSourceTarget(source)}</li>`).join("")}</ul>`
               : ""
           }
         </section>`
@@ -75,6 +76,7 @@ export function renderReportHtml(report: StrategicReportView): string {
   </header>
   <h2>Summary</h2>
   <ul>${report.summary.bullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+  ${renderHtmlWarnings(report.summary.warnings)}
   <h2>Metrics</h2>
   <div class="metrics">
     <div class="metric"><b>Followers</b><br>${report.metrics.followersCount}</div>
@@ -87,4 +89,21 @@ export function renderReportHtml(report: StrategicReportView): string {
   <p class="disclaimer">Public data only. Hypotheses/signals for verification, not certainty.</p>
 </body>
 </html>`;
+}
+
+function markdownWarnings(warnings: string[]): string[] {
+  if (!warnings.length) return [];
+  return ["", "## Quality Warnings", ...warnings.map((item) => `- ${item}`)];
+}
+
+function renderHtmlWarnings(warnings: string[]): string {
+  if (!warnings.length) return "";
+  return `<h2>Quality Warnings</h2><ul>${warnings.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+}
+
+function renderHtmlSourceTarget(source: { url?: string; postId?: string }): string {
+  if (source.url) {
+    return `<a href="${escapeHtml(source.url)}">${escapeHtml(source.url)}</a>`;
+  }
+  return source.postId ? escapeHtml(source.postId) : "";
 }

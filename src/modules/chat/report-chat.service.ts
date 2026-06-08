@@ -7,6 +7,7 @@ import { MODE_COST_UNITS } from "../billing/packages.js";
 import type { CreditsService } from "../billing/credits.service.js";
 import type { LlmProvider } from "../llm/types.js";
 import { recordUsage, recordUsageSafe } from "../observability/usage.js";
+import { buildReportChatContext } from "./context.js";
 
 const PENDING_ASSISTANT_ROLE = "assistant_pending";
 const IDEMPOTENCY_POLL_MS = 250;
@@ -102,10 +103,7 @@ export class ReportChatService {
         }
       });
       reserved = true;
-      const reportText = [
-        report.rawText,
-        ...report.sections.map((section) => `${section.title}\n${section.content}`)
-      ].join("\n\n");
+      const reportText = buildReportChatContext(report);
       const answer = await this.llm.chat({
         language: input.language,
         reportText,

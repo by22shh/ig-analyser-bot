@@ -88,6 +88,13 @@ describe("ReportChatService.ask idempotency", () => {
     });
 
     expect(result.text).toBe("fresh");
+    const chatInput = (llm as unknown as { chat: ReturnType<typeof vi.fn> }).chat.mock
+      .calls[0]?.[0] as { reportText: string };
+    expect(JSON.parse(chatInput.reportText)).toMatchObject({
+      reportId: "r1",
+      rawTextExcerpt: "report",
+      sections: []
+    });
     const reserveInput = (credits as unknown as { reserve: ReturnType<typeof vi.fn> }).reserve.mock
       .calls[0]?.[0] as { reportChatMessageId?: string };
     const captureInput = captureReserve.mock.calls[0]?.[0] as { reportChatMessageId?: string };

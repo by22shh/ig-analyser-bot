@@ -12,6 +12,15 @@ describe("report parser", () => {
     expect(sections[0]?.sources[0]?.url).toContain("instagram.com");
   });
 
+  it("extracts evidence post IDs even when no URL is present", () => {
+    const sections = parseReportSections(
+      "[[SECTION]]\nОсновные темы и приоритеты\nEvidence:\n- [p42] public caption: launch mentioned (high) p42\nConfidence: medium",
+      "standard"
+    );
+
+    expect(sections[0]?.sources).toEqual([expect.objectContaining({ postId: "p42" })]);
+  });
+
   it("reports missing required sections", () => {
     const missing = validateRequiredSections("influencer", [
       { title: "Brand safety", content: "", sources: [] }

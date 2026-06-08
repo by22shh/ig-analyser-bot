@@ -16,7 +16,9 @@ export function startRetentionLoop(services: Services): RetentionLoopHandle {
     try {
       const reports = await services.retention.cleanupExpiredReports();
       const photos = await services.retention.cleanupOldPhotoSearch();
-      if (reports || photos) log.info({ reports, photos }, "retention_cleanup_done");
+      const chats = await services.chat.recoverStalePendingAnswers();
+      if (reports || photos || chats)
+        log.info({ reports, photos, chats }, "retention_cleanup_done");
     } catch (error) {
       log.error({ error }, "retention_cleanup_failed");
     } finally {

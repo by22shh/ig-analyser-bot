@@ -205,6 +205,32 @@ export class ReportChatService {
     }
   }
 
+  async recoverStalePendingAnswers(now = new Date(), batchSize = 100): Promise<number> {
+    const cutoff = new Date(now.getTime() - PENDING_ASSISTANT_STALE_MS);
+    const pending = await this.prisma.reportChatMessage.findMany({
+      where: {
+        role: PENDING_ASSISTANT_ROLE,
+        createdAt: { lt: cutoff }
+      },
+      select: {
+        id: true,
+        session: { select: { userId: true } }
+      },
+      orderBy: { createdAt: "asc" },
+      take: batchSize
+    });
+
+    let recovered = 0;
+    for (const message of pending) {
+      const didRecover = await this.recoverStalePendingAnswer({
+        userId: message.session.userId,
+        messageId: message.id
+      });
+      if (didRecover) recovered += 1;
+    }
+    return recovered;
+  }
+
   private async waitForIdempotentAnswer(answerKey: string, userId: string) {
     const deadline = Date.now() + IDEMPOTENCY_WAIT_MS;
     while (Date.now() < deadline) {
@@ -226,22 +252,24 @@ export class ReportChatService {
     return Date.now() - createdAt.getTime() > PENDING_ASSISTANT_STALE_MS;
   }
 
-  private async recoverStalePendingAnswer(input: { userId: string; messageId: string }) {
-    await this.credits
-      .releaseReserve({
-        userId: input.userId,
+  private async recoverStalePendingAnswer(input: {
+    userId: string;
+    messageId: string;
+  }): Promise<boolean> {
+    await this.credits.releaseReserve({
+      userId: input.userId,
+      reportChatMessageId: input.messageId,
+      amountUnits: MODE_COST_UNITS.chat_message,
+      metadata: {
+        type: "report_chat",
         reportChatMessageId: input.messageId,
-        amountUnits: MODE_COST_UNITS.chat_message,
-        metadata: {
-          type: "report_chat",
-          reportChatMessageId: input.messageId,
-          reason: "stale_pending_chat_recovered"
-        }
-      })
-      .catch(() => undefined);
-    await this.prisma.reportChatMessage.deleteMany({
+        reason: "stale_pending_chat_recovered"
+      }
+    });
+    const deleted = await this.prisma.reportChatMessage.deleteMany({
       where: { id: input.messageId, role: PENDING_ASSISTANT_ROLE }
     });
+    return deleted.count > 0;
   }
 }
 

@@ -376,6 +376,7 @@ async function authenticateMiniApp(
     last_name?: string;
     language_code?: string;
   };
+  let chatId: number | undefined;
   try {
     if (initData) {
       const validated = validateMiniAppInitData(initData, env.TELEGRAM_BOT_TOKEN);
@@ -384,8 +385,10 @@ async function authenticateMiniApp(
         return undefined;
       }
       telegramUser = validated.user;
+      chatId = validated.chat?.id;
     } else if (env.APP_ENV === "development" || env.APP_ENV === "test") {
       telegramUser = devTelegramUser(request);
+      chatId = devTelegramChatId(request, telegramUser.id);
     } else {
       apiError(reply, 401, "INIT_DATA_MISSING");
       return undefined;
@@ -418,7 +421,7 @@ async function authenticateMiniApp(
   return {
     user: result.user,
     telegramUserId: telegramUser.id,
-    chatId: telegramUser.id
+    chatId: chatId ?? telegramUser.id
   };
 }
 
@@ -440,6 +443,12 @@ function devTelegramUser(request: FastifyRequest) {
     last_name: "Tester",
     language_code: env.DEFAULT_LANGUAGE
   };
+}
+
+function devTelegramChatId(request: FastifyRequest, fallback: number): number {
+  const raw = request.headers["x-mini-app-dev-chat"];
+  const id = typeof raw === "string" ? Number(raw) : NaN;
+  return Number.isSafeInteger(id) ? id : fallback;
 }
 
 async function grantWelcomeBonus(services: Services, userId: string) {

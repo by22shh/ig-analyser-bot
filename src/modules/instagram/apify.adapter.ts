@@ -66,9 +66,9 @@ export class ApifyInstagramProfileProvider implements InstagramProfileProvider {
     if (!this.token) throw new Error("APIFY_TOKEN_MISSING");
     const actorInput = {
       directUrls: [`https://www.instagram.com/${input.username}`],
-      resultsLimit: Math.max(input.postLimit, 35),
+      resultsLimit: Math.max(1, input.postLimit),
       resultsType: "posts",
-      searchType: "hashtag",
+      searchType: "user",
       enhanceUserSearchWithFacebookPage: false,
       isUserReelFeedURL: false,
       addParentData: input.includeParentData,

@@ -122,6 +122,28 @@ describe("Mini App API", () => {
     await app.close();
   });
 
+  it("uses the Mini App chat context when one is available", async () => {
+    const services = makeServices();
+    const app = createApp({ services: services as never, bot: makeBot() as never });
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/mini-app/analysis",
+      headers: {
+        "content-type": "application/json",
+        "x-mini-app-dev-user": "900000001",
+        "x-mini-app-dev-chat": "-1001234567890"
+      },
+      payload: JSON.stringify({ username: "alice", mode: "standard", requestId: "r2" })
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(services.analysis.startAnalysis).toHaveBeenCalledWith(
+      expect.objectContaining({ chatId: -1001234567890 })
+    );
+    await app.close();
+  });
+
   it("treats a restricted chat member as subscribed only when is_member is true", async () => {
     env.FEATURE_REQUIRE_CHANNEL_SUB = true;
     env.REQUIRED_CHANNEL_ID = "@required";

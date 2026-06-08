@@ -19,6 +19,24 @@ describe("validateMiniAppInitData", () => {
     expect(result.queryId).toBe("query-1");
   });
 
+  it("accepts a signed chat context when Telegram includes it", () => {
+    const initData = sign({
+      auth_date: "1893456000",
+      user: JSON.stringify({ id: 42, first_name: "Ada" }),
+      chat: JSON.stringify({ id: -1001234567890, type: "supergroup", title: "Launch chat" })
+    });
+
+    const result = validateMiniAppInitData(initData, token, 0);
+
+    expect(result.user?.id).toBe(42);
+    expect(result.chat).toEqual({
+      id: -1001234567890,
+      type: "supergroup",
+      title: "Launch chat",
+      username: undefined
+    });
+  });
+
   it("rejects tampered data", () => {
     const initData = sign({
       auth_date: "1893456000",

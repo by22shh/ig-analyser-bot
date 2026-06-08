@@ -297,4 +297,58 @@ describe("ReportChatService.ask idempotency", () => {
       })
     );
   });
+
+  it("recovers stale pending answers in the background", async () => {
+    const now = new Date("2026-06-08T12:00:00.000Z");
+    const stale = new Date(now.getTime() - 16 * 60 * 1000);
+    const findMany = vi
+      .fn()
+      .mockResolvedValue([{ id: "pending-1", session: { userId: "u1" }, createdAt: stale }]);
+    const deleteMany = vi.fn().mockResolvedValueOnce({ count: 1 });
+    const prisma = {
+      reportChatMessage: { findMany, deleteMany }
+    } as never;
+    const credits = { releaseReserve: vi.fn().mockResolvedValue(undefined) } as never;
+    const service = new ReportChatService(prisma, {} as never, credits);
+
+    const recovered = await service.recoverStalePendingAnswers(now);
+
+    expect(recovered).toBe(1);
+    expect(findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          role: "assistant_pending",
+          createdAt: { lt: new Date(now.getTime() - 15 * 60 * 1000) }
+        }),
+        take: 100
+      })
+    );
+    expect(
+      (credits as unknown as { releaseReserve: ReturnType<typeof vi.fn> }).releaseReserve
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: "u1",
+        reportChatMessageId: "pending-1",
+        amountUnits: 5
+      })
+    );
+    expect(deleteMany).toHaveBeenCalledWith({
+      where: { id: "pending-1", role: "assistant_pending" }
+    });
+  });
+
+  it("keeps stale pending answers when reserve release fails", async () => {
+    const now = new Date("2026-06-08T12:00:00.000Z");
+    const findMany = vi.fn().mockResolvedValue([{ id: "pending-1", session: { userId: "u1" } }]);
+    const deleteMany = vi.fn();
+    const prisma = {
+      reportChatMessage: { findMany, deleteMany }
+    } as never;
+    const credits = { releaseReserve: vi.fn().mockRejectedValue(new Error("db down")) } as never;
+    const service = new ReportChatService(prisma, {} as never, credits);
+
+    await expect(service.recoverStalePendingAnswers(now)).rejects.toThrow("db down");
+
+    expect(deleteMany).not.toHaveBeenCalled();
+  });
 });

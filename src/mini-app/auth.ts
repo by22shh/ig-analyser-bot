@@ -10,10 +10,18 @@ export type MiniAppTelegramUser = {
   photo_url?: string;
 };
 
+export type MiniAppTelegramChat = {
+  id: number;
+  type?: string;
+  title?: string;
+  username?: string;
+};
+
 export type ValidatedMiniAppInitData = {
   authDate: Date;
   queryId?: string;
   user?: MiniAppTelegramUser;
+  chat?: MiniAppTelegramChat;
   raw: Record<string, string>;
 };
 
@@ -26,7 +34,8 @@ export class MiniAppAuthError extends Error {
       | "HASH_INVALID"
       | "AUTH_DATE_MISSING"
       | "AUTH_DATE_EXPIRED"
-      | "USER_INVALID",
+      | "USER_INVALID"
+      | "CHAT_INVALID",
     message = code
   ) {
     super(message);
@@ -66,10 +75,12 @@ export function validateMiniAppInitData(
   }
 
   const user = parseTelegramUser(params.get("user"));
+  const chat = parseTelegramChat(params.get("chat"));
   return {
     authDate: new Date(authDateSeconds * 1000),
     queryId: params.get("query_id") ?? undefined,
     user,
+    chat,
     raw: Object.fromEntries(params.entries())
   };
 }
@@ -84,8 +95,8 @@ function parseTelegramUser(value: string | null): MiniAppTelegramUser | undefine
   if (!value) return undefined;
   try {
     const parsed = JSON.parse(value) as Partial<MiniAppTelegramUser>;
-    const id = parsed.id;
-    if (typeof id !== "number" || !Number.isSafeInteger(id)) throw new Error("invalid id");
+    const id = integerId(parsed.id);
+    if (id == null) throw new Error("invalid id");
     return {
       id,
       first_name: stringOrUndefined(parsed.first_name),
@@ -98,6 +109,32 @@ function parseTelegramUser(value: string | null): MiniAppTelegramUser | undefine
   } catch {
     throw new MiniAppAuthError("USER_INVALID");
   }
+}
+
+function parseTelegramChat(value: string | null): MiniAppTelegramChat | undefined {
+  if (!value) return undefined;
+  try {
+    const parsed = JSON.parse(value) as Partial<MiniAppTelegramChat>;
+    const id = integerId(parsed.id);
+    if (id == null) throw new Error("invalid id");
+    return {
+      id,
+      type: stringOrUndefined(parsed.type),
+      title: stringOrUndefined(parsed.title),
+      username: stringOrUndefined(parsed.username)
+    };
+  } catch {
+    throw new MiniAppAuthError("CHAT_INVALID");
+  }
+}
+
+function integerId(value: unknown): number | undefined {
+  if (typeof value === "number" && Number.isSafeInteger(value)) return value;
+  if (typeof value === "string" && /^-?\d+$/.test(value)) {
+    const parsed = Number(value);
+    if (Number.isSafeInteger(parsed)) return parsed;
+  }
+  return undefined;
 }
 
 function stringOrUndefined(value: unknown): string | undefined {

@@ -364,6 +364,12 @@ async function loadPersistedProfile(
     include: { posts: { orderBy: { sortOrder: "asc" } } }
   });
   if (!snapshot) return null;
+  if (snapshot.posts.length === 0 && snapshot.postsCount > 0) {
+    await prisma.instagramProfileSnapshot
+      .delete({ where: { id: snapshot.id } })
+      .catch(() => undefined);
+    return null;
+  }
 
   const posts: InstagramPost[] = snapshot.posts.map((post) => ({
     id: post.postId,
@@ -446,54 +452,56 @@ async function persistProfile(
   analysisJobId: string,
   profile: Awaited<ReturnType<InstagramProfileProvider["fetchProfile"]>>
 ) {
-  const snapshot = await prisma.instagramProfileSnapshot.create({
-    data: {
-      analysisJobId,
-      username: profile.username,
-      fullName: profile.fullName,
-      biography: profile.biography,
-      followersCount: profile.followersCount,
-      followsCount: profile.followsCount,
-      postsCount: profile.postsCount,
-      profilePicUrl: profile.profilePicUrl,
-      externalUrl: profile.externalUrl,
-      isVerified: profile.isVerified,
-      relatedProfiles: profile.relatedProfiles,
-      provider: "apify",
-      providerDatasetId: profile.providerDatasetId,
-      rawDebug: profile.rawDebug as never
-    }
+  return prisma.$transaction(async (tx) => {
+    const snapshot = await tx.instagramProfileSnapshot.create({
+      data: {
+        analysisJobId,
+        username: profile.username,
+        fullName: profile.fullName,
+        biography: profile.biography,
+        followersCount: profile.followersCount,
+        followsCount: profile.followsCount,
+        postsCount: profile.postsCount,
+        profilePicUrl: profile.profilePicUrl,
+        externalUrl: profile.externalUrl,
+        isVerified: profile.isVerified,
+        relatedProfiles: profile.relatedProfiles,
+        provider: "apify",
+        providerDatasetId: profile.providerDatasetId,
+        rawDebug: profile.rawDebug as never
+      }
+    });
+    await tx.instagramPostSnapshot.createMany({
+      data: profile.posts.map((post, index) => ({
+        profileSnapshotId: snapshot.id,
+        postId: post.id,
+        type: post.type,
+        caption: post.caption,
+        hashtags: post.hashtags,
+        mentions: post.mentions,
+        likesCount: post.likesCount,
+        commentsCount: post.commentsCount,
+        latestComments: post.latestComments as never,
+        timestamp: post.timestamp ? new Date(post.timestamp) : null,
+        displayUrl: post.displayUrl,
+        url: post.url,
+        videoViewCount: post.videoViewCount,
+        videoDuration: post.videoDuration,
+        location: post.location as never,
+        isPinned: post.isPinned,
+        productType: post.productType,
+        musicInfo: post.musicInfo as never,
+        childPosts: post.childPosts,
+        taggedUsers: post.taggedUsers,
+        sortOrder: index
+      }))
+    });
+    const posts = await tx.instagramPostSnapshot.findMany({
+      where: { profileSnapshotId: snapshot.id },
+      select: { id: true, postId: true }
+    });
+    return new Map(posts.map((post) => [post.postId, post.id]));
   });
-  await prisma.instagramPostSnapshot.createMany({
-    data: profile.posts.map((post, index) => ({
-      profileSnapshotId: snapshot.id,
-      postId: post.id,
-      type: post.type,
-      caption: post.caption,
-      hashtags: post.hashtags,
-      mentions: post.mentions,
-      likesCount: post.likesCount,
-      commentsCount: post.commentsCount,
-      latestComments: post.latestComments as never,
-      timestamp: post.timestamp ? new Date(post.timestamp) : null,
-      displayUrl: post.displayUrl,
-      url: post.url,
-      videoViewCount: post.videoViewCount,
-      videoDuration: post.videoDuration,
-      location: post.location as never,
-      isPinned: post.isPinned,
-      productType: post.productType,
-      musicInfo: post.musicInfo as never,
-      childPosts: post.childPosts,
-      taggedUsers: post.taggedUsers,
-      sortOrder: index
-    }))
-  });
-  const posts = await prisma.instagramPostSnapshot.findMany({
-    where: { profileSnapshotId: snapshot.id },
-    select: { id: true, postId: true }
-  });
-  return new Map(posts.map((post) => [post.postId, post.id]));
 }
 
 async function persistVision(

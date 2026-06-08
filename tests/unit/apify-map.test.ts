@@ -1,5 +1,8 @@
-import { describe, expect, it } from "vitest";
-import { mapApifyItems } from "../../src/modules/instagram/apify.adapter.js";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import {
+  ApifyInstagramProfileProvider,
+  mapApifyItems
+} from "../../src/modules/instagram/apify.adapter.js";
 
 // The real apify~instagram-scraper returns taggedUsers / relatedProfiles as
 // arrays of objects ({ username, full_name, ... }) and childPosts as objects
@@ -93,3 +96,46 @@ describe("mapApifyItems", () => {
     expect(profile.relatedProfiles).toEqual(["brand_friend"]);
   });
 });
+
+describe("ApifyInstagramProfileProvider", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("requests the configured post limit without silently inflating provider spend", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse({ data: { id: "run-1", status: "RUNNING" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({ data: { id: "run-1", status: "SUCCEEDED", defaultDatasetId: "ds-1" } })
+      )
+      .mockResolvedValueOnce(
+        jsonResponse([
+          {
+            id: "post1",
+            type: "Image",
+            ownerUsername: "alice",
+            timestamp: "2026-06-01T00:00:00Z"
+          }
+        ])
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const provider = new ApifyInstagramProfileProvider("token");
+    await provider.fetchProfile({ username: "alice", postLimit: 30, includeParentData: true });
+
+    const body = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body)) as {
+      resultsLimit?: number;
+      searchType?: string;
+    };
+    expect(body.resultsLimit).toBe(30);
+    expect(body.searchType).toBe("user");
+  });
+});
+
+function jsonResponse(value: unknown): Response {
+  return new Response(JSON.stringify(value), {
+    status: 200,
+    headers: { "content-type": "application/json" }
+  });
+}

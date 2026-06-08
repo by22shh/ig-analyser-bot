@@ -59,4 +59,37 @@ describe("mapApifyItems", () => {
     expect(profile.posts[0]?.mentions).toEqual(["grace"]);
     expect(profile.relatedProfiles).toEqual(["heidi"]);
   });
+
+  it("uses dataSource as parent profile data when Apify attaches it to post items", () => {
+    const profile = mapApifyItems(
+      "alice",
+      [
+        {
+          ...baseItem,
+          ownerUsername: undefined,
+          followersCount: undefined,
+          biography: undefined,
+          dataSource: {
+            username: "alice",
+            fullName: "Alice Example",
+            biography: "profile from parent data",
+            followersCount: 1234,
+            followsCount: 55,
+            postsCount: 88,
+            profilePicUrl: "https://example.com/alice.jpg",
+            relatedProfiles: [{ username: "brand_friend" }]
+          }
+        }
+      ],
+      30
+    );
+
+    expect(profile.fullName).toBe("Alice Example");
+    expect(profile.biography).toBe("profile from parent data");
+    expect(profile.followersCount).toBe(1234);
+    expect(profile.followsCount).toBe(55);
+    expect(profile.postsCount).toBe(88);
+    expect(profile.profilePicUrl).toBe("https://example.com/alice.jpg");
+    expect(profile.relatedProfiles).toEqual(["brand_friend"]);
+  });
 });

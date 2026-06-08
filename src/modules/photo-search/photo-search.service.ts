@@ -28,42 +28,47 @@ export class PhotoSearchService {
       });
       if (existing) return existing;
     }
-    const reserved = await this.credits.reserve({
-      userId: input.userId,
-      amountUnits: MODE_COST_UNITS.photo_search,
-      metadata: { type: "photo_search" }
-    });
     let job: Awaited<ReturnType<typeof this.prisma.photoSearchJob.create>> | undefined;
+    let reserved: Awaited<ReturnType<CreditsService["reserve"]>> | undefined;
     try {
-      job = await this.prisma.photoSearchJob.create({
-        data: {
+      const created = await this.prisma.$transaction(async (tx) => {
+        const photoSearchJob = await tx.photoSearchJob.create({
+          data: {
+            userId: input.userId,
+            telegramChatId: input.chatId != null ? BigInt(input.chatId) : undefined,
+            telegramFileId: input.telegramFileId,
+            telegramFileUniqueId: input.telegramFileUniqueId,
+            inputMimeType: input.mimeType,
+            inputSizeBytes: input.sizeBytes,
+            idempotencyKey: input.idempotencyKey,
+            status: "queued"
+          }
+        });
+        const reserve = await this.credits.reserveWithin(tx, {
           userId: input.userId,
-          telegramChatId: input.chatId != null ? BigInt(input.chatId) : undefined,
-          telegramFileId: input.telegramFileId,
-          telegramFileUniqueId: input.telegramFileUniqueId,
-          inputMimeType: input.mimeType,
-          inputSizeBytes: input.sizeBytes,
-          idempotencyKey: input.idempotencyKey,
-          status: "queued"
-        }
+          photoSearchJobId: photoSearchJob.id,
+          amountUnits: MODE_COST_UNITS.photo_search,
+          metadata: { type: "photo_search" }
+        });
+        return { job: photoSearchJob, reserved: reserve };
       });
-      await this.prisma.creditTransaction.update({
-        where: { id: reserved.id },
-        data: { photoSearchJobId: job.id }
-      });
+      job = created.job;
+      reserved = created.reserved;
       await photoSearchQueue.add("photo-search", { photoSearchJobId: job.id }, { jobId: job.id });
       return job;
     } catch (error) {
       // Never leave a reserve hanging if the job could not be created/enqueued.
-      await this.credits
-        .releaseReserve({
-          userId: input.userId,
-          photoSearchJobId: job?.id,
-          reserveTransactionId: reserved.id,
-          amountUnits: MODE_COST_UNITS.photo_search,
-          metadata: { reason: "photo_search_enqueue_failed" }
-        })
-        .catch(() => undefined);
+      if (reserved) {
+        await this.credits
+          .releaseReserve({
+            userId: input.userId,
+            photoSearchJobId: job?.id,
+            reserveTransactionId: reserved.id,
+            amountUnits: MODE_COST_UNITS.photo_search,
+            metadata: { reason: "photo_search_enqueue_failed" }
+          })
+          .catch(() => undefined);
+      }
       if (job) {
         await this.prisma.photoSearchJob
           .update({
@@ -72,8 +77,8 @@ export class PhotoSearchService {
           })
           .catch(() => undefined);
       }
-      // A concurrent request won the unique key: our just-made reserve is released
-      // above, so return the winning job instead of charging the user twice.
+      // A concurrent request won the unique key before this transaction reserved
+      // credits, so return the winning job instead of charging the user twice.
       if (input.idempotencyKey && isUniqueConstraintError(error)) {
         return this.prisma.photoSearchJob.findUniqueOrThrow({
           where: { idempotencyKey: input.idempotencyKey }

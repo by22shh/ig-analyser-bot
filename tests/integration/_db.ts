@@ -14,6 +14,12 @@ export const dbAvailable: boolean = await prisma.user
   .then(() => true)
   .catch(() => false);
 
+if (!dbAvailable && process.env.CI) {
+  throw new Error(
+    "Integration database is unavailable in CI. Provision Postgres and run Prisma migrations before tests."
+  );
+}
+
 let seq = 0n;
 
 /** Collision-resistant id for unique columns (telegramId, charge ids, …). */

@@ -132,6 +132,12 @@ function str(value: unknown): string | undefined {
   return typeof value === "string" && value ? value : undefined;
 }
 
+function record(value: unknown): Record<string, unknown> | undefined {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : undefined;
+}
+
 function num(value: unknown): number {
   return typeof value === "number" && Number.isFinite(value) ? value : 0;
 }
@@ -184,9 +190,11 @@ export function mapApifyItems(
   if (!items.length) throw new Error("PROFILE_NOT_FOUND_OR_PRIVATE");
   const records = items as Array<Record<string, unknown>>;
   const first = records[0] ?? {};
-  const owner = (first.ownerUsername ?? first.username ?? first.ownerFullName) as
-    | string
-    | undefined;
+  const profileSource =
+    record(first.dataSource) ?? record(first.owner) ?? record(first.ownerData) ?? first;
+  const owner = str(
+    first.ownerUsername ?? first.username ?? profileSource.ownerUsername ?? profileSource.username
+  );
   if (owner && owner.toLowerCase() !== username.toLowerCase()) {
     throw new Error("IDENTITY_MISMATCH");
   }
@@ -230,17 +238,19 @@ export function mapApifyItems(
     .sort((a, b) => Date.parse(b.timestamp ?? "0") - Date.parse(a.timestamp ?? "0"))
     .slice(0, postLimit);
 
-  const profileSource =
-    ((first.owner ?? first.ownerData ?? first) as Record<string, unknown>) || {};
   return {
     username,
-    fullName: str(profileSource.fullName ?? first.ownerFullName),
-    biography: str(profileSource.biography),
-    followersCount: num(profileSource.followersCount ?? first.followersCount),
-    followsCount: num(profileSource.followsCount ?? first.followsCount),
-    postsCount: num(profileSource.postsCount ?? first.postsCount),
-    profilePicUrl: str(profileSource.profilePicUrl ?? first.profilePicUrl),
-    externalUrl: str(profileSource.externalUrl),
+    fullName: str(profileSource.fullName ?? profileSource.full_name ?? first.ownerFullName),
+    biography: str(profileSource.biography ?? first.biography),
+    followersCount: num(
+      profileSource.followersCount ?? profileSource.followers ?? first.followersCount
+    ),
+    followsCount: num(profileSource.followsCount ?? profileSource.follows ?? first.followsCount),
+    postsCount: num(profileSource.postsCount ?? profileSource.posts ?? first.postsCount),
+    profilePicUrl: str(
+      profileSource.profilePicUrl ?? profileSource.profilePic ?? first.profilePicUrl
+    ),
+    externalUrl: str(profileSource.externalUrl ?? first.externalUrl),
     isVerified: Boolean(profileSource.isVerified ?? first.isVerified),
     relatedProfiles: usernameArray(profileSource.relatedProfiles ?? first.relatedProfiles),
     posts,

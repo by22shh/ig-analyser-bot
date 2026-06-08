@@ -32,47 +32,55 @@ export class AnalysisService {
     });
     if (existing) return analysisStartResult(existing, true);
 
-    const reserved = await this.credits.reserve({
-      userId: input.userId,
-      amountUnits: costCreditUnits,
-      metadata: { mode: input.mode, username }
-    });
     let job: Awaited<ReturnType<typeof this.prisma.analysisJob.create>> | undefined;
+    let reserved: Awaited<ReturnType<CreditsService["reserve"]>> | undefined;
     try {
-      job = await this.prisma.analysisJob.create({
-        data: {
+      const created = await this.prisma.$transaction(async (tx) => {
+        const analysisJob = await tx.analysisJob.create({
+          data: {
+            userId: input.userId,
+            mode: input.mode,
+            inputType: input.inputType,
+            targetUsername: username,
+            targetPosition: input.targetPosition,
+            goal: input.goal,
+            language: input.language,
+            status: "queued",
+            stage: "queued",
+            telegramChatId: BigInt(input.chatId),
+            costCreditUnits,
+            idempotencyKey: input.idempotencyKey
+          } as never
+        });
+        const reserve = await this.credits.reserveWithin(tx, {
           userId: input.userId,
-          mode: input.mode,
-          inputType: input.inputType,
-          targetUsername: username,
-          targetPosition: input.targetPosition,
-          goal: input.goal,
-          language: input.language,
-          status: "queued",
-          stage: "queued",
-          telegramChatId: BigInt(input.chatId),
-          costCreditUnits,
-          reservedTransactionId: reserved.id,
-          idempotencyKey: input.idempotencyKey
-        } as never
+          analysisJobId: analysisJob.id,
+          amountUnits: costCreditUnits,
+          metadata: { mode: input.mode, username }
+        });
+        const linkedJob = await tx.analysisJob.update({
+          where: { id: analysisJob.id },
+          data: { reservedTransactionId: reserve.id }
+        });
+        return { job: linkedJob, reserved: reserve };
       });
-      await this.prisma.creditTransaction.update({
-        where: { id: reserved.id },
-        data: { analysisJobId: job.id }
-      });
+      job = created.job;
+      reserved = created.reserved;
       await analysisQueue.add("analysis", { analysisJobId: job.id }, { jobId: job.id });
       return analysisStartResult(job, false);
     } catch (error) {
       // Never leave a reserve hanging if the job could not be created/enqueued.
-      await this.credits
-        .releaseReserve({
-          userId: input.userId,
-          analysisJobId: job?.id,
-          reserveTransactionId: reserved.id,
-          amountUnits: costCreditUnits,
-          metadata: { reason: "analysis_enqueue_failed" }
-        })
-        .catch(() => undefined);
+      if (reserved) {
+        await this.credits
+          .releaseReserve({
+            userId: input.userId,
+            analysisJobId: job?.id,
+            reserveTransactionId: reserved.id,
+            amountUnits: costCreditUnits,
+            metadata: { reason: "analysis_enqueue_failed" }
+          })
+          .catch(() => undefined);
+      }
       if (job) {
         await this.prisma.analysisJob
           .update({

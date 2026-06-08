@@ -5,6 +5,7 @@ import { createBot } from "./telegram/bot.js";
 import { startAnalysisWorker } from "./jobs/workers/analysis.worker.js";
 import { startPhotoSearchWorker } from "./jobs/workers/photo-search.worker.js";
 import { startRetentionLoop } from "./jobs/workers/retention.worker.js";
+import { startJobRecoveryLoop } from "./jobs/recovery.js";
 
 const services = createServices();
 const bot = env.TELEGRAM_BOT_TOKEN ? createBot(services) : undefined;
@@ -24,6 +25,7 @@ const photoSearchWorker = startPhotoSearchWorker({
 });
 
 const retentionTimer = startRetentionLoop(services);
+const jobRecoveryTimer = startJobRecoveryLoop({ prisma: services.prisma });
 
 logger.info("workers_started");
 
@@ -33,6 +35,7 @@ async function shutdown(signal: string) {
   shuttingDown = true;
   logger.info({ signal }, "workers_shutting_down");
   retentionTimer.stop();
+  jobRecoveryTimer.stop();
   try {
     // Worker.close() waits for the active job to finish before resolving, so an
     // in-flight analysis/photo search is not killed mid-pipeline on redeploy.

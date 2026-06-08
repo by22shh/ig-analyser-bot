@@ -1,0 +1,47 @@
+[
+  {
+    "username": "evachkaaaaa",
+    "status": "failed",
+    "error": "OPENROUTER_API_KEY_MISSING",
+    "followersCount": 1289,
+    "followsCount": 628,
+    "postsCount": 141,
+    "fetchedPosts": 12
+  },
+  {
+    "username": "missstaccyy",
+    "status": "failed",
+    "error": "OPENROUTER_API_KEY_MISSING",
+    "followersCount": 587,
+    "followsCount": 319,
+    "postsCount": 23,
+    "fetchedPosts": 12
+  },
+  {
+    "username": "_daria.bers_",
+    "status": "failed",
+    "error": "OPENROUTER_API_KEY_MISSING",
+    "followersCount": 748,
+    "followsCount": 583,
+    "postsCount": 118,
+    "fetchedPosts": 12
+  },
+  {
+    "username": "fakeev",
+    "status": "failed",
+    "error": "OPENROUTER_API_KEY_MISSING",
+    "followersCount": 57755,
+    "followsCount": 969,
+    "postsCount": 1087,
+    "fetchedPosts": 12
+  },
+  {
+    "username": "mark.tales",
+    "status": "failed",
+    "error": "OPENROUTER_API_KEY_MISSING",
+    "followersCount": 443,
+    "followsCount": 333,
+    "postsCount": 96,
+    "fetchedPosts": 12
+  }
+]

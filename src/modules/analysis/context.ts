@@ -422,7 +422,11 @@ function buildContentClusters(
   posts: InstagramPost[],
   vision: VisionAnalysisItemView[]
 ): AnalysisContext["contentClusters"] {
-  const visionByPost = new Map(vision.map((item) => [item.postId, item.description ?? ""]));
+  const visionByPost = new Map(
+    vision
+      .filter((item) => item.status === "completed")
+      .map((item) => [item.postId, item.description ?? ""])
+  );
   return CONTENT_CLUSTERS.map((cluster) => {
     const matched = posts.filter((post) =>
       cluster.re.test(
@@ -528,7 +532,8 @@ function buildRiskSignals(
     });
   }
   const failedVision = vision.filter(
-    (item) => item.status === "failed" || item.status === "skipped"
+    (item) =>
+      item.status === "failed" || item.status === "skipped" || item.status === "low_quality"
   );
   if (failedVision.length) {
     risks.push({

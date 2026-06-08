@@ -126,6 +126,9 @@ export function evaluateReportQuality(input: {
     });
   }
 
+  const sampleCoverageFinding = sampleCoverageQualityFinding(input.metrics);
+  if (sampleCoverageFinding) findings.push(sampleCoverageFinding);
+
   const modeFinding = modeSpecificFinding(input.mode, input.sections, input.metrics);
   if (modeFinding) findings.push(modeFinding);
 
@@ -209,6 +212,28 @@ function modeSpecificFinding(
       id: "mode:standard:thin_sample",
       severity: "low",
       detail: "Standard report should state that the selected sample is small."
+    };
+  }
+  return undefined;
+}
+
+function sampleCoverageQualityFinding(metrics?: ReportMetrics): SectionQualityFinding | undefined {
+  if (!metrics?.postsCount || !metrics.analyzedPosts) return undefined;
+  if (metrics.analyzedPosts >= metrics.postsCount) return undefined;
+  const coverage = metrics.analyzedPosts / metrics.postsCount;
+  const percent = Math.round(coverage * 1000) / 10;
+  if (coverage < 0.05) {
+    return {
+      id: "report:very_low_sample_coverage",
+      severity: "medium",
+      detail: `${metrics.analyzedPosts}/${metrics.postsCount} posts analyzed (${percent}%). Whole-profile conclusions should be low-confidence.`
+    };
+  }
+  if (coverage < 0.1) {
+    return {
+      id: "report:low_sample_coverage",
+      severity: "low",
+      detail: `${metrics.analyzedPosts}/${metrics.postsCount} posts analyzed (${percent}%). Report should frame findings as selected-post signals.`
     };
   }
   return undefined;

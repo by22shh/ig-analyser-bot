@@ -181,6 +181,26 @@ function idArray(value: unknown): string[] {
     .filter((item): item is string => typeof item === "string" && item.length > 0);
 }
 
+function mediaUrlArray(childPosts: unknown, displayUrl?: string): string[] {
+  const urls: string[] = [];
+  if (displayUrl) urls.push(displayUrl);
+  if (Array.isArray(childPosts)) {
+    for (const item of childPosts) {
+      if (!item || typeof item !== "object") continue;
+      const record = item as Record<string, unknown>;
+      const url = str(
+        record.displayUrl ??
+          record.imageUrl ??
+          record.thumbnailUrl ??
+          record.thumbnailSrc ??
+          record.url
+      );
+      if (url && /^https?:\/\//i.test(url)) urls.push(url);
+    }
+  }
+  return [...new Set(urls)].slice(0, 12);
+}
+
 export function mapApifyItems(
   username: string,
   items: unknown[],
@@ -200,8 +220,9 @@ export function mapApifyItems(
   }
   const posts = records
     .map((item, index): InstagramPost => {
+      const displayUrl = str(item.displayUrl ?? item.imageUrl);
       const comments = Array.isArray(item.latestComments)
-        ? (item.latestComments as Array<Record<string, unknown>>).slice(0, 5).map((comment) => ({
+        ? (item.latestComments as Array<Record<string, unknown>>).slice(0, 10).map((comment) => ({
             ownerUsername: str(comment.ownerUsername ?? comment.owner),
             text: str(comment.text) ?? "",
             timestamp: str(comment.timestamp)
@@ -217,7 +238,8 @@ export function mapApifyItems(
         commentsCount: num(item.commentsCount),
         latestComments: comments,
         timestamp: str(item.timestamp),
-        displayUrl: str(item.displayUrl ?? item.imageUrl),
+        displayUrl,
+        mediaUrls: mediaUrlArray(item.childPosts, displayUrl),
         url: str(item.url),
         videoViewCount: num(item.videoViewCount) || undefined,
         videoDuration: num(item.videoDuration) || undefined,

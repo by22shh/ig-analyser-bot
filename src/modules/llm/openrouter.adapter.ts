@@ -143,46 +143,73 @@ export class OpenRouterLlmProvider implements LlmProvider {
     // "failed" item instead of rejecting the batch; result order is preserved.
     return mapWithConcurrency(posts, env.VISION_BATCH_SIZE ?? 5, async (post) => {
       try {
-        const image = await boundedImageDataUrl(post.displayUrl);
-        if (!image.dataUrl) {
+        const images = await boundedPostImageDataUrls(post);
+        if (!images.dataUrls.length) {
           return {
             postId: post.id,
             status: "skipped" as const,
             description: null,
             model: env.MODEL_VISION,
             promptVersion: prompts.vision.key,
-            errorCode: image.errorCode
+            errorCode: images.errorCodes[0] ?? "IMAGE_URL_MISSING"
           };
         }
-        const visionRequest = {
+        const structuredVisionRequest = {
           model: env.MODEL_VISION,
           system: prompts.vision.system,
           user: buildVisionUserContent({
             postId: post.id,
             caption: post.caption,
-            imageUrl: image.dataUrl
+            imageUrls: images.dataUrls
           }),
           maxTokens: env.LLM_VISION_OUTPUT_TOKEN_BUDGET ?? 700,
           responseFormat: env.LLM_STRUCTURED_OUTPUTS ? visionResponseFormat : undefined,
           provider: structuredProvider(),
           temperature: 0.1
         };
-        const content = await this.chatCompletion(visionRequest).catch((error: unknown) => {
+        const textVisionRequest = {
+          ...structuredVisionRequest,
+          responseFormat: undefined,
+          provider: undefined
+        };
+        const content = await this.chatCompletion(structuredVisionRequest).catch((error: unknown) => {
           if (!env.LLM_STRUCTURED_OUTPUTS || !canFallbackFromStructuredError(error)) throw error;
-          return this.chatCompletion({
-            ...visionRequest,
-            responseFormat: undefined,
-            provider: undefined
-          });
+          return this.chatCompletion(textVisionRequest);
         });
-        const description =
-          env.LLM_STRUCTURED_OUTPUTS && content.structured
-            ? tryRenderStructuredVision(post.id, content.text)
-            : `[Image ID: ${post.id}] ${content.text}`;
+        let rendered = renderVisionCompletion(post.id, content.text);
+        if (rendered.errorCode) {
+          try {
+            const retryContent = await this.chatCompletion(textVisionRequest);
+            const retryRendered = renderVisionCompletion(post.id, retryContent.text);
+            rendered = retryRendered;
+          } catch (retryError) {
+            rendered = {
+              ...rendered,
+              errorCode:
+                retryError instanceof Error
+                  ? `${rendered.errorCode}:RETRY_${retryError.message}`
+                  : `${rendered.errorCode}:RETRY_FAILED`
+            };
+          }
+        }
+        const imageNote =
+          images.attempted > 1
+            ? `\n[Images analyzed: ${images.dataUrls.length}/${images.attempted}]`
+            : "";
+        if (rendered.errorCode) {
+          return {
+            postId: post.id,
+            status: "low_quality" as const,
+            description: `${rendered.description}${imageNote}`,
+            model: env.MODEL_VISION,
+            promptVersion: prompts.vision.key,
+            errorCode: rendered.errorCode
+          };
+        }
         return {
           postId: post.id,
           status: "completed" as const,
-          description,
+          description: `${rendered.description}${imageNote}`,
           model: env.MODEL_VISION,
           promptVersion: prompts.vision.key
         };
@@ -393,9 +420,9 @@ function buildBudgetedReportContext(
 ): string {
   const budget = env.LLM_FINAL_INPUT_TOKEN_BUDGET ?? 24000;
   const attempts = [
-    { captionChars: 500, commentCount: 5, commentChars: 220, visionChars: 1600 },
-    { captionChars: 320, commentCount: 3, commentChars: 160, visionChars: 1000 },
-    { captionChars: 220, commentCount: 2, commentChars: 120, visionChars: 700 },
+    { captionChars: 500, commentCount: 8, commentChars: 220, visionChars: 1600 },
+    { captionChars: 320, commentCount: 5, commentChars: 160, visionChars: 1000 },
+    { captionChars: 220, commentCount: 3, commentChars: 120, visionChars: 700 },
     { captionChars: 140, commentCount: 1, commentChars: 90, visionChars: 450 }
   ];
 
@@ -448,10 +475,12 @@ function buildMinimalReportContext(
     goal: publicReportGoal(input.goal),
     requiredSections: prompt.requiredSections,
     sectionGuides: sectionGuidesForMode(input.mode),
+    analysisHealth: analysisHealthFor(input),
     analysisContext: compactAnalysisContext(input.analysisContext),
     qualityRules: [
       "Use only the compact profile, metrics, and analysisContext evidence in this payload.",
       "Treat analysisContext.evidenceMap as prioritized deterministic signals, not as extra private data.",
+      "Use analysisHealth to calibrate confidence: low sample coverage, missing vision, or missing comment text must lower certainty.",
       "Explicitly say when post-level evidence was compressed out of the context.",
       "Use goal only when it is a user-facing analytical objective; never mention operational test, deploy, pipeline, CI, smoke, or e2e wording in the report.",
       "Do not expose internal schema names (analysisContext, evidenceMap, contentClusters, profileSignals, audienceSignals, riskSignals, opportunitySignals, sourceCatalog, postIds) in user-facing prose; translate them into natural language.",
@@ -526,11 +555,14 @@ function buildReportContext(
     goal: publicReportGoal(input.goal),
     requiredSections: prompt.requiredSections,
     sectionGuides: sectionGuidesForMode(input.mode),
+    analysisHealth: analysisHealthFor(input),
     analysisContext: compactAnalysisContext(input.analysisContext),
     qualityRules: [
       "Every non-obvious claim needs evidence from sourceCatalog, post metadata, comments, metrics, or vision.",
       "Use analysisContext.evidenceMap, profileSignals, contentClusters, audienceSignals, riskSignals, opportunitySignals, and modeGuidance to prioritize the strongest deterministic signals.",
       "Do not expose internal schema names (analysisContext, evidenceMap, contentClusters, profileSignals, audienceSignals, riskSignals, opportunitySignals, sourceCatalog, postIds) in user-facing prose; translate them into natural language.",
+      "Use analysisHealth to calibrate confidence: if sampleCoveragePercent is below 10, frame findings as selected-post/recent-public-content signals, not whole-profile conclusions.",
+      "In each substantive section, connect observable evidence to its practical meaning; avoid merely restating metrics or captions.",
       "Prefer specific observable facts over generic personality claims.",
       "Use low/medium/high confidence and say when public data is insufficient.",
       "Use goal only when it is a user-facing analytical objective; never mention operational test, deploy, pipeline, CI, smoke, or e2e wording in the report.",
@@ -558,7 +590,8 @@ function buildReportContext(
     vision: input.vision.map((item) => ({
       postId: item.postId,
       status: item.status,
-      description: truncate(item.description, limits.visionChars),
+      description:
+        item.status === "completed" ? truncate(item.description, limits.visionChars) : undefined,
       errorCode: item.errorCode
     })),
     repair: repair.repair
@@ -576,6 +609,55 @@ function buildReportContext(
 function truncate(value: string | null | undefined, maxLength: number): string | undefined {
   if (!value) return undefined;
   return value.length > maxLength ? `${value.slice(0, Math.max(0, maxLength - 1))}…` : value;
+}
+
+function analysisHealthFor(input: ReportInput) {
+  const analyzedPosts = input.metrics?.analyzedPosts ?? input.posts.length;
+  const postsCount = input.metrics?.postsCount ?? input.profile.postsCount;
+  const sampleCoveragePercent =
+    postsCount > 0 ? Math.round((analyzedPosts / postsCount) * 1000) / 10 : undefined;
+  const profilePostCoveragePercent =
+    input.profile.posts.length > 0
+      ? Math.round((input.posts.length / input.profile.posts.length) * 1000) / 10
+      : undefined;
+  const visionTotal = input.vision.length;
+  const visionCompleted = input.vision.filter((item) => item.status === "completed").length;
+  const commentTextCount = input.posts.reduce(
+    (sum, post) => sum + post.latestComments.filter((comment) => comment.text.trim()).length,
+    0
+  );
+  const postsWithCommentText = input.posts.filter((post) =>
+    post.latestComments.some((comment) => comment.text.trim())
+  ).length;
+
+  return {
+    analyzedPosts,
+    postsCount,
+    sampleCoveragePercent,
+    profilePostCoveragePercent,
+    sampleCoverageLevel: sampleCoverageLevel(sampleCoveragePercent),
+    visionCompleted,
+    visionTotal,
+    visionCompletionPercent: visionTotal
+      ? Math.round((visionCompleted / visionTotal) * 1000) / 10
+      : undefined,
+    postsWithCommentText,
+    commentCoveragePercent: analyzedPosts
+      ? Math.round((postsWithCommentText / analyzedPosts) * 1000) / 10
+      : undefined,
+    commentTextCount
+  };
+}
+
+function sampleCoverageLevel(
+  percent: number | undefined
+): "unknown" | "very_low" | "low" | "partial" | "broad" | "near_full" {
+  if (percent === undefined) return "unknown";
+  if (percent < 5) return "very_low";
+  if (percent < 10) return "low";
+  if (percent < 35) return "partial";
+  if (percent < 80) return "broad";
+  return "near_full";
 }
 
 function publicReportGoal(goal: string | undefined): string | undefined {
@@ -597,12 +679,55 @@ function reasoningConfig(): ReasoningConfig {
   return { enabled: true, exclude: true, effort: env.MODEL_REASONING_EFFORT };
 }
 
+function renderVisionCompletion(
+  postId: string,
+  text: string
+): { description: string; errorCode?: string } {
+  const description = tryRenderStructuredVision(postId, text);
+  return {
+    description,
+    errorCode: visionDescriptionQualityIssue(description, text)
+  };
+}
+
 function tryRenderStructuredVision(postId: string, text: string): string {
   try {
-    return renderVisionDescription(postId, parseStructuredVision(text));
+    const structured = parseStructuredVision(text);
+    if (!structured.visibleFacts.length) throw new Error("STRUCTURED_VISION_EMPTY_FACTS");
+    return renderVisionDescription(postId, structured);
   } catch {
     return `[Image ID: ${postId}] ${text}`;
   }
+}
+
+const VISION_DESCRIPTION_MIN_WORDS = 30;
+
+function visionDescriptionQualityIssue(description: string, rawText: string): string | undefined {
+  const raw = rawText.trim();
+  const normalized = description.trim();
+  if (looksLikeTruncatedStructuredVision(raw) || looksLikeTruncatedStructuredVision(normalized)) {
+    return "VISION_LOW_QUALITY_TRUNCATED_JSON";
+  }
+  if (/"(?:visibleFacts|visualStyle|textOverlays|textVerbatim|isLikelyScreenshot|uncertainty)"\s*:/i.test(normalized)) {
+    return "VISION_LOW_QUALITY_RAW_JSON";
+  }
+  if (wordCount(normalized) < VISION_DESCRIPTION_MIN_WORDS) {
+    return "VISION_LOW_QUALITY_TOO_SHORT";
+  }
+  return undefined;
+}
+
+function looksLikeTruncatedStructuredVision(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return true;
+  if (/^\[Image ID:[^\]]+\]\s*\{\s*"?visibleFacts"?\s*$/i.test(trimmed)) return true;
+  if (/^\{\s*"?visibleFacts"?\s*$/i.test(trimmed)) return true;
+  if (/^\{[\s\S]*"?visibleFacts"?\s*:/i.test(trimmed) && !/\}\s*$/.test(trimmed)) return true;
+  return false;
+}
+
+function wordCount(value: string): number {
+  return value.match(/[\p{L}\p{N}]{2,}/gu)?.length ?? 0;
 }
 
 async function boundedImageDataUrl(imageUrl: string | null | undefined): Promise<{
@@ -637,6 +762,24 @@ async function boundedImageDataUrl(imageUrl: string | null | undefined): Promise
   } catch (error) {
     return { errorCode: error instanceof Error ? error.message : "IMAGE_DOWNLOAD_FAILED" };
   }
+}
+
+async function boundedPostImageDataUrls(post: {
+  displayUrl?: string | null;
+  mediaUrls?: string[];
+}): Promise<{ dataUrls: string[]; errorCodes: string[]; attempted: number }> {
+  const limit = Math.max(1, env.ANALYSIS_MAX_CAROUSEL_IMAGES_PER_POST ?? 3);
+  const urls = uniqueImageUrls([post.displayUrl, ...(post.mediaUrls ?? [])]).slice(0, limit);
+  const results = await Promise.all(urls.map((url) => boundedImageDataUrl(url)));
+  return {
+    dataUrls: results.map((result) => result.dataUrl).filter((url): url is string => Boolean(url)),
+    errorCodes: results.map((result) => result.errorCode).filter((code) => code !== "ok"),
+    attempted: urls.length
+  };
+}
+
+function uniqueImageUrls(values: Array<string | null | undefined>): string[] {
+  return [...new Set(values.filter((value): value is string => Boolean(value)))];
 }
 
 async function fetchPublicImage(

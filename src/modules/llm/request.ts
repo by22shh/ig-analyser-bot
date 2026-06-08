@@ -36,15 +36,21 @@ export function buildVisionUserContent(input: {
   postId: string;
   caption?: string | null;
   imageUrl?: string | null;
+  imageUrls?: string[];
 }): ChatContentPart[] {
+  const imageUrls = input.imageUrls?.length
+    ? input.imageUrls
+    : input.imageUrl
+      ? [input.imageUrl]
+      : [];
   const parts: ChatContentPart[] = [
     {
       type: "text",
-      text: `Post ID: ${input.postId}\nCaption: ${input.caption ?? ""}\nDescribe visible public facts only.`
+      text: `Post ID: ${input.postId}\nCaption: ${input.caption ?? ""}\nImages attached: ${imageUrls.length}\nDescribe visible public facts only. If multiple images are attached, compare recurring and differing visual signals across the carousel.`
     }
   ];
-  if (input.imageUrl) {
-    parts.push({ type: "image_url", image_url: { url: input.imageUrl } });
+  for (const imageUrl of imageUrls) {
+    parts.push({ type: "image_url", image_url: { url: imageUrl } });
   }
   return parts;
 }

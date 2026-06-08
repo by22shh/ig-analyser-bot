@@ -94,6 +94,50 @@ describe("report quality validation", () => {
     expect(quality.findings.map((finding) => finding.id)).toContain("mode:standard:thin_sample");
   });
 
+  it("penalizes very low sample coverage even when the raw post count is 30", () => {
+    const sections: ReportSectionView[] = [
+      {
+        title: "Общая оценка ценности профиля",
+        content:
+          "Confidence: medium. Наблюдение ограничено публичной выборкой и не описывает весь профиль.",
+        sources: [{ postId: "p1", label: "Public post" }]
+      }
+    ];
+
+    const quality = evaluateReportQuality({
+      mode: "standard",
+      sections,
+      metrics: {
+        followersCount: 57_000,
+        followsCount: 900,
+        postsCount: 1087,
+        analyzedPosts: 30,
+        avgLikes: 500,
+        avgComments: 15,
+        medianLikes: 350,
+        medianComments: 6,
+        engagementRate: 0.9,
+        frequencyDays: 30,
+        pinnedPostsCount: 0,
+        uniqueLocations: [],
+        uniqueMusic: [],
+        relatedProfiles: [],
+        topPostsByLikes: [],
+        topPostsByComments: [],
+        postTypeDistribution: {},
+        hashtagFrequency: {},
+        mentionFrequency: {},
+        digitalCircle: []
+      }
+    });
+
+    expect(quality.score).toBe(93);
+    expect(quality.findings.map((finding) => finding.id)).toContain(
+      "report:very_low_sample_coverage"
+    );
+    expect(qualityFindingsNeedRepair(quality.findings)).toBe(false);
+  });
+
   it("penalizes reports with missing vision and count-only comment evidence", () => {
     const sections: ReportSectionView[] = [
       {

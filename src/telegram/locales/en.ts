@@ -246,16 +246,31 @@ export const en = {
   }): string {
     const m = input.metrics;
     const warnings = renderReportWarnings(input.summary.warnings, "Quality limits");
+    const health = input.summary.analysisHealth;
+    const healthText = health
+      ? "\n\n<b>Analysis health:</b>\n" +
+        `• format: ${escapeHtml(health.formatLabel)}\n` +
+        `• coverage: ${health.analyzedPosts}/${health.postsCount} (${health.sampleCoveragePercent ?? 0}%)\n` +
+        `• vision: ${health.visionCompleted}/${health.visionTotal}\n` +
+        `• comment coverage: ${health.postsWithCommentText}/${health.analyzedPosts} (${health.commentCoveragePercent ?? 0}%)\n` +
+        `• comment texts: ${health.commentTextCount}\n`
+      : "";
+    const executive = input.summary.executiveSummary
+      ? `<b>What this means:</b>\n${escapeHtml(input.summary.executiveSummary)}\n\n`
+      : "";
     return (
       `✅ <b>Report for @${escapeHtml(input.username)} is ready</b>\n` +
       `Mode: <b>${this.modeTitle(input.mode)}</b>\n\n` +
+      executive +
       "<b>Metrics:</b>\n" +
       `• followers: ${m.followersCount.toLocaleString("en-US")}\n` +
       `• analyzed posts: ${m.analyzedPosts}\n` +
       `• avg likes: ${Math.round(m.avgLikes).toLocaleString("en-US")}\n` +
       `• avg comments: ${Math.round(m.avgComments).toLocaleString("en-US")}\n` +
       `• engagement (ER): ${percent(m.engagementRate)}\n` +
-      `• frequency: every ${m.frequencyDays.toFixed(1)} days\n\n` +
+      `• frequency: every ${m.frequencyDays.toFixed(1)} days` +
+      healthText +
+      "\n" +
       "<b>Short take:</b>\n" +
       input.summary.bullets.map((item) => `• ${escapeHtml(item)}`).join("\n") +
       warnings

@@ -250,16 +250,31 @@ export const ru = {
   }): string {
     const m = input.metrics;
     const warnings = renderReportWarnings(input.summary.warnings, "Ограничения качества");
+    const health = input.summary.analysisHealth;
+    const healthText = health
+      ? "\n\n<b>Здоровье анализа:</b>\n" +
+        `• формат: ${escapeHtml(health.formatLabel)}\n` +
+        `• покрытие: ${health.analyzedPosts}/${health.postsCount} (${health.sampleCoveragePercent ?? 0}%)\n` +
+        `• vision: ${health.visionCompleted}/${health.visionTotal}\n` +
+        `• покрытие комментариев: ${health.postsWithCommentText}/${health.analyzedPosts} (${health.commentCoveragePercent ?? 0}%)\n` +
+        `• текстовых комментариев: ${health.commentTextCount}\n`
+      : "";
+    const executive = input.summary.executiveSummary
+      ? `<b>Что это значит:</b>\n${escapeHtml(input.summary.executiveSummary)}\n\n`
+      : "";
     return (
       `✅ <b>Отчёт по @${escapeHtml(input.username)} готов</b>\n` +
       `Режим: <b>${this.modeTitle(input.mode)}</b>\n\n` +
+      executive +
       "<b>Метрики:</b>\n" +
       `• подписчики: ${m.followersCount.toLocaleString("ru-RU")}\n` +
       `• постов в анализе: ${m.analyzedPosts}\n` +
       `• средние лайки: ${Math.round(m.avgLikes).toLocaleString("ru-RU")}\n` +
       `• средние комментарии: ${Math.round(m.avgComments).toLocaleString("ru-RU")}\n` +
       `• вовлечённость (ER): ${percent(m.engagementRate)}\n` +
-      `• частота: раз в ${m.frequencyDays.toFixed(1)} дн.\n\n` +
+      `• частота: раз в ${m.frequencyDays.toFixed(1)} дн.` +
+      healthText +
+      "\n" +
       "<b>Короткий вывод:</b>\n" +
       input.summary.bullets.map((item) => `• ${escapeHtml(item)}`).join("\n") +
       warnings

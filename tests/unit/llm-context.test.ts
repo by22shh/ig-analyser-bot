@@ -59,17 +59,30 @@ describe("buildReportUserMessage", () => {
       metrics: Record<string, unknown>;
       sourceCatalog: Array<Record<string, unknown>>;
       posts: Array<Record<string, unknown>>;
+      analysisHealth: Record<string, unknown>;
       qualityRules: string[];
     };
 
     expect(context.profile.posts).toBeUndefined();
     expect(context.metrics.engagementRate).toBe(11);
+    expect(context.analysisHealth).toMatchObject({
+      analyzedPosts: 1,
+      postsCount: 10,
+      sampleCoveragePercent: 10,
+      sampleCoverageLevel: "partial",
+      visionCompleted: 1,
+      visionTotal: 1,
+      postsWithCommentText: 1,
+      commentCoveragePercent: 100,
+      commentTextCount: 1
+    });
     expect(context.sourceCatalog[0]).toMatchObject({
       postId: "p1",
       url: "https://www.instagram.com/p/p1/"
     });
     expect(context.posts[0]).toMatchObject({ pinned: true, location: "Dubai" });
     expect(context.qualityRules.join(" ")).toContain("Every non-obvious claim");
+    expect(context.qualityRules.join(" ")).toContain("sampleCoveragePercent");
   });
 
   it("injects section guides for the standard mode", () => {

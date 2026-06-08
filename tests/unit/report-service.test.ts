@@ -69,8 +69,13 @@ describe("ReportService", () => {
     const html = renderReportHtml(report);
 
     expect(markdown).toContain("## Quality Warnings");
+    expect(markdown).toContain("## Analysis Health");
+    expect(markdown).toContain("Comment coverage: 1/1 posts (100%)");
     expect(markdown).toContain("Quality flags");
+    expect(html).toContain("Executive Summary");
+    expect(html).toContain("Analysis Health");
     expect(html).toContain("Quality Warnings");
+    expect(html).toContain("Comment coverage");
     expect(html).toContain("post-only evidence");
     expect(html).toContain("p1");
   });
@@ -83,7 +88,24 @@ function minimalReport(): StrategicReportView {
     language: "ru",
     rawText: "raw",
     sections: [{ title: "Section", content: "Content", sources: [] }],
-    summary: { bullets: ["Summary"], warnings: [] },
+    summary: {
+      executiveSummary: "Что это значит: проверочная выжимка.",
+      bullets: ["Summary"],
+      warnings: [],
+      analysisHealth: {
+        formatLabel: "near-full public-post read",
+        analyzedPosts: 1,
+        postsCount: 1,
+        sampleCoveragePercent: 100,
+        sampleCoverageLevel: "near_full",
+        visionCompleted: 1,
+        visionTotal: 1,
+        visionCompletionPercent: 100,
+        postsWithCommentText: 1,
+        commentCoveragePercent: 100,
+        commentTextCount: 1
+      }
+    },
     metrics: {
       followersCount: 10,
       followsCount: 5,

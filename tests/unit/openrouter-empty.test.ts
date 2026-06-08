@@ -164,7 +164,16 @@ describe("OpenRouterLlmProvider", () => {
       .mockResolvedValueOnce(new Response("{}", { status: 400 }))
       .mockResolvedValueOnce(
         new Response(
-          JSON.stringify({ choices: [{ message: { content: "Visible public facts." } }] })
+          JSON.stringify({
+            choices: [
+              {
+                message: {
+                  content:
+                    "Visible public facts: the image shows a person in a bright outdoor setting with clear clothing, background objects, and a calm lifestyle composition. The scene is public and does not support private-life claims."
+                }
+              }
+            ]
+          })
         )
       );
     vi.stubGlobal("fetch", fetchMock);
@@ -211,7 +220,122 @@ describe("OpenRouterLlmProvider", () => {
     expect(result[0]).toMatchObject({
       postId: "p1",
       status: "completed",
-      description: "[Image ID: p1] Visible public facts."
+      description: expect.stringContaining("Visible public facts")
+    });
+  });
+
+  it("renders valid vision JSON even when structured outputs are disabled", async () => {
+    env.LLM_STRUCTURED_OUTPUTS = false;
+    imageRequestMocks.state.responses.push({
+      statusCode: 200,
+      headers: { "content-type": "image/jpeg" },
+      chunks: [Buffer.from("image-bytes")]
+    });
+    const fetchMock = vi.fn().mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  visibleFacts: [
+                    "The image shows a public outdoor scene with a person standing near a canal.",
+                    "Buildings and water are visible in the background.",
+                    "The composition emphasizes travel context rather than private information."
+                  ],
+                  setting: "Outdoor canal-side travel scene",
+                  objects: ["canal", "buildings", "person"],
+                  textOverlays: [],
+                  textVerbatim: [],
+                  visualStyle: ["daylight", "travel photo", "wide composition"],
+                  isLikelyScreenshot: false,
+                  uncertainty: ["Identity and private intent cannot be inferred."]
+                })
+              }
+            }
+          ]
+        })
+      )
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const provider = new OpenRouterLlmProvider("token");
+    const result = await provider.analyzeVision(visionInput("https://cdn.example/post.jpg"));
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(result[0]).toMatchObject({
+      postId: "p1",
+      status: "completed",
+      description: expect.stringContaining("- Visible fact:")
+    });
+    expect(result[0]?.description).not.toContain('"visibleFacts"');
+  });
+
+  it("retries truncated structured vision and keeps the text fallback when it is usable", async () => {
+    imageRequestMocks.state.responses.push({
+      statusCode: 200,
+      headers: { "content-type": "image/jpeg" },
+      chunks: [Buffer.from("image-bytes")]
+    });
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ choices: [{ message: { content: '{"visibleFacts' } }] }))
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            choices: [
+              {
+                message: {
+                  content:
+                    "Visible public facts: the image shows a person standing outdoors near a city street, with buildings, daylight, and a travel-like composition. The description stays limited to observable public visual details and avoids private inferences."
+                }
+              }
+            ]
+          })
+        )
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const provider = new OpenRouterLlmProvider("token");
+    const result = await provider.analyzeVision(visionInput("https://cdn.example/post.jpg"));
+    const bodies = fetchMock.mock.calls.map((call) => JSON.parse(String(call[1]?.body)));
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(bodies[0].response_format).toBeDefined();
+    expect(bodies[1].response_format).toBeUndefined();
+    expect(result[0]).toMatchObject({
+      postId: "p1",
+      status: "completed",
+      description: expect.stringContaining("Visible public facts")
+    });
+  });
+
+  it("marks vision as low_quality when retry still returns an unusable description", async () => {
+    imageRequestMocks.state.responses.push({
+      statusCode: 200,
+      headers: { "content-type": "image/jpeg" },
+      chunks: [Buffer.from("image-bytes")]
+    });
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ choices: [{ message: { content: '{"visibleFacts' } }] }))
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ choices: [{ message: { content: "Too short." } }] }))
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const provider = new OpenRouterLlmProvider("token");
+    const result = await provider.analyzeVision(visionInput("https://cdn.example/post.jpg"));
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(result[0]).toMatchObject({
+      postId: "p1",
+      status: "low_quality",
+      errorCode: "VISION_LOW_QUALITY_TOO_SHORT"
     });
   });
 

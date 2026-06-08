@@ -1,12 +1,15 @@
 import { mkdir, writeFile } from "node:fs/promises";
+import { evaluateReportContentQuality } from "../src/modules/analysis/content-quality.js";
 import { buildStrategicReport } from "../src/modules/analysis/report-builder.js";
+import { ApifyInstagramProfileProvider } from "../src/modules/instagram/apify.adapter.js";
 import type { InstagramPost, InstagramProfile } from "../src/modules/instagram/types.js";
 import { OpenRouterLlmProvider } from "../src/modules/llm/openrouter.adapter.js";
 
 const DEFAULT_HANDLES = ["evachkaaaaa", "missstaccyy", "_daria.bers_", "fakeev", "mark.tales"];
 const USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36";
-const OUT_DIR = "docs/research/2026-06-08-instagram-profile-eval";
+const OUT_DIR = process.env.EVAL_OUT_DIR ?? "docs/research/2026-06-08-instagram-profile-eval";
+const PROFILE_PROVIDER = process.env.EVAL_PROFILE_PROVIDER === "apify" ? "apify" : "web";
 const INSTAGRAM_APP_ID = "936619743392459";
 const INSTAGRAM_ASBD_ID = "129477";
 
@@ -82,14 +85,23 @@ const jar: CookieJar = new Map();
 await mkdir(`${OUT_DIR}/profiles`, { recursive: true });
 await mkdir(`${OUT_DIR}/reports`, { recursive: true });
 
-const csrfToken = await bootstrapInstagramSession(jar);
+const csrfToken = PROFILE_PROVIDER === "web" ? await bootstrapInstagramSession(jar) : undefined;
+const apify = PROFILE_PROVIDER === "apify" ? new ApifyInstagramProfileProvider() : undefined;
 const llm = new OpenRouterLlmProvider();
 const results: EvalProfileResult[] = [];
 
 for (const username of handles) {
   console.log(`\n== ${username} ==`);
+  let profile: InstagramProfile | undefined;
   try {
-    const profile = await fetchPublicProfile(username, jar, csrfToken);
+    profile =
+      PROFILE_PROVIDER === "apify"
+        ? await apify!.fetchProfile({
+            username,
+            postLimit: Number(process.env.EVAL_POST_LIMIT ?? 30),
+            includeParentData: true
+          })
+        : await fetchPublicProfile(username, jar, csrfToken!);
     console.log(
       `profile: followers=${profile.followersCount}, posts=${profile.postsCount}, fetched=${profile.posts.length}`
     );
@@ -109,7 +121,7 @@ for (const username of handles) {
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    results.push({ username, status: "failed", error: message });
+    results.push({ username, status: "failed", error: message, profile });
     console.log(`failed: ${message}`);
   }
 }
@@ -287,6 +299,7 @@ function compactReport(report: Awaited<ReturnType<typeof buildStrategicReport>>)
     sections: report.sections,
     summary: report.summary,
     metrics: report.metrics,
+    contentQuality: reportContentQuality(report),
     sourceMap: report.sourceMap,
     posts: report.posts.map((post) => ({
       id: post.id,
@@ -307,7 +320,21 @@ function compactReport(report: Awaited<ReturnType<typeof buildStrategicReport>>)
 }
 
 function summarizeResult(item: EvalProfileResult) {
-  if (item.status === "failed") return item;
+  if (item.status === "failed") {
+    return {
+      username: item.username,
+      status: item.status,
+      error: item.error,
+      ...(item.profile
+        ? {
+            followersCount: item.profile.followersCount,
+            followsCount: item.profile.followsCount,
+            postsCount: item.profile.postsCount,
+            fetchedPosts: item.profile.posts.length
+          }
+        : {})
+    };
+  }
   const report = item.report;
   const profile = item.profile;
   if (!report || !profile)
@@ -323,11 +350,21 @@ function summarizeResult(item: EvalProfileResult) {
     requiredSections: 17,
     qualityScore: report.summary.quality?.score,
     qualityFindings: report.summary.quality?.findings.length,
+    contentQuality: reportContentQuality(report),
     sourceCoverage: `${report.sections.filter((section) => section.sources.length).length}/${report.sections.length}`,
     warnings: report.summary.warnings,
     metrics: report.metrics,
     vision: countVision(report.vision)
   };
+}
+
+function reportContentQuality(report: Awaited<ReturnType<typeof buildStrategicReport>>) {
+  return evaluateReportContentQuality({
+    sections: report.sections,
+    executiveSummary: report.summary.executiveSummary,
+    warnings: report.summary.warnings,
+    metrics: report.metrics
+  });
 }
 
 function countVision(vision: Array<{ status: string }>): Record<string, number> {
@@ -350,6 +387,7 @@ function renderFindings(results: EvalProfileResult[]): string {
     const profile = item.profile!;
     const report = item.report!;
     const sourced = report.sections.filter((section) => section.sources.length).length;
+    const contentQuality = reportContentQuality(report);
     return [
       profile.username,
       profile.followersCount,
@@ -360,6 +398,7 @@ function renderFindings(results: EvalProfileResult[]): string {
       report.sections.length,
       `${sourced}/${report.sections.length}`,
       report.summary.quality?.score ?? "n/a",
+      contentQuality.score,
       report.summary.warnings.join(" | ") || "none"
     ];
   });
@@ -368,19 +407,32 @@ function renderFindings(results: EvalProfileResult[]): string {
 
 Date: 2026-06-08
 
-Provider path used: public Instagram web_profile_info endpoint for profile/post input, then current project buildStrategicReport pipeline with OpenRouter vision/reasoning, deterministic grounding, quality evaluation, and repair when triggered.
+Provider path used: ${
+    PROFILE_PROVIDER === "apify"
+      ? "Apify apify~instagram-scraper"
+      : "public Instagram web_profile_info endpoint"
+  } for profile/post input, then current project buildStrategicReport pipeline with OpenRouter vision/reasoning, deterministic grounding, quality evaluation, and repair when triggered.
 
-Important limitation: APIFY_TOKEN is not present locally, so the production container would use MockInstagramProfileProvider instead of the real Apify provider in this environment. This eval isolates the analysis/report algorithm from that missing production ingestion credential.
+Important limitation: ${
+    PROFILE_PROVIDER === "apify"
+      ? "this run uses APIFY_TOKEN from the environment and exercises production-like ingestion."
+      : "APIFY_TOKEN is not present locally. In local non-production service mode this would select MockInstagramProfileProvider; production mode should fail configuration validation instead of silently using mock credentials. This eval isolates the analysis/report algorithm from that missing production ingestion credential."
+  }
 
-| Profile | Followers | IG posts | Fetched posts | Engagement % | Vision | Sections | Source coverage | Quality | Warnings |
-|---|---:|---:|---:|---:|---|---:|---:|---:|---|
+| Profile | Followers | IG posts | Fetched posts | Engagement % | Vision | Sections | Source coverage | Quality | Content quality | Warnings |
+|---|---:|---:|---:|---:|---|---:|---:|---:|---:|---|
 ${rows.map((row) => `| ${row.join(" | ")} |`).join("\n")}
 
 Failed profiles:
 ${
   results
     .filter((item) => item.status === "failed")
-    .map((item) => `- ${item.username}: ${item.error}`)
+    .map((item) => {
+      const profileNote = item.profile
+        ? ` (profile fetched: followers=${item.profile.followersCount}, posts=${item.profile.postsCount}, fetched=${item.profile.posts.length})`
+        : "";
+      return `- ${item.username}: ${item.error}${profileNote}`;
+    })
     .join("\n") || "- none"
 }
 `;

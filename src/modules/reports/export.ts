@@ -9,8 +9,14 @@ export function renderReportMarkdown(report: StrategicReportView): string {
     `Generated language: ${report.language}`,
     "",
     "## Summary",
+    ...(report.summary.executiveSummary
+      ? ["", "### Executive Summary", report.summary.executiveSummary, ""]
+      : []),
     ...report.summary.bullets.map((item) => `- ${item}`),
     ...markdownWarnings(report.summary.warnings),
+    "",
+    "## Analysis Health",
+    ...markdownAnalysisHealth(report),
     "",
     "## Metrics",
     `- Followers: ${report.metrics.followersCount}`,
@@ -75,8 +81,15 @@ export function renderReportHtml(report: StrategicReportView): string {
     <div>Mode: ${escapeHtml(report.mode)} · Language: ${escapeHtml(report.language)}</div>
   </header>
   <h2>Summary</h2>
+  ${
+    report.summary.executiveSummary
+      ? `<h3>Executive Summary</h3><p>${escapeHtml(report.summary.executiveSummary)}</p>`
+      : ""
+  }
   <ul>${report.summary.bullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
   ${renderHtmlWarnings(report.summary.warnings)}
+  <h2>Analysis Health</h2>
+  ${renderHtmlAnalysisHealth(report)}
   <h2>Metrics</h2>
   <div class="metrics">
     <div class="metric"><b>Followers</b><br>${report.metrics.followersCount}</div>
@@ -96,9 +109,33 @@ function markdownWarnings(warnings: string[]): string[] {
   return ["", "## Quality Warnings", ...warnings.map((item) => `- ${item}`)];
 }
 
+function markdownAnalysisHealth(report: StrategicReportView): string[] {
+  const health = report.summary.analysisHealth;
+  if (!health) return ["- unavailable"];
+  return [
+    `- Format: ${health.formatLabel}`,
+    `- Sample coverage: ${health.analyzedPosts}/${health.postsCount} posts (${health.sampleCoveragePercent ?? 0}%)`,
+    `- Vision coverage: ${health.visionCompleted}/${health.visionTotal} (${health.visionCompletionPercent ?? 0}%)`,
+    `- Comment coverage: ${health.postsWithCommentText}/${health.analyzedPosts} posts (${health.commentCoveragePercent ?? 0}%)`,
+    `- Comment texts available: ${health.commentTextCount}`
+  ];
+}
+
 function renderHtmlWarnings(warnings: string[]): string {
   if (!warnings.length) return "";
   return `<h2>Quality Warnings</h2><ul>${warnings.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+}
+
+function renderHtmlAnalysisHealth(report: StrategicReportView): string {
+  const health = report.summary.analysisHealth;
+  if (!health) return "<p>Unavailable</p>";
+  return `<ul>
+    <li><b>Format:</b> ${escapeHtml(health.formatLabel)}</li>
+    <li><b>Sample coverage:</b> ${health.analyzedPosts}/${health.postsCount} posts (${health.sampleCoveragePercent ?? 0}%)</li>
+    <li><b>Vision coverage:</b> ${health.visionCompleted}/${health.visionTotal} (${health.visionCompletionPercent ?? 0}%)</li>
+    <li><b>Comment coverage:</b> ${health.postsWithCommentText}/${health.analyzedPosts} posts (${health.commentCoveragePercent ?? 0}%)</li>
+    <li><b>Comment texts available:</b> ${health.commentTextCount}</li>
+  </ul>`;
 }
 
 function renderHtmlSourceTarget(source: { url?: string; postId?: string }): string {

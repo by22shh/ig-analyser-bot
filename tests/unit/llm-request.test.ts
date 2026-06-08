@@ -18,6 +18,23 @@ describe("buildVisionUserContent", () => {
     expect(content).toHaveLength(1);
     expect(content.map((part) => part.type)).toEqual(["text"]);
   });
+
+  it("attaches multiple carousel images when provided", () => {
+    const content = buildVisionUserContent({
+      postId: "p3",
+      caption: "carousel",
+      imageUrls: ["https://cdn/1.jpg", "https://cdn/2.jpg"]
+    });
+
+    expect(content.filter((part) => part.type === "image_url")).toEqual([
+      { type: "image_url", image_url: { url: "https://cdn/1.jpg" } },
+      { type: "image_url", image_url: { url: "https://cdn/2.jpg" } }
+    ]);
+    expect(content[0]).toMatchObject({
+      type: "text",
+      text: expect.stringContaining("Images attached: 2")
+    });
+  });
 });
 
 describe("buildChatCompletionBody", () => {

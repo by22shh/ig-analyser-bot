@@ -383,6 +383,7 @@ async function loadPersistedProfile(
     latestComments: commentsArray(post.latestComments),
     timestamp: post.timestamp?.toISOString(),
     displayUrl: post.displayUrl ?? undefined,
+    mediaUrls: post.mediaUrls,
     url: post.url ?? undefined,
     videoViewCount: post.videoViewCount ?? undefined,
     videoDuration: post.videoDuration == null ? undefined : Number(post.videoDuration),
@@ -487,6 +488,7 @@ async function persistProfile(
         latestComments: post.latestComments as never,
         timestamp: post.timestamp ? new Date(post.timestamp) : null,
         displayUrl: post.displayUrl,
+        mediaUrls: post.mediaUrls ?? [],
         url: post.url,
         videoViewCount: post.videoViewCount,
         videoDuration: post.videoDuration,
@@ -557,5 +559,10 @@ function stringArray(value: unknown): string[] {
 }
 
 function visionStatus(status: string): VisionAnalysisItemView["status"] {
-  return status === "completed" || status === "skipped" || status === "failed" ? status : "failed";
+  return status === "completed" ||
+    status === "skipped" ||
+    status === "failed" ||
+    status === "low_quality"
+    ? status
+    : "failed";
 }

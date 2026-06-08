@@ -11,6 +11,7 @@ import type { LlmProvider } from "../llm/types.js";
 import { computeReportMetrics } from "../reports/metrics.js";
 import { parseReportSections, validateRequiredSections } from "../reports/parser.js";
 import type {
+  ReportAnalysisHealth,
   ReportSectionView,
   StrategicReportView,
   VisionAnalysisItemView
@@ -143,6 +144,8 @@ export async function buildStrategicReport(input: {
           (section) => `${section.title}: ${section.content.slice(0, 140).replace(/\s+/g, " ")}...`
         );
   const qualityWarning = renderQualityWarning(qualitySummary);
+  const analysisHealth = buildReportAnalysisHealth(metrics, vision, posts);
+  const executiveSummary = buildExecutiveSummary(input.language, analysisHealth, bullets);
 
   return {
     mode: input.mode,
@@ -151,14 +154,17 @@ export async function buildStrategicReport(input: {
     rawText: generated.rawText,
     sections,
     summary: {
+      executiveSummary,
       bullets: bullets.length ? bullets : [`Public profile @${profile.username} was analyzed.`],
       warnings: [
+        ...analysisHealthWarnings(input.language, analysisHealth),
         ...(missing.length ? [`Missing/weak sections: ${missing.join(", ")}`] : []),
         ...(groundingFindings.length
           ? [`Unresolved grounding flags: ${groundingFindings.length}`]
           : []),
         ...(qualityWarning ? [qualityWarning] : [])
       ],
+      analysisHealth,
       quality: qualitySummary,
       evidence: analysisContextDigest(analysisContext)
     },
@@ -171,6 +177,105 @@ export async function buildStrategicReport(input: {
     vision,
     analysisContext
   };
+}
+
+function buildReportAnalysisHealth(
+  metrics: { analyzedPosts: number; postsCount: number },
+  vision: VisionAnalysisItemView[],
+  posts: Array<{ latestComments: Array<{ text: string }> }>
+): ReportAnalysisHealth {
+  const sampleCoveragePercent =
+    metrics.postsCount > 0
+      ? Math.round((metrics.analyzedPosts / metrics.postsCount) * 1000) / 10
+      : undefined;
+  const visionTotal = vision.length;
+  const visionCompleted = vision.filter((item) => item.status === "completed").length;
+  const postsWithCommentText = posts.filter((post) =>
+    post.latestComments.some((comment) => comment.text.trim())
+  ).length;
+  const commentTextCount = posts.reduce(
+    (sum, post) => sum + post.latestComments.filter((comment) => comment.text.trim()).length,
+    0
+  );
+  return {
+    formatLabel: reportFormatLabel(metrics.analyzedPosts, metrics.postsCount),
+    analyzedPosts: metrics.analyzedPosts,
+    postsCount: metrics.postsCount,
+    sampleCoveragePercent,
+    sampleCoverageLevel: sampleCoverageLevel(sampleCoveragePercent),
+    visionCompleted,
+    visionTotal,
+    visionCompletionPercent: visionTotal
+      ? Math.round((visionCompleted / visionTotal) * 1000) / 10
+      : undefined,
+    postsWithCommentText,
+    commentCoveragePercent: metrics.analyzedPosts
+      ? Math.round((postsWithCommentText / metrics.analyzedPosts) * 1000) / 10
+      : undefined,
+    commentTextCount
+  };
+}
+
+function reportFormatLabel(analyzedPosts: number, postsCount: number): string {
+  if (postsCount <= analyzedPosts) return "near-full public-post read";
+  if (postsCount > 0 && analyzedPosts / postsCount >= 0.8) return "near-full public-post read";
+  if (postsCount > analyzedPosts && analyzedPosts === 30) return "recent 30-post read";
+  if (postsCount > analyzedPosts) return `recent ${analyzedPosts}-post read`;
+  return "public-post read";
+}
+
+function sampleCoverageLevel(
+  percent: number | undefined
+): ReportAnalysisHealth["sampleCoverageLevel"] {
+  if (percent === undefined) return "unknown";
+  if (percent < 5) return "very_low";
+  if (percent < 10) return "low";
+  if (percent < 35) return "partial";
+  if (percent < 80) return "broad";
+  return "near_full";
+}
+
+function analysisHealthWarnings(language: Locale, health: ReportAnalysisHealth): string[] {
+  const warnings: string[] = [];
+  if (health.sampleCoverageLevel === "very_low" || health.sampleCoverageLevel === "low") {
+    warnings.push(
+      language === "ru"
+        ? `Формат отчёта: ${health.formatLabel}; покрытие выборки ${health.sampleCoveragePercent ?? 0}% (${health.analyzedPosts}/${health.postsCount}). Выводы описывают выбранные публичные посты, а не весь профиль.`
+        : `Report format: ${health.formatLabel}; sample coverage ${health.sampleCoveragePercent ?? 0}% (${health.analyzedPosts}/${health.postsCount}). Findings describe selected public posts, not the whole profile.`
+    );
+  }
+  if (health.visionTotal > 0 && health.visionCompleted < health.visionTotal) {
+    warnings.push(
+      language === "ru"
+        ? `Vision coverage: ${health.visionCompleted}/${health.visionTotal} визуальных элементов.`
+        : `Vision coverage: ${health.visionCompleted}/${health.visionTotal} visual items.`
+    );
+  }
+  return warnings;
+}
+
+function buildExecutiveSummary(
+  language: Locale,
+  health: ReportAnalysisHealth,
+  bullets: string[]
+): string {
+  const first = bullets[0]?.replace(/\s+/g, " ").trim();
+  if (language === "ru") {
+    return [
+      `Что это значит: это ${health.formatLabel} по публичным данным Instagram.`,
+      `Покрытие: ${health.analyzedPosts}/${health.postsCount} постов (${health.sampleCoveragePercent ?? 0}%), vision ${health.visionCompleted}/${health.visionTotal}, покрытие комментариев ${health.postsWithCommentText}/${health.analyzedPosts} (${health.commentCoveragePercent ?? 0}%), текстовых комментариев: ${health.commentTextCount}.`,
+      first ? `Главный сигнал: ${first}` : undefined
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }
+  return [
+    `What this means: this is a ${health.formatLabel} from public Instagram data.`,
+    `Coverage: ${health.analyzedPosts}/${health.postsCount} posts (${health.sampleCoveragePercent ?? 0}%), vision ${health.visionCompleted}/${health.visionTotal}, comment coverage ${health.postsWithCommentText}/${health.analyzedPosts} (${health.commentCoveragePercent ?? 0}%), comment texts: ${health.commentTextCount}.`,
+    first ? `Main signal: ${first}` : undefined
+  ]
+    .filter(Boolean)
+    .join(" ");
 }
 
 function cleanSummaryBullet(bullet: string, language: Locale): string {

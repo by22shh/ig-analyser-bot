@@ -5,7 +5,7 @@ import type { InstagramPost, InstagramProfile } from "../instagram/types.js";
 
 export type VisionAnalysisItemView = {
   postId: string;
-  status: "completed" | "skipped" | "failed";
+  status: "completed" | "skipped" | "failed" | "low_quality";
   description: string | null;
   model: string;
   promptVersion: string;
@@ -56,9 +56,25 @@ export type DigitalCircleItem = {
   details: string[];
 };
 
+export type ReportAnalysisHealth = {
+  formatLabel: string;
+  analyzedPosts: number;
+  postsCount: number;
+  sampleCoveragePercent?: number;
+  sampleCoverageLevel: "unknown" | "very_low" | "low" | "partial" | "broad" | "near_full";
+  visionCompleted: number;
+  visionTotal: number;
+  visionCompletionPercent?: number;
+  postsWithCommentText: number;
+  commentCoveragePercent?: number;
+  commentTextCount: number;
+};
+
 export type ReportSummaryView = {
+  executiveSummary?: string;
   bullets: string[];
   warnings: string[];
+  analysisHealth?: ReportAnalysisHealth;
   quality?: ReportQualitySummary;
   evidence?: AnalysisContextDigest;
 };

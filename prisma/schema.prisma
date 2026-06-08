@@ -374,6 +374,7 @@ model InstagramPostSnapshot {
   latestComments    Json?
   timestamp         DateTime?
   displayUrl        String?
+  mediaUrls         String[]  @default([])
   url               String?
   videoViewCount    Int?
   videoDuration     Decimal?

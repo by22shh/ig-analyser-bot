@@ -15,6 +15,7 @@ export type InstagramPost = {
   latestComments: InstagramComment[];
   timestamp?: string;
   displayUrl?: string;
+  mediaUrls?: string[];
   url?: string;
   videoViewCount?: number;
   videoDuration?: number;

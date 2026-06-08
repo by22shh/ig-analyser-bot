@@ -1,0 +1,124 @@
+[
+  {
+    "username": "evachkaaaaa",
+    "followersCount": 1290,
+    "postsCount": 141,
+    "fetchedPosts": 30,
+    "sampleCoveragePct": 21.3,
+    "reportSections": 17,
+    "sourceCoverage": "17/17",
+    "qualityScore": 93,
+    "qualityFindings": [
+      {
+        "id": "report:vision_evidence_gap",
+        "severity": "medium",
+        "detail": "Selected visual posts could not be analyzed; visual-pattern claims should be limited."
+      }
+    ],
+    "groundingFindings": [],
+    "vision": {
+      "completed": 29,
+      "skipped": 1
+    },
+    "warnings": [
+      "Quality flags: score 93/100, 1 medium/high findings"
+    ],
+    "engagementRate": 1.55,
+    "avgLikes": 16.5,
+    "avgComments": 3.5,
+    "commentsWithText": 73,
+    "internalLeaks": []
+  },
+  {
+    "username": "missstaccyy",
+    "followersCount": 587,
+    "postsCount": 23,
+    "fetchedPosts": 22,
+    "sampleCoveragePct": 95.7,
+    "reportSections": 17,
+    "sourceCoverage": "17/17",
+    "qualityScore": 100,
+    "qualityFindings": [],
+    "groundingFindings": [],
+    "vision": {
+      "completed": 22
+    },
+    "warnings": [],
+    "engagementRate": 22.67,
+    "avgLikes": 128.64,
+    "avgComments": 4.45,
+    "commentsWithText": 57,
+    "internalLeaks": []
+  },
+  {
+    "username": "_daria.bers_",
+    "followersCount": 748,
+    "postsCount": 118,
+    "fetchedPosts": 30,
+    "sampleCoveragePct": 25.4,
+    "reportSections": 17,
+    "sourceCoverage": "17/17",
+    "qualityScore": 100,
+    "qualityFindings": [],
+    "groundingFindings": [],
+    "vision": {
+      "completed": 30
+    },
+    "warnings": [],
+    "engagementRate": 11.71,
+    "avgLikes": 85.4,
+    "avgComments": 2.2,
+    "commentsWithText": 44,
+    "internalLeaks": []
+  },
+  {
+    "username": "fakeev",
+    "followersCount": 57755,
+    "postsCount": 1087,
+    "fetchedPosts": 30,
+    "sampleCoveragePct": 2.8,
+    "reportSections": 17,
+    "sourceCoverage": "17/17",
+    "qualityScore": 93,
+    "qualityFindings": [
+      {
+        "id": "report:very_low_sample_coverage",
+        "severity": "medium",
+        "detail": "30/1087 posts analyzed (2.8%). Whole-profile conclusions should be low-confidence."
+      }
+    ],
+    "groundingFindings": [],
+    "vision": {
+      "completed": 30
+    },
+    "warnings": [
+      "Quality flags: score 93/100, 1 medium/high findings"
+    ],
+    "engagementRate": 0.91,
+    "avgLikes": 508.27,
+    "avgComments": 14.77,
+    "commentsWithText": 119,
+    "internalLeaks": []
+  },
+  {
+    "username": "mark.tales",
+    "followersCount": 444,
+    "postsCount": 96,
+    "fetchedPosts": 30,
+    "sampleCoveragePct": 31.3,
+    "reportSections": 17,
+    "sourceCoverage": "17/17",
+    "qualityScore": 100,
+    "qualityFindings": [],
+    "groundingFindings": [],
+    "vision": {
+      "completed": 30
+    },
+    "warnings": [],
+    "engagementRate": 16.25,
+    "avgLikes": 70.23,
+    "avgComments": 1.9,
+    "commentsWithText": 36,
+    "internalLeaks": []
+  }
+]

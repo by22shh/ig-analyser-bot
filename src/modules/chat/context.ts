@@ -42,14 +42,19 @@ export function buildReportChatContext(report: StoredReportForChat): string {
 function normalizeSummary(summary: unknown): unknown {
   if (!summary || typeof summary !== "object") return summary;
   const value = summary as {
+    executiveSummary?: unknown;
     bullets?: unknown;
     warnings?: unknown;
+    analysisHealth?: unknown;
     quality?: unknown;
     evidence?: unknown;
   };
   return {
+    executiveSummary:
+      typeof value.executiveSummary === "string" ? value.executiveSummary.slice(0, 1200) : "",
     bullets: Array.isArray(value.bullets) ? value.bullets.slice(0, 8) : [],
     warnings: Array.isArray(value.warnings) ? value.warnings.slice(0, 8) : [],
+    analysisHealth: value.analysisHealth,
     quality: value.quality,
     evidence: value.evidence
   };

@@ -105,6 +105,7 @@ const schema = z.object({
   ANALYSIS_POST_LIMIT: optionalNumber(30),
   VISION_BATCH_SIZE: optionalNumber(5),
   ANALYSIS_MAX_IMAGES_ANALYZED: optionalNumber(30),
+  ANALYSIS_MAX_CAROUSEL_IMAGES_PER_POST: optionalNumber(3),
   ANALYSIS_MAX_IMAGE_DOWNLOAD_MB: optionalNumber(8),
   LLM_STRUCTURED_OUTPUTS: boolFromString.default(true),
   // Applied as a *character* cap on the JSON report context. Reasoning models

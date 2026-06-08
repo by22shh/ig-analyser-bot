@@ -52,6 +52,30 @@ describe("mapApifyItems", () => {
     expect(profile.posts[0]?.childPosts).toEqual(["child1", "child2"]);
   });
 
+  it("keeps carousel child media urls for multi-image vision", () => {
+    const profile = mapApifyItems(
+      "alice",
+      [
+        {
+          ...baseItem,
+          displayUrl: "https://cdn.example/cover.jpg",
+          childPosts: [
+            { id: "child1", displayUrl: "https://cdn.example/child1.jpg" },
+            { id: "child2", imageUrl: "https://cdn.example/child2.jpg" }
+          ]
+        }
+      ],
+      30
+    );
+
+    expect(profile.posts[0]?.childPosts).toEqual(["child1", "child2"]);
+    expect(profile.posts[0]?.mediaUrls).toEqual([
+      "https://cdn.example/cover.jpg",
+      "https://cdn.example/child1.jpg",
+      "https://cdn.example/child2.jpg"
+    ]);
+  });
+
   it("still accepts bare-string arrays (backward compatible)", () => {
     const profile = mapApifyItems(
       "alice",

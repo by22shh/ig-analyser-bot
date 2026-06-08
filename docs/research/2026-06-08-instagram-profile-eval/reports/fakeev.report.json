@@ -1,0 +1,1983 @@
+{
+  "mode": "standard",
+  "username": "fakeev",
+  "language": "ru",
+  "model": "x-ai/grok-4.3",
+  "promptVersion": "report.standard.v4",
+  "sections": [
+    {
+      "title": "Основные темы и приоритеты",
+      "content": "Центральные темы — инвестиции в криптовалюту, участие в конференциях Blockchain Life и краткие стратегии (шорт). Профиль подчёркивает экспертный опыт через выступления перед 15–16 тыс. человек. Био напрямую заявляет «Я просто хорошо умею инвестировать». Локации включают Москву, Каир и пустыню Руб-эль-Хали.\n\nEvidence:\n\n- [3622298533331354216] Выступление на конференции: Текст: «Выступил на самой большой конференции по блокчейн-технологиям… перед 15.000 человек» + хэштег #BlockchainLife (high) https://www.instagram.com/p/DJE_VMFokJo/\n\n- [3877167059469876922] Выступление 2026: Текст: «Выступил на Blockchain Life 2026… Тема доклада — «Как сделать эффективную ставку на падение крипторынка»» (high) https://www.instagram.com/p/DXOduYCjD66/\n\n- [3891158459865688897] Стратегия шорта: Текст: «ШОРТ КРИПТЫ - почему это лучшая инвест-стратегия 2026 года» (high) https://www.instagram.com/p/DYALADFDOtB/\n\nConfidence: medium\n\nCaveats:\n\n- Выборка 12 постов из 1087\n\n- Нет данных о сторис и ответах",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "postId": "3622298533331354216",
+          "label": "[3622298533331354216] Выступление на конференции: Текст: «Выступил на самой большой конференции по блокчейн-технологиям… перед 15.000 человек» + хэштег #BlockchainLife (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DXOduYCjD66/",
+          "postId": "3877167059469876922",
+          "label": "[3877167059469876922] Выступление 2026: Текст: «Выступил на Blockchain Life 2026… Тема доклада — «Как сделать эффективную ставку на падение крипторынка»» (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYALADFDOtB/",
+          "postId": "3891158459865688897",
+          "label": "[3891158459865688897] Стратегия шорта: Текст: «ШОРТ КРИПТЫ - почему это лучшая инвест-стратегия 2026 года» (high)"
+        }
+      ]
+    },
+    {
+      "title": "Повторяющиеся визуальные и текстовые паттерны",
+      "content": "Преобладают карусели (7 из 12). Подписи короткие или информативные, часто с эмодзи (👌🏻, ➡️, 🍄). Отсутствуют регулярные бренд-теги и призывы к действию в большинстве постов. Данные о визуальной палитре и композиции недоступны.\n\nEvidence:\n\n- [3891158459865688897] Карусель + эмодзи: Тип Carousel, подпись содержит эмодзи ➡️ и указание «листай карусель» (high) https://www.instagram.com/p/DYALADFDOtB/\n\n- [3750967731777487011] Короткая цитата + эмодзи: Текст: «Если на ваш караван никто не лает, возможно, он никуда не двигается👌🏻» (high) https://www.instagram.com/p/DQOHUdQjMCj/\n\nConfidence: low\n\nCaveats:\n\n- Все визуальные анализы пропущены\n\n- Паттерны только по подписям и метаданным",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYALADFDOtB/",
+          "postId": "3891158459865688897",
+          "label": "[3891158459865688897] Карусель + эмодзи: Тип Carousel, подпись содержит эмодзи ➡️ и указание «листай карусель» (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+          "postId": "3750967731777487011",
+          "label": "[3750967731777487011] Короткая цитата + эмодзи: Текст: «Если на ваш караван никто не лает, возможно, он никуда не двигается👌🏻» (high)"
+        }
+      ]
+    },
+    {
+      "title": "Поведение и вовлеченность",
+      "content": "Средний ER 0.42%, медиана 240–241 лайк и 5 комментариев. Самые высокие показатели у pinned-постов и постов о конференциях. Частота публикаций ~1 пост в 35 дней. Аномалий в метриках не выявлено.\n\nEvidence:\n\n- [3825836720978630051] Высокий охват: 370 лайков, 14 комментариев, pinned (high) https://www.instagram.com/p/DUYGjpCk5Wj/\n\n- [3900672109022341105] Высокий охват: 363 лайка, pinned-статус в selection (high) https://www.instagram.com/p/DYh-J3TjOfx/\n\nConfidence: medium\n\nCaveats:\n\n- Выборка 12/1087 постов\n\n- Нет данных о reach и saves",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "postId": "3825836720978630051",
+          "label": "[3825836720978630051] Высокий охват: 370 лайков, 14 комментариев, pinned (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYh-J3TjOfx/",
+          "postId": "3900672109022341105",
+          "label": "[3900672109022341105] Высокий охват: 363 лайка, pinned-статус в selection (high)"
+        }
+      ]
+    },
+    {
+      "title": "Аудитория и комментарии",
+      "content": "Плотность комментариев средняя. Посты с наибольшим числом комментариев — выступления и цитаты. Конкретные темы комментариев в данных отсутствуют; recurringCommentTerms не зафиксированы.\n\nEvidence:\n\n- [3829320551060222818] Максимум комментариев: 18 комментариев (high) https://www.instagram.com/p/DUkesCpDDNi/\n\n- [3750967731777487011] 13 комментариев: Пост с цитатой про караван (high) https://www.instagram.com/p/DQOHUdQjMCj/\n\nConfidence: medium\n\nCaveats:\n\n- Комментарии latestComments пусты\n\n- Нет тематического анализа комментариев",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+          "postId": "3829320551060222818",
+          "label": "[3829320551060222818] Максимум комментариев: 18 комментариев (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+          "postId": "3750967731777487011",
+          "label": "[3750967731777487011] 13 комментариев: Пост с цитатой про караван (high)"
+        }
+      ]
+    },
+    {
+      "title": "Стиль общения",
+      "content": "Подписи деловые-информативные или афористичные, длина от одной строки до абзаца. Используются эмодзи умеренно. Стиль в личных сообщениях неизвестен.\n\nEvidence:\n\n- [3622298533331354216] Информативная подпись: Длинный текст про конференцию и статистику депозита (high) https://www.instagram.com/p/DJE_VMFokJo/\n\n- [3750967731777487011] Афоризм: Короткая фраза с эмодзи 👌🏻 (high) https://www.instagram.com/p/DQOHUdQjMCj/\n\nConfidence: medium\n\nCaveats:\n\n- Стиль в личке не анализировался",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "postId": "3622298533331354216",
+          "label": "[3622298533331354216] Информативная подпись: Длинный текст про конференцию и статистику депозита (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+          "postId": "3750967731777487011",
+          "label": "[3750967731777487011] Афоризм: Короткая фраза с эмодзи 👌🏻 (high)"
+        }
+      ]
+    },
+    {
+      "title": "Профессия и статус",
+      "content": "Публичные признаки указывают на эксперта в сфере инвестиций и блокчейна: упоминание «эксперт» в био и докладах, выступления на крупных конференциях. Данных о точной должности, доходе или компании недостаточно.\n\nEvidence:\n\n- [3622298533331354216] Экспертный статус: Текст: «для эксперта это некое признание» и упоминание собственной статистики депозита (medium) https://www.instagram.com/p/DJE_VMFokJo/\n\n- Био: «Я просто хорошо умею инвестировать» + ссылка на t.me/kitinvest (high) profile metadata\n\nConfidence: medium\n\nCaveats:\n\n- Нет ссылок на компанию или должность\n\n- Только публичные hints",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "postId": "3622298533331354216",
+          "label": "[3622298533331354216] Экспертный статус: Текст: «для эксперта это некое признание» и упоминание собственной статистики депозита (medium)"
+        },
+        {
+          "label": "Био: «Я просто хорошо умею инвестировать» + ссылка на t.me/kitinvest (high) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Отличие от типичных аккаунтов",
+      "content": "Профиль сочетает экспертные выступления и личные заметки; pinned-посты с высоким охватом. При отсутствии сравнительной базы по нише выводы ограничены.\n\nEvidence:\n\n- [3877167059469876922] Конкретная тема доклада: Указана тема «Как сделать эффективную ставку на падение крипторынка» (medium) https://www.instagram.com/p/DXOduYCjD66/\n\nConfidence: low\n\nCaveats:\n\n- Нет базы сравнения похожих аккаунтов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DXOduYCjD66/",
+          "postId": "3877167059469876922",
+          "label": "[3877167059469876922] Конкретная тема доклада: Указана тема «Как сделать эффективную ставку на падение крипторынка» (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Отсутствия как сигнал",
+      "content": "Редко встречаются теги брендов, CTA и подробные описания личной жизни. Отсутствие регулярных упоминаний продуктов и услуг может указывать на фокус на личном бренде эксперта, а не на коммерческом продвижении.\n\nEvidence:\n\n- [3881727680567837792] Минимальная подпись: Подпись «.» (high) https://www.instagram.com/p/DXeqsJbDARg/\n\nConfidence: low\n\nCaveats:\n\n- Выборка ограничена",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DXeqsJbDARg/",
+          "postId": "3881727680567837792",
+          "label": "[3881727680567837792] Минимальная подпись: Подпись «.» (high)"
+        }
+      ]
+    },
+    {
+      "title": "Потенциальная польза от контакта",
+      "content": "Возможен обмен опытом по инвестиционным стратегиям, обсуждение блокчейн-конференций и общих тем из публичного контента. Контакт через Telegram указан открыто.\n\nEvidence:\n\n- Публичный контакт: Ссылка в био и opportunitySignals (high) https://t.me/kitinvest\n\n- [3891158459865688897] Тема шорта: Пост про лучшую инвест-стратегию 2026 (medium) https://www.instagram.com/p/DYALADFDOtB/\n\nConfidence: medium\n\nCaveats:\n\n- Без предположений о готовности к диалогу",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://t.me/kitinvest",
+          "label": "Публичный контакт: Ссылка в био и opportunitySignals (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYALADFDOtB/",
+          "postId": "3891158459865688897",
+          "label": "[3891158459865688897] Тема шорта: Пост про лучшую инвест-стратегию 2026 (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Триггеры и зацепки",
+      "content": "Безопасные зацепки: упоминания Blockchain Life, шорт-стратегии 2026 года, локации Москва/Дубай. Высококомментируемые посты — наиболее подходящие для контекстного начала.\n\nEvidence:\n\n- [3829320551060222818] Высокий комментарий: 18 комментариев, opportunity hook (high) https://www.instagram.com/p/DUkesCpDDNi/\n\n- [3877167059469876922] Конференция: Blockchain Life 2026 (high) https://www.instagram.com/p/DXOduYCjD66/\n\nConfidence: medium\n\nCaveats:\n\n- Только из публичных постов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+          "postId": "3829320551060222818",
+          "label": "[3829320551060222818] Высокий комментарий: 18 комментариев, opportunity hook (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DXOduYCjD66/",
+          "postId": "3877167059469876922",
+          "label": "[3877167059469876922] Конференция: Blockchain Life 2026 (high)"
+        }
+      ]
+    },
+    {
+      "title": "Коммуникационные рекомендации",
+      "content": "Начинать с нейтральной ссылки на публичный пост или конференцию, без оценок и личных тем. Использовать стиль информативных подписей. Избегать давления и упоминания внешности.\n\nEvidence:\n\n- modeGuidance: «practical but safe communication recommendations» (high) profile metadata\n\nConfidence: medium\n\nCaveats:\n\n- Стиль в личке неизвестен",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "modeGuidance: «practical but safe communication recommendations» (high) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Готовые фразы для входа в диалог",
+      "content": "1. «Интересно было прочитать про вашу ставку на падение рынка на Blockchain Life». 2. «Видел выступление на конференции 2026 — тема шорта показалась актуальной». 3. «Как вам результаты стратегии короткой позиции в 2026?».\n\nEvidence:\n\n- [3877167059469876922] Тема доклада: Прямая ссылка на текст поста (high) https://www.instagram.com/p/DXOduYCjD66/\n\n- [3891158459865688897] Стратегия шорта: Текст про «лучшая инвест-стратегия 2026» (high) https://www.instagram.com/p/DYALADFDOtB/\n\nConfidence: medium\n\nCaveats:\n\n- Фразы только на основе публичных данных",
+      "kind": "phrases",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DXOduYCjD66/",
+          "postId": "3877167059469876922",
+          "label": "[3877167059469876922] Тема доклада: Прямая ссылка на текст поста (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYALADFDOtB/",
+          "postId": "3891158459865688897",
+          "label": "[3891158459865688897] Стратегия шорта: Текст про «лучшая инвест-стратегия 2026» (high)"
+        }
+      ]
+    },
+    {
+      "title": "Неочевидные наблюдения",
+      "content": "Гипотеза: pinned-посты и посты с конференциями получают стабильно выше engagement; это может отражать интерес аудитории именно к экспертному контенту. При малой выборке требует проверки.\n\nEvidence:\n\n- [3622298533331354216] Pinned + конференция: 357 лайков, 8 комментариев (medium) https://www.instagram.com/p/DJE_VMFokJo/\n\nConfidence: low\n\nCaveats:\n\n- Выборка 12 постов\n\n- Гипотеза, а не факт",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "postId": "3622298533331354216",
+          "label": "[3622298533331354216] Pinned + конференция: 357 лайков, 8 комментариев (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Общая оценка ценности профиля",
+      "content": "Под цель контакта ценность средняя: есть экспертный контент и публичный Telegram, но ограниченная выборка и отсутствие визуальных данных снижают точность. Рекомендуется использовать только публичные зацепки.\n\nEvidence:\n\n- Контакт: opportunity:published_contact (high) https://t.me/kitinvest\n\nConfidence: medium\n\nCaveats:\n\n- 12/1087 постов\n\n- vision data отсутствуют",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://t.me/kitinvest",
+          "label": "Контакт: opportunity:published_contact (high)"
+        }
+      ]
+    },
+    {
+      "title": "Поведенческие сигналы",
+      "content": "Публикации преимущественно каруселями, pinned 3 поста, средняя частота раз в 35 дней. Высокая активность в 2025–2026 годах по конференциям и инвестиционным темам.\n\nEvidence:\n\n- [3825836720978630051] Pinned carousel: Тип Carousel, pinned, 370 лайков (high) https://www.instagram.com/p/DUYGjpCk5Wj/\n\n- [3877167059469876922] Конференция: Апрель 2026 (high) https://www.instagram.com/p/DXOduYCjD66/\n\nConfidence: medium\n\nCaveats:\n\n- Только метаданные, без психологических интерпретаций",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "postId": "3825836720978630051",
+          "label": "[3825836720978630051] Pinned carousel: Тип Carousel, pinned, 370 лайков (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DXOduYCjD66/",
+          "postId": "3877167059469876922",
+          "label": "[3877167059469876922] Конференция: Апрель 2026 (high)"
+        }
+      ]
+    },
+    {
+      "title": "Ошибки, слепые зоны, барьеры",
+      "content": "Основные ограничения: все 12 визуальных анализов пропущены, нет доступа к сторис, ответам и полным комментариям. Риск переоценки на основе 1% постов. Контакт возможен только через публичные каналы.\n\nEvidence:\n\n- risk:vision_gaps: 12 selected visual items could not be analyzed (high) profile metadata\n\nConfidence: high\n\nCaveats:\n\n- Полностью соответствует riskSignals",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "risk:vision_gaps: 12 selected visual items could not be analyzed (high) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Образ как у бренда",
+      "content": "Личный бренд эксперта-инвестора: акцент на публичных выступлениях и практических стратегиях, а не на lifestyle или коммерческих офферах. Настроение — профессиональное, с редкими личными вставками.\n\nEvidence:\n\n- [3622298533331354216] Экспертный образ: Текст про признание эксперта и показ статистики депозита (medium) https://www.instagram.com/p/DJE_VMFokJo/\n\nConfidence: medium\n\nCaveats:\n\n- Не рекламный образ, а личный mood эксперта",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "postId": "3622298533331354216",
+          "label": "[3622298533331354216] Экспертный образ: Текст про признание эксперта и показ статистики депозита (medium)"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "bullets": [
+      "Профиль позиционирует владельца как эксперта по инвестициям в криптовалюту с акцентом на выступления на Blockchain Life (посты 3622298533331354216 и 3877167059469876922).",
+      "Публичная ссылка https://t.me/kitinvest даёт прямой канал для контакта; ER ~0.42% при 57k подписчиках, медиана лайков 240.5 на 12 проанализированных постах.",
+      "Основные темы: конференции, стратегии шорта крипты, личный отдых; 7 каруселей из 12 постов, pinned-посты имеют наивысший охват.",
+      "Высокий комментарий на постах о докладах и цитатах (3829320551060222818, 3825836720978630051); локации Москва, Каир, Дубай.",
+      "Выборка 12 постов из 1087 — ограничена; визуальные данные отсутствуют из-за ошибок анализа."
+    ],
+    "warnings": [
+      "Unresolved grounding flags: 2"
+    ],
+    "quality": {
+      "score": 100,
+      "findings": []
+    },
+    "evidence": {
+      "selectedPostIds": [
+        "3825836720978630051",
+        "3622298533331354216",
+        "3789007229152945044",
+        "3829320551060222818",
+        "3900672109022341105",
+        "3881727680567837792",
+        "3877167059469876922",
+        "3750967731777487011",
+        "3891158459865688897",
+        "3772716907758397483",
+        "3746074560824084529",
+        "3733879615291962419"
+      ],
+      "postSelection": [
+        {
+          "postId": "3825836720978630051",
+          "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "timestamp": "2026-02-05T12:41:39.000Z",
+          "score": 113,
+          "reasons": [
+            "recent",
+            "pinned",
+            "high_likes",
+            "high_comments",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3622298533331354216",
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "timestamp": "2025-04-30T16:47:36.000Z",
+          "score": 89,
+          "reasons": [
+            "pinned",
+            "high_likes",
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3789007229152945044",
+          "url": "https://www.instagram.com/p/DSVQf_5DGOU/",
+          "timestamp": "2025-12-16T17:08:01.000Z",
+          "score": 79,
+          "reasons": [
+            "recent",
+            "pinned",
+            "high_likes",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3829320551060222818",
+          "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+          "timestamp": "2026-02-10T08:03:24.000Z",
+          "score": 73,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "high_comments",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3900672109022341105",
+          "url": "https://www.instagram.com/p/DYh-J3TjOfx/",
+          "timestamp": "2026-05-19T18:46:12.000Z",
+          "score": 68,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3881727680567837792",
+          "url": "https://www.instagram.com/p/DXeqsJbDARg/",
+          "timestamp": "2026-04-23T15:27:00.000Z",
+          "score": 57,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3877167059469876922",
+          "url": "https://www.instagram.com/p/DXOduYCjD66/",
+          "timestamp": "2026-04-17T08:25:52.000Z",
+          "score": 46,
+          "reasons": [
+            "recent",
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3750967731777487011",
+          "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+          "timestamp": "2025-10-25T05:30:20.000Z",
+          "score": 43,
+          "reasons": [
+            "high_likes",
+            "high_comments",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3891158459865688897",
+          "url": "https://www.instagram.com/p/DYALADFDOtB/",
+          "timestamp": "2026-05-06T15:44:17.000Z",
+          "score": 38,
+          "reasons": [
+            "recent",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3772716907758397483",
+          "url": "https://www.instagram.com/p/DRbYgn1DKgr/",
+          "timestamp": "2025-11-24T05:42:33.000Z",
+          "score": 37,
+          "reasons": [
+            "recent",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3746074560824084529",
+          "url": "https://www.instagram.com/p/DP8uvcsDAgx/",
+          "timestamp": "2025-10-18T11:29:44.000Z",
+          "score": 37,
+          "reasons": [
+            "high_likes",
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3733879615291962419",
+          "url": "https://www.instagram.com/p/DPRZ7onjLQz/",
+          "timestamp": "2025-10-01T15:39:17.000Z",
+          "score": 19,
+          "reasons": [
+            "audience_signal",
+            "visual_signal"
+          ]
+        }
+      ],
+      "profileSignals": {
+        "publicContacts": [],
+        "publicLinks": [
+          "https://t.me/kitinvest"
+        ],
+        "platformHandles": [
+          "@serkhitrov",
+          "@fakeev"
+        ],
+        "professionHints": [
+          "эксперт"
+        ],
+        "locationHints": [
+          "Moscow, Russia",
+          "Cairo, Egypt",
+          "Пустыня Руб Эль Хали, Оаэ, Дубай"
+        ],
+        "bioKeywords": [
+          "инвестировать",
+          "олег",
+          "просто",
+          "умею",
+          "факеев",
+          "хорошо"
+        ]
+      },
+      "contentClusters": [
+        {
+          "label": "community_and_events",
+          "count": 2,
+          "postIds": [
+            "3622298533331354216",
+            "3877167059469876922"
+          ],
+          "keywords": [
+            "event",
+            "team",
+            "meetup",
+            "community",
+            "команда",
+            "мероприятие"
+          ]
+        },
+        {
+          "label": "work_and_expertise",
+          "count": 1,
+          "postIds": [
+            "3622298533331354216"
+          ],
+          "keywords": [
+            "founder",
+            "startup",
+            "business",
+            "work",
+            "career",
+            "expert",
+            "эксперт",
+            "бизнес"
+          ]
+        }
+      ],
+      "audienceSignals": {
+        "frequentCommenters": [],
+        "repeatedCommentTerms": [],
+        "commentDensity": "medium",
+        "highCommentPostIds": [
+          "3829320551060222818",
+          "3825836720978630051",
+          "3750967731777487011",
+          "3622298533331354216",
+          "3900672109022341105"
+        ]
+      },
+      "riskSignals": [
+        {
+          "id": "risk:vision_gaps",
+          "type": "risk",
+          "label": "Vision evidence gaps",
+          "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+          "confidence": "high",
+          "postIds": [
+            "3825836720978630051",
+            "3622298533331354216",
+            "3789007229152945044",
+            "3829320551060222818",
+            "3900672109022341105",
+            "3881727680567837792",
+            "3877167059469876922",
+            "3750967731777487011"
+          ]
+        }
+      ],
+      "opportunitySignals": [
+        {
+          "id": "opportunity:published_contact",
+          "type": "opportunity",
+          "label": "Published contact/channel",
+          "detail": "The profile exposes explicit public contact or link surfaces; use only respectful/public outreach.",
+          "confidence": "high",
+          "urls": [
+            "https://t.me/kitinvest"
+          ]
+        },
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3829320551060222818",
+            "3825836720978630051",
+            "3750967731777487011"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DUkesCpDDNi/",
+            "https://www.instagram.com/p/DUYGjpCk5Wj/",
+            "https://www.instagram.com/p/DQOHUdQjMCj/"
+          ]
+        },
+        {
+          "id": "opportunity:positioning",
+          "type": "opportunity",
+          "label": "Clear positioning surface",
+          "detail": "Verified or pinned content gives stronger first-read context than a purely chronological feed.",
+          "confidence": "medium",
+          "postIds": [
+            "3825836720978630051",
+            "3622298533331354216",
+            "3789007229152945044"
+          ]
+        }
+      ],
+      "modeGuidance": {
+        "mode": "standard",
+        "evidencePriorities": [
+          "recurring themes across selected posts",
+          "audience and comment evidence",
+          "visual/textual patterns",
+          "practical but safe communication recommendations"
+        ],
+        "scoringFocus": [
+          "specificity",
+          "source-backed hypotheses",
+          "actionability",
+          "confidence calibration"
+        ],
+        "cautionRules": [
+          "Avoid personality certainty",
+          "No harassment, doxing, pressure or privacy bypass"
+        ]
+      },
+      "evidenceMap": [
+        {
+          "id": "profile:profession_hints",
+          "type": "profile",
+          "label": "Profession/status hints",
+          "detail": "эксперт",
+          "confidence": "medium"
+        },
+        {
+          "id": "profile:location_hints",
+          "type": "profile",
+          "label": "Coarse location hints",
+          "detail": "Moscow, Russia, Cairo, Egypt, Пустыня Руб Эль Хали, Оаэ, Дубай",
+          "confidence": "medium"
+        },
+        {
+          "id": "profile:published_contacts",
+          "type": "profile",
+          "label": "Published contacts/links",
+          "detail": "https://t.me/kitinvest",
+          "confidence": "high",
+          "urls": [
+            "https://t.me/kitinvest"
+          ]
+        },
+        {
+          "id": "post:3825836720978630051",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, pinned, high_likes, high_comments, format_diversity, audience_signal, visual_signal; score 113.",
+          "confidence": "high",
+          "postIds": [
+            "3825836720978630051"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DUYGjpCk5Wj/"
+          ]
+        },
+        {
+          "id": "post:3622298533331354216",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for pinned, high_likes, profile_signal, audience_signal, visual_signal; score 89.",
+          "confidence": "high",
+          "postIds": [
+            "3622298533331354216"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DJE_VMFokJo/"
+          ]
+        },
+        {
+          "id": "post:3789007229152945044",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, pinned, high_likes, format_diversity, audience_signal, visual_signal; score 79.",
+          "confidence": "high",
+          "postIds": [
+            "3789007229152945044"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DSVQf_5DGOU/"
+          ]
+        },
+        {
+          "id": "post:3829320551060222818",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, high_comments, audience_signal, visual_signal; score 73.",
+          "confidence": "high",
+          "postIds": [
+            "3829320551060222818"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DUkesCpDDNi/"
+          ]
+        },
+        {
+          "id": "post:3900672109022341105",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 68.",
+          "confidence": "high",
+          "postIds": [
+            "3900672109022341105"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYh-J3TjOfx/"
+          ]
+        },
+        {
+          "id": "post:3881727680567837792",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 57.",
+          "confidence": "high",
+          "postIds": [
+            "3881727680567837792"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DXeqsJbDARg/"
+          ]
+        },
+        {
+          "id": "post:3877167059469876922",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, profile_signal, audience_signal, visual_signal; score 46.",
+          "confidence": "high",
+          "postIds": [
+            "3877167059469876922"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DXOduYCjD66/"
+          ]
+        },
+        {
+          "id": "post:3750967731777487011",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, high_comments, audience_signal, visual_signal; score 43.",
+          "confidence": "high",
+          "postIds": [
+            "3750967731777487011"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DQOHUdQjMCj/"
+          ]
+        },
+        {
+          "id": "post:3891158459865688897",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, audience_signal, visual_signal; score 38.",
+          "confidence": "high",
+          "postIds": [
+            "3891158459865688897"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYALADFDOtB/"
+          ]
+        },
+        {
+          "id": "post:3772716907758397483",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, format_diversity, audience_signal, visual_signal; score 37.",
+          "confidence": "high",
+          "postIds": [
+            "3772716907758397483"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DRbYgn1DKgr/"
+          ]
+        },
+        {
+          "id": "post:3746074560824084529",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, profile_signal, audience_signal, visual_signal; score 37.",
+          "confidence": "high",
+          "postIds": [
+            "3746074560824084529"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DP8uvcsDAgx/"
+          ]
+        },
+        {
+          "id": "post:3733879615291962419",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for audience_signal, visual_signal; score 19.",
+          "confidence": "high",
+          "postIds": [
+            "3733879615291962419"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DPRZ7onjLQz/"
+          ]
+        },
+        {
+          "id": "cluster:community_and_events",
+          "type": "content_cluster",
+          "label": "community_and_events",
+          "detail": "2 selected posts match keywords: event, team, meetup, community, команда, мероприятие",
+          "confidence": "medium",
+          "postIds": [
+            "3622298533331354216",
+            "3877167059469876922"
+          ]
+        },
+        {
+          "id": "cluster:work_and_expertise",
+          "type": "content_cluster",
+          "label": "work_and_expertise",
+          "detail": "1 selected posts match keywords: founder, startup, business, work, career, expert",
+          "confidence": "medium",
+          "postIds": [
+            "3622298533331354216"
+          ]
+        },
+        {
+          "id": "audience:high_comment_posts",
+          "type": "audience",
+          "label": "High-comment posts",
+          "detail": "medium comment density across selected posts.",
+          "confidence": "medium",
+          "postIds": [
+            "3829320551060222818",
+            "3825836720978630051",
+            "3750967731777487011",
+            "3622298533331354216",
+            "3900672109022341105"
+          ]
+        },
+        {
+          "id": "risk:vision_gaps",
+          "type": "risk",
+          "label": "Vision evidence gaps",
+          "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+          "confidence": "high",
+          "postIds": [
+            "3825836720978630051",
+            "3622298533331354216",
+            "3789007229152945044",
+            "3829320551060222818",
+            "3900672109022341105",
+            "3881727680567837792",
+            "3877167059469876922",
+            "3750967731777487011"
+          ]
+        },
+        {
+          "id": "opportunity:published_contact",
+          "type": "opportunity",
+          "label": "Published contact/channel",
+          "detail": "The profile exposes explicit public contact or link surfaces; use only respectful/public outreach.",
+          "confidence": "high",
+          "urls": [
+            "https://t.me/kitinvest"
+          ]
+        },
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3829320551060222818",
+            "3825836720978630051",
+            "3750967731777487011"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DUkesCpDDNi/",
+            "https://www.instagram.com/p/DUYGjpCk5Wj/",
+            "https://www.instagram.com/p/DQOHUdQjMCj/"
+          ]
+        },
+        {
+          "id": "opportunity:positioning",
+          "type": "opportunity",
+          "label": "Clear positioning surface",
+          "detail": "Verified or pinned content gives stronger first-read context than a purely chronological feed.",
+          "confidence": "medium",
+          "postIds": [
+            "3825836720978630051",
+            "3622298533331354216",
+            "3789007229152945044"
+          ]
+        },
+        {
+          "id": "mode:standard",
+          "type": "mode",
+          "label": "standard priorities",
+          "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+          "confidence": "high"
+        }
+      ]
+    }
+  },
+  "metrics": {
+    "followersCount": 57772,
+    "followsCount": 969,
+    "postsCount": 1087,
+    "analyzedPosts": 12,
+    "avgLikes": 234.16666666666666,
+    "avgComments": 6.75,
+    "medianLikes": 240.5,
+    "medianComments": 5,
+    "engagementRate": 0.41701285513166697,
+    "frequencyDays": 34.91657828282828,
+    "pinnedPostsCount": 3,
+    "uniqueLocations": [
+      "Moscow, Russia",
+      "Cairo, Egypt",
+      "Пустыня Руб Эль Хали, Оаэ, Дубай"
+    ],
+    "uniqueMusic": [],
+    "relatedProfiles": [
+      "nazarow_ivan",
+      "pysarenko_k",
+      "amanzhol_rysmendiyev.kz",
+      "alex_mlv",
+      "valeraovechkin",
+      "semyannikov1",
+      "fedanov",
+      "srebniy",
+      "dselyandin_invest",
+      "art.fernandess",
+      "alexander_evchenko",
+      "vladimir_krainev",
+      "naurbiev.ru",
+      "anatoliy_tsekhin",
+      "vlad.bermuda",
+      "ignatbond",
+      "kirill__rusin",
+      "pavel.pershukov",
+      "n.yudaev",
+      "andreeff19",
+      "homka6",
+      "eshmuratov_r",
+      "maers_one",
+      "yuryzhigalov",
+      "gerasimov.lab",
+      "serhii_ruban",
+      "eduard.barsukoff",
+      "unicornlab.in",
+      "ab_kuznetsov",
+      "dmitry_gorbachev87",
+      "vladimir_41r",
+      "stanislav_rublev",
+      "dmitriyarnautov"
+    ],
+    "topPostsByLikes": [
+      {
+        "postId": "3825836720978630051",
+        "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+        "likesCount": 370
+      },
+      {
+        "postId": "3900672109022341105",
+        "url": "https://www.instagram.com/p/DYh-J3TjOfx/",
+        "likesCount": 363
+      },
+      {
+        "postId": "3622298533331354216",
+        "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+        "likesCount": 357
+      }
+    ],
+    "topPostsByComments": [
+      {
+        "postId": "3829320551060222818",
+        "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+        "commentsCount": 18
+      },
+      {
+        "postId": "3825836720978630051",
+        "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+        "commentsCount": 14
+      },
+      {
+        "postId": "3750967731777487011",
+        "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+        "commentsCount": 13
+      }
+    ],
+    "postTypeDistribution": {
+      "Carousel": 7,
+      "Image": 3,
+      "Video": 2
+    },
+    "hashtagFrequency": {
+      "blockchainlife": 1
+    },
+    "mentionFrequency": {
+      "serkhitrov": 1,
+      "fakeev": 1
+    },
+    "digitalCircle": [
+      {
+        "username": "serkhitrov",
+        "type": "mentioned",
+        "score": 1.5,
+        "lastInteractionDate": "2025-04-30T16:47:36.000Z",
+        "details": [
+          "mentioned in caption: https://www.instagram.com/p/DJE_VMFokJo/"
+        ]
+      },
+      {
+        "username": "fakeev",
+        "type": "mentioned",
+        "score": 1.5,
+        "lastInteractionDate": "2025-10-18T11:29:44.000Z",
+        "details": [
+          "mentioned in caption: https://www.instagram.com/p/DP8uvcsDAgx/"
+        ]
+      }
+    ]
+  },
+  "sourceMap": [
+    {
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "postId": "3622298533331354216",
+      "label": "[3622298533331354216] Выступление на конференции: Текст: «Выступил на самой большой конференции по блокчейн-технологиям… перед 15.000 человек» + хэштег #BlockchainLife (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXOduYCjD66/",
+      "postId": "3877167059469876922",
+      "label": "[3877167059469876922] Выступление 2026: Текст: «Выступил на Blockchain Life 2026… Тема доклада — «Как сделать эффективную ставку на падение крипторынка»» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYALADFDOtB/",
+      "postId": "3891158459865688897",
+      "label": "[3891158459865688897] Стратегия шорта: Текст: «ШОРТ КРИПТЫ - почему это лучшая инвест-стратегия 2026 года» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYALADFDOtB/",
+      "postId": "3891158459865688897",
+      "label": "[3891158459865688897] Карусель + эмодзи: Тип Carousel, подпись содержит эмодзи ➡️ и указание «листай карусель» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+      "postId": "3750967731777487011",
+      "label": "[3750967731777487011] Короткая цитата + эмодзи: Текст: «Если на ваш караван никто не лает, возможно, он никуда не двигается👌🏻» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+      "postId": "3825836720978630051",
+      "label": "[3825836720978630051] Высокий охват: 370 лайков, 14 комментариев, pinned (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYh-J3TjOfx/",
+      "postId": "3900672109022341105",
+      "label": "[3900672109022341105] Высокий охват: 363 лайка, pinned-статус в selection (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+      "postId": "3829320551060222818",
+      "label": "[3829320551060222818] Максимум комментариев: 18 комментариев (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+      "postId": "3750967731777487011",
+      "label": "[3750967731777487011] 13 комментариев: Пост с цитатой про караван (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "postId": "3622298533331354216",
+      "label": "[3622298533331354216] Информативная подпись: Длинный текст про конференцию и статистику депозита (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+      "postId": "3750967731777487011",
+      "label": "[3750967731777487011] Афоризм: Короткая фраза с эмодзи 👌🏻 (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "postId": "3622298533331354216",
+      "label": "[3622298533331354216] Экспертный статус: Текст: «для эксперта это некое признание» и упоминание собственной статистики депозита (medium)"
+    },
+    {
+      "label": "Био: «Я просто хорошо умею инвестировать» + ссылка на t.me/kitinvest (high) profile metadata"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXOduYCjD66/",
+      "postId": "3877167059469876922",
+      "label": "[3877167059469876922] Конкретная тема доклада: Указана тема «Как сделать эффективную ставку на падение крипторынка» (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXeqsJbDARg/",
+      "postId": "3881727680567837792",
+      "label": "[3881727680567837792] Минимальная подпись: Подпись «.» (high)"
+    },
+    {
+      "url": "https://t.me/kitinvest",
+      "label": "Публичный контакт: Ссылка в био и opportunitySignals (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYALADFDOtB/",
+      "postId": "3891158459865688897",
+      "label": "[3891158459865688897] Тема шорта: Пост про лучшую инвест-стратегию 2026 (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+      "postId": "3829320551060222818",
+      "label": "[3829320551060222818] Высокий комментарий: 18 комментариев, opportunity hook (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXOduYCjD66/",
+      "postId": "3877167059469876922",
+      "label": "[3877167059469876922] Конференция: Blockchain Life 2026 (high)"
+    },
+    {
+      "label": "modeGuidance: «practical but safe communication recommendations» (high) profile metadata"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXOduYCjD66/",
+      "postId": "3877167059469876922",
+      "label": "[3877167059469876922] Тема доклада: Прямая ссылка на текст поста (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYALADFDOtB/",
+      "postId": "3891158459865688897",
+      "label": "[3891158459865688897] Стратегия шорта: Текст про «лучшая инвест-стратегия 2026» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "postId": "3622298533331354216",
+      "label": "[3622298533331354216] Pinned + конференция: 357 лайков, 8 комментариев (medium)"
+    },
+    {
+      "url": "https://t.me/kitinvest",
+      "label": "Контакт: opportunity:published_contact (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+      "postId": "3825836720978630051",
+      "label": "[3825836720978630051] Pinned carousel: Тип Carousel, pinned, 370 лайков (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXOduYCjD66/",
+      "postId": "3877167059469876922",
+      "label": "[3877167059469876922] Конференция: Апрель 2026 (high)"
+    },
+    {
+      "label": "risk:vision_gaps: 12 selected visual items could not be analyzed (high) profile metadata"
+    },
+    {
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "postId": "3622298533331354216",
+      "label": "[3622298533331354216] Экспертный образ: Текст про признание эксперта и показ статистики депозита (medium)"
+    }
+  ],
+  "posts": [
+    {
+      "id": "3825836720978630051",
+      "type": "Carousel",
+      "timestamp": "2026-02-05T12:41:39.000Z",
+      "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+      "likesCount": 370,
+      "commentsCount": 14,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": true,
+      "taggedUsers": []
+    },
+    {
+      "id": "3622298533331354216",
+      "type": "Carousel",
+      "timestamp": "2025-04-30T16:47:36.000Z",
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "caption": "Выступил на самой большой конференции по блокчейн-технологиям.\n\nДля меня, конечно, было важно выступить перед 15.000 человек. На мой взгляд, для эксперта это некое признание — попасть на большую сцену #BlockchainLife. Очень рад)\n\nЯ постарался дать максимально актуальную информацию — то, что мы сами делаем прямо сейчас и на чём смогли показать результат. Кто был, видел, как я показал статистику по приросту депозита на своих кошельках. Это мало кто делает в мире инвестиций, а я показал прямо со сцены.\n\nКстати, мне нравится выступать. Раньше я делал это чаще, но в определённый момент перестал ходить на интервью, подкасты и выступать — занимался другим. Сейчас наоборот - хочется делится нашими стратегиями, мышлениям и подходом перед всей Россией🇷🇺\n\nЕщё для меня было важно, что после моего выступления меня ещё на 30 минут окружили люди и засыпали вопросами. Круто пообщались! Спасибо всем тем кто подошел 😎👌🏻\n\nЗафиксирую эти фото с выступления тут. Организатору @serkhitrov спасибо! Двигаемся дальше🚀",
+      "likesCount": 357,
+      "commentsCount": 8,
+      "hashtags": [
+        "blockchainlife"
+      ],
+      "mentions": [
+        "serkhitrov"
+      ],
+      "isPinned": true,
+      "taggedUsers": []
+    },
+    {
+      "id": "3789007229152945044",
+      "type": "Image",
+      "timestamp": "2025-12-16T17:08:01.000Z",
+      "url": "https://www.instagram.com/p/DSVQf_5DGOU/",
+      "likesCount": 225,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": true,
+      "taggedUsers": []
+    },
+    {
+      "id": "3829320551060222818",
+      "type": "Carousel",
+      "timestamp": "2026-02-10T08:03:24.000Z",
+      "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+      "likesCount": 270,
+      "commentsCount": 18,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3900672109022341105",
+      "type": "Carousel",
+      "timestamp": "2026-05-19T18:46:12.000Z",
+      "url": "https://www.instagram.com/p/DYh-J3TjOfx/",
+      "likesCount": 363,
+      "commentsCount": 8,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3881727680567837792",
+      "type": "Carousel",
+      "timestamp": "2026-04-23T15:27:00.000Z",
+      "url": "https://www.instagram.com/p/DXeqsJbDARg/",
+      "caption": ".",
+      "likesCount": 283,
+      "commentsCount": 7,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3877167059469876922",
+      "type": "Carousel",
+      "timestamp": "2026-04-17T08:25:52.000Z",
+      "url": "https://www.instagram.com/p/DXOduYCjD66/",
+      "caption": "Выступил на Blockchain Life 2026. Конференцию посетило 16 000 человек.\nТема доклада — «Как сделать эффективную ставку на падение крипторынка».",
+      "likesCount": 119,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3750967731777487011",
+      "type": "Image",
+      "timestamp": "2025-10-25T05:30:20.000Z",
+      "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+      "caption": "Если на ваш караван никто не лает, возможно, он никуда не двигается👌🏻",
+      "likesCount": 204,
+      "commentsCount": 13,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3891158459865688897",
+      "type": "Carousel",
+      "timestamp": "2026-05-06T15:44:17.000Z",
+      "url": "https://www.instagram.com/p/DYALADFDOtB/",
+      "caption": "ШОРТ КРИПТЫ - почему это лучшая инвест-стратегия 2026 года (листай карусель) ➡️",
+      "likesCount": 86,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3772716907758397483",
+      "type": "Video",
+      "timestamp": "2025-11-24T05:42:33.000Z",
+      "url": "https://www.instagram.com/p/DRbYgn1DKgr/",
+      "caption": "Мой отдых",
+      "likesCount": 94,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3746074560824084529",
+      "type": "Video",
+      "timestamp": "2025-10-18T11:29:44.000Z",
+      "url": "https://www.instagram.com/p/DP8uvcsDAgx/",
+      "caption": "За грибами🍄‍🟫 @fakeev",
+      "likesCount": 256,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [
+        "fakeev"
+      ],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3733879615291962419",
+      "type": "Image",
+      "timestamp": "2025-10-01T15:39:17.000Z",
+      "url": "https://www.instagram.com/p/DPRZ7onjLQz/",
+      "likesCount": 183,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    }
+  ],
+  "vision": [
+    {
+      "postId": "3825836720978630051",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3622298533331354216",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3789007229152945044",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3829320551060222818",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3900672109022341105",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3881727680567837792",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3877167059469876922",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3750967731777487011",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3891158459865688897",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3772716907758397483",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3746074560824084529",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3733879615291962419",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    }
+  ],
+  "analysisContext": {
+    "selectedPostIds": [
+      "3825836720978630051",
+      "3622298533331354216",
+      "3789007229152945044",
+      "3829320551060222818",
+      "3900672109022341105",
+      "3881727680567837792",
+      "3877167059469876922",
+      "3750967731777487011",
+      "3891158459865688897",
+      "3772716907758397483",
+      "3746074560824084529",
+      "3733879615291962419"
+    ],
+    "postSelection": [
+      {
+        "postId": "3825836720978630051",
+        "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+        "timestamp": "2026-02-05T12:41:39.000Z",
+        "score": 113,
+        "reasons": [
+          "recent",
+          "pinned",
+          "high_likes",
+          "high_comments",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3622298533331354216",
+        "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+        "timestamp": "2025-04-30T16:47:36.000Z",
+        "score": 89,
+        "reasons": [
+          "pinned",
+          "high_likes",
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3789007229152945044",
+        "url": "https://www.instagram.com/p/DSVQf_5DGOU/",
+        "timestamp": "2025-12-16T17:08:01.000Z",
+        "score": 79,
+        "reasons": [
+          "recent",
+          "pinned",
+          "high_likes",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3829320551060222818",
+        "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+        "timestamp": "2026-02-10T08:03:24.000Z",
+        "score": 73,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "high_comments",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3900672109022341105",
+        "url": "https://www.instagram.com/p/DYh-J3TjOfx/",
+        "timestamp": "2026-05-19T18:46:12.000Z",
+        "score": 68,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3881727680567837792",
+        "url": "https://www.instagram.com/p/DXeqsJbDARg/",
+        "timestamp": "2026-04-23T15:27:00.000Z",
+        "score": 57,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3877167059469876922",
+        "url": "https://www.instagram.com/p/DXOduYCjD66/",
+        "timestamp": "2026-04-17T08:25:52.000Z",
+        "score": 46,
+        "reasons": [
+          "recent",
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3750967731777487011",
+        "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+        "timestamp": "2025-10-25T05:30:20.000Z",
+        "score": 43,
+        "reasons": [
+          "high_likes",
+          "high_comments",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3891158459865688897",
+        "url": "https://www.instagram.com/p/DYALADFDOtB/",
+        "timestamp": "2026-05-06T15:44:17.000Z",
+        "score": 38,
+        "reasons": [
+          "recent",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3772716907758397483",
+        "url": "https://www.instagram.com/p/DRbYgn1DKgr/",
+        "timestamp": "2025-11-24T05:42:33.000Z",
+        "score": 37,
+        "reasons": [
+          "recent",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3746074560824084529",
+        "url": "https://www.instagram.com/p/DP8uvcsDAgx/",
+        "timestamp": "2025-10-18T11:29:44.000Z",
+        "score": 37,
+        "reasons": [
+          "high_likes",
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3733879615291962419",
+        "url": "https://www.instagram.com/p/DPRZ7onjLQz/",
+        "timestamp": "2025-10-01T15:39:17.000Z",
+        "score": 19,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      }
+    ],
+    "profileSignals": {
+      "publicContacts": [],
+      "publicLinks": [
+        "https://t.me/kitinvest"
+      ],
+      "platformHandles": [
+        "@serkhitrov",
+        "@fakeev"
+      ],
+      "professionHints": [
+        "эксперт"
+      ],
+      "locationHints": [
+        "Moscow, Russia",
+        "Cairo, Egypt",
+        "Пустыня Руб Эль Хали, Оаэ, Дубай"
+      ],
+      "bioKeywords": [
+        "инвестировать",
+        "олег",
+        "просто",
+        "умею",
+        "факеев",
+        "хорошо"
+      ]
+    },
+    "contentClusters": [
+      {
+        "label": "community_and_events",
+        "count": 2,
+        "postIds": [
+          "3622298533331354216",
+          "3877167059469876922"
+        ],
+        "keywords": [
+          "event",
+          "team",
+          "meetup",
+          "community",
+          "команда",
+          "мероприятие"
+        ]
+      },
+      {
+        "label": "work_and_expertise",
+        "count": 1,
+        "postIds": [
+          "3622298533331354216"
+        ],
+        "keywords": [
+          "founder",
+          "startup",
+          "business",
+          "work",
+          "career",
+          "expert",
+          "эксперт",
+          "бизнес"
+        ]
+      }
+    ],
+    "audienceSignals": {
+      "frequentCommenters": [],
+      "repeatedCommentTerms": [],
+      "commentDensity": "medium",
+      "highCommentPostIds": [
+        "3829320551060222818",
+        "3825836720978630051",
+        "3750967731777487011",
+        "3622298533331354216",
+        "3900672109022341105"
+      ]
+    },
+    "riskSignals": [
+      {
+        "id": "risk:vision_gaps",
+        "type": "risk",
+        "label": "Vision evidence gaps",
+        "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+        "confidence": "high",
+        "postIds": [
+          "3825836720978630051",
+          "3622298533331354216",
+          "3789007229152945044",
+          "3829320551060222818",
+          "3900672109022341105",
+          "3881727680567837792",
+          "3877167059469876922",
+          "3750967731777487011"
+        ]
+      }
+    ],
+    "opportunitySignals": [
+      {
+        "id": "opportunity:published_contact",
+        "type": "opportunity",
+        "label": "Published contact/channel",
+        "detail": "The profile exposes explicit public contact or link surfaces; use only respectful/public outreach.",
+        "confidence": "high",
+        "urls": [
+          "https://t.me/kitinvest"
+        ]
+      },
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3829320551060222818",
+          "3825836720978630051",
+          "3750967731777487011"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DUkesCpDDNi/",
+          "https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "https://www.instagram.com/p/DQOHUdQjMCj/"
+        ]
+      },
+      {
+        "id": "opportunity:positioning",
+        "type": "opportunity",
+        "label": "Clear positioning surface",
+        "detail": "Verified or pinned content gives stronger first-read context than a purely chronological feed.",
+        "confidence": "medium",
+        "postIds": [
+          "3825836720978630051",
+          "3622298533331354216",
+          "3789007229152945044"
+        ]
+      }
+    ],
+    "modeGuidance": {
+      "mode": "standard",
+      "evidencePriorities": [
+        "recurring themes across selected posts",
+        "audience and comment evidence",
+        "visual/textual patterns",
+        "practical but safe communication recommendations"
+      ],
+      "scoringFocus": [
+        "specificity",
+        "source-backed hypotheses",
+        "actionability",
+        "confidence calibration"
+      ],
+      "cautionRules": [
+        "Avoid personality certainty",
+        "No harassment, doxing, pressure or privacy bypass"
+      ]
+    },
+    "evidenceMap": [
+      {
+        "id": "profile:profession_hints",
+        "type": "profile",
+        "label": "Profession/status hints",
+        "detail": "эксперт",
+        "confidence": "medium"
+      },
+      {
+        "id": "profile:location_hints",
+        "type": "profile",
+        "label": "Coarse location hints",
+        "detail": "Moscow, Russia, Cairo, Egypt, Пустыня Руб Эль Хали, Оаэ, Дубай",
+        "confidence": "medium"
+      },
+      {
+        "id": "profile:published_contacts",
+        "type": "profile",
+        "label": "Published contacts/links",
+        "detail": "https://t.me/kitinvest",
+        "confidence": "high",
+        "urls": [
+          "https://t.me/kitinvest"
+        ]
+      },
+      {
+        "id": "post:3825836720978630051",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, pinned, high_likes, high_comments, format_diversity, audience_signal, visual_signal; score 113.",
+        "confidence": "high",
+        "postIds": [
+          "3825836720978630051"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DUYGjpCk5Wj/"
+        ]
+      },
+      {
+        "id": "post:3622298533331354216",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for pinned, high_likes, profile_signal, audience_signal, visual_signal; score 89.",
+        "confidence": "high",
+        "postIds": [
+          "3622298533331354216"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DJE_VMFokJo/"
+        ]
+      },
+      {
+        "id": "post:3789007229152945044",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, pinned, high_likes, format_diversity, audience_signal, visual_signal; score 79.",
+        "confidence": "high",
+        "postIds": [
+          "3789007229152945044"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DSVQf_5DGOU/"
+        ]
+      },
+      {
+        "id": "post:3829320551060222818",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, high_comments, audience_signal, visual_signal; score 73.",
+        "confidence": "high",
+        "postIds": [
+          "3829320551060222818"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DUkesCpDDNi/"
+        ]
+      },
+      {
+        "id": "post:3900672109022341105",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 68.",
+        "confidence": "high",
+        "postIds": [
+          "3900672109022341105"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYh-J3TjOfx/"
+        ]
+      },
+      {
+        "id": "post:3881727680567837792",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 57.",
+        "confidence": "high",
+        "postIds": [
+          "3881727680567837792"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DXeqsJbDARg/"
+        ]
+      },
+      {
+        "id": "post:3877167059469876922",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, profile_signal, audience_signal, visual_signal; score 46.",
+        "confidence": "high",
+        "postIds": [
+          "3877167059469876922"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DXOduYCjD66/"
+        ]
+      },
+      {
+        "id": "post:3750967731777487011",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, high_comments, audience_signal, visual_signal; score 43.",
+        "confidence": "high",
+        "postIds": [
+          "3750967731777487011"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DQOHUdQjMCj/"
+        ]
+      },
+      {
+        "id": "post:3891158459865688897",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, audience_signal, visual_signal; score 38.",
+        "confidence": "high",
+        "postIds": [
+          "3891158459865688897"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYALADFDOtB/"
+        ]
+      },
+      {
+        "id": "post:3772716907758397483",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, format_diversity, audience_signal, visual_signal; score 37.",
+        "confidence": "high",
+        "postIds": [
+          "3772716907758397483"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DRbYgn1DKgr/"
+        ]
+      },
+      {
+        "id": "post:3746074560824084529",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, profile_signal, audience_signal, visual_signal; score 37.",
+        "confidence": "high",
+        "postIds": [
+          "3746074560824084529"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DP8uvcsDAgx/"
+        ]
+      },
+      {
+        "id": "post:3733879615291962419",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for audience_signal, visual_signal; score 19.",
+        "confidence": "high",
+        "postIds": [
+          "3733879615291962419"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DPRZ7onjLQz/"
+        ]
+      },
+      {
+        "id": "cluster:community_and_events",
+        "type": "content_cluster",
+        "label": "community_and_events",
+        "detail": "2 selected posts match keywords: event, team, meetup, community, команда, мероприятие",
+        "confidence": "medium",
+        "postIds": [
+          "3622298533331354216",
+          "3877167059469876922"
+        ]
+      },
+      {
+        "id": "cluster:work_and_expertise",
+        "type": "content_cluster",
+        "label": "work_and_expertise",
+        "detail": "1 selected posts match keywords: founder, startup, business, work, career, expert",
+        "confidence": "medium",
+        "postIds": [
+          "3622298533331354216"
+        ]
+      },
+      {
+        "id": "audience:high_comment_posts",
+        "type": "audience",
+        "label": "High-comment posts",
+        "detail": "medium comment density across selected posts.",
+        "confidence": "medium",
+        "postIds": [
+          "3829320551060222818",
+          "3825836720978630051",
+          "3750967731777487011",
+          "3622298533331354216",
+          "3900672109022341105"
+        ]
+      },
+      {
+        "id": "risk:vision_gaps",
+        "type": "risk",
+        "label": "Vision evidence gaps",
+        "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+        "confidence": "high",
+        "postIds": [
+          "3825836720978630051",
+          "3622298533331354216",
+          "3789007229152945044",
+          "3829320551060222818",
+          "3900672109022341105",
+          "3881727680567837792",
+          "3877167059469876922",
+          "3750967731777487011"
+        ]
+      },
+      {
+        "id": "opportunity:published_contact",
+        "type": "opportunity",
+        "label": "Published contact/channel",
+        "detail": "The profile exposes explicit public contact or link surfaces; use only respectful/public outreach.",
+        "confidence": "high",
+        "urls": [
+          "https://t.me/kitinvest"
+        ]
+      },
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3829320551060222818",
+          "3825836720978630051",
+          "3750967731777487011"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DUkesCpDDNi/",
+          "https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "https://www.instagram.com/p/DQOHUdQjMCj/"
+        ]
+      },
+      {
+        "id": "opportunity:positioning",
+        "type": "opportunity",
+        "label": "Clear positioning surface",
+        "detail": "Verified or pinned content gives stronger first-read context than a purely chronological feed.",
+        "confidence": "medium",
+        "postIds": [
+          "3825836720978630051",
+          "3622298533331354216",
+          "3789007229152945044"
+        ]
+      },
+      {
+        "id": "mode:standard",
+        "type": "mode",
+        "label": "standard priorities",
+        "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+        "confidence": "high"
+      }
+    ]
+  }
+}

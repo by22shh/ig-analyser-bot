@@ -93,4 +93,42 @@ describe("report quality validation", () => {
 
     expect(quality.findings.map((finding) => finding.id)).toContain("mode:standard:thin_sample");
   });
+
+  it("penalizes reports with missing vision and count-only comment evidence", () => {
+    const sections: ReportSectionView[] = [
+      {
+        title: "Повторяющиеся визуальные и текстовые паттерны",
+        content: "Confidence: medium. Наблюдение ограничено публичной выборкой и требует проверки.",
+        sources: [{ postId: "p1", label: "Public post" }]
+      }
+    ];
+
+    const quality = evaluateReportQuality({
+      mode: "standard",
+      sections,
+      analysisContext: {
+        riskSignals: [
+          {
+            id: "risk:vision_gaps",
+            type: "risk",
+            label: "Vision evidence gaps",
+            detail: "1 selected visual item could not be analyzed.",
+            confidence: "high"
+          }
+        ],
+        audienceSignals: {
+          frequentCommenters: [],
+          repeatedCommentTerms: [],
+          commentDensity: "medium",
+          highCommentPostIds: ["p1"]
+        }
+      } as never
+    });
+
+    expect(quality.score).toBe(92);
+    expect(quality.findings.map((finding) => finding.id)).toEqual(
+      expect.arrayContaining(["report:vision_evidence_gap", "report:comments_count_only"])
+    );
+    expect(qualityFindingsNeedRepair(quality.findings)).toBe(false);
+  });
 });

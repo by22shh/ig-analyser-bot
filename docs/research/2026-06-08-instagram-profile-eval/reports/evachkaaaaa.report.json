@@ -1,0 +1,1715 @@
+{
+  "mode": "standard",
+  "username": "evachkaaaaa",
+  "language": "ru",
+  "model": "x-ai/grok-4.3",
+  "promptVersion": "report.standard.v4.repair",
+  "sections": [
+    {
+      "title": "Основные темы и приоритеты",
+      "content": "Центральная тема — путешествия и съёмка в новых локациях (Венеция, Тбилиси, Цюрих, Барселона, Алтай, Шерегеш, Дубай, Индия, Флоренция, Гоа). В подписях часто упоминаются личные впечатления и философские размышления (ашрам, истина). Другие темы почти отсутствуют.\n\nEvidence:\n\n- [3774971866193113955] caption: Пост о Венеции как городе любви и любимых фильмах (high) https://www.instagram.com/p/DRjZOlhiLNj/\n\n- [3577785295287617796] caption: Размышления об ашраме и позиции наблюдателя (high) https://www.instagram.com/p/DGm2MUoPAkE/\n\n- [3601035192919381741] location: Шерегеш, регулярные поездки (high) https://www.instagram.com/p/DH5cm3Jo9bt/\n\nConfidence: medium\n\nCaveats:\n\n- Выборка 12 постов из 141\n\n- Нет визуального анализа",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+          "postId": "3774971866193113955",
+          "label": "[3774971866193113955] caption: Пост о Венеции как городе любви и любимых фильмах (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DGm2MUoPAkE/",
+          "postId": "3577785295287617796",
+          "label": "[3577785295287617796] caption: Размышления об ашраме и позиции наблюдателя (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DH5cm3Jo9bt/",
+          "postId": "3601035192919381741",
+          "label": "[3601035192919381741] location: Шерегеш, регулярные поездки (high)"
+        }
+      ]
+    },
+    {
+      "title": "Повторяющиеся визуальные и текстовые паттерны",
+      "content": "Текстовые паттерны: короткие или средние подписи с эмодзи, литературные отсылки и лёгкий юмор. Посты преимущественно карусели и видео без хэштегов. Визуальные паттерны не могут быть подтверждены — все vision-запросы пропущены.\n\nEvidence:\n\n- [3746092211453654219] caption: Юмористическая цитата про Цюрих и Сибирь (high) https://www.instagram.com/p/DP8ywTHjXTL/\n\n- [3774971866193113955] caption: Эмодзи 🤞🏼 и личное отношение к городу (high) https://www.instagram.com/p/DRjZOlhiLNj/\n\nConfidence: low\n\nCaveats:\n\n- Vision data недоступна для всех 12 постов\n\n- Нет данных о палитре и композиции",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DP8ywTHjXTL/",
+          "postId": "3746092211453654219",
+          "label": "[3746092211453654219] caption: Юмористическая цитата про Цюрих и Сибирь (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+          "postId": "3774971866193113955",
+          "label": "[3774971866193113955] caption: Эмодзи 🤞🏼 и личное отношение к городу (high)"
+        }
+      ]
+    },
+    {
+      "title": "Поведение и вовлеченность",
+      "content": "ER 15.35 % выглядит высоким относительно 1290 подписчиков, но рассчитан на малой выборке. Среднее 195 лайков и 3 комментария. Частота публикаций в выборке — примерно раз в 33 дня. Аномалий в метриках не отмечено.\n\nEvidence:\n\n- [3679444295634544817] metrics: 263 likes, 11 comments — максимум в выборке (high) https://www.instagram.com/p/DMQAxekImix/\n\nConfidence: medium\n\nCaveats:\n\n- Анализировано только 12 постов\n\n- Нет данных по всем 141 постам",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DMQAxekImix/",
+          "postId": "3679444295634544817",
+          "label": "[3679444295634544817] metrics: 263 likes, 11 comments — максимум в выборке (high)"
+        }
+      ]
+    },
+    {
+      "title": "Аудитория и комментарии",
+      "content": "Плотность комментариев средняя. Посты с наибольшим количеством комментариев — travel и рефлексивные. Конкретные темы комментариев и повторяющиеся пользователи в данных не представлены.\n\nEvidence:\n\n- [3679444295634544817] comments: 11 комментариев — наибольшее значение (high) https://www.instagram.com/p/DMQAxekImix/\n\n- [3841112762961401703] comments: 7 комментариев (high) https://www.instagram.com/p/DVOX7TyiJdn/\n\nConfidence: medium\n\nCaveats:\n\n- latestComments не содержат текста\n\n- frequentCommenters пустой список",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DMQAxekImix/",
+          "postId": "3679444295634544817",
+          "label": "[3679444295634544817] comments: 11 комментариев — наибольшее значение (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DVOX7TyiJdn/",
+          "postId": "3841112762961401703",
+          "label": "[3841112762961401703] comments: 7 комментариев (high)"
+        }
+      ]
+    },
+    {
+      "title": "Стиль общения",
+      "content": "В публичных подписях — лёгкий, рефлексивный тон с элементами юмора и литературных отсылок. Используются эмодзи, но не чрезмерно. Стиль в личных сообщениях неизвестен.\n\nEvidence:\n\n- [3577785295287617796] caption: Философская цитата и отсылка к Пелевину (high) https://www.instagram.com/p/DGm2MUoPAkE/\n\nConfidence: medium\n\nCaveats:\n\n- Анализ только публичных подписей",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DGm2MUoPAkE/",
+          "postId": "3577785295287617796",
+          "label": "[3577785295287617796] caption: Философская цитата и отсылка к Пелевину (high)"
+        }
+      ]
+    },
+    {
+      "title": "Профессия и статус",
+      "content": "Единственная публичная подсказка — «фотограф». Других данных о роде занятий, статусе или доходе в био, ссылках и контенте нет.\n\nEvidence:\n\n- profileSignals: professionHints: фотограф (medium) profile metadata\n\nConfidence: low\n\nCaveats:\n\n- Нет подтверждений в постах и био",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "profileSignals: professionHints: фотограф (medium) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Отличие от типичных аккаунтов",
+      "content": "Аккаунт выделяется минимальным использованием хэштегов (hashtagFrequency пустой) и акцентом на личных текстах в подписях, в отличие от типичных travel-аккаунтов с promotional контентом и тегами брендов. При отсутствии сравнительной базы по похожим travel-аккаунтам уверенность низкая.\n\nEvidence:\n\n- metrics: hashtagFrequency и mentionFrequency пустые (high) profile metadata\n\n- [3774971866193113955] caption: Личная рефлексия о Венеции без хэштегов (high) https://www.instagram.com/p/DRjZOlhiLNj/\n\nConfidence: low\n\nCaveats:\n\n- Нет базы сравнения\n\n- Выборка мала",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "metrics: hashtagFrequency и mentionFrequency пустые (high) profile metadata"
+        },
+        {
+          "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+          "postId": "3774971866193113955",
+          "label": "[3774971866193113955] caption: Личная рефлексия о Венеции без хэштегов (high)"
+        }
+      ]
+    },
+    {
+      "title": "Отсутствия как сигнал",
+      "content": "Отсутствуют хэштеги, теги брендов, CTA, ссылки и pinned-посты. Это может указывать на личный, а не коммерческий характер аккаунта.\n\nEvidence:\n\n- metrics: hashtagFrequency и mentionFrequency пустые, pinnedPostsCount = 0 (high) profile metadata\n\nConfidence: medium",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "metrics: hashtagFrequency и mentionFrequency пустые, pinnedPostsCount = 0 (high) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Потенциальная польза от контакта",
+      "content": "Может быть интересен обменом опытом о путешествиях, локациях и съёмке (по публичным интересам). Готовность к контакту неизвестна.\n\nEvidence:\n\n- [3774971866193113955] caption: Любовь к Венеции и travel-фото (high) https://www.instagram.com/p/DRjZOlhiLNj/\n\nConfidence: low\n\nCaveats:\n\n- Без предположений о намерениях",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+          "postId": "3774971866193113955",
+          "label": "[3774971866193113955] caption: Любовь к Венеции и travel-фото (high)"
+        }
+      ]
+    },
+    {
+      "title": "Триггеры и зацепки",
+      "content": "Безопасные зацепки: Венеция, Шерегеш, ашрам в Индии, Флоренция, Дубай. Можно упомянуть конкретные посты и локации.\n\nEvidence:\n\n- [3774971866193113955] location: Венеция (high) https://www.instagram.com/p/DRjZOlhiLNj/\n\n- [3601035192919381741] location: Шерегеш (high) https://www.instagram.com/p/DH5cm3Jo9bt/\n\nConfidence: medium",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+          "postId": "3774971866193113955",
+          "label": "[3774971866193113955] location: Венеция (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DH5cm3Jo9bt/",
+          "postId": "3601035192919381741",
+          "label": "[3601035192919381741] location: Шерегеш (high)"
+        }
+      ]
+    },
+    {
+      "title": "Коммуникационные рекомендации",
+      "content": "Начинать с конкретной локации или подписи поста (Венеция, Шерегеш, ашрам), без оценок внешности и личных вопросов. Использовать нейтральный тон, соответствующий рефлексивному стилю аккаунта. Стиль в личке неизвестен.\n\nEvidence:\n\n- [3774971866193113955] caption: Венеция как город любви (high) https://www.instagram.com/p/DRjZOlhiLNj/\n\n- [3577785295287617796] caption: Ашрам и цитата Пелевина (high) https://www.instagram.com/p/DGm2MUoPAkE/\n\nConfidence: medium\n\nCaveats:\n\n- Стиль в личке неизвестен\n\n- Нет данных о ответах на комментарии",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+          "postId": "3774971866193113955",
+          "label": "[3774971866193113955] caption: Венеция как город любви (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DGm2MUoPAkE/",
+          "postId": "3577785295287617796",
+          "label": "[3577785295287617796] caption: Ашрам и цитата Пелевина (high)"
+        }
+      ]
+    },
+    {
+      "title": "Готовые фразы для входа в диалог",
+      "content": "1. «В посте про Венецию вы упомянули, что это ваш любимый город — интересно, что именно привлекает больше всего?»\n\n2. «Видел(а) пост из Шерегеша, там всегда интересно — давно туда ездите?»\n\n3. «В подписи про ашрам вы цитировали Пелевина — эта мысль особенно запомнилась?»\n\nEvidence:\n\n- [3774971866193113955] caption: Венеция и фильмы (high) https://www.instagram.com/p/DRjZOlhiLNj/\n\n- [3577785295287617796] caption: Ашрам и Пелевин (high) https://www.instagram.com/p/DGm2MUoPAkE/\n\nConfidence: medium\n\nCaveats:\n\n- Фразы только на основе публичных подписей",
+      "kind": "phrases",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+          "postId": "3774971866193113955",
+          "label": "[3774971866193113955] caption: Венеция и фильмы (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DGm2MUoPAkE/",
+          "postId": "3577785295287617796",
+          "label": "[3577785295287617796] caption: Ашрам и Пелевин (high)"
+        }
+      ]
+    },
+    {
+      "title": "Неочевидные наблюдения",
+      "content": "Гипотеза: аккаунт может вести человек, регулярно путешествующий между Европой, Азией и Россией. Малый объём выборки не позволяет сделать устойчивые выводы.\n\nEvidence:\n\n- profileSignals: locationHints: 10+ уникальных локаций (medium) profile metadata\n\nConfidence: low\n\nCaveats:\n\n- Выборка мала\n\n- Гипотеза, а не факт",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "profileSignals: locationHints: 10+ уникальных локаций (medium) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Общая оценка ценности профиля",
+      "content": "Профиль представляет интерес для тематики travel и визуального контента. Высокий ER на travel-постах и множество локаций могут быть полезны для обмена опытом. Оценка ограничена малой выборкой (12/141) и отсутствием визуального анализа.\n\nEvidence:\n\n- [3679444295634544817] metrics: 263 likes, 11 comments — highest engagement (high) https://www.instagram.com/p/DMQAxekImix/\n\n- metrics: 12 проанализированных постов из 141 (high) profile metadata\n\nConfidence: medium\n\nCaveats:\n\n- Нет данных по goal\n\n- Vision analysis недоступен",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DMQAxekImix/",
+          "postId": "3679444295634544817",
+          "label": "[3679444295634544817] metrics: 263 likes, 11 comments — highest engagement (high)"
+        },
+        {
+          "label": "metrics: 12 проанализированных постов из 141 (high) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Поведенческие сигналы",
+      "content": "Регулярные публикации каруселей и видео с travel-контентом. Подписи публикуются с интервалом примерно в месяц. pinned-посты отсутствуют.\n\nEvidence:\n\n- metrics: postTypeDistribution: Carousel 9, Video 3 (high) profile metadata\n\nConfidence: medium",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "metrics: postTypeDistribution: Carousel 9, Video 3 (high) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Ошибки, слепые зоны, барьеры",
+      "content": "Главные ограничения: все 12 vision-анализов пропущены, нет доступа к сторис и ответам на комментарии. Риск неверных выводов при малой выборке.\n\nEvidence:\n\n- risk: Vision evidence gaps — 12 постов (high) profile metadata\n\nConfidence: high",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "risk: Vision evidence gaps — 12 постов (high) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Образ как у бренда",
+      "content": "Личный mood-аккаунт с фокусом на travel и рефлексии. Без коммерческих атрибутов (хэштеги, CTA, бренды). Аудитория реагирует умеренно.\n\nEvidence:\n\n- metrics: Отсутствие hashtagFrequency и mentionFrequency (high) profile metadata\n\nConfidence: medium",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "metrics: Отсутствие hashtagFrequency и mentionFrequency (high) profile metadata"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "bullets": [
+      "ER ~15,4 % на выборке из 12 постов при 1290 подписчиках, среднее 195 лайков; travel-посты получают наибольшее количество комментариев.",
+      "12 уникальных локаций (Венеция, Тбилиси, Цюрих, Барселона, Шерегеш, Дубай, Гоа и др.) в 12 проанализированных постах.",
+      "Подписи содержат личные рефлексии, литературные отсылки и юмор; хэштеги и упоминания брендов отсутствуют.",
+      "Высококомментируемые посты (3679444295634544817, 3841112762961401703, 3601035192919381741) — лучшие зацепки для диалога.",
+      "Профессиональная подсказка «фотограф» присутствует в profileSignals, визуальный анализ всех постов недоступен."
+    ],
+    "warnings": [],
+    "quality": {
+      "score": 100,
+      "findings": []
+    },
+    "evidence": {
+      "selectedPostIds": [
+        "3679444295634544817",
+        "3774971866193113955",
+        "3841112762961401703",
+        "3746092211453654219",
+        "3724231267530050083",
+        "3666788856090560482",
+        "3601035192919381741",
+        "3617691037933295790",
+        "3577785295287617796",
+        "3718444545668034005",
+        "3616327917637857671",
+        "3579785447675359435"
+      ],
+      "postSelection": [
+        {
+          "postId": "3679444295634544817",
+          "url": "https://www.instagram.com/p/DMQAxekImix/",
+          "timestamp": "2025-07-18T13:06:02.000Z",
+          "score": 77,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "high_comments",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3774971866193113955",
+          "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+          "timestamp": "2025-11-27T08:22:15.000Z",
+          "score": 74,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "format_diversity",
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3841112762961401703",
+          "url": "https://www.instagram.com/p/DVOX7TyiJdn/",
+          "timestamp": "2026-02-26T14:36:32.000Z",
+          "score": 70,
+          "reasons": [
+            "recent",
+            "high_comments",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3746092211453654219",
+          "url": "https://www.instagram.com/p/DP8ywTHjXTL/",
+          "timestamp": "2025-10-18T12:03:32.000Z",
+          "score": 45,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3724231267530050083",
+          "url": "https://www.instagram.com/p/DOvIJsiiAoj/",
+          "timestamp": "2025-09-18T08:09:45.000Z",
+          "score": 45,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3666788856090560482",
+          "url": "https://www.instagram.com/p/DLjDQmBo4fi/",
+          "timestamp": "2025-07-01T02:01:56.000Z",
+          "score": 45,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3601035192919381741",
+          "url": "https://www.instagram.com/p/DH5cm3Jo9bt/",
+          "timestamp": "2025-04-01T08:41:08.000Z",
+          "score": 40,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3617691037933295790",
+          "url": "https://www.instagram.com/p/DI0ntTnINiu/",
+          "timestamp": "2025-04-24T08:13:20.000Z",
+          "score": 39,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3577785295287617796",
+          "url": "https://www.instagram.com/p/DGm2MUoPAkE/",
+          "timestamp": "2025-02-28T06:47:44.000Z",
+          "score": 33,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3718444545668034005",
+          "url": "https://www.instagram.com/p/DOakZz1iC3V/",
+          "timestamp": "2025-09-10T08:41:12.000Z",
+          "score": 31,
+          "reasons": [
+            "recent",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3616327917637857671",
+          "url": "https://www.instagram.com/p/DIvxxS6IfGH/",
+          "timestamp": "2025-04-22T11:05:03.000Z",
+          "score": 28,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3579785447675359435",
+          "url": "https://www.instagram.com/p/DGt8-XszXDL/",
+          "timestamp": "2025-03-03T01:02:37.000Z",
+          "score": 27,
+          "reasons": [
+            "high_likes",
+            "visual_signal"
+          ]
+        }
+      ],
+      "profileSignals": {
+        "publicContacts": [],
+        "publicLinks": [],
+        "platformHandles": [],
+        "professionHints": [
+          "фотограф"
+        ],
+        "locationHints": [
+          "Gallipoli, Italy",
+          "Venezia, Italia",
+          "Tbilisi, Georgia",
+          "Zürich, Switzerland",
+          "Barcelona, Spain",
+          "Алтай Актру",
+          "Sheregesh, Kemerovskaya Oblast', Russia",
+          "Dubai,UAE",
+          "Sri Sri Ravishankar Ashram",
+          "Florence, Italy"
+        ],
+        "bioKeywords": [
+          "eva"
+        ]
+      },
+      "contentClusters": [
+        {
+          "label": "lifestyle_and_travel",
+          "count": 1,
+          "postIds": [
+            "3774971866193113955"
+          ],
+          "keywords": [
+            "travel",
+            "city",
+            "hotel",
+            "trip",
+            "путешествие",
+            "город"
+          ]
+        }
+      ],
+      "audienceSignals": {
+        "frequentCommenters": [],
+        "repeatedCommentTerms": [],
+        "commentDensity": "medium",
+        "highCommentPostIds": [
+          "3679444295634544817",
+          "3841112762961401703",
+          "3601035192919381741",
+          "3774971866193113955",
+          "3666788856090560482"
+        ]
+      },
+      "riskSignals": [
+        {
+          "id": "risk:vision_gaps",
+          "type": "risk",
+          "label": "Vision evidence gaps",
+          "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+          "confidence": "high",
+          "postIds": [
+            "3679444295634544817",
+            "3774971866193113955",
+            "3841112762961401703",
+            "3746092211453654219",
+            "3724231267530050083",
+            "3666788856090560482",
+            "3601035192919381741",
+            "3617691037933295790"
+          ]
+        }
+      ],
+      "opportunitySignals": [
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3679444295634544817",
+            "3841112762961401703",
+            "3601035192919381741"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DMQAxekImix/",
+            "https://www.instagram.com/p/DVOX7TyiJdn/",
+            "https://www.instagram.com/p/DH5cm3Jo9bt/"
+          ]
+        }
+      ],
+      "modeGuidance": {
+        "mode": "standard",
+        "evidencePriorities": [
+          "recurring themes across selected posts",
+          "audience and comment evidence",
+          "visual/textual patterns",
+          "practical but safe communication recommendations"
+        ],
+        "scoringFocus": [
+          "specificity",
+          "source-backed hypotheses",
+          "actionability",
+          "confidence calibration"
+        ],
+        "cautionRules": [
+          "Avoid personality certainty",
+          "No harassment, doxing, pressure or privacy bypass"
+        ]
+      },
+      "evidenceMap": [
+        {
+          "id": "profile:profession_hints",
+          "type": "profile",
+          "label": "Profession/status hints",
+          "detail": "фотограф",
+          "confidence": "medium"
+        },
+        {
+          "id": "profile:location_hints",
+          "type": "profile",
+          "label": "Coarse location hints",
+          "detail": "Gallipoli, Italy, Venezia, Italia, Tbilisi, Georgia, Zürich, Switzerland, Barcelona, Spain, Алтай Актру, Sheregesh, Kemerovskaya Oblast', Russia, Dubai,UAE, Sri Sri Ravishankar Ashram, Florence, Italy",
+          "confidence": "medium"
+        },
+        {
+          "id": "post:3679444295634544817",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, high_comments, audience_signal, visual_signal; score 77.",
+          "confidence": "high",
+          "postIds": [
+            "3679444295634544817"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DMQAxekImix/"
+          ]
+        },
+        {
+          "id": "post:3774971866193113955",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, format_diversity, profile_signal, audience_signal, visual_signal; score 74.",
+          "confidence": "high",
+          "postIds": [
+            "3774971866193113955"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DRjZOlhiLNj/"
+          ]
+        },
+        {
+          "id": "post:3841112762961401703",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_comments, format_diversity, audience_signal, visual_signal; score 70.",
+          "confidence": "high",
+          "postIds": [
+            "3841112762961401703"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DVOX7TyiJdn/"
+          ]
+        },
+        {
+          "id": "post:3746092211453654219",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, visual_signal; score 45.",
+          "confidence": "high",
+          "postIds": [
+            "3746092211453654219"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DP8ywTHjXTL/"
+          ]
+        },
+        {
+          "id": "post:3724231267530050083",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 45.",
+          "confidence": "high",
+          "postIds": [
+            "3724231267530050083"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DOvIJsiiAoj/"
+          ]
+        },
+        {
+          "id": "post:3666788856090560482",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 45.",
+          "confidence": "high",
+          "postIds": [
+            "3666788856090560482"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DLjDQmBo4fi/"
+          ]
+        },
+        {
+          "id": "post:3601035192919381741",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 40.",
+          "confidence": "high",
+          "postIds": [
+            "3601035192919381741"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DH5cm3Jo9bt/"
+          ]
+        },
+        {
+          "id": "post:3617691037933295790",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 39.",
+          "confidence": "high",
+          "postIds": [
+            "3617691037933295790"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DI0ntTnINiu/"
+          ]
+        },
+        {
+          "id": "post:3577785295287617796",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 33.",
+          "confidence": "high",
+          "postIds": [
+            "3577785295287617796"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DGm2MUoPAkE/"
+          ]
+        },
+        {
+          "id": "post:3718444545668034005",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, visual_signal; score 31.",
+          "confidence": "high",
+          "postIds": [
+            "3718444545668034005"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DOakZz1iC3V/"
+          ]
+        },
+        {
+          "id": "post:3616327917637857671",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 28.",
+          "confidence": "high",
+          "postIds": [
+            "3616327917637857671"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DIvxxS6IfGH/"
+          ]
+        },
+        {
+          "id": "post:3579785447675359435",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, visual_signal; score 27.",
+          "confidence": "high",
+          "postIds": [
+            "3579785447675359435"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DGt8-XszXDL/"
+          ]
+        },
+        {
+          "id": "cluster:lifestyle_and_travel",
+          "type": "content_cluster",
+          "label": "lifestyle_and_travel",
+          "detail": "1 selected posts match keywords: travel, city, hotel, trip, путешествие, город",
+          "confidence": "medium",
+          "postIds": [
+            "3774971866193113955"
+          ]
+        },
+        {
+          "id": "audience:high_comment_posts",
+          "type": "audience",
+          "label": "High-comment posts",
+          "detail": "medium comment density across selected posts.",
+          "confidence": "medium",
+          "postIds": [
+            "3679444295634544817",
+            "3841112762961401703",
+            "3601035192919381741",
+            "3774971866193113955",
+            "3666788856090560482"
+          ]
+        },
+        {
+          "id": "risk:vision_gaps",
+          "type": "risk",
+          "label": "Vision evidence gaps",
+          "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+          "confidence": "high",
+          "postIds": [
+            "3679444295634544817",
+            "3774971866193113955",
+            "3841112762961401703",
+            "3746092211453654219",
+            "3724231267530050083",
+            "3666788856090560482",
+            "3601035192919381741",
+            "3617691037933295790"
+          ]
+        },
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3679444295634544817",
+            "3841112762961401703",
+            "3601035192919381741"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DMQAxekImix/",
+            "https://www.instagram.com/p/DVOX7TyiJdn/",
+            "https://www.instagram.com/p/DH5cm3Jo9bt/"
+          ]
+        },
+        {
+          "id": "mode:standard",
+          "type": "mode",
+          "label": "standard priorities",
+          "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+          "confidence": "high"
+        }
+      ]
+    }
+  },
+  "metrics": {
+    "followersCount": 1290,
+    "followsCount": 628,
+    "postsCount": 141,
+    "analyzedPosts": 12,
+    "avgLikes": 195.08333333333334,
+    "avgComments": 3,
+    "medianLikes": 207.5,
+    "medianComments": 2.5,
+    "engagementRate": 15.355297157622742,
+    "frequencyDays": 33.02959595959596,
+    "pinnedPostsCount": 0,
+    "uniqueLocations": [
+      "Gallipoli, Italy",
+      "Venezia, Italia",
+      "Tbilisi, Georgia",
+      "Zürich, Switzerland",
+      "Barcelona, Spain",
+      "Алтай Актру",
+      "Sheregesh, Kemerovskaya Oblast', Russia",
+      "Dubai,UAE",
+      "Sri Sri Ravishankar Ashram",
+      "Florence, Italy",
+      "Desert Safari Dubai",
+      "Goa, India"
+    ],
+    "uniqueMusic": [],
+    "relatedProfiles": [],
+    "topPostsByLikes": [
+      {
+        "postId": "3679444295634544817",
+        "url": "https://www.instagram.com/p/DMQAxekImix/",
+        "likesCount": 263
+      },
+      {
+        "postId": "3579785447675359435",
+        "url": "https://www.instagram.com/p/DGt8-XszXDL/",
+        "likesCount": 237
+      },
+      {
+        "postId": "3601035192919381741",
+        "url": "https://www.instagram.com/p/DH5cm3Jo9bt/",
+        "likesCount": 216
+      }
+    ],
+    "topPostsByComments": [
+      {
+        "postId": "3679444295634544817",
+        "url": "https://www.instagram.com/p/DMQAxekImix/",
+        "commentsCount": 11
+      },
+      {
+        "postId": "3841112762961401703",
+        "url": "https://www.instagram.com/p/DVOX7TyiJdn/",
+        "commentsCount": 7
+      },
+      {
+        "postId": "3601035192919381741",
+        "url": "https://www.instagram.com/p/DH5cm3Jo9bt/",
+        "commentsCount": 5
+      }
+    ],
+    "postTypeDistribution": {
+      "Carousel": 9,
+      "Video": 3
+    },
+    "hashtagFrequency": {},
+    "mentionFrequency": {},
+    "digitalCircle": [
+      {
+        "username": "kholopovaanna",
+        "type": "tagged",
+        "score": 2,
+        "lastInteractionDate": "2025-04-24T08:13:20.000Z",
+        "details": [
+          "tagged in post: https://www.instagram.com/p/DI0ntTnINiu/"
+        ]
+      }
+    ]
+  },
+  "sourceMap": [
+    {
+      "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+      "postId": "3774971866193113955",
+      "label": "[3774971866193113955] caption: Пост о Венеции как городе любви и любимых фильмах (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DGm2MUoPAkE/",
+      "postId": "3577785295287617796",
+      "label": "[3577785295287617796] caption: Размышления об ашраме и позиции наблюдателя (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DH5cm3Jo9bt/",
+      "postId": "3601035192919381741",
+      "label": "[3601035192919381741] location: Шерегеш, регулярные поездки (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DP8ywTHjXTL/",
+      "postId": "3746092211453654219",
+      "label": "[3746092211453654219] caption: Юмористическая цитата про Цюрих и Сибирь (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+      "postId": "3774971866193113955",
+      "label": "[3774971866193113955] caption: Эмодзи 🤞🏼 и личное отношение к городу (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DMQAxekImix/",
+      "postId": "3679444295634544817",
+      "label": "[3679444295634544817] metrics: 263 likes, 11 comments — максимум в выборке (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DMQAxekImix/",
+      "postId": "3679444295634544817",
+      "label": "[3679444295634544817] comments: 11 комментариев — наибольшее значение (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DVOX7TyiJdn/",
+      "postId": "3841112762961401703",
+      "label": "[3841112762961401703] comments: 7 комментариев (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DGm2MUoPAkE/",
+      "postId": "3577785295287617796",
+      "label": "[3577785295287617796] caption: Философская цитата и отсылка к Пелевину (high)"
+    },
+    {
+      "label": "profileSignals: professionHints: фотограф (medium) profile metadata"
+    },
+    {
+      "label": "metrics: hashtagFrequency и mentionFrequency пустые (high) profile metadata"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+      "postId": "3774971866193113955",
+      "label": "[3774971866193113955] caption: Личная рефлексия о Венеции без хэштегов (high)"
+    },
+    {
+      "label": "metrics: hashtagFrequency и mentionFrequency пустые, pinnedPostsCount = 0 (high) profile metadata"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+      "postId": "3774971866193113955",
+      "label": "[3774971866193113955] caption: Любовь к Венеции и travel-фото (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+      "postId": "3774971866193113955",
+      "label": "[3774971866193113955] location: Венеция (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DH5cm3Jo9bt/",
+      "postId": "3601035192919381741",
+      "label": "[3601035192919381741] location: Шерегеш (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+      "postId": "3774971866193113955",
+      "label": "[3774971866193113955] caption: Венеция как город любви (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DGm2MUoPAkE/",
+      "postId": "3577785295287617796",
+      "label": "[3577785295287617796] caption: Ашрам и цитата Пелевина (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+      "postId": "3774971866193113955",
+      "label": "[3774971866193113955] caption: Венеция и фильмы (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DGm2MUoPAkE/",
+      "postId": "3577785295287617796",
+      "label": "[3577785295287617796] caption: Ашрам и Пелевин (high)"
+    },
+    {
+      "label": "profileSignals: locationHints: 10+ уникальных локаций (medium) profile metadata"
+    },
+    {
+      "url": "https://www.instagram.com/p/DMQAxekImix/",
+      "postId": "3679444295634544817",
+      "label": "[3679444295634544817] metrics: 263 likes, 11 comments — highest engagement (high)"
+    },
+    {
+      "label": "metrics: 12 проанализированных постов из 141 (high) profile metadata"
+    },
+    {
+      "label": "metrics: postTypeDistribution: Carousel 9, Video 3 (high) profile metadata"
+    },
+    {
+      "label": "risk: Vision evidence gaps — 12 постов (high) profile metadata"
+    },
+    {
+      "label": "metrics: Отсутствие hashtagFrequency и mentionFrequency (high) profile metadata"
+    }
+  ],
+  "posts": [
+    {
+      "id": "3679444295634544817",
+      "type": "Carousel",
+      "timestamp": "2025-07-18T13:06:02.000Z",
+      "url": "https://www.instagram.com/p/DMQAxekImix/",
+      "likesCount": 263,
+      "commentsCount": 11,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3774971866193113955",
+      "type": "Carousel",
+      "timestamp": "2025-11-27T08:22:15.000Z",
+      "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+      "caption": "Разбирать фотографии из путешествий оказалось для меня одной из самых сложных задач,но пусть такие задачи и дальше остаются самыми сложными в моей жизни 🤞🏼\n\nВенеция была, есть и будет одним из моих самых любимых городов. Наверное, потому что почти все мои любимые фильмы сняты именно там. И город любви для меня совсем не Париж. Любовь - это определенно Венеция. Тысячу раз Венеция",
+      "likesCount": 176,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3841112762961401703",
+      "type": "Video",
+      "timestamp": "2026-02-26T14:36:32.000Z",
+      "url": "https://www.instagram.com/p/DVOX7TyiJdn/",
+      "likesCount": 99,
+      "commentsCount": 7,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3746092211453654219",
+      "type": "Carousel",
+      "timestamp": "2025-10-18T12:03:32.000Z",
+      "url": "https://www.instagram.com/p/DP8ywTHjXTL/",
+      "caption": "«Душой я с Вами на каторге в Сибири, а телом,к сожалению,здесь,в Цюрихе» 🤭",
+      "likesCount": 215,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3724231267530050083",
+      "type": "Carousel",
+      "timestamp": "2025-09-18T08:09:45.000Z",
+      "url": "https://www.instagram.com/p/DOvIJsiiAoj/",
+      "caption": "🇪🇸",
+      "likesCount": 209,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3666788856090560482",
+      "type": "Carousel",
+      "timestamp": "2025-07-01T02:01:56.000Z",
+      "url": "https://www.instagram.com/p/DLjDQmBo4fi/",
+      "likesCount": 203,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3601035192919381741",
+      "type": "Carousel",
+      "timestamp": "2025-04-01T08:41:08.000Z",
+      "url": "https://www.instagram.com/p/DH5cm3Jo9bt/",
+      "caption": "-Едем в Геш через 2 часа?\n-А когда не ехали🙂‍↕️",
+      "likesCount": 216,
+      "commentsCount": 5,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3617691037933295790",
+      "type": "Carousel",
+      "timestamp": "2025-04-24T08:13:20.000Z",
+      "url": "https://www.instagram.com/p/DI0ntTnINiu/",
+      "caption": "Our UAE weekends was like: 🫦",
+      "likesCount": 196,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [
+        "kholopovaanna"
+      ]
+    },
+    {
+      "id": "3577785295287617796",
+      "type": "Carousel",
+      "timestamp": "2025-02-28T06:47:44.000Z",
+      "url": "https://www.instagram.com/p/DGm2MUoPAkE/",
+      "caption": "Ашрам - оазис в Индии,в котором ты неизбежно познаешь истину. Одно из знаний ,которое я услышала во время пребывания в Ашраме: «Ты - это не твои мысли и чувства.\nТы тот, кто стоит за ними». Когда эмоции,объекты,удовольствия перестают управлять нами, нашими выборами и действиями, мы становимся в позицию наблюдателя. Наблюдай и не реагируй и ты увидишь мир ,его возможности и изобилия гораздо шире.\nКак говорил Пелевин: «истина настолько проста,что за нее даже обидно».",
+      "likesCount": 206,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3718444545668034005",
+      "type": "Video",
+      "timestamp": "2025-09-10T08:41:12.000Z",
+      "url": "https://www.instagram.com/p/DOakZz1iC3V/",
+      "caption": "Если бы Флоренции не существовало,ее обязательно бы выдумали",
+      "likesCount": 105,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3616327917637857671",
+      "type": "Carousel",
+      "timestamp": "2025-04-22T11:05:03.000Z",
+      "url": "https://www.instagram.com/p/DIvxxS6IfGH/",
+      "caption": "Шейхов не нашли,нашли верблюдов",
+      "likesCount": 216,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3579785447675359435",
+      "type": "Video",
+      "timestamp": "2025-03-03T01:02:37.000Z",
+      "url": "https://www.instagram.com/p/DGt8-XszXDL/",
+      "caption": "The Indian Ocean therapy",
+      "likesCount": 237,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    }
+  ],
+  "vision": [
+    {
+      "postId": "3679444295634544817",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3774971866193113955",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3841112762961401703",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3746092211453654219",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3724231267530050083",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3666788856090560482",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3601035192919381741",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3617691037933295790",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3577785295287617796",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3718444545668034005",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3616327917637857671",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3579785447675359435",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    }
+  ],
+  "analysisContext": {
+    "selectedPostIds": [
+      "3679444295634544817",
+      "3774971866193113955",
+      "3841112762961401703",
+      "3746092211453654219",
+      "3724231267530050083",
+      "3666788856090560482",
+      "3601035192919381741",
+      "3617691037933295790",
+      "3577785295287617796",
+      "3718444545668034005",
+      "3616327917637857671",
+      "3579785447675359435"
+    ],
+    "postSelection": [
+      {
+        "postId": "3679444295634544817",
+        "url": "https://www.instagram.com/p/DMQAxekImix/",
+        "timestamp": "2025-07-18T13:06:02.000Z",
+        "score": 77,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "high_comments",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3774971866193113955",
+        "url": "https://www.instagram.com/p/DRjZOlhiLNj/",
+        "timestamp": "2025-11-27T08:22:15.000Z",
+        "score": 74,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "format_diversity",
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3841112762961401703",
+        "url": "https://www.instagram.com/p/DVOX7TyiJdn/",
+        "timestamp": "2026-02-26T14:36:32.000Z",
+        "score": 70,
+        "reasons": [
+          "recent",
+          "high_comments",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3746092211453654219",
+        "url": "https://www.instagram.com/p/DP8ywTHjXTL/",
+        "timestamp": "2025-10-18T12:03:32.000Z",
+        "score": 45,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3724231267530050083",
+        "url": "https://www.instagram.com/p/DOvIJsiiAoj/",
+        "timestamp": "2025-09-18T08:09:45.000Z",
+        "score": 45,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3666788856090560482",
+        "url": "https://www.instagram.com/p/DLjDQmBo4fi/",
+        "timestamp": "2025-07-01T02:01:56.000Z",
+        "score": 45,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3601035192919381741",
+        "url": "https://www.instagram.com/p/DH5cm3Jo9bt/",
+        "timestamp": "2025-04-01T08:41:08.000Z",
+        "score": 40,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3617691037933295790",
+        "url": "https://www.instagram.com/p/DI0ntTnINiu/",
+        "timestamp": "2025-04-24T08:13:20.000Z",
+        "score": 39,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3577785295287617796",
+        "url": "https://www.instagram.com/p/DGm2MUoPAkE/",
+        "timestamp": "2025-02-28T06:47:44.000Z",
+        "score": 33,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3718444545668034005",
+        "url": "https://www.instagram.com/p/DOakZz1iC3V/",
+        "timestamp": "2025-09-10T08:41:12.000Z",
+        "score": 31,
+        "reasons": [
+          "recent",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3616327917637857671",
+        "url": "https://www.instagram.com/p/DIvxxS6IfGH/",
+        "timestamp": "2025-04-22T11:05:03.000Z",
+        "score": 28,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3579785447675359435",
+        "url": "https://www.instagram.com/p/DGt8-XszXDL/",
+        "timestamp": "2025-03-03T01:02:37.000Z",
+        "score": 27,
+        "reasons": [
+          "high_likes",
+          "visual_signal"
+        ]
+      }
+    ],
+    "profileSignals": {
+      "publicContacts": [],
+      "publicLinks": [],
+      "platformHandles": [],
+      "professionHints": [
+        "фотограф"
+      ],
+      "locationHints": [
+        "Gallipoli, Italy",
+        "Venezia, Italia",
+        "Tbilisi, Georgia",
+        "Zürich, Switzerland",
+        "Barcelona, Spain",
+        "Алтай Актру",
+        "Sheregesh, Kemerovskaya Oblast', Russia",
+        "Dubai,UAE",
+        "Sri Sri Ravishankar Ashram",
+        "Florence, Italy"
+      ],
+      "bioKeywords": [
+        "eva"
+      ]
+    },
+    "contentClusters": [
+      {
+        "label": "lifestyle_and_travel",
+        "count": 1,
+        "postIds": [
+          "3774971866193113955"
+        ],
+        "keywords": [
+          "travel",
+          "city",
+          "hotel",
+          "trip",
+          "путешествие",
+          "город"
+        ]
+      }
+    ],
+    "audienceSignals": {
+      "frequentCommenters": [],
+      "repeatedCommentTerms": [],
+      "commentDensity": "medium",
+      "highCommentPostIds": [
+        "3679444295634544817",
+        "3841112762961401703",
+        "3601035192919381741",
+        "3774971866193113955",
+        "3666788856090560482"
+      ]
+    },
+    "riskSignals": [
+      {
+        "id": "risk:vision_gaps",
+        "type": "risk",
+        "label": "Vision evidence gaps",
+        "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+        "confidence": "high",
+        "postIds": [
+          "3679444295634544817",
+          "3774971866193113955",
+          "3841112762961401703",
+          "3746092211453654219",
+          "3724231267530050083",
+          "3666788856090560482",
+          "3601035192919381741",
+          "3617691037933295790"
+        ]
+      }
+    ],
+    "opportunitySignals": [
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3679444295634544817",
+          "3841112762961401703",
+          "3601035192919381741"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DMQAxekImix/",
+          "https://www.instagram.com/p/DVOX7TyiJdn/",
+          "https://www.instagram.com/p/DH5cm3Jo9bt/"
+        ]
+      }
+    ],
+    "modeGuidance": {
+      "mode": "standard",
+      "evidencePriorities": [
+        "recurring themes across selected posts",
+        "audience and comment evidence",
+        "visual/textual patterns",
+        "practical but safe communication recommendations"
+      ],
+      "scoringFocus": [
+        "specificity",
+        "source-backed hypotheses",
+        "actionability",
+        "confidence calibration"
+      ],
+      "cautionRules": [
+        "Avoid personality certainty",
+        "No harassment, doxing, pressure or privacy bypass"
+      ]
+    },
+    "evidenceMap": [
+      {
+        "id": "profile:profession_hints",
+        "type": "profile",
+        "label": "Profession/status hints",
+        "detail": "фотограф",
+        "confidence": "medium"
+      },
+      {
+        "id": "profile:location_hints",
+        "type": "profile",
+        "label": "Coarse location hints",
+        "detail": "Gallipoli, Italy, Venezia, Italia, Tbilisi, Georgia, Zürich, Switzerland, Barcelona, Spain, Алтай Актру, Sheregesh, Kemerovskaya Oblast', Russia, Dubai,UAE, Sri Sri Ravishankar Ashram, Florence, Italy",
+        "confidence": "medium"
+      },
+      {
+        "id": "post:3679444295634544817",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, high_comments, audience_signal, visual_signal; score 77.",
+        "confidence": "high",
+        "postIds": [
+          "3679444295634544817"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DMQAxekImix/"
+        ]
+      },
+      {
+        "id": "post:3774971866193113955",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, format_diversity, profile_signal, audience_signal, visual_signal; score 74.",
+        "confidence": "high",
+        "postIds": [
+          "3774971866193113955"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DRjZOlhiLNj/"
+        ]
+      },
+      {
+        "id": "post:3841112762961401703",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_comments, format_diversity, audience_signal, visual_signal; score 70.",
+        "confidence": "high",
+        "postIds": [
+          "3841112762961401703"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DVOX7TyiJdn/"
+        ]
+      },
+      {
+        "id": "post:3746092211453654219",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, visual_signal; score 45.",
+        "confidence": "high",
+        "postIds": [
+          "3746092211453654219"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DP8ywTHjXTL/"
+        ]
+      },
+      {
+        "id": "post:3724231267530050083",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 45.",
+        "confidence": "high",
+        "postIds": [
+          "3724231267530050083"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DOvIJsiiAoj/"
+        ]
+      },
+      {
+        "id": "post:3666788856090560482",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 45.",
+        "confidence": "high",
+        "postIds": [
+          "3666788856090560482"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DLjDQmBo4fi/"
+        ]
+      },
+      {
+        "id": "post:3601035192919381741",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 40.",
+        "confidence": "high",
+        "postIds": [
+          "3601035192919381741"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DH5cm3Jo9bt/"
+        ]
+      },
+      {
+        "id": "post:3617691037933295790",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 39.",
+        "confidence": "high",
+        "postIds": [
+          "3617691037933295790"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DI0ntTnINiu/"
+        ]
+      },
+      {
+        "id": "post:3577785295287617796",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 33.",
+        "confidence": "high",
+        "postIds": [
+          "3577785295287617796"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DGm2MUoPAkE/"
+        ]
+      },
+      {
+        "id": "post:3718444545668034005",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, visual_signal; score 31.",
+        "confidence": "high",
+        "postIds": [
+          "3718444545668034005"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DOakZz1iC3V/"
+        ]
+      },
+      {
+        "id": "post:3616327917637857671",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 28.",
+        "confidence": "high",
+        "postIds": [
+          "3616327917637857671"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DIvxxS6IfGH/"
+        ]
+      },
+      {
+        "id": "post:3579785447675359435",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, visual_signal; score 27.",
+        "confidence": "high",
+        "postIds": [
+          "3579785447675359435"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DGt8-XszXDL/"
+        ]
+      },
+      {
+        "id": "cluster:lifestyle_and_travel",
+        "type": "content_cluster",
+        "label": "lifestyle_and_travel",
+        "detail": "1 selected posts match keywords: travel, city, hotel, trip, путешествие, город",
+        "confidence": "medium",
+        "postIds": [
+          "3774971866193113955"
+        ]
+      },
+      {
+        "id": "audience:high_comment_posts",
+        "type": "audience",
+        "label": "High-comment posts",
+        "detail": "medium comment density across selected posts.",
+        "confidence": "medium",
+        "postIds": [
+          "3679444295634544817",
+          "3841112762961401703",
+          "3601035192919381741",
+          "3774971866193113955",
+          "3666788856090560482"
+        ]
+      },
+      {
+        "id": "risk:vision_gaps",
+        "type": "risk",
+        "label": "Vision evidence gaps",
+        "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+        "confidence": "high",
+        "postIds": [
+          "3679444295634544817",
+          "3774971866193113955",
+          "3841112762961401703",
+          "3746092211453654219",
+          "3724231267530050083",
+          "3666788856090560482",
+          "3601035192919381741",
+          "3617691037933295790"
+        ]
+      },
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3679444295634544817",
+          "3841112762961401703",
+          "3601035192919381741"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DMQAxekImix/",
+          "https://www.instagram.com/p/DVOX7TyiJdn/",
+          "https://www.instagram.com/p/DH5cm3Jo9bt/"
+        ]
+      },
+      {
+        "id": "mode:standard",
+        "type": "mode",
+        "label": "standard priorities",
+        "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+        "confidence": "high"
+      }
+    ]
+  }
+}

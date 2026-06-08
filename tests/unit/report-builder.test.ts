@@ -147,4 +147,57 @@ describe("buildStrategicReport", () => {
     expect(llm.repairReport).toHaveBeenCalled();
     expect(report.rawText).toBe(safeRaw);
   });
+
+  it("allows profile externalUrl as a grounded source", async () => {
+    const post: InstagramPost = {
+      id: "p1",
+      type: "Image",
+      caption: "public launch",
+      hashtags: [],
+      mentions: [],
+      likesCount: 10,
+      commentsCount: 1,
+      latestComments: [],
+      timestamp: "2026-06-01T00:00:00Z",
+      url: "https://www.instagram.com/p/p1/",
+      isPinned: false,
+      childPosts: [],
+      taggedUsers: []
+    };
+    const profile: InstagramProfile = {
+      username: "alice",
+      followersCount: 100,
+      followsCount: 20,
+      postsCount: 1,
+      externalUrl: "https://example.com/alice",
+      isVerified: false,
+      relatedProfiles: [],
+      posts: [post]
+    };
+    const raw = REQUIRED_SECTIONS.standard
+      .map(
+        (title) =>
+          `[[SECTION]]\n${title}\nПрофиль содержит публичную ссылку в био.\nEvidence:\n- profile link: https://example.com/alice`
+      )
+      .join("\n\n");
+    const llm: LlmProvider = {
+      analyzeVision: vi.fn(async () => []),
+      generateReport: vi.fn(async () => ({
+        rawText: raw,
+        model: "reasoning",
+        promptVersion: "report"
+      })),
+      repairReport: vi.fn(async () => ({
+        rawText: raw,
+        model: "reasoning",
+        promptVersion: "report.repair"
+      })),
+      chat: vi.fn()
+    };
+
+    const report = await buildStrategicReport({ mode: "standard", language: "ru", profile, llm });
+
+    expect(llm.repairReport).not.toHaveBeenCalled();
+    expect(report.summary.warnings).toEqual([]);
+  });
 });

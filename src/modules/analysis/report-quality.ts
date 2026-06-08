@@ -84,6 +84,30 @@ export function evaluateReportQuality(input: {
     });
   }
 
+  if (input.analysisContext?.riskSignals.some((signal) => signal.id === "risk:vision_gaps")) {
+    findings.push({
+      id: "report:vision_evidence_gap",
+      severity: "medium",
+      detail:
+        "Selected visual posts could not be analyzed; visual-pattern claims should be limited."
+    });
+  }
+
+  const audienceSignals = input.analysisContext?.audienceSignals;
+  if (
+    audienceSignals &&
+    audienceSignals.commentDensity !== "none" &&
+    !audienceSignals.frequentCommenters.length &&
+    !audienceSignals.repeatedCommentTerms.length
+  ) {
+    findings.push({
+      id: "report:comments_count_only",
+      severity: "low",
+      detail:
+        "Comment counts exist, but commenter identities and comment text are unavailable for audience-quality analysis."
+    });
+  }
+
   const modeFinding = modeSpecificFinding(input.mode, input.sections, input.metrics);
   if (modeFinding) findings.push(modeFinding);
 

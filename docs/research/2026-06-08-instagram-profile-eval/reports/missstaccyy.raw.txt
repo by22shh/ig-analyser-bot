@@ -1,0 +1,169 @@
+[[SECTION]]
+Основные темы и приоритеты
+Повторяющиеся темы: короткие travel-моменты (Швейцария, Венеция, Шанхай Диснейленд), личные вехи (день рождения «24», диплом). Био минималистично (🤍).
+Evidence:
+- [3902468283497615574] travel: Shanghai Disneyland Park, Magical day 🪄❤️ (high) https://www.instagram.com/p/DYoWjpJGpDW/
+- [3396247716147706866] milestone: Диплом на пять 🩷, NSU (high) https://www.instagram.com/p/C8h5U3CNzvy/
+- [3441622057949313313] swiss: Slow Swiss life 🦭, Lucerne (high) https://www.instagram.com/p/C_DGQb3N7kh/
+Confidence: medium
+Caveats:
+- 12 постов из 23
+- Нет визуального анализа
+
+[[SECTION]]
+Повторяющиеся визуальные и текстовые паттерны
+Подписи минималистичные: 1–4 эмодзи или короткая строка с ❤️/🤍. Карусели доминируют. Визуальные паттерны не анализируются из-за skipped vision.
+Evidence:
+- [3766373022051794113] caption: 24 🤍 (high) https://www.instagram.com/p/DRE2E73AvzB/
+- [3878628768138585623] caption: 🤍🌷🌸💌 (high) https://www.instagram.com/p/DXTqFCUguYX/
+Confidence: low
+Caveats:
+- Только текст подписей
+- Vision пропущен для всех постов
+
+[[SECTION]]
+Поведение и вовлеченность
+ER ~20,16 %. Среднее 115 лайков, 3,5 комментария. Пики комментариев на недавних постах. Интервал публикаций ~63 дня.
+Evidence:
+- [3766373022051794113] metrics: 110 likes, 14 comments (high) https://www.instagram.com/p/DRE2E73AvzB/
+- [3396791555811926473] likes: 180 likes (max) (high) https://www.instagram.com/p/C8j0-xMN2HJ/
+Confidence: medium
+Caveats:
+- 12/23 постов
+- Нет reach-данных
+
+[[SECTION]]
+Аудитория и комментарии
+Medium плотность комментариев. Больше реакций на свежие посты (14, 8, 6). Конкретные темы комментариев в данных отсутствуют.
+Evidence:
+- [3766373022051794113] comments: 14 comments (high) https://www.instagram.com/p/DRE2E73AvzB/
+- [3878628768138585623] comments: 8 comments (high) https://www.instagram.com/p/DXTqFCUguYX/
+Confidence: medium
+Caveats:
+- latestComments пусты
+- Нет повторяющихся терминов
+
+[[SECTION]]
+Стиль общения
+Короткие нейтрально-позитивные подписи или только эмодзи. Стиль в личке неизвестен.
+Evidence:
+- [3722341000816986827] caption: 🏔️❤️ (high) https://www.instagram.com/p/DOoaWsekYrL/
+- [3549966998887312725] caption: 🖤 (high) https://www.instagram.com/p/DFEBC1NCa1V/
+Confidence: medium
+Caveats:
+- Только публичные подписи
+
+[[SECTION]]
+Профессия и статус
+Явных признаков профессии нет. Упомянут диплом НГУ с отличием. Данных недостаточно.
+Evidence:
+- [3396247716147706866] academic: Диплом на пять 🩷, NSU (high) https://www.instagram.com/p/C8h5U3CNzvy/
+Confidence: low
+Caveats:
+- Нет bio/ссылок на работу
+
+[[SECTION]]
+Отличие от типичных аккаунтов
+Малый аккаунт (587) сочетает российский университетский milestone с travel-постами из Европы и Азии. Конкретное сравнение невозможно без нишевой базы.
+Evidence:
+- [3396247716147706866] milestone: Диплом НГУ + travel локации (medium) https://www.instagram.com/p/C8h5U3CNzvy/
+Confidence: low
+Caveats:
+- Нет данных сравнения
+- 12/23 постов
+
+[[SECTION]]
+Отсутствия как сигнал
+Отсутствуют хэштеги, бренд-теги, CTA. Один tagged пользователь (ph.dlsnk).
+Evidence:
+- [3766373022051794113] tag: tagged ph.dlsnk (high) https://www.instagram.com/p/DRE2E73AvzB/
+Confidence: medium
+Caveats:
+- Может быть приватностью
+
+[[SECTION]]
+Потенциальная польза от контакта
+Возможен обмен по travel-локациям (Швейцария, Венеция, Шанхай) и университетской жизни НГУ.
+Evidence:
+- [3441622057949313313] swiss: Slow Swiss life (high) https://www.instagram.com/p/C_DGQb3N7kh/
+- [3396247716147706866] university: Диплом НГУ (high) https://www.instagram.com/p/C8h5U3CNzvy/
+Confidence: medium
+Caveats:
+- Только публичные интересы
+
+[[SECTION]]
+Триггеры и зацепки
+Шанхай Диснейленд, Венеция (Grand Canal), Швейцарские Альпы, диплом НГУ.
+Evidence:
+- [3902468283497615574] location: Shanghai Disneyland Park (high) https://www.instagram.com/p/DYoWjpJGpDW/
+- [3431490927686108990] location: Venice, Italy (high) https://www.instagram.com/p/C-fGtFitMc-/
+Confidence: high
+
+[[SECTION]]
+Коммуникационные рекомендации
+Начинать с комментария к конкретной локации или событию поста. Избегать личных тем и оценок.
+Evidence:
+- [3902468283497615574] hook: Magical day, Shanghai Disneyland (high) https://www.instagram.com/p/DYoWjpJGpDW/
+Confidence: medium
+Caveats:
+- Общие рекомендации
+
+[[SECTION]]
+Готовые фразы для входа в диалог
+1. «Красиво в Шанхае Диснейленде, как вам там?»
+2. «Slow Swiss life — очень атмосферно.»
+3. «Поздравляю с дипломом! НГУ?»
+Evidence:
+- [3902468283497615574] phrase: Shanghai Disneyland post (high) https://www.instagram.com/p/DYoWjpJGpDW/
+- [3441622057949313313] phrase: Slow Swiss life post (high) https://www.instagram.com/p/C_DGQb3N7kh/
+- [3396247716147706866] phrase: Диплом НГУ post (high) https://www.instagram.com/p/C8h5U3CNzvy/
+Confidence: medium
+Caveats:
+- Фразы нейтральные
+
+[[SECTION]]
+Неочевидные наблюдения
+Высокий ER при малой аудитории и редком постинге может говорить о лояльной нишевой аудитории (гипотеза). Разнообразие локаций за короткий период.
+Evidence:
+- [3766373022051794113] er: 14 comments, recent (medium) https://www.instagram.com/p/DRE2E73AvzB/
+Confidence: low
+Caveats:
+- Гипотеза
+- Малая выборка
+
+[[SECTION]]
+Общая оценка ценности профиля
+Интересен для тем travel и университетской жизни в РФ/Европе. Ограничено 12 постами без vision и сторис.
+Evidence:
+- [3396247716147706866] value: Диплом + travel (medium) https://www.instagram.com/p/C8h5U3CNzvy/
+Confidence: medium
+Caveats:
+- 12/23 постов
+- Нет goal
+
+[[SECTION]]
+Поведенческие сигналы
+Предпочтение каруселей (8/12), нерегулярный постинг, пики комментариев на свежих постах, частые ❤️/🤍 в подписях.
+Evidence:
+- [3766373022051794113] format: Carousel, 14 comments (high) https://www.instagram.com/p/DRE2E73AvzB/
+Confidence: medium
+Caveats:
+- Наблюдаемые факты без интерпретации
+
+[[SECTION]]
+Ошибки, слепые зоны, барьеры
+Vision analysis skipped для всех 12 постов. Нет комментариев и сторис. Малая выборка снижает надёжность.
+Evidence:
+- risk: Vision evidence gaps (risk:vision_gaps) (high) profile metadata
+Confidence: high
+Caveats:
+- 12 постов без изображений
+
+[[SECTION]]
+Образ как у бренда
+Личный mood-аккаунт: минималистичные travel и life moments с акцентом на эмоции и локации. Не выглядит рекламным.
+Evidence:
+- [3441622057949313313] mood: Slow Swiss life 🦭 (medium) https://www.instagram.com/p/C_DGQb3N7kh/
+Confidence: medium
+Caveats:
+- На основе подписей

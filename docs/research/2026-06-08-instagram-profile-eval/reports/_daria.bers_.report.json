@@ -1,0 +1,1660 @@
+{
+  "mode": "standard",
+  "username": "_daria.bers_",
+  "language": "ru",
+  "model": "x-ai/grok-4.3",
+  "promptVersion": "report.standard.v4.repair",
+  "sections": [
+    {
+      "title": "Основные темы и приоритеты",
+      "content": "Основной акцент — короткие заметки о поездках и морских локациях. Упоминаются Вьетнам 2026 и несколько мест в Черногории; подписи отражают лёгкие наблюдения за моментом. Био «Мой фотоальбом» подтверждает личный, некоммерческий характер.\n\nEvidence:\n\n- [3902705718197266263] caption: Вьетнам 2026 (high) https://www.instagram.com/p/DYpMixcCKdX/\n\n- [3900718612008670096] caption: Солнечный денек в солнечном Которе (high) https://www.instagram.com/p/DYiIukliBOQ/\n\n- [3901314308789265837] caption: На морюшке (high) https://www.instagram.com/p/DYkQLGciGWt/\n\nConfidence: medium\n\nCaveats:\n\n- Выборка 12 постов из 118\n\n- Нет хэштегов и ссылок в био",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+          "postId": "3902705718197266263",
+          "label": "[3902705718197266263] caption: Вьетнам 2026 (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYiIukliBOQ/",
+          "postId": "3900718612008670096",
+          "label": "[3900718612008670096] caption: Солнечный денек в солнечном Которе (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYkQLGciGWt/",
+          "postId": "3901314308789265837",
+          "label": "[3901314308789265837] caption: На морюшке (high)"
+        }
+      ]
+    },
+    {
+      "title": "Повторяющиеся визуальные и текстовые паттерны",
+      "content": "Текстовые паттерны: короткие подписи (1–2 предложения) или их отсутствие. Частые упоминания локаций или простых эмоций. Все выбранные посты — карусели. Визуальные паттерны не анализировались из-за технических ограничений.\n\nEvidence:\n\n- [3902718743121788092] caption: Мы там где мы есть или жизнь в легкости (high) https://www.instagram.com/p/DYpPgT2CHy8/\n\n- [3900345839692296959] caption: Подпись отсутствует (high) https://www.instagram.com/p/DYgz-BUCDL_/\n\nConfidence: low\n\nCaveats:\n\n- Vision-анализ всех 12 постов пропущен\n\n- Паттерны только по подписям и метаданным",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+          "postId": "3902718743121788092",
+          "label": "[3902718743121788092] caption: Мы там где мы есть или жизнь в легкости (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYgz-BUCDL_/",
+          "postId": "3900345839692296959",
+          "label": "[3900345839692296959] caption: Подпись отсутствует (high)"
+        }
+      ]
+    },
+    {
+      "title": "Поведение и вовлеченность",
+      "content": "Среднее 100 лайков и 4 комментария на пост. ER ~14 % на выборке 12 постов. Самые комментируемые посты — недавние (май 2026). Частота публикаций в выборке нерегулярна.\n\nEvidence:\n\n- [3902718743121788092] metrics: 136 лайков, 18 комментариев (high) https://www.instagram.com/p/DYpPgT2CHy8/\n\n- [3902705718197266263] metrics: 114 лайков, 10 комментариев (high) https://www.instagram.com/p/DYpMixcCKdX/\n\nConfidence: medium\n\nCaveats:\n\n- Только 12 из 118 постов\n\n- Нет данных о сторис",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+          "postId": "3902718743121788092",
+          "label": "[3902718743121788092] metrics: 136 лайков, 18 комментариев (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+          "postId": "3902705718197266263",
+          "label": "[3902705718197266263] metrics: 114 лайков, 10 комментариев (high)"
+        }
+      ]
+    },
+    {
+      "title": "Аудитория и комментарии",
+      "content": "Плотность комментариев средняя. Конкретные тексты комментариев в предоставленных данных отсутствуют. Высокий отклик у трёх недавних постов.\n\nEvidence:\n\n- [3902718743121788092] audience: 18 комментариев (high) https://www.instagram.com/p/DYpPgT2CHy8/\n\n- [3902705718197266263] audience: 10 комментариев (high) https://www.instagram.com/p/DYpMixcCKdX/\n\nConfidence: low\n\nCaveats:\n\n- Комментарии не приведены в данных\n\n- Выводы только по количеству",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+          "postId": "3902718743121788092",
+          "label": "[3902718743121788092] audience: 18 комментариев (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+          "postId": "3902705718197266263",
+          "label": "[3902705718197266263] audience: 10 комментариев (high)"
+        }
+      ]
+    },
+    {
+      "title": "Стиль общения",
+      "content": "Публичные подписи короткие, нейтрально-лёгкие, с эмодзи в отдельных случаях. Длина — от 1 слова до короткого предложения. Стиль в личных сообщениях неизвестен.\n\nEvidence:\n\n- [3853330872695016817] caption: 💙 (high) https://www.instagram.com/p/DV5yANNCE1x/\n\n- [3900710750758950145] caption: Ляпота (high) https://www.instagram.com/p/DYiG8LOiNUB/\n\nConfidence: medium\n\nCaveats:\n\n- Только публичные подписи",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DV5yANNCE1x/",
+          "postId": "3853330872695016817",
+          "label": "[3853330872695016817] caption: 💙 (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYiG8LOiNUB/",
+          "postId": "3900710750758950145",
+          "label": "[3900710750758950145] caption: Ляпота (high)"
+        }
+      ]
+    },
+    {
+      "title": "Профессия и статус",
+      "content": "Явных указаний на профессию, ссылки или сферу деятельности в био и постах нет. Био содержит только «Мой фотоальбом». Данных недостаточно для каких-либо выводов.\n\nEvidence:\n\n- bio: Мой фотоальбом (high) profile metadata\n\nConfidence: low\n\nCaveats:\n\n- Био содержит только «Мой фотоальбом»\n\n- Нет ссылок и упоминаний работы",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "bio: Мой фотоальбом (high) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Отличие от типичных аккаунтов",
+      "content": "Аккаунт выглядит как личный фотоальбом без коммерческих элементов. На фоне типичных travel-аккаунтов с хэштегами и CTA здесь их практически нет. Уверенность низкая из-за отсутствия сравнительной базы.\n\nEvidence:\n\n- [3902705718197266263] caption: Отсутствие хэштегов (high) https://www.instagram.com/p/DYpMixcCKdX/\n\nConfidence: low\n\nCaveats:\n\n- Нет базы сравнения похожих аккаунтов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+          "postId": "3902705718197266263",
+          "label": "[3902705718197266263] caption: Отсутствие хэштегов (high)"
+        }
+      ]
+    },
+    {
+      "title": "Отсутствия как сигнал",
+      "content": "Отсутствуют брендовые теги, CTA, ссылки, длинные тексты и хэштеги. Это может указывать на некоммерческий, личный формат, но требует осторожной интерпретации.\n\nEvidence:\n\n- [3900345839692296959] caption: Подпись отсутствует (high) https://www.instagram.com/p/DYgz-BUCDL_/\n\nConfidence: medium\n\nCaveats:\n\n- Отсутствие — не всегда намеренный сигнал",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYgz-BUCDL_/",
+          "postId": "3900345839692296959",
+          "label": "[3900345839692296959] caption: Подпись отсутствует (high)"
+        }
+      ]
+    },
+    {
+      "title": "Потенциальная польза от контакта",
+      "content": "Профиль может быть интересен общими темами путешествий по Черногории и Вьетнаму, если собеседник разделяет интерес к этим локациям. Выводы только по публичным интересам.\n\nEvidence:\n\n- [3900717152759973663] location: Kotor, Montenegro (high) https://www.instagram.com/p/DYiIZVjiAcf/\n\nConfidence: low\n\nCaveats:\n\n- Без предположений о готовности к общению",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYiIZVjiAcf/",
+          "postId": "3900717152759973663",
+          "label": "[3900717152759973663] location: Kotor, Montenegro (high)"
+        }
+      ]
+    },
+    {
+      "title": "Триггеры и зацепки",
+      "content": "Безопасные зацепки: упоминания конкретных локаций (Котор, Вьетнам, Белград) и краткие подписи о море или лёгкости. Можно опираться только на эти публичные элементы.\n\nEvidence:\n\n- [3900718612008670096] caption: Солнечный денек в солнечном Которе (high) https://www.instagram.com/p/DYiIukliBOQ/\n\nConfidence: medium\n\nCaveats:\n\n- Только по опубликованным данным",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYiIukliBOQ/",
+          "postId": "3900718612008670096",
+          "label": "[3900718612008670096] caption: Солнечный денек в солнечном Которе (high)"
+        }
+      ]
+    },
+    {
+      "title": "Коммуникационные рекомендации",
+      "content": "Начинать с короткого комментария к конкретной локации или подписи (например, Вьетнам 2026 или Котор). Избегать оценок внешности, личных вопросов и давления. Стиль — короткий и уважительный.\n\nEvidence:\n\n- [3902705718197266263] caption: Вьетнам 2026 (high) https://www.instagram.com/p/DYpMixcCKdX/\n\n- [3900718612008670096] caption: Солнечный денек в солнечном Которе (high) https://www.instagram.com/p/DYiIukliBOQ/\n\nConfidence: medium\n\nCaveats:\n\n- Стиль в личке неизвестен\n\n- Рекомендации только по публичным подписям",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+          "postId": "3902705718197266263",
+          "label": "[3902705718197266263] caption: Вьетнам 2026 (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYiIukliBOQ/",
+          "postId": "3900718612008670096",
+          "label": "[3900718612008670096] caption: Солнечный денек в солнечном Которе (high)"
+        }
+      ]
+    },
+    {
+      "title": "Готовые фразы для входа в диалог",
+      "content": "1. «Интересно выглядел Вьетнам в 2026 году». 2. «Котор выглядит очень солнечно на фото». 3. «Понравилось фото с подписью про жизнь в лёгкости».\n\nEvidence:\n\n- [3902705718197266263] caption: Вьетнам 2026 (high) https://www.instagram.com/p/DYpMixcCKdX/\n\n- [3900718612008670096] caption: Солнечный денек в солнечном Которе (high) https://www.instagram.com/p/DYiIukliBOQ/\n\n- [3902718743121788092] caption: Мы там где мы есть или жизнь в легкости (high) https://www.instagram.com/p/DYpPgT2CHy8/\n\nConfidence: medium\n\nCaveats:\n\n- Фразы должны быть адаптированы под момент",
+      "kind": "phrases",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+          "postId": "3902705718197266263",
+          "label": "[3902705718197266263] caption: Вьетнам 2026 (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYiIukliBOQ/",
+          "postId": "3900718612008670096",
+          "label": "[3900718612008670096] caption: Солнечный денек в солнечном Которе (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+          "postId": "3902718743121788092",
+          "label": "[3902718743121788092] caption: Мы там где мы есть или жизнь в легкости (high)"
+        }
+      ]
+    },
+    {
+      "title": "Неочевидные наблюдения",
+      "content": "Несколько постов имеют высокие лайки при небольшом количестве комментариев; гипотеза — визуальный контент привлекает, но обсуждение ограничено. Выборка мала для устойчивых выводов.\n\nEvidence:\n\n- [3902623459784045836] metrics: 136 лайков, 0 комментариев (high) https://www.instagram.com/p/DYo51wUiLUM/\n\nConfidence: low\n\nCaveats:\n\n- Гипотеза на малой выборке",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYo51wUiLUM/",
+          "postId": "3902623459784045836",
+          "label": "[3902623459784045836] metrics: 136 лайков, 0 комментариев (high)"
+        }
+      ]
+    },
+    {
+      "title": "Общая оценка ценности профиля",
+      "content": "Профиль представляет собой личный travel-фотоальбом с высокой относительной вовлечённостью на выборке. Ценность для контакта ограничена публичными локационными интересами и требует осторожного подхода. Данные по 12 постам не позволяют делать широкие обобщения.\n\nEvidence:\n\n- metrics: ER ~14 % на 748 подписчиках (medium) profile metadata\n\nConfidence: low\n\nCaveats:\n\n- 12 из 118 постов\n\n- Отсутствует vision-анализ",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "metrics: ER ~14 % на 748 подписчиках (medium) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Поведенческие сигналы",
+      "content": "Публикации — исключительно карусели. Посты публикуются сериями (несколько за день в мае 2026). Регулярность в долгосрочной перспективе оценить невозможно по выборке.\n\nEvidence:\n\n- [3902718743121788092] timestamp: 2026-05-22 (high) https://www.instagram.com/p/DYpPgT2CHy8/\n\nConfidence: medium\n\nCaveats:\n\n- Выборка ограничена",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+          "postId": "3902718743121788092",
+          "label": "[3902718743121788092] timestamp: 2026-05-22 (high)"
+        }
+      ]
+    },
+    {
+      "title": "Ошибки, слепые зоны, барьеры",
+      "content": "Главные ограничения: пропущенный vision-анализ всех постов, отсутствие текста комментариев, малая доля проанализированных публикаций (12/118). Контакт затруднён отсутствием публичных контактов и CTA.\n\nEvidence:\n\n- risk: Vision evidence gaps на 12 постах (high) profile metadata\n\nConfidence: high\n\nCaveats:\n\n- Нет данных о сторис и ответах",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "risk: Vision evidence gaps на 12 постах (high) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Образ как у бренда",
+      "content": "Личный, некоммерческий образ: «Мой фотоальбом». Без брендовых атрибутов, хэштегов или призывов к действию. Выглядит как личный mood-board путешествий.\n\nEvidence:\n\n- bio: Мой фотоальбом (high) profile metadata\n\nConfidence: medium\n\nCaveats:\n\n- Нет признаков рекламного продвижения",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "bio: Мой фотоальбом (high) profile metadata"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "bullets": [
+      "ER ~14% на 748 подписчиках по выборке 12 каруселей; самые комментируемые посты — недавние (май 2026) с локациями Вьетнам и Черногория.",
+      "Короткие подписи (1–2 предложения) или их отсутствие, без хэштегов и CTA; био «Мой фотоальбом» указывает личный формат.",
+      "Частые геотеги: Вьетнам, Котор, Стари Бар, Белград; посты публикуются сериями за один день.",
+      "Vision-анализ всех 12 постов недоступен; выводы ограничены метаданными и подписями.",
+      "Отсутствуют брендовые теги, ссылки и коммерческие элементы — аккаунт выглядит как личный фотоальбом."
+    ],
+    "warnings": [],
+    "quality": {
+      "score": 100,
+      "findings": []
+    },
+    "evidence": {
+      "selectedPostIds": [
+        "3902718743121788092",
+        "3902705718197266263",
+        "3901314308789265837",
+        "3902623459784045836",
+        "3901316034074303406",
+        "3901317361982565718",
+        "3900718612008670096",
+        "3900717152759973663",
+        "3900710750758950145",
+        "3786123220051589800",
+        "3900345839692296959",
+        "3853330872695016817"
+      ],
+      "postSelection": [
+        {
+          "postId": "3902718743121788092",
+          "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+          "timestamp": "2026-05-22T14:32:30.000Z",
+          "score": 97,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "high_comments",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3902705718197266263",
+          "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+          "timestamp": "2026-05-22T14:06:37.000Z",
+          "score": 66,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "high_comments",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3901314308789265837",
+          "url": "https://www.instagram.com/p/DYkQLGciGWt/",
+          "timestamp": "2026-05-20T16:02:08.000Z",
+          "score": 52,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3902623459784045836",
+          "url": "https://www.instagram.com/p/DYo51wUiLUM/",
+          "timestamp": "2026-05-22T11:23:11.000Z",
+          "score": 49,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3901316034074303406",
+          "url": "https://www.instagram.com/p/DYkQkNPiNuu/",
+          "timestamp": "2026-05-20T16:05:34.000Z",
+          "score": 46,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3901317361982565718",
+          "url": "https://www.instagram.com/p/DYkQ3h9CO1W/",
+          "timestamp": "2026-05-20T16:08:12.000Z",
+          "score": 39,
+          "reasons": [
+            "recent",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3900718612008670096",
+          "url": "https://www.instagram.com/p/DYiIukliBOQ/",
+          "timestamp": "2026-05-19T20:18:36.000Z",
+          "score": 39,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3900717152759973663",
+          "url": "https://www.instagram.com/p/DYiIZVjiAcf/",
+          "timestamp": "2026-05-19T20:15:42.000Z",
+          "score": 33,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3900710750758950145",
+          "url": "https://www.instagram.com/p/DYiG8LOiNUB/",
+          "timestamp": "2026-05-19T20:02:59.000Z",
+          "score": 28,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3786123220051589800",
+          "url": "https://www.instagram.com/p/DSLAwJHCHqo/",
+          "timestamp": "2025-12-12T17:38:00.000Z",
+          "score": 27,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3900345839692296959",
+          "url": "https://www.instagram.com/p/DYgz-BUCDL_/",
+          "timestamp": "2026-05-19T07:57:58.000Z",
+          "score": 23,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3853330872695016817",
+          "url": "https://www.instagram.com/p/DV5yANNCE1x/",
+          "timestamp": "2026-03-15T11:07:37.000Z",
+          "score": 21,
+          "reasons": [
+            "high_likes",
+            "visual_signal"
+          ]
+        }
+      ],
+      "profileSignals": {
+        "publicContacts": [],
+        "publicLinks": [],
+        "platformHandles": [],
+        "professionHints": [],
+        "locationHints": [
+          "Vietnam",
+          "Montenegro",
+          "Сербия, Белград;",
+          "Kotor, Montenegro",
+          "Stari Bar, Montenegro"
+        ],
+        "bioKeywords": [
+          "берсенева",
+          "даша",
+          "мой",
+          "фотоальбом"
+        ]
+      },
+      "contentClusters": [],
+      "audienceSignals": {
+        "frequentCommenters": [],
+        "repeatedCommentTerms": [],
+        "commentDensity": "medium",
+        "highCommentPostIds": [
+          "3902718743121788092",
+          "3902705718197266263",
+          "3901314308789265837",
+          "3901316034074303406",
+          "3900718612008670096"
+        ]
+      },
+      "riskSignals": [
+        {
+          "id": "risk:vision_gaps",
+          "type": "risk",
+          "label": "Vision evidence gaps",
+          "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+          "confidence": "high",
+          "postIds": [
+            "3902718743121788092",
+            "3902705718197266263",
+            "3901314308789265837",
+            "3902623459784045836",
+            "3901316034074303406",
+            "3901317361982565718",
+            "3900718612008670096",
+            "3900717152759973663"
+          ]
+        }
+      ],
+      "opportunitySignals": [
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3902718743121788092",
+            "3902705718197266263",
+            "3901314308789265837"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYpPgT2CHy8/",
+            "https://www.instagram.com/p/DYpMixcCKdX/",
+            "https://www.instagram.com/p/DYkQLGciGWt/"
+          ]
+        }
+      ],
+      "modeGuidance": {
+        "mode": "standard",
+        "evidencePriorities": [
+          "recurring themes across selected posts",
+          "audience and comment evidence",
+          "visual/textual patterns",
+          "practical but safe communication recommendations"
+        ],
+        "scoringFocus": [
+          "specificity",
+          "source-backed hypotheses",
+          "actionability",
+          "confidence calibration"
+        ],
+        "cautionRules": [
+          "Avoid personality certainty",
+          "No harassment, doxing, pressure or privacy bypass"
+        ]
+      },
+      "evidenceMap": [
+        {
+          "id": "profile:location_hints",
+          "type": "profile",
+          "label": "Coarse location hints",
+          "detail": "Vietnam, Montenegro, Сербия, Белград;, Kotor, Montenegro, Stari Bar, Montenegro",
+          "confidence": "medium"
+        },
+        {
+          "id": "post:3902718743121788092",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, high_comments, format_diversity, audience_signal, visual_signal; score 97.",
+          "confidence": "high",
+          "postIds": [
+            "3902718743121788092"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYpPgT2CHy8/"
+          ]
+        },
+        {
+          "id": "post:3902705718197266263",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, high_comments, audience_signal, visual_signal; score 66.",
+          "confidence": "high",
+          "postIds": [
+            "3902705718197266263"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYpMixcCKdX/"
+          ]
+        },
+        {
+          "id": "post:3901314308789265837",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 52.",
+          "confidence": "high",
+          "postIds": [
+            "3901314308789265837"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYkQLGciGWt/"
+          ]
+        },
+        {
+          "id": "post:3902623459784045836",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, visual_signal; score 49.",
+          "confidence": "high",
+          "postIds": [
+            "3902623459784045836"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYo51wUiLUM/"
+          ]
+        },
+        {
+          "id": "post:3901316034074303406",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 46.",
+          "confidence": "high",
+          "postIds": [
+            "3901316034074303406"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYkQkNPiNuu/"
+          ]
+        },
+        {
+          "id": "post:3901317361982565718",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, audience_signal, visual_signal; score 39.",
+          "confidence": "high",
+          "postIds": [
+            "3901317361982565718"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYkQ3h9CO1W/"
+          ]
+        },
+        {
+          "id": "post:3900718612008670096",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 39.",
+          "confidence": "high",
+          "postIds": [
+            "3900718612008670096"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYiIukliBOQ/"
+          ]
+        },
+        {
+          "id": "post:3900717152759973663",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 33.",
+          "confidence": "high",
+          "postIds": [
+            "3900717152759973663"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYiIZVjiAcf/"
+          ]
+        },
+        {
+          "id": "post:3900710750758950145",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 28.",
+          "confidence": "high",
+          "postIds": [
+            "3900710750758950145"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYiG8LOiNUB/"
+          ]
+        },
+        {
+          "id": "post:3786123220051589800",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 27.",
+          "confidence": "high",
+          "postIds": [
+            "3786123220051589800"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DSLAwJHCHqo/"
+          ]
+        },
+        {
+          "id": "post:3900345839692296959",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 23.",
+          "confidence": "high",
+          "postIds": [
+            "3900345839692296959"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYgz-BUCDL_/"
+          ]
+        },
+        {
+          "id": "post:3853330872695016817",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, visual_signal; score 21.",
+          "confidence": "high",
+          "postIds": [
+            "3853330872695016817"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DV5yANNCE1x/"
+          ]
+        },
+        {
+          "id": "audience:high_comment_posts",
+          "type": "audience",
+          "label": "High-comment posts",
+          "detail": "medium comment density across selected posts.",
+          "confidence": "medium",
+          "postIds": [
+            "3902718743121788092",
+            "3902705718197266263",
+            "3901314308789265837",
+            "3901316034074303406",
+            "3900718612008670096"
+          ]
+        },
+        {
+          "id": "risk:vision_gaps",
+          "type": "risk",
+          "label": "Vision evidence gaps",
+          "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+          "confidence": "high",
+          "postIds": [
+            "3902718743121788092",
+            "3902705718197266263",
+            "3901314308789265837",
+            "3902623459784045836",
+            "3901316034074303406",
+            "3901317361982565718",
+            "3900718612008670096",
+            "3900717152759973663"
+          ]
+        },
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3902718743121788092",
+            "3902705718197266263",
+            "3901314308789265837"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYpPgT2CHy8/",
+            "https://www.instagram.com/p/DYpMixcCKdX/",
+            "https://www.instagram.com/p/DYkQLGciGWt/"
+          ]
+        },
+        {
+          "id": "mode:standard",
+          "type": "mode",
+          "label": "standard priorities",
+          "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+          "confidence": "high"
+        }
+      ]
+    }
+  },
+  "metrics": {
+    "followersCount": 748,
+    "followsCount": 583,
+    "postsCount": 118,
+    "analyzedPosts": 12,
+    "avgLikes": 100.41666666666667,
+    "avgComments": 4.416666666666667,
+    "medianLikes": 100,
+    "medianComments": 3,
+    "engagementRate": 14.015151515151514,
+    "frequencyDays": 14.624652777777778,
+    "pinnedPostsCount": 0,
+    "uniqueLocations": [
+      "Vietnam",
+      "Montenegro",
+      "Сербия, Белград;",
+      "Kotor, Montenegro",
+      "Stari Bar, Montenegro"
+    ],
+    "uniqueMusic": [],
+    "relatedProfiles": [],
+    "topPostsByLikes": [
+      {
+        "postId": "3902718743121788092",
+        "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+        "likesCount": 136
+      },
+      {
+        "postId": "3902623459784045836",
+        "url": "https://www.instagram.com/p/DYo51wUiLUM/",
+        "likesCount": 136
+      },
+      {
+        "postId": "3901314308789265837",
+        "url": "https://www.instagram.com/p/DYkQLGciGWt/",
+        "likesCount": 121
+      }
+    ],
+    "topPostsByComments": [
+      {
+        "postId": "3902718743121788092",
+        "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+        "commentsCount": 18
+      },
+      {
+        "postId": "3902705718197266263",
+        "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+        "commentsCount": 10
+      },
+      {
+        "postId": "3901314308789265837",
+        "url": "https://www.instagram.com/p/DYkQLGciGWt/",
+        "commentsCount": 6
+      }
+    ],
+    "postTypeDistribution": {
+      "Carousel": 12
+    },
+    "hashtagFrequency": {},
+    "mentionFrequency": {},
+    "digitalCircle": [
+      {
+        "username": "tuckersasha",
+        "type": "tagged",
+        "score": 3,
+        "lastInteractionDate": "2026-05-22T14:32:30.000Z",
+        "details": [
+          "tagged in post: https://www.instagram.com/p/DYpPgT2CHy8/"
+        ]
+      },
+      {
+        "username": "_katub_",
+        "type": "tagged",
+        "score": 3,
+        "lastInteractionDate": "2026-05-22T11:23:11.000Z",
+        "details": [
+          "tagged in post: https://www.instagram.com/p/DYo51wUiLUM/"
+        ]
+      }
+    ]
+  },
+  "sourceMap": [
+    {
+      "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+      "postId": "3902705718197266263",
+      "label": "[3902705718197266263] caption: Вьетнам 2026 (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYiIukliBOQ/",
+      "postId": "3900718612008670096",
+      "label": "[3900718612008670096] caption: Солнечный денек в солнечном Которе (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYkQLGciGWt/",
+      "postId": "3901314308789265837",
+      "label": "[3901314308789265837] caption: На морюшке (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+      "postId": "3902718743121788092",
+      "label": "[3902718743121788092] caption: Мы там где мы есть или жизнь в легкости (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYgz-BUCDL_/",
+      "postId": "3900345839692296959",
+      "label": "[3900345839692296959] caption: Подпись отсутствует (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+      "postId": "3902718743121788092",
+      "label": "[3902718743121788092] metrics: 136 лайков, 18 комментариев (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+      "postId": "3902705718197266263",
+      "label": "[3902705718197266263] metrics: 114 лайков, 10 комментариев (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+      "postId": "3902718743121788092",
+      "label": "[3902718743121788092] audience: 18 комментариев (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+      "postId": "3902705718197266263",
+      "label": "[3902705718197266263] audience: 10 комментариев (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DV5yANNCE1x/",
+      "postId": "3853330872695016817",
+      "label": "[3853330872695016817] caption: 💙 (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYiG8LOiNUB/",
+      "postId": "3900710750758950145",
+      "label": "[3900710750758950145] caption: Ляпота (high)"
+    },
+    {
+      "label": "bio: Мой фотоальбом (high) profile metadata"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+      "postId": "3902705718197266263",
+      "label": "[3902705718197266263] caption: Отсутствие хэштегов (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYgz-BUCDL_/",
+      "postId": "3900345839692296959",
+      "label": "[3900345839692296959] caption: Подпись отсутствует (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYiIZVjiAcf/",
+      "postId": "3900717152759973663",
+      "label": "[3900717152759973663] location: Kotor, Montenegro (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYiIukliBOQ/",
+      "postId": "3900718612008670096",
+      "label": "[3900718612008670096] caption: Солнечный денек в солнечном Которе (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+      "postId": "3902705718197266263",
+      "label": "[3902705718197266263] caption: Вьетнам 2026 (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYiIukliBOQ/",
+      "postId": "3900718612008670096",
+      "label": "[3900718612008670096] caption: Солнечный денек в солнечном Которе (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+      "postId": "3902705718197266263",
+      "label": "[3902705718197266263] caption: Вьетнам 2026 (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYiIukliBOQ/",
+      "postId": "3900718612008670096",
+      "label": "[3900718612008670096] caption: Солнечный денек в солнечном Которе (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+      "postId": "3902718743121788092",
+      "label": "[3902718743121788092] caption: Мы там где мы есть или жизнь в легкости (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYo51wUiLUM/",
+      "postId": "3902623459784045836",
+      "label": "[3902623459784045836] metrics: 136 лайков, 0 комментариев (high)"
+    },
+    {
+      "label": "metrics: ER ~14 % на 748 подписчиках (medium) profile metadata"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+      "postId": "3902718743121788092",
+      "label": "[3902718743121788092] timestamp: 2026-05-22 (high)"
+    },
+    {
+      "label": "risk: Vision evidence gaps на 12 постах (high) profile metadata"
+    },
+    {
+      "label": "bio: Мой фотоальбом (high) profile metadata"
+    }
+  ],
+  "posts": [
+    {
+      "id": "3902718743121788092",
+      "type": "Carousel",
+      "timestamp": "2026-05-22T14:32:30.000Z",
+      "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+      "caption": "Мы там где мы есть или жизнь в легкости",
+      "likesCount": 136,
+      "commentsCount": 18,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [
+        "tuckersasha"
+      ]
+    },
+    {
+      "id": "3902705718197266263",
+      "type": "Carousel",
+      "timestamp": "2026-05-22T14:06:37.000Z",
+      "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+      "caption": "Вьетнам 2026",
+      "likesCount": 114,
+      "commentsCount": 10,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3901314308789265837",
+      "type": "Carousel",
+      "timestamp": "2026-05-20T16:02:08.000Z",
+      "url": "https://www.instagram.com/p/DYkQLGciGWt/",
+      "caption": "На морюшке",
+      "likesCount": 121,
+      "commentsCount": 6,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3902623459784045836",
+      "type": "Carousel",
+      "timestamp": "2026-05-22T11:23:11.000Z",
+      "url": "https://www.instagram.com/p/DYo51wUiLUM/",
+      "caption": "Быть твоей сестрой самая большая радость в моей жизни 🤍🤍🤍",
+      "likesCount": 136,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [
+        "_katub_"
+      ]
+    },
+    {
+      "id": "3901316034074303406",
+      "type": "Carousel",
+      "timestamp": "2026-05-20T16:05:34.000Z",
+      "url": "https://www.instagram.com/p/DYkQkNPiNuu/",
+      "caption": "Русалочку выбросило на скалы, и она решила пофоткаться",
+      "likesCount": 100,
+      "commentsCount": 4,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3901317361982565718",
+      "type": "Carousel",
+      "timestamp": "2026-05-20T16:08:12.000Z",
+      "url": "https://www.instagram.com/p/DYkQ3h9CO1W/",
+      "likesCount": 67,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3900718612008670096",
+      "type": "Carousel",
+      "timestamp": "2026-05-19T20:18:36.000Z",
+      "url": "https://www.instagram.com/p/DYiIukliBOQ/",
+      "caption": "Солнечный денек в солнечном Которе",
+      "likesCount": 90,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3900717152759973663",
+      "type": "Carousel",
+      "timestamp": "2026-05-19T20:15:42.000Z",
+      "url": "https://www.instagram.com/p/DYiIZVjiAcf/",
+      "likesCount": 72,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3900710750758950145",
+      "type": "Carousel",
+      "timestamp": "2026-05-19T20:02:59.000Z",
+      "url": "https://www.instagram.com/p/DYiG8LOiNUB/",
+      "caption": "Ляпота",
+      "likesCount": 100,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3786123220051589800",
+      "type": "Carousel",
+      "timestamp": "2025-12-12T17:38:00.000Z",
+      "url": "https://www.instagram.com/p/DSLAwJHCHqo/",
+      "caption": "Немножечко балуюсь",
+      "likesCount": 101,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3900345839692296959",
+      "type": "Carousel",
+      "timestamp": "2026-05-19T07:57:58.000Z",
+      "url": "https://www.instagram.com/p/DYgz-BUCDL_/",
+      "likesCount": 79,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3853330872695016817",
+      "type": "Carousel",
+      "timestamp": "2026-03-15T11:07:37.000Z",
+      "url": "https://www.instagram.com/p/DV5yANNCE1x/",
+      "caption": "💙",
+      "likesCount": 89,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    }
+  ],
+  "vision": [
+    {
+      "postId": "3902718743121788092",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3902705718197266263",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3901314308789265837",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3902623459784045836",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3901316034074303406",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3901317361982565718",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3900718612008670096",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3900717152759973663",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3900710750758950145",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3786123220051589800",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3900345839692296959",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3853330872695016817",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    }
+  ],
+  "analysisContext": {
+    "selectedPostIds": [
+      "3902718743121788092",
+      "3902705718197266263",
+      "3901314308789265837",
+      "3902623459784045836",
+      "3901316034074303406",
+      "3901317361982565718",
+      "3900718612008670096",
+      "3900717152759973663",
+      "3900710750758950145",
+      "3786123220051589800",
+      "3900345839692296959",
+      "3853330872695016817"
+    ],
+    "postSelection": [
+      {
+        "postId": "3902718743121788092",
+        "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+        "timestamp": "2026-05-22T14:32:30.000Z",
+        "score": 97,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "high_comments",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3902705718197266263",
+        "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+        "timestamp": "2026-05-22T14:06:37.000Z",
+        "score": 66,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "high_comments",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3901314308789265837",
+        "url": "https://www.instagram.com/p/DYkQLGciGWt/",
+        "timestamp": "2026-05-20T16:02:08.000Z",
+        "score": 52,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3902623459784045836",
+        "url": "https://www.instagram.com/p/DYo51wUiLUM/",
+        "timestamp": "2026-05-22T11:23:11.000Z",
+        "score": 49,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3901316034074303406",
+        "url": "https://www.instagram.com/p/DYkQkNPiNuu/",
+        "timestamp": "2026-05-20T16:05:34.000Z",
+        "score": 46,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3901317361982565718",
+        "url": "https://www.instagram.com/p/DYkQ3h9CO1W/",
+        "timestamp": "2026-05-20T16:08:12.000Z",
+        "score": 39,
+        "reasons": [
+          "recent",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3900718612008670096",
+        "url": "https://www.instagram.com/p/DYiIukliBOQ/",
+        "timestamp": "2026-05-19T20:18:36.000Z",
+        "score": 39,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3900717152759973663",
+        "url": "https://www.instagram.com/p/DYiIZVjiAcf/",
+        "timestamp": "2026-05-19T20:15:42.000Z",
+        "score": 33,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3900710750758950145",
+        "url": "https://www.instagram.com/p/DYiG8LOiNUB/",
+        "timestamp": "2026-05-19T20:02:59.000Z",
+        "score": 28,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3786123220051589800",
+        "url": "https://www.instagram.com/p/DSLAwJHCHqo/",
+        "timestamp": "2025-12-12T17:38:00.000Z",
+        "score": 27,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3900345839692296959",
+        "url": "https://www.instagram.com/p/DYgz-BUCDL_/",
+        "timestamp": "2026-05-19T07:57:58.000Z",
+        "score": 23,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3853330872695016817",
+        "url": "https://www.instagram.com/p/DV5yANNCE1x/",
+        "timestamp": "2026-03-15T11:07:37.000Z",
+        "score": 21,
+        "reasons": [
+          "high_likes",
+          "visual_signal"
+        ]
+      }
+    ],
+    "profileSignals": {
+      "publicContacts": [],
+      "publicLinks": [],
+      "platformHandles": [],
+      "professionHints": [],
+      "locationHints": [
+        "Vietnam",
+        "Montenegro",
+        "Сербия, Белград;",
+        "Kotor, Montenegro",
+        "Stari Bar, Montenegro"
+      ],
+      "bioKeywords": [
+        "берсенева",
+        "даша",
+        "мой",
+        "фотоальбом"
+      ]
+    },
+    "contentClusters": [],
+    "audienceSignals": {
+      "frequentCommenters": [],
+      "repeatedCommentTerms": [],
+      "commentDensity": "medium",
+      "highCommentPostIds": [
+        "3902718743121788092",
+        "3902705718197266263",
+        "3901314308789265837",
+        "3901316034074303406",
+        "3900718612008670096"
+      ]
+    },
+    "riskSignals": [
+      {
+        "id": "risk:vision_gaps",
+        "type": "risk",
+        "label": "Vision evidence gaps",
+        "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+        "confidence": "high",
+        "postIds": [
+          "3902718743121788092",
+          "3902705718197266263",
+          "3901314308789265837",
+          "3902623459784045836",
+          "3901316034074303406",
+          "3901317361982565718",
+          "3900718612008670096",
+          "3900717152759973663"
+        ]
+      }
+    ],
+    "opportunitySignals": [
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3902718743121788092",
+          "3902705718197266263",
+          "3901314308789265837"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYpPgT2CHy8/",
+          "https://www.instagram.com/p/DYpMixcCKdX/",
+          "https://www.instagram.com/p/DYkQLGciGWt/"
+        ]
+      }
+    ],
+    "modeGuidance": {
+      "mode": "standard",
+      "evidencePriorities": [
+        "recurring themes across selected posts",
+        "audience and comment evidence",
+        "visual/textual patterns",
+        "practical but safe communication recommendations"
+      ],
+      "scoringFocus": [
+        "specificity",
+        "source-backed hypotheses",
+        "actionability",
+        "confidence calibration"
+      ],
+      "cautionRules": [
+        "Avoid personality certainty",
+        "No harassment, doxing, pressure or privacy bypass"
+      ]
+    },
+    "evidenceMap": [
+      {
+        "id": "profile:location_hints",
+        "type": "profile",
+        "label": "Coarse location hints",
+        "detail": "Vietnam, Montenegro, Сербия, Белград;, Kotor, Montenegro, Stari Bar, Montenegro",
+        "confidence": "medium"
+      },
+      {
+        "id": "post:3902718743121788092",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, high_comments, format_diversity, audience_signal, visual_signal; score 97.",
+        "confidence": "high",
+        "postIds": [
+          "3902718743121788092"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYpPgT2CHy8/"
+        ]
+      },
+      {
+        "id": "post:3902705718197266263",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, high_comments, audience_signal, visual_signal; score 66.",
+        "confidence": "high",
+        "postIds": [
+          "3902705718197266263"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYpMixcCKdX/"
+        ]
+      },
+      {
+        "id": "post:3901314308789265837",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 52.",
+        "confidence": "high",
+        "postIds": [
+          "3901314308789265837"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYkQLGciGWt/"
+        ]
+      },
+      {
+        "id": "post:3902623459784045836",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, visual_signal; score 49.",
+        "confidence": "high",
+        "postIds": [
+          "3902623459784045836"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYo51wUiLUM/"
+        ]
+      },
+      {
+        "id": "post:3901316034074303406",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 46.",
+        "confidence": "high",
+        "postIds": [
+          "3901316034074303406"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYkQkNPiNuu/"
+        ]
+      },
+      {
+        "id": "post:3901317361982565718",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, audience_signal, visual_signal; score 39.",
+        "confidence": "high",
+        "postIds": [
+          "3901317361982565718"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYkQ3h9CO1W/"
+        ]
+      },
+      {
+        "id": "post:3900718612008670096",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 39.",
+        "confidence": "high",
+        "postIds": [
+          "3900718612008670096"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYiIukliBOQ/"
+        ]
+      },
+      {
+        "id": "post:3900717152759973663",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 33.",
+        "confidence": "high",
+        "postIds": [
+          "3900717152759973663"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYiIZVjiAcf/"
+        ]
+      },
+      {
+        "id": "post:3900710750758950145",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 28.",
+        "confidence": "high",
+        "postIds": [
+          "3900710750758950145"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYiG8LOiNUB/"
+        ]
+      },
+      {
+        "id": "post:3786123220051589800",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 27.",
+        "confidence": "high",
+        "postIds": [
+          "3786123220051589800"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DSLAwJHCHqo/"
+        ]
+      },
+      {
+        "id": "post:3900345839692296959",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 23.",
+        "confidence": "high",
+        "postIds": [
+          "3900345839692296959"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYgz-BUCDL_/"
+        ]
+      },
+      {
+        "id": "post:3853330872695016817",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, visual_signal; score 21.",
+        "confidence": "high",
+        "postIds": [
+          "3853330872695016817"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DV5yANNCE1x/"
+        ]
+      },
+      {
+        "id": "audience:high_comment_posts",
+        "type": "audience",
+        "label": "High-comment posts",
+        "detail": "medium comment density across selected posts.",
+        "confidence": "medium",
+        "postIds": [
+          "3902718743121788092",
+          "3902705718197266263",
+          "3901314308789265837",
+          "3901316034074303406",
+          "3900718612008670096"
+        ]
+      },
+      {
+        "id": "risk:vision_gaps",
+        "type": "risk",
+        "label": "Vision evidence gaps",
+        "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+        "confidence": "high",
+        "postIds": [
+          "3902718743121788092",
+          "3902705718197266263",
+          "3901314308789265837",
+          "3902623459784045836",
+          "3901316034074303406",
+          "3901317361982565718",
+          "3900718612008670096",
+          "3900717152759973663"
+        ]
+      },
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3902718743121788092",
+          "3902705718197266263",
+          "3901314308789265837"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYpPgT2CHy8/",
+          "https://www.instagram.com/p/DYpMixcCKdX/",
+          "https://www.instagram.com/p/DYkQLGciGWt/"
+        ]
+      },
+      {
+        "id": "mode:standard",
+        "type": "mode",
+        "label": "standard priorities",
+        "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+        "confidence": "high"
+      }
+    ]
+  }
+}

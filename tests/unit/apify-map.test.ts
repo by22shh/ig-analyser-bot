@@ -63,6 +63,29 @@ describe("mapApifyItems", () => {
     expect(profile.relatedProfiles).toEqual(["heidi"]);
   });
 
+  it("normalizes negative provider counters to zero", () => {
+    const profile = mapApifyItems(
+      "alice",
+      [
+        {
+          ...baseItem,
+          likesCount: -1,
+          commentsCount: -1,
+          followersCount: -1,
+          followsCount: -1,
+          postsCount: -1
+        }
+      ],
+      30
+    );
+
+    expect(profile.followersCount).toBe(0);
+    expect(profile.followsCount).toBe(0);
+    expect(profile.postsCount).toBe(0);
+    expect(profile.posts[0]?.likesCount).toBe(0);
+    expect(profile.posts[0]?.commentsCount).toBe(0);
+  });
+
   it("uses dataSource as parent profile data when Apify attaches it to post items", () => {
     const profile = mapApifyItems(
       "alice",

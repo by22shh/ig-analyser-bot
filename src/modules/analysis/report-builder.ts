@@ -64,10 +64,14 @@ export async function buildStrategicReport(input: {
   let sections = parseReportSections(generated.rawText, input.mode);
   let missing = validateRequiredSections(input.mode, sections);
   let weakSourceSections = weakSourceSectionTitles(sections);
-  const sourceCatalog: SourceCatalogEntry[] = posts.map((post) => ({
-    postId: post.id,
-    url: post.url
-  }));
+  const sourceCatalog: SourceCatalogEntry[] = [
+    { url: `https://www.instagram.com/${profile.username}/` },
+    ...(profile.externalUrl ? [{ url: profile.externalUrl }] : []),
+    ...posts.map((post) => ({
+      postId: post.id,
+      url: post.url
+    }))
+  ];
   let groundingFindings = await runGrounding(input.llm, input.language, sections, sourceCatalog);
   let qualitySummary = evaluateReportQuality({
     mode: input.mode,

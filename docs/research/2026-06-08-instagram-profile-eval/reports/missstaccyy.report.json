@@ -1,0 +1,1678 @@
+{
+  "mode": "standard",
+  "username": "missstaccyy",
+  "language": "ru",
+  "model": "x-ai/grok-4.3",
+  "promptVersion": "report.standard.v4.repair",
+  "sections": [
+    {
+      "title": "Основные темы и приоритеты",
+      "content": "Повторяющиеся темы: короткие travel-моменты (Швейцария, Венеция, Шанхай Диснейленд), личные вехи (день рождения «24», диплом). Био минималистично (🤍).\n\nEvidence:\n\n- [3902468283497615574] travel: Shanghai Disneyland Park, Magical day 🪄❤️ (high) https://www.instagram.com/p/DYoWjpJGpDW/\n\n- [3396247716147706866] milestone: Диплом на пять 🩷, NSU (high) https://www.instagram.com/p/C8h5U3CNzvy/\n\n- [3441622057949313313] swiss: Slow Swiss life 🦭, Lucerne (high) https://www.instagram.com/p/C_DGQb3N7kh/\n\nConfidence: medium\n\nCaveats:\n\n- 12 постов из 23\n\n- Нет визуального анализа",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+          "postId": "3902468283497615574",
+          "label": "[3902468283497615574] travel: Shanghai Disneyland Park, Magical day 🪄❤️ (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+          "postId": "3396247716147706866",
+          "label": "[3396247716147706866] milestone: Диплом на пять 🩷, NSU (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "postId": "3441622057949313313",
+          "label": "[3441622057949313313] swiss: Slow Swiss life 🦭, Lucerne (high)"
+        }
+      ]
+    },
+    {
+      "title": "Повторяющиеся визуальные и текстовые паттерны",
+      "content": "Подписи минималистичные: 1–4 эмодзи или короткая строка с ❤️/🤍. Карусели доминируют. Визуальные паттерны не анализируются из-за skipped vision.\n\nEvidence:\n\n- [3766373022051794113] caption: 24 🤍 (high) https://www.instagram.com/p/DRE2E73AvzB/\n\n- [3878628768138585623] caption: 🤍🌷🌸💌 (high) https://www.instagram.com/p/DXTqFCUguYX/\n\nConfidence: low\n\nCaveats:\n\n- Только текст подписей\n\n- Vision пропущен для всех постов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "postId": "3766373022051794113",
+          "label": "[3766373022051794113] caption: 24 🤍 (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+          "postId": "3878628768138585623",
+          "label": "[3878628768138585623] caption: 🤍🌷🌸💌 (high)"
+        }
+      ]
+    },
+    {
+      "title": "Поведение и вовлеченность",
+      "content": "ER ~20,16 %. Среднее 115 лайков, 3,5 комментария. Пики комментариев на недавних постах. Интервал публикаций ~63 дня.\n\nEvidence:\n\n- [3766373022051794113] metrics: 110 likes, 14 comments (high) https://www.instagram.com/p/DRE2E73AvzB/\n\n- [3396791555811926473] likes: 180 likes (max) (high) https://www.instagram.com/p/C8j0-xMN2HJ/\n\nConfidence: medium\n\nCaveats:\n\n- 12/23 постов\n\n- Нет reach-данных",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "postId": "3766373022051794113",
+          "label": "[3766373022051794113] metrics: 110 likes, 14 comments (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+          "postId": "3396791555811926473",
+          "label": "[3396791555811926473] likes: 180 likes (max) (high)"
+        }
+      ]
+    },
+    {
+      "title": "Аудитория и комментарии",
+      "content": "Medium плотность комментариев. Больше реакций на свежие посты (14, 8, 6). Конкретные темы комментариев в данных отсутствуют.\n\nEvidence:\n\n- [3766373022051794113] comments: 14 comments (high) https://www.instagram.com/p/DRE2E73AvzB/\n\n- [3878628768138585623] comments: 8 comments (high) https://www.instagram.com/p/DXTqFCUguYX/\n\nConfidence: medium\n\nCaveats:\n\n- latestComments пусты\n\n- Нет повторяющихся терминов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "postId": "3766373022051794113",
+          "label": "[3766373022051794113] comments: 14 comments (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+          "postId": "3878628768138585623",
+          "label": "[3878628768138585623] comments: 8 comments (high)"
+        }
+      ]
+    },
+    {
+      "title": "Стиль общения",
+      "content": "Короткие нейтрально-позитивные подписи или только эмодзи. Стиль в личке неизвестен.\n\nEvidence:\n\n- [3722341000816986827] caption: 🏔️❤️ (high) https://www.instagram.com/p/DOoaWsekYrL/\n\n- [3549966998887312725] caption: 🖤 (high) https://www.instagram.com/p/DFEBC1NCa1V/\n\nConfidence: medium\n\nCaveats:\n\n- Только публичные подписи",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DOoaWsekYrL/",
+          "postId": "3722341000816986827",
+          "label": "[3722341000816986827] caption: 🏔️❤️ (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+          "postId": "3549966998887312725",
+          "label": "[3549966998887312725] caption: 🖤 (high)"
+        }
+      ]
+    },
+    {
+      "title": "Профессия и статус",
+      "content": "Явных признаков профессии нет. Упомянут диплом НГУ с отличием. Данных недостаточно.\n\nEvidence:\n\n- [3396247716147706866] academic: Диплом на пять 🩷, NSU (high) https://www.instagram.com/p/C8h5U3CNzvy/\n\nConfidence: low\n\nCaveats:\n\n- Нет bio/ссылок на работу",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+          "postId": "3396247716147706866",
+          "label": "[3396247716147706866] academic: Диплом на пять 🩷, NSU (high)"
+        }
+      ]
+    },
+    {
+      "title": "Отличие от типичных аккаунтов",
+      "content": "Малый аккаунт (587) сочетает российский университетский milestone с travel-постами из Европы и Азии. Конкретное сравнение невозможно без нишевой базы.\n\nEvidence:\n\n- [3396247716147706866] milestone: Диплом НГУ + travel локации (medium) https://www.instagram.com/p/C8h5U3CNzvy/\n\nConfidence: low\n\nCaveats:\n\n- Нет данных сравнения\n\n- 12/23 постов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+          "postId": "3396247716147706866",
+          "label": "[3396247716147706866] milestone: Диплом НГУ + travel локации (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Отсутствия как сигнал",
+      "content": "Отсутствуют хэштеги, бренд-теги, CTA. Один tagged пользователь (ph.dlsnk).\n\nEvidence:\n\n- [3766373022051794113] tag: tagged ph.dlsnk (high) https://www.instagram.com/p/DRE2E73AvzB/\n\nConfidence: medium\n\nCaveats:\n\n- Может быть приватностью",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "postId": "3766373022051794113",
+          "label": "[3766373022051794113] tag: tagged ph.dlsnk (high)"
+        }
+      ]
+    },
+    {
+      "title": "Потенциальная польза от контакта",
+      "content": "Возможен обмен по travel-локациям (Швейцария, Венеция, Шанхай) и университетской жизни НГУ.\n\nEvidence:\n\n- [3441622057949313313] swiss: Slow Swiss life (high) https://www.instagram.com/p/C_DGQb3N7kh/\n\n- [3396247716147706866] university: Диплом НГУ (high) https://www.instagram.com/p/C8h5U3CNzvy/\n\nConfidence: medium\n\nCaveats:\n\n- Только публичные интересы",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "postId": "3441622057949313313",
+          "label": "[3441622057949313313] swiss: Slow Swiss life (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+          "postId": "3396247716147706866",
+          "label": "[3396247716147706866] university: Диплом НГУ (high)"
+        }
+      ]
+    },
+    {
+      "title": "Триггеры и зацепки",
+      "content": "Шанхай Диснейленд, Венеция (Grand Canal), Швейцарские Альпы, диплом НГУ.\n\nEvidence:\n\n- [3902468283497615574] location: Shanghai Disneyland Park (high) https://www.instagram.com/p/DYoWjpJGpDW/\n\n- [3431490927686108990] location: Venice, Italy (high) https://www.instagram.com/p/C-fGtFitMc-/\n\nConfidence: high",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+          "postId": "3902468283497615574",
+          "label": "[3902468283497615574] location: Shanghai Disneyland Park (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C-fGtFitMc-/",
+          "postId": "3431490927686108990",
+          "label": "[3431490927686108990] location: Venice, Italy (high)"
+        }
+      ]
+    },
+    {
+      "title": "Коммуникационные рекомендации",
+      "content": "Начинать с комментария к конкретной локации или событию поста. Избегать личных тем и оценок.\n\nEvidence:\n\n- [3902468283497615574] hook: Magical day, Shanghai Disneyland (high) https://www.instagram.com/p/DYoWjpJGpDW/\n\nConfidence: medium\n\nCaveats:\n\n- Общие рекомендации",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+          "postId": "3902468283497615574",
+          "label": "[3902468283497615574] hook: Magical day, Shanghai Disneyland (high)"
+        }
+      ]
+    },
+    {
+      "title": "Готовые фразы для входа в диалог",
+      "content": "1. «Красиво в Шанхае Диснейленде, как вам там?»\n\n2. «Slow Swiss life — очень атмосферно.»\n\n3. «Поздравляю с дипломом! НГУ?»\n\nEvidence:\n\n- [3902468283497615574] phrase: Shanghai Disneyland post (high) https://www.instagram.com/p/DYoWjpJGpDW/\n\n- [3441622057949313313] phrase: Slow Swiss life post (high) https://www.instagram.com/p/C_DGQb3N7kh/\n\n- [3396247716147706866] phrase: Диплом НГУ post (high) https://www.instagram.com/p/C8h5U3CNzvy/\n\nConfidence: medium\n\nCaveats:\n\n- Фразы нейтральные",
+      "kind": "phrases",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+          "postId": "3902468283497615574",
+          "label": "[3902468283497615574] phrase: Shanghai Disneyland post (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "postId": "3441622057949313313",
+          "label": "[3441622057949313313] phrase: Slow Swiss life post (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+          "postId": "3396247716147706866",
+          "label": "[3396247716147706866] phrase: Диплом НГУ post (high)"
+        }
+      ]
+    },
+    {
+      "title": "Неочевидные наблюдения",
+      "content": "Высокий ER при малой аудитории и редком постинге может говорить о лояльной нишевой аудитории (гипотеза). Разнообразие локаций за короткий период.\n\nEvidence:\n\n- [3766373022051794113] er: 14 comments, recent (medium) https://www.instagram.com/p/DRE2E73AvzB/\n\nConfidence: low\n\nCaveats:\n\n- Гипотеза\n\n- Малая выборка",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "postId": "3766373022051794113",
+          "label": "[3766373022051794113] er: 14 comments, recent (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Общая оценка ценности профиля",
+      "content": "Интересен для тем travel и университетской жизни в РФ/Европе. Ограничено 12 постами без vision и сторис.\n\nEvidence:\n\n- [3396247716147706866] value: Диплом + travel (medium) https://www.instagram.com/p/C8h5U3CNzvy/\n\nConfidence: medium\n\nCaveats:\n\n- 12/23 постов\n\n- Нет goal",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+          "postId": "3396247716147706866",
+          "label": "[3396247716147706866] value: Диплом + travel (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Поведенческие сигналы",
+      "content": "Предпочтение каруселей (8/12), нерегулярный постинг, пики комментариев на свежих постах, частые ❤️/🤍 в подписях.\n\nEvidence:\n\n- [3766373022051794113] format: Carousel, 14 comments (high) https://www.instagram.com/p/DRE2E73AvzB/\n\nConfidence: medium\n\nCaveats:\n\n- Наблюдаемые факты без интерпретации",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "postId": "3766373022051794113",
+          "label": "[3766373022051794113] format: Carousel, 14 comments (high)"
+        }
+      ]
+    },
+    {
+      "title": "Ошибки, слепые зоны, барьеры",
+      "content": "Vision analysis skipped для всех 12 постов. Нет комментариев и сторис. Малая выборка снижает надёжность.\n\nEvidence:\n\n- risk: Vision evidence gaps (risk:vision_gaps) (high) profile metadata\n\nConfidence: high\n\nCaveats:\n\n- 12 постов без изображений",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "risk: Vision evidence gaps (risk:vision_gaps) (high) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Образ как у бренда",
+      "content": "Личный mood-аккаунт: минималистичные travel и life moments с акцентом на эмоции и локации. Не выглядит рекламным.\n\nEvidence:\n\n- [3441622057949313313] mood: Slow Swiss life 🦭 (medium) https://www.instagram.com/p/C_DGQb3N7kh/\n\nConfidence: medium\n\nCaveats:\n\n- На основе подписей",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "postId": "3441622057949313313",
+          "label": "[3441622057949313313] mood: Slow Swiss life 🦭 (medium)"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "bullets": [
+      "Высокий ER ~20% на 587 подписчиков при 12 проанализированных постах из 23 (медиана 111,5 лайков).",
+      "Минимумалистичные подписи (1–4 эмодзи или короткая фраза) и преобладание каруселей (8 из 12).",
+      "Явные локации: Lucerne/Eigenthal (Швейцария), Venice, Shanghai Disneyland, NSU (Новосибирск) — из sourceCatalog.",
+      "Пост с максимумом комментариев (14) — https://www.instagram.com/p/DRE2E73AvzB/ (3766373022051794113).",
+      "Единственное упоминание диплома: «Диплом на пять 🩷» в посте https://www.instagram.com/p/C8h5U3CNzvy/"
+    ],
+    "warnings": [],
+    "quality": {
+      "score": 100,
+      "findings": []
+    },
+    "evidence": {
+      "selectedPostIds": [
+        "3766373022051794113",
+        "3878628768138585623",
+        "3902468283497615574",
+        "3722341000816986827",
+        "3549966998887312725",
+        "3396791555811926473",
+        "3441622057949313313",
+        "3449749113605988036",
+        "3435303631081408608",
+        "3431490927686108990",
+        "3396247716147706866",
+        "3430370911453808782"
+      ],
+      "postSelection": [
+        {
+          "postId": "3766373022051794113",
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "timestamp": "2025-11-15T11:37:53.000Z",
+          "score": 74,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "high_comments",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3878628768138585623",
+          "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+          "timestamp": "2026-04-19T08:50:01.000Z",
+          "score": 61,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "high_comments",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3902468283497615574",
+          "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+          "timestamp": "2026-05-22T06:14:53.000Z",
+          "score": 57,
+          "reasons": [
+            "recent",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3722341000816986827",
+          "url": "https://www.instagram.com/p/DOoaWsekYrL/",
+          "timestamp": "2025-09-15T17:34:07.000Z",
+          "score": 57,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3549966998887312725",
+          "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+          "timestamp": "2025-01-20T21:37:45.000Z",
+          "score": 53,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3396791555811926473",
+          "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+          "timestamp": "2024-06-23T13:25:29.000Z",
+          "score": 39,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3441622057949313313",
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "timestamp": "2024-08-24T09:56:09.000Z",
+          "score": 36,
+          "reasons": [
+            "recent",
+            "format_diversity",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3449749113605988036",
+          "url": "https://www.instagram.com/p/C_f-IqQtB7E/",
+          "timestamp": "2024-09-04T15:02:42.000Z",
+          "score": 35,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3435303631081408608",
+          "url": "https://www.instagram.com/p/C-spnOSN4hg/",
+          "timestamp": "2024-08-15T16:42:06.000Z",
+          "score": 30,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3431490927686108990",
+          "url": "https://www.instagram.com/p/C-fGtFitMc-/",
+          "timestamp": "2024-08-10T10:26:57.000Z",
+          "score": 27,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3396247716147706866",
+          "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+          "timestamp": "2024-06-22T19:24:59.000Z",
+          "score": 25,
+          "reasons": [
+            "high_likes",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3430370911453808782",
+          "url": "https://www.instagram.com/p/C-bICtJCYiO/",
+          "timestamp": "2024-08-08T21:21:40.000Z",
+          "score": 19,
+          "reasons": [
+            "audience_signal",
+            "visual_signal"
+          ]
+        }
+      ],
+      "profileSignals": {
+        "publicContacts": [],
+        "publicLinks": [],
+        "platformHandles": [],
+        "professionHints": [],
+        "locationHints": [
+          "Shanghai Disneyland Park",
+          "Moscow, Russia",
+          "ИНСТ • ресторан • Новосибирск",
+          "Lucerne, Switzerland",
+          "Tivoli The Villa D'este",
+          "Eigenthal, Luzern, Switzerland",
+          "Venice, Italy",
+          "NSU, Novosibirsk State University",
+          "Grand Canal Venice, Italy"
+        ],
+        "bioKeywords": [
+          "𝐴𝑁𝐴𝑆𝑇𝐴𝑆𝐼𝐼𝐴"
+        ]
+      },
+      "contentClusters": [],
+      "audienceSignals": {
+        "frequentCommenters": [],
+        "repeatedCommentTerms": [],
+        "commentDensity": "medium",
+        "highCommentPostIds": [
+          "3766373022051794113",
+          "3878628768138585623",
+          "3549966998887312725",
+          "3722341000816986827",
+          "3396791555811926473"
+        ]
+      },
+      "riskSignals": [
+        {
+          "id": "risk:vision_gaps",
+          "type": "risk",
+          "label": "Vision evidence gaps",
+          "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+          "confidence": "high",
+          "postIds": [
+            "3766373022051794113",
+            "3878628768138585623",
+            "3902468283497615574",
+            "3722341000816986827",
+            "3549966998887312725",
+            "3396791555811926473",
+            "3441622057949313313",
+            "3449749113605988036"
+          ]
+        }
+      ],
+      "opportunitySignals": [
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3766373022051794113",
+            "3878628768138585623",
+            "3549966998887312725"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DRE2E73AvzB/",
+            "https://www.instagram.com/p/DXTqFCUguYX/",
+            "https://www.instagram.com/p/DFEBC1NCa1V/"
+          ]
+        }
+      ],
+      "modeGuidance": {
+        "mode": "standard",
+        "evidencePriorities": [
+          "recurring themes across selected posts",
+          "audience and comment evidence",
+          "visual/textual patterns",
+          "practical but safe communication recommendations"
+        ],
+        "scoringFocus": [
+          "specificity",
+          "source-backed hypotheses",
+          "actionability",
+          "confidence calibration"
+        ],
+        "cautionRules": [
+          "Avoid personality certainty",
+          "No harassment, doxing, pressure or privacy bypass"
+        ]
+      },
+      "evidenceMap": [
+        {
+          "id": "profile:location_hints",
+          "type": "profile",
+          "label": "Coarse location hints",
+          "detail": "Shanghai Disneyland Park, Moscow, Russia, ИНСТ • ресторан • Новосибирск, Lucerne, Switzerland, Tivoli The Villa D'este, Eigenthal, Luzern, Switzerland, Venice, Italy, NSU, Novosibirsk State University, Grand Canal Venice, Italy",
+          "confidence": "medium"
+        },
+        {
+          "id": "post:3766373022051794113",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, high_comments, audience_signal, visual_signal; score 74.",
+          "confidence": "high",
+          "postIds": [
+            "3766373022051794113"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DRE2E73AvzB/"
+          ]
+        },
+        {
+          "id": "post:3878628768138585623",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, high_comments, audience_signal, visual_signal; score 61.",
+          "confidence": "high",
+          "postIds": [
+            "3878628768138585623"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DXTqFCUguYX/"
+          ]
+        },
+        {
+          "id": "post:3902468283497615574",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, format_diversity, audience_signal, visual_signal; score 57.",
+          "confidence": "high",
+          "postIds": [
+            "3902468283497615574"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYoWjpJGpDW/"
+          ]
+        },
+        {
+          "id": "post:3722341000816986827",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, format_diversity, audience_signal, visual_signal; score 57.",
+          "confidence": "high",
+          "postIds": [
+            "3722341000816986827"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DOoaWsekYrL/"
+          ]
+        },
+        {
+          "id": "post:3549966998887312725",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 53.",
+          "confidence": "high",
+          "postIds": [
+            "3549966998887312725"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DFEBC1NCa1V/"
+          ]
+        },
+        {
+          "id": "post:3396791555811926473",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 39.",
+          "confidence": "high",
+          "postIds": [
+            "3396791555811926473"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C8j0-xMN2HJ/"
+          ]
+        },
+        {
+          "id": "post:3441622057949313313",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, format_diversity, visual_signal; score 36.",
+          "confidence": "high",
+          "postIds": [
+            "3441622057949313313"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C_DGQb3N7kh/"
+          ]
+        },
+        {
+          "id": "post:3449749113605988036",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, visual_signal; score 35.",
+          "confidence": "high",
+          "postIds": [
+            "3449749113605988036"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C_f-IqQtB7E/"
+          ]
+        },
+        {
+          "id": "post:3435303631081408608",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, visual_signal; score 30.",
+          "confidence": "high",
+          "postIds": [
+            "3435303631081408608"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C-spnOSN4hg/"
+          ]
+        },
+        {
+          "id": "post:3431490927686108990",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 27.",
+          "confidence": "high",
+          "postIds": [
+            "3431490927686108990"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C-fGtFitMc-/"
+          ]
+        },
+        {
+          "id": "post:3396247716147706866",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, visual_signal; score 25.",
+          "confidence": "high",
+          "postIds": [
+            "3396247716147706866"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C8h5U3CNzvy/"
+          ]
+        },
+        {
+          "id": "post:3430370911453808782",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for audience_signal, visual_signal; score 19.",
+          "confidence": "high",
+          "postIds": [
+            "3430370911453808782"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C-bICtJCYiO/"
+          ]
+        },
+        {
+          "id": "audience:high_comment_posts",
+          "type": "audience",
+          "label": "High-comment posts",
+          "detail": "medium comment density across selected posts.",
+          "confidence": "medium",
+          "postIds": [
+            "3766373022051794113",
+            "3878628768138585623",
+            "3549966998887312725",
+            "3722341000816986827",
+            "3396791555811926473"
+          ]
+        },
+        {
+          "id": "risk:vision_gaps",
+          "type": "risk",
+          "label": "Vision evidence gaps",
+          "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+          "confidence": "high",
+          "postIds": [
+            "3766373022051794113",
+            "3878628768138585623",
+            "3902468283497615574",
+            "3722341000816986827",
+            "3549966998887312725",
+            "3396791555811926473",
+            "3441622057949313313",
+            "3449749113605988036"
+          ]
+        },
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3766373022051794113",
+            "3878628768138585623",
+            "3549966998887312725"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DRE2E73AvzB/",
+            "https://www.instagram.com/p/DXTqFCUguYX/",
+            "https://www.instagram.com/p/DFEBC1NCa1V/"
+          ]
+        },
+        {
+          "id": "mode:standard",
+          "type": "mode",
+          "label": "standard priorities",
+          "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+          "confidence": "high"
+        }
+      ]
+    }
+  },
+  "metrics": {
+    "followersCount": 587,
+    "followsCount": 319,
+    "postsCount": 23,
+    "analyzedPosts": 12,
+    "avgLikes": 114.83333333333333,
+    "avgComments": 3.5,
+    "medianLikes": 111.5,
+    "medianComments": 2.5,
+    "engagementRate": 20.15900056785917,
+    "frequencyDays": 63.4955744949495,
+    "pinnedPostsCount": 0,
+    "uniqueLocations": [
+      "Shanghai Disneyland Park",
+      "Moscow, Russia",
+      "ИНСТ • ресторан • Новосибирск ",
+      "Lucerne, Switzerland",
+      "Tivoli The Villa D'este",
+      "Eigenthal, Luzern, Switzerland",
+      "Venice, Italy",
+      "NSU, Novosibirsk State University",
+      "Grand Canal Venice, Italy"
+    ],
+    "uniqueMusic": [],
+    "relatedProfiles": [],
+    "topPostsByLikes": [
+      {
+        "postId": "3396791555811926473",
+        "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+        "likesCount": 180
+      },
+      {
+        "postId": "3396247716147706866",
+        "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+        "likesCount": 147
+      },
+      {
+        "postId": "3549966998887312725",
+        "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+        "likesCount": 134
+      }
+    ],
+    "topPostsByComments": [
+      {
+        "postId": "3766373022051794113",
+        "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+        "commentsCount": 14
+      },
+      {
+        "postId": "3878628768138585623",
+        "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+        "commentsCount": 8
+      },
+      {
+        "postId": "3549966998887312725",
+        "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+        "commentsCount": 6
+      }
+    ],
+    "postTypeDistribution": {
+      "Carousel": 8,
+      "Image": 3,
+      "Video": 1
+    },
+    "hashtagFrequency": {},
+    "mentionFrequency": {},
+    "digitalCircle": [
+      {
+        "username": "ph.dlsnk",
+        "type": "tagged",
+        "score": 2,
+        "lastInteractionDate": "2025-11-15T11:37:53.000Z",
+        "details": [
+          "tagged in post: https://www.instagram.com/p/DRE2E73AvzB/"
+        ]
+      }
+    ]
+  },
+  "sourceMap": [
+    {
+      "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+      "postId": "3902468283497615574",
+      "label": "[3902468283497615574] travel: Shanghai Disneyland Park, Magical day 🪄❤️ (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+      "postId": "3396247716147706866",
+      "label": "[3396247716147706866] milestone: Диплом на пять 🩷, NSU (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "postId": "3441622057949313313",
+      "label": "[3441622057949313313] swiss: Slow Swiss life 🦭, Lucerne (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "postId": "3766373022051794113",
+      "label": "[3766373022051794113] caption: 24 🤍 (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+      "postId": "3878628768138585623",
+      "label": "[3878628768138585623] caption: 🤍🌷🌸💌 (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "postId": "3766373022051794113",
+      "label": "[3766373022051794113] metrics: 110 likes, 14 comments (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+      "postId": "3396791555811926473",
+      "label": "[3396791555811926473] likes: 180 likes (max) (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "postId": "3766373022051794113",
+      "label": "[3766373022051794113] comments: 14 comments (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+      "postId": "3878628768138585623",
+      "label": "[3878628768138585623] comments: 8 comments (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DOoaWsekYrL/",
+      "postId": "3722341000816986827",
+      "label": "[3722341000816986827] caption: 🏔️❤️ (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+      "postId": "3549966998887312725",
+      "label": "[3549966998887312725] caption: 🖤 (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+      "postId": "3396247716147706866",
+      "label": "[3396247716147706866] academic: Диплом на пять 🩷, NSU (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+      "postId": "3396247716147706866",
+      "label": "[3396247716147706866] milestone: Диплом НГУ + travel локации (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "postId": "3766373022051794113",
+      "label": "[3766373022051794113] tag: tagged ph.dlsnk (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "postId": "3441622057949313313",
+      "label": "[3441622057949313313] swiss: Slow Swiss life (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+      "postId": "3396247716147706866",
+      "label": "[3396247716147706866] university: Диплом НГУ (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+      "postId": "3902468283497615574",
+      "label": "[3902468283497615574] location: Shanghai Disneyland Park (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C-fGtFitMc-/",
+      "postId": "3431490927686108990",
+      "label": "[3431490927686108990] location: Venice, Italy (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+      "postId": "3902468283497615574",
+      "label": "[3902468283497615574] hook: Magical day, Shanghai Disneyland (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+      "postId": "3902468283497615574",
+      "label": "[3902468283497615574] phrase: Shanghai Disneyland post (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "postId": "3441622057949313313",
+      "label": "[3441622057949313313] phrase: Slow Swiss life post (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+      "postId": "3396247716147706866",
+      "label": "[3396247716147706866] phrase: Диплом НГУ post (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "postId": "3766373022051794113",
+      "label": "[3766373022051794113] er: 14 comments, recent (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+      "postId": "3396247716147706866",
+      "label": "[3396247716147706866] value: Диплом + travel (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "postId": "3766373022051794113",
+      "label": "[3766373022051794113] format: Carousel, 14 comments (high)"
+    },
+    {
+      "label": "risk: Vision evidence gaps (risk:vision_gaps) (high) profile metadata"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "postId": "3441622057949313313",
+      "label": "[3441622057949313313] mood: Slow Swiss life 🦭 (medium)"
+    }
+  ],
+  "posts": [
+    {
+      "id": "3766373022051794113",
+      "type": "Carousel",
+      "timestamp": "2025-11-15T11:37:53.000Z",
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "caption": "24 🤍",
+      "likesCount": 110,
+      "commentsCount": 14,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [
+        "ph.dlsnk"
+      ]
+    },
+    {
+      "id": "3878628768138585623",
+      "type": "Carousel",
+      "timestamp": "2026-04-19T08:50:01.000Z",
+      "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+      "caption": "🤍🌷🌸💌",
+      "likesCount": 108,
+      "commentsCount": 8,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3902468283497615574",
+      "type": "Carousel",
+      "timestamp": "2026-05-22T06:14:53.000Z",
+      "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+      "caption": "Magical day 🪄❤️",
+      "likesCount": 77,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3722341000816986827",
+      "type": "Image",
+      "timestamp": "2025-09-15T17:34:07.000Z",
+      "url": "https://www.instagram.com/p/DOoaWsekYrL/",
+      "caption": "🏔️❤️",
+      "likesCount": 110,
+      "commentsCount": 4,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3549966998887312725",
+      "type": "Carousel",
+      "timestamp": "2025-01-20T21:37:45.000Z",
+      "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+      "caption": "🖤",
+      "likesCount": 134,
+      "commentsCount": 6,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3396791555811926473",
+      "type": "Carousel",
+      "timestamp": "2024-06-23T13:25:29.000Z",
+      "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+      "caption": "🩷",
+      "likesCount": 180,
+      "commentsCount": 4,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3441622057949313313",
+      "type": "Video",
+      "timestamp": "2024-08-24T09:56:09.000Z",
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "caption": "Slow Swiss life 🦭",
+      "likesCount": 66,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3449749113605988036",
+      "type": "Image",
+      "timestamp": "2024-09-04T15:02:42.000Z",
+      "url": "https://www.instagram.com/p/C_f-IqQtB7E/",
+      "caption": "🕊️ 🤍",
+      "likesCount": 119,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3435303631081408608",
+      "type": "Carousel",
+      "timestamp": "2024-08-15T16:42:06.000Z",
+      "url": "https://www.instagram.com/p/C-spnOSN4hg/",
+      "caption": "pleasure 🏔️",
+      "likesCount": 113,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3431490927686108990",
+      "type": "Image",
+      "timestamp": "2024-08-10T10:26:57.000Z",
+      "url": "https://www.instagram.com/p/C-fGtFitMc-/",
+      "caption": "one summer evening 🤍",
+      "likesCount": 125,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3396247716147706866",
+      "type": "Carousel",
+      "timestamp": "2024-06-22T19:24:59.000Z",
+      "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+      "caption": "Диплом на пять 🩷\n\nСпасибо всем, кто был рядом!",
+      "likesCount": 147,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3430370911453808782",
+      "type": "Carousel",
+      "timestamp": "2024-08-08T21:21:40.000Z",
+      "url": "https://www.instagram.com/p/C-bICtJCYiO/",
+      "caption": "🩵",
+      "likesCount": 89,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    }
+  ],
+  "vision": [
+    {
+      "postId": "3766373022051794113",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3878628768138585623",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3902468283497615574",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3722341000816986827",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3549966998887312725",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3396791555811926473",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3441622057949313313",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3449749113605988036",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3435303631081408608",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3431490927686108990",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3396247716147706866",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    },
+    {
+      "postId": "3430370911453808782",
+      "status": "skipped",
+      "description": null,
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3",
+      "errorCode": "Invalid IP address: undefined"
+    }
+  ],
+  "analysisContext": {
+    "selectedPostIds": [
+      "3766373022051794113",
+      "3878628768138585623",
+      "3902468283497615574",
+      "3722341000816986827",
+      "3549966998887312725",
+      "3396791555811926473",
+      "3441622057949313313",
+      "3449749113605988036",
+      "3435303631081408608",
+      "3431490927686108990",
+      "3396247716147706866",
+      "3430370911453808782"
+    ],
+    "postSelection": [
+      {
+        "postId": "3766373022051794113",
+        "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+        "timestamp": "2025-11-15T11:37:53.000Z",
+        "score": 74,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "high_comments",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3878628768138585623",
+        "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+        "timestamp": "2026-04-19T08:50:01.000Z",
+        "score": 61,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "high_comments",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3902468283497615574",
+        "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+        "timestamp": "2026-05-22T06:14:53.000Z",
+        "score": 57,
+        "reasons": [
+          "recent",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3722341000816986827",
+        "url": "https://www.instagram.com/p/DOoaWsekYrL/",
+        "timestamp": "2025-09-15T17:34:07.000Z",
+        "score": 57,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3549966998887312725",
+        "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+        "timestamp": "2025-01-20T21:37:45.000Z",
+        "score": 53,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3396791555811926473",
+        "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+        "timestamp": "2024-06-23T13:25:29.000Z",
+        "score": 39,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3441622057949313313",
+        "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+        "timestamp": "2024-08-24T09:56:09.000Z",
+        "score": 36,
+        "reasons": [
+          "recent",
+          "format_diversity",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3449749113605988036",
+        "url": "https://www.instagram.com/p/C_f-IqQtB7E/",
+        "timestamp": "2024-09-04T15:02:42.000Z",
+        "score": 35,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3435303631081408608",
+        "url": "https://www.instagram.com/p/C-spnOSN4hg/",
+        "timestamp": "2024-08-15T16:42:06.000Z",
+        "score": 30,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3431490927686108990",
+        "url": "https://www.instagram.com/p/C-fGtFitMc-/",
+        "timestamp": "2024-08-10T10:26:57.000Z",
+        "score": 27,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3396247716147706866",
+        "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+        "timestamp": "2024-06-22T19:24:59.000Z",
+        "score": 25,
+        "reasons": [
+          "high_likes",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3430370911453808782",
+        "url": "https://www.instagram.com/p/C-bICtJCYiO/",
+        "timestamp": "2024-08-08T21:21:40.000Z",
+        "score": 19,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      }
+    ],
+    "profileSignals": {
+      "publicContacts": [],
+      "publicLinks": [],
+      "platformHandles": [],
+      "professionHints": [],
+      "locationHints": [
+        "Shanghai Disneyland Park",
+        "Moscow, Russia",
+        "ИНСТ • ресторан • Новосибирск",
+        "Lucerne, Switzerland",
+        "Tivoli The Villa D'este",
+        "Eigenthal, Luzern, Switzerland",
+        "Venice, Italy",
+        "NSU, Novosibirsk State University",
+        "Grand Canal Venice, Italy"
+      ],
+      "bioKeywords": [
+        "𝐴𝑁𝐴𝑆𝑇𝐴𝑆𝐼𝐼𝐴"
+      ]
+    },
+    "contentClusters": [],
+    "audienceSignals": {
+      "frequentCommenters": [],
+      "repeatedCommentTerms": [],
+      "commentDensity": "medium",
+      "highCommentPostIds": [
+        "3766373022051794113",
+        "3878628768138585623",
+        "3549966998887312725",
+        "3722341000816986827",
+        "3396791555811926473"
+      ]
+    },
+    "riskSignals": [
+      {
+        "id": "risk:vision_gaps",
+        "type": "risk",
+        "label": "Vision evidence gaps",
+        "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+        "confidence": "high",
+        "postIds": [
+          "3766373022051794113",
+          "3878628768138585623",
+          "3902468283497615574",
+          "3722341000816986827",
+          "3549966998887312725",
+          "3396791555811926473",
+          "3441622057949313313",
+          "3449749113605988036"
+        ]
+      }
+    ],
+    "opportunitySignals": [
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3766373022051794113",
+          "3878628768138585623",
+          "3549966998887312725"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DRE2E73AvzB/",
+          "https://www.instagram.com/p/DXTqFCUguYX/",
+          "https://www.instagram.com/p/DFEBC1NCa1V/"
+        ]
+      }
+    ],
+    "modeGuidance": {
+      "mode": "standard",
+      "evidencePriorities": [
+        "recurring themes across selected posts",
+        "audience and comment evidence",
+        "visual/textual patterns",
+        "practical but safe communication recommendations"
+      ],
+      "scoringFocus": [
+        "specificity",
+        "source-backed hypotheses",
+        "actionability",
+        "confidence calibration"
+      ],
+      "cautionRules": [
+        "Avoid personality certainty",
+        "No harassment, doxing, pressure or privacy bypass"
+      ]
+    },
+    "evidenceMap": [
+      {
+        "id": "profile:location_hints",
+        "type": "profile",
+        "label": "Coarse location hints",
+        "detail": "Shanghai Disneyland Park, Moscow, Russia, ИНСТ • ресторан • Новосибирск, Lucerne, Switzerland, Tivoli The Villa D'este, Eigenthal, Luzern, Switzerland, Venice, Italy, NSU, Novosibirsk State University, Grand Canal Venice, Italy",
+        "confidence": "medium"
+      },
+      {
+        "id": "post:3766373022051794113",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, high_comments, audience_signal, visual_signal; score 74.",
+        "confidence": "high",
+        "postIds": [
+          "3766373022051794113"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DRE2E73AvzB/"
+        ]
+      },
+      {
+        "id": "post:3878628768138585623",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, high_comments, audience_signal, visual_signal; score 61.",
+        "confidence": "high",
+        "postIds": [
+          "3878628768138585623"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DXTqFCUguYX/"
+        ]
+      },
+      {
+        "id": "post:3902468283497615574",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, format_diversity, audience_signal, visual_signal; score 57.",
+        "confidence": "high",
+        "postIds": [
+          "3902468283497615574"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYoWjpJGpDW/"
+        ]
+      },
+      {
+        "id": "post:3722341000816986827",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, format_diversity, audience_signal, visual_signal; score 57.",
+        "confidence": "high",
+        "postIds": [
+          "3722341000816986827"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DOoaWsekYrL/"
+        ]
+      },
+      {
+        "id": "post:3549966998887312725",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 53.",
+        "confidence": "high",
+        "postIds": [
+          "3549966998887312725"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DFEBC1NCa1V/"
+        ]
+      },
+      {
+        "id": "post:3396791555811926473",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 39.",
+        "confidence": "high",
+        "postIds": [
+          "3396791555811926473"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C8j0-xMN2HJ/"
+        ]
+      },
+      {
+        "id": "post:3441622057949313313",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, format_diversity, visual_signal; score 36.",
+        "confidence": "high",
+        "postIds": [
+          "3441622057949313313"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C_DGQb3N7kh/"
+        ]
+      },
+      {
+        "id": "post:3449749113605988036",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, visual_signal; score 35.",
+        "confidence": "high",
+        "postIds": [
+          "3449749113605988036"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C_f-IqQtB7E/"
+        ]
+      },
+      {
+        "id": "post:3435303631081408608",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, visual_signal; score 30.",
+        "confidence": "high",
+        "postIds": [
+          "3435303631081408608"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C-spnOSN4hg/"
+        ]
+      },
+      {
+        "id": "post:3431490927686108990",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 27.",
+        "confidence": "high",
+        "postIds": [
+          "3431490927686108990"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C-fGtFitMc-/"
+        ]
+      },
+      {
+        "id": "post:3396247716147706866",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, visual_signal; score 25.",
+        "confidence": "high",
+        "postIds": [
+          "3396247716147706866"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C8h5U3CNzvy/"
+        ]
+      },
+      {
+        "id": "post:3430370911453808782",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for audience_signal, visual_signal; score 19.",
+        "confidence": "high",
+        "postIds": [
+          "3430370911453808782"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C-bICtJCYiO/"
+        ]
+      },
+      {
+        "id": "audience:high_comment_posts",
+        "type": "audience",
+        "label": "High-comment posts",
+        "detail": "medium comment density across selected posts.",
+        "confidence": "medium",
+        "postIds": [
+          "3766373022051794113",
+          "3878628768138585623",
+          "3549966998887312725",
+          "3722341000816986827",
+          "3396791555811926473"
+        ]
+      },
+      {
+        "id": "risk:vision_gaps",
+        "type": "risk",
+        "label": "Vision evidence gaps",
+        "detail": "12 selected visual items could not be analyzed and should not support visual claims.",
+        "confidence": "high",
+        "postIds": [
+          "3766373022051794113",
+          "3878628768138585623",
+          "3902468283497615574",
+          "3722341000816986827",
+          "3549966998887312725",
+          "3396791555811926473",
+          "3441622057949313313",
+          "3449749113605988036"
+        ]
+      },
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3766373022051794113",
+          "3878628768138585623",
+          "3549966998887312725"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DRE2E73AvzB/",
+          "https://www.instagram.com/p/DXTqFCUguYX/",
+          "https://www.instagram.com/p/DFEBC1NCa1V/"
+        ]
+      },
+      {
+        "id": "mode:standard",
+        "type": "mode",
+        "label": "standard priorities",
+        "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+        "confidence": "high"
+      }
+    ]
+  }
+}

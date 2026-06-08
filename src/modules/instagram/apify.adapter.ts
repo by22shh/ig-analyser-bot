@@ -139,7 +139,7 @@ function record(value: unknown): Record<string, unknown> | undefined {
 }
 
 function num(value: unknown): number {
-  return typeof value === "number" && Number.isFinite(value) ? value : 0;
+  return typeof value === "number" && Number.isFinite(value) && value > 0 ? value : 0;
 }
 
 function stringArray(value: unknown): string[] {

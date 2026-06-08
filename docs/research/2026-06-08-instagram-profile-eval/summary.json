@@ -1,0 +1,500 @@
+[
+  {
+    "username": "evachkaaaaa",
+    "status": "report_completed_first_pass",
+    "note": "Report generated before image-download lookup fix; vision was skipped in all selected posts. qualityScoreReevaluated uses the current quality evaluator.",
+    "followersCount": 1290,
+    "followsCount": 628,
+    "postsCount": 141,
+    "fetchedPosts": 12,
+    "reportSections": 17,
+    "qualityScoreFirstPass": 100,
+    "qualityScoreReevaluated": 92,
+    "qualityFindingsReevaluated": [
+      {
+        "id": "report:vision_evidence_gap",
+        "severity": "medium",
+        "detail": "Selected visual posts could not be analyzed; visual-pattern claims should be limited."
+      },
+      {
+        "id": "report:comments_count_only",
+        "severity": "low",
+        "detail": "Comment counts exist, but commenter identities and comment text are unavailable for audience-quality analysis."
+      }
+    ],
+    "sourceCoverage": "17/17",
+    "warnings": [],
+    "metrics": {
+      "followersCount": 1290,
+      "followsCount": 628,
+      "postsCount": 141,
+      "analyzedPosts": 12,
+      "avgLikes": 195.08333333333334,
+      "avgComments": 3,
+      "medianLikes": 207.5,
+      "medianComments": 2.5,
+      "engagementRate": 15.355297157622742,
+      "frequencyDays": 33.02959595959596,
+      "pinnedPostsCount": 0,
+      "uniqueLocations": [
+        "Gallipoli, Italy",
+        "Venezia, Italia",
+        "Tbilisi, Georgia",
+        "Zürich, Switzerland",
+        "Barcelona, Spain",
+        "Алтай Актру",
+        "Sheregesh, Kemerovskaya Oblast', Russia",
+        "Dubai,UAE",
+        "Sri Sri Ravishankar Ashram",
+        "Florence, Italy",
+        "Desert Safari Dubai",
+        "Goa, India"
+      ],
+      "uniqueMusic": [],
+      "relatedProfiles": [],
+      "topPostsByLikes": [
+        {
+          "postId": "3679444295634544817",
+          "url": "https://www.instagram.com/p/DMQAxekImix/",
+          "likesCount": 263
+        },
+        {
+          "postId": "3579785447675359435",
+          "url": "https://www.instagram.com/p/DGt8-XszXDL/",
+          "likesCount": 237
+        },
+        {
+          "postId": "3601035192919381741",
+          "url": "https://www.instagram.com/p/DH5cm3Jo9bt/",
+          "likesCount": 216
+        }
+      ],
+      "topPostsByComments": [
+        {
+          "postId": "3679444295634544817",
+          "url": "https://www.instagram.com/p/DMQAxekImix/",
+          "commentsCount": 11
+        },
+        {
+          "postId": "3841112762961401703",
+          "url": "https://www.instagram.com/p/DVOX7TyiJdn/",
+          "commentsCount": 7
+        },
+        {
+          "postId": "3601035192919381741",
+          "url": "https://www.instagram.com/p/DH5cm3Jo9bt/",
+          "commentsCount": 5
+        }
+      ],
+      "postTypeDistribution": {
+        "Carousel": 9,
+        "Video": 3
+      },
+      "hashtagFrequency": {},
+      "mentionFrequency": {},
+      "digitalCircle": [
+        {
+          "username": "kholopovaanna",
+          "type": "tagged",
+          "score": 2,
+          "lastInteractionDate": "2025-04-24T08:13:20.000Z",
+          "details": [
+            "tagged in post: https://www.instagram.com/p/DI0ntTnINiu/"
+          ]
+        }
+      ]
+    },
+    "vision": {
+      "skipped": 12
+    },
+    "visionErrors": [
+      "Invalid IP address: undefined"
+    ]
+  },
+  {
+    "username": "missstaccyy",
+    "status": "report_completed_first_pass",
+    "note": "Report generated before image-download lookup fix; vision was skipped in all selected posts. qualityScoreReevaluated uses the current quality evaluator.",
+    "followersCount": 587,
+    "followsCount": 319,
+    "postsCount": 23,
+    "fetchedPosts": 12,
+    "reportSections": 17,
+    "qualityScoreFirstPass": 100,
+    "qualityScoreReevaluated": 92,
+    "qualityFindingsReevaluated": [
+      {
+        "id": "report:vision_evidence_gap",
+        "severity": "medium",
+        "detail": "Selected visual posts could not be analyzed; visual-pattern claims should be limited."
+      },
+      {
+        "id": "report:comments_count_only",
+        "severity": "low",
+        "detail": "Comment counts exist, but commenter identities and comment text are unavailable for audience-quality analysis."
+      }
+    ],
+    "sourceCoverage": "17/17",
+    "warnings": [],
+    "metrics": {
+      "followersCount": 587,
+      "followsCount": 319,
+      "postsCount": 23,
+      "analyzedPosts": 12,
+      "avgLikes": 114.83333333333333,
+      "avgComments": 3.5,
+      "medianLikes": 111.5,
+      "medianComments": 2.5,
+      "engagementRate": 20.15900056785917,
+      "frequencyDays": 63.4955744949495,
+      "pinnedPostsCount": 0,
+      "uniqueLocations": [
+        "Shanghai Disneyland Park",
+        "Moscow, Russia",
+        "ИНСТ • ресторан • Новосибирск ",
+        "Lucerne, Switzerland",
+        "Tivoli The Villa D'este",
+        "Eigenthal, Luzern, Switzerland",
+        "Venice, Italy",
+        "NSU, Novosibirsk State University",
+        "Grand Canal Venice, Italy"
+      ],
+      "uniqueMusic": [],
+      "relatedProfiles": [],
+      "topPostsByLikes": [
+        {
+          "postId": "3396791555811926473",
+          "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+          "likesCount": 180
+        },
+        {
+          "postId": "3396247716147706866",
+          "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+          "likesCount": 147
+        },
+        {
+          "postId": "3549966998887312725",
+          "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+          "likesCount": 134
+        }
+      ],
+      "topPostsByComments": [
+        {
+          "postId": "3766373022051794113",
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "commentsCount": 14
+        },
+        {
+          "postId": "3878628768138585623",
+          "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+          "commentsCount": 8
+        },
+        {
+          "postId": "3549966998887312725",
+          "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+          "commentsCount": 6
+        }
+      ],
+      "postTypeDistribution": {
+        "Carousel": 8,
+        "Image": 3,
+        "Video": 1
+      },
+      "hashtagFrequency": {},
+      "mentionFrequency": {},
+      "digitalCircle": [
+        {
+          "username": "ph.dlsnk",
+          "type": "tagged",
+          "score": 2,
+          "lastInteractionDate": "2025-11-15T11:37:53.000Z",
+          "details": [
+            "tagged in post: https://www.instagram.com/p/DRE2E73AvzB/"
+          ]
+        }
+      ]
+    },
+    "vision": {
+      "skipped": 12
+    },
+    "visionErrors": [
+      "Invalid IP address: undefined"
+    ]
+  },
+  {
+    "username": "_daria.bers_",
+    "status": "report_completed_first_pass",
+    "note": "Report generated before image-download lookup fix; vision was skipped in all selected posts. qualityScoreReevaluated uses the current quality evaluator.",
+    "followersCount": 748,
+    "followsCount": 583,
+    "postsCount": 118,
+    "fetchedPosts": 12,
+    "reportSections": 17,
+    "qualityScoreFirstPass": 100,
+    "qualityScoreReevaluated": 92,
+    "qualityFindingsReevaluated": [
+      {
+        "id": "report:vision_evidence_gap",
+        "severity": "medium",
+        "detail": "Selected visual posts could not be analyzed; visual-pattern claims should be limited."
+      },
+      {
+        "id": "report:comments_count_only",
+        "severity": "low",
+        "detail": "Comment counts exist, but commenter identities and comment text are unavailable for audience-quality analysis."
+      }
+    ],
+    "sourceCoverage": "17/17",
+    "warnings": [],
+    "metrics": {
+      "followersCount": 748,
+      "followsCount": 583,
+      "postsCount": 118,
+      "analyzedPosts": 12,
+      "avgLikes": 100.41666666666667,
+      "avgComments": 4.416666666666667,
+      "medianLikes": 100,
+      "medianComments": 3,
+      "engagementRate": 14.015151515151514,
+      "frequencyDays": 14.624652777777778,
+      "pinnedPostsCount": 0,
+      "uniqueLocations": [
+        "Vietnam",
+        "Montenegro",
+        "Сербия, Белград;",
+        "Kotor, Montenegro",
+        "Stari Bar, Montenegro"
+      ],
+      "uniqueMusic": [],
+      "relatedProfiles": [],
+      "topPostsByLikes": [
+        {
+          "postId": "3902718743121788092",
+          "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+          "likesCount": 136
+        },
+        {
+          "postId": "3902623459784045836",
+          "url": "https://www.instagram.com/p/DYo51wUiLUM/",
+          "likesCount": 136
+        },
+        {
+          "postId": "3901314308789265837",
+          "url": "https://www.instagram.com/p/DYkQLGciGWt/",
+          "likesCount": 121
+        }
+      ],
+      "topPostsByComments": [
+        {
+          "postId": "3902718743121788092",
+          "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+          "commentsCount": 18
+        },
+        {
+          "postId": "3902705718197266263",
+          "url": "https://www.instagram.com/p/DYpMixcCKdX/",
+          "commentsCount": 10
+        },
+        {
+          "postId": "3901314308789265837",
+          "url": "https://www.instagram.com/p/DYkQLGciGWt/",
+          "commentsCount": 6
+        }
+      ],
+      "postTypeDistribution": {
+        "Carousel": 12
+      },
+      "hashtagFrequency": {},
+      "mentionFrequency": {},
+      "digitalCircle": [
+        {
+          "username": "tuckersasha",
+          "type": "tagged",
+          "score": 3,
+          "lastInteractionDate": "2026-05-22T14:32:30.000Z",
+          "details": [
+            "tagged in post: https://www.instagram.com/p/DYpPgT2CHy8/"
+          ]
+        },
+        {
+          "username": "_katub_",
+          "type": "tagged",
+          "score": 3,
+          "lastInteractionDate": "2026-05-22T11:23:11.000Z",
+          "details": [
+            "tagged in post: https://www.instagram.com/p/DYo51wUiLUM/"
+          ]
+        }
+      ]
+    },
+    "vision": {
+      "skipped": 12
+    },
+    "visionErrors": [
+      "Invalid IP address: undefined"
+    ]
+  },
+  {
+    "username": "fakeev",
+    "status": "report_completed_first_pass",
+    "note": "Report generated before image-download lookup fix; vision was skipped in all selected posts. qualityScoreReevaluated uses the current quality evaluator.",
+    "followersCount": 57772,
+    "followsCount": 969,
+    "postsCount": 1087,
+    "fetchedPosts": 12,
+    "reportSections": 17,
+    "qualityScoreFirstPass": 100,
+    "qualityScoreReevaluated": 92,
+    "qualityFindingsReevaluated": [
+      {
+        "id": "report:vision_evidence_gap",
+        "severity": "medium",
+        "detail": "Selected visual posts could not be analyzed; visual-pattern claims should be limited."
+      },
+      {
+        "id": "report:comments_count_only",
+        "severity": "low",
+        "detail": "Comment counts exist, but commenter identities and comment text are unavailable for audience-quality analysis."
+      }
+    ],
+    "sourceCoverage": "17/17",
+    "warnings": [
+      "Unresolved grounding flags: 2"
+    ],
+    "metrics": {
+      "followersCount": 57772,
+      "followsCount": 969,
+      "postsCount": 1087,
+      "analyzedPosts": 12,
+      "avgLikes": 234.16666666666666,
+      "avgComments": 6.75,
+      "medianLikes": 240.5,
+      "medianComments": 5,
+      "engagementRate": 0.41701285513166697,
+      "frequencyDays": 34.91657828282828,
+      "pinnedPostsCount": 3,
+      "uniqueLocations": [
+        "Moscow, Russia",
+        "Cairo, Egypt",
+        "Пустыня Руб Эль Хали, Оаэ, Дубай"
+      ],
+      "uniqueMusic": [],
+      "relatedProfiles": [
+        "nazarow_ivan",
+        "pysarenko_k",
+        "amanzhol_rysmendiyev.kz",
+        "alex_mlv",
+        "valeraovechkin",
+        "semyannikov1",
+        "fedanov",
+        "srebniy",
+        "dselyandin_invest",
+        "art.fernandess",
+        "alexander_evchenko",
+        "vladimir_krainev",
+        "naurbiev.ru",
+        "anatoliy_tsekhin",
+        "vlad.bermuda",
+        "ignatbond",
+        "kirill__rusin",
+        "pavel.pershukov",
+        "n.yudaev",
+        "andreeff19",
+        "homka6",
+        "eshmuratov_r",
+        "maers_one",
+        "yuryzhigalov",
+        "gerasimov.lab",
+        "serhii_ruban",
+        "eduard.barsukoff",
+        "unicornlab.in",
+        "ab_kuznetsov",
+        "dmitry_gorbachev87",
+        "vladimir_41r",
+        "stanislav_rublev",
+        "dmitriyarnautov"
+      ],
+      "topPostsByLikes": [
+        {
+          "postId": "3825836720978630051",
+          "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "likesCount": 370
+        },
+        {
+          "postId": "3900672109022341105",
+          "url": "https://www.instagram.com/p/DYh-J3TjOfx/",
+          "likesCount": 363
+        },
+        {
+          "postId": "3622298533331354216",
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "likesCount": 357
+        }
+      ],
+      "topPostsByComments": [
+        {
+          "postId": "3829320551060222818",
+          "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+          "commentsCount": 18
+        },
+        {
+          "postId": "3825836720978630051",
+          "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "commentsCount": 14
+        },
+        {
+          "postId": "3750967731777487011",
+          "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+          "commentsCount": 13
+        }
+      ],
+      "postTypeDistribution": {
+        "Carousel": 7,
+        "Image": 3,
+        "Video": 2
+      },
+      "hashtagFrequency": {
+        "blockchainlife": 1
+      },
+      "mentionFrequency": {
+        "serkhitrov": 1,
+        "fakeev": 1
+      },
+      "digitalCircle": [
+        {
+          "username": "serkhitrov",
+          "type": "mentioned",
+          "score": 1.5,
+          "lastInteractionDate": "2025-04-30T16:47:36.000Z",
+          "details": [
+            "mentioned in caption: https://www.instagram.com/p/DJE_VMFokJo/"
+          ]
+        },
+        {
+          "username": "fakeev",
+          "type": "mentioned",
+          "score": 1.5,
+          "lastInteractionDate": "2025-10-18T11:29:44.000Z",
+          "details": [
+            "mentioned in caption: https://www.instagram.com/p/DP8uvcsDAgx/"
+          ]
+        }
+      ]
+    },
+    "vision": {
+      "skipped": 12
+    },
+    "visionErrors": [
+      "Invalid IP address: undefined"
+    ]
+  },
+  {
+    "username": "mark.tales",
+    "status": "profile_fetched_report_blocked",
+    "note": "Profile data fetched successfully on rerun, but OpenRouter returned ACCESS_DENIED_CREDITS before report generation.",
+    "followersCount": 443,
+    "followsCount": 333,
+    "postsCount": 96,
+    "fetchedPosts": 12
+  }
+]

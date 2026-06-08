@@ -696,7 +696,16 @@ async function requestPinnedPublicImage(
   const selectedAddress = addresses[0];
   if (!selectedAddress) throw new Error("IMAGE_DNS_EMPTY");
 
-  const lookup: LookupFunction = (_hostname, _options, callback) => {
+  const lookup: LookupFunction = (_hostname, options, callback) => {
+    if (typeof options === "object" && options?.all) {
+      (
+        callback as (
+          error: NodeJS.ErrnoException | null,
+          addresses: Array<{ address: string; family: 4 | 6 }>
+        ) => void
+      )(null, addresses);
+      return;
+    }
     callback(null, selectedAddress.address, selectedAddress.family);
   };
 

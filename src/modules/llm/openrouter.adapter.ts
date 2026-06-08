@@ -1,6 +1,9 @@
 import { Buffer } from "node:buffer";
 import { lookup as dnsLookup } from "node:dns/promises";
+import { request as httpRequest, type ClientRequest, type IncomingHttpHeaders } from "node:http";
+import { request as httpsRequest } from "node:https";
 import { isIP } from "node:net";
+import type { LookupFunction } from "node:net";
 import { env } from "../../config/env.js";
 import { sectionGuidesForMode } from "../../prompts/section-guides.js";
 import { mapWithConcurrency } from "../../util/concurrency.js";
@@ -43,6 +46,18 @@ type OpenRouterResponse = {
   // Anthropic rejecting response_format). Surface it so structured calls can
   // fall back to text mode instead of failing as an empty response.
   error?: { message?: string; code?: number };
+};
+
+type PublicAddress = {
+  address: string;
+  family: 4 | 6;
+};
+
+type PublicImageResponse = {
+  status: number;
+  ok: boolean;
+  headers: Headers;
+  bytes: Buffer;
 };
 
 const IMAGE_DOWNLOAD_TIMEOUT_MS = 30_000;
@@ -575,7 +590,7 @@ async function boundedImageDataUrl(imageUrl: string | null | undefined): Promise
       1,
       Math.floor((env.ANALYSIS_MAX_IMAGE_DOWNLOAD_MB ?? 8) * 1024 * 1024)
     );
-    const response = await fetchPublicImage(imageUrl);
+    const response = await fetchPublicImage(imageUrl, maxBytes);
     if (!response.ok) throw new Error(`IMAGE_DOWNLOAD_${response.status}`);
     const contentLength = Number(response.headers.get("content-length"));
     if (Number.isFinite(contentLength) && contentLength > maxBytes) {
@@ -590,26 +605,8 @@ async function boundedImageDataUrl(imageUrl: string | null | undefined): Promise
       throw new Error("IMAGE_UNSUPPORTED_TYPE");
     }
 
-    const chunks: Buffer[] = [];
-    let received = 0;
-    const reader = response.body?.getReader();
-    if (reader) {
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        received += value.byteLength;
-        if (received > maxBytes) throw new Error("IMAGE_TOO_LARGE");
-        chunks.push(Buffer.from(value));
-      }
-    } else {
-      const bytes = Buffer.from(await response.arrayBuffer());
-      received = bytes.byteLength;
-      if (received > maxBytes) throw new Error("IMAGE_TOO_LARGE");
-      chunks.push(bytes);
-    }
-
     return {
-      dataUrl: `data:${rawContentType || "image/jpeg"};base64,${Buffer.concat(chunks).toString("base64")}`,
+      dataUrl: `data:${rawContentType || "image/jpeg"};base64,${response.bytes.toString("base64")}`,
       errorCode: "ok"
     };
   } catch (error) {
@@ -617,25 +614,28 @@ async function boundedImageDataUrl(imageUrl: string | null | undefined): Promise
   }
 }
 
-async function fetchPublicImage(imageUrl: string, redirectCount = 0): Promise<Response> {
-  const url = await validatedPublicHttpUrl(imageUrl);
-  const response = await fetch(url.toString(), {
-    redirect: "manual",
-    signal: AbortSignal.timeout(IMAGE_DOWNLOAD_TIMEOUT_MS)
-  });
+async function fetchPublicImage(
+  imageUrl: string,
+  maxBytes: number,
+  redirectCount = 0
+): Promise<PublicImageResponse> {
+  const { url, addresses } = await validatedPublicHttpUrl(imageUrl);
+  const response = await requestPinnedPublicImage(url, addresses, maxBytes);
 
   if (!redirectStatus(response.status)) return response;
   if (redirectCount >= IMAGE_DOWNLOAD_MAX_REDIRECTS) throw new Error("IMAGE_REDIRECT_LIMIT");
   const location = response.headers.get("location");
   if (!location) throw new Error("IMAGE_REDIRECT_MISSING_LOCATION");
-  return fetchPublicImage(new URL(location, url).toString(), redirectCount + 1);
+  return fetchPublicImage(new URL(location, url).toString(), maxBytes, redirectCount + 1);
 }
 
 function redirectStatus(status: number): boolean {
   return status >= 300 && status < 400;
 }
 
-async function validatedPublicHttpUrl(value: string): Promise<URL> {
+async function validatedPublicHttpUrl(
+  value: string
+): Promise<{ url: URL; addresses: PublicAddress[] }> {
   let url: URL;
   try {
     url = new URL(value);
@@ -646,25 +646,122 @@ async function validatedPublicHttpUrl(value: string): Promise<URL> {
     throw new Error("IMAGE_URL_UNSUPPORTED");
   }
   if (url.username || url.password) throw new Error("IMAGE_URL_UNSUPPORTED");
-  await assertPublicHostname(url.hostname);
-  return url;
+  const addresses = await resolvePublicHostname(url.hostname);
+  return { url, addresses };
 }
 
-async function assertPublicHostname(hostname: string): Promise<void> {
+async function resolvePublicHostname(hostname: string): Promise<PublicAddress[]> {
   const normalized = normalizeHostname(hostname);
   if (!normalized || BLOCKED_IMAGE_HOSTS.has(normalized)) throw new Error("IMAGE_URL_PRIVATE");
 
   const literalFamily = isIP(normalized);
   if (literalFamily === 4 || literalFamily === 6) {
     if (ipIsBlocked(normalized, literalFamily)) throw new Error("IMAGE_URL_PRIVATE");
-    return;
+    return [{ address: normalized, family: literalFamily }];
   }
 
   const addresses = await dnsLookup(normalized, { all: true, verbatim: true });
   if (!addresses.length) throw new Error("IMAGE_DNS_EMPTY");
-  if (addresses.some(({ address, family }) => ipIsBlocked(address, family === 6 ? 6 : 4))) {
-    throw new Error("IMAGE_URL_PRIVATE");
+  const publicAddresses = addresses.map(({ address, family }) => {
+    const parsedFamily = publicAddressFamily(address, family);
+    if (!parsedFamily || ipIsBlocked(address, parsedFamily)) throw new Error("IMAGE_URL_PRIVATE");
+    return { address, family: parsedFamily };
+  });
+  if (!publicAddresses.length) throw new Error("IMAGE_DNS_EMPTY");
+  return publicAddresses;
+}
+
+function publicAddressFamily(address: string, family: number): 4 | 6 | undefined {
+  if (family === 4 || family === 6) return family;
+  const parsed = isIP(address);
+  return parsed === 4 || parsed === 6 ? parsed : undefined;
+}
+
+async function requestPinnedPublicImage(
+  url: URL,
+  addresses: PublicAddress[],
+  maxBytes: number
+): Promise<PublicImageResponse> {
+  const selectedAddress = addresses[0];
+  if (!selectedAddress) throw new Error("IMAGE_DNS_EMPTY");
+
+  const lookup: LookupFunction = (_hostname, _options, callback) => {
+    callback(null, selectedAddress.address, selectedAddress.family);
+  };
+
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    const requestState: { ref?: ClientRequest } = {};
+    const finishError = (error: Error) => {
+      if (settled) return;
+      settled = true;
+      requestState.ref?.destroy(error);
+      reject(error);
+    };
+
+    const requester = url.protocol === "https:" ? httpsRequest : httpRequest;
+    requestState.ref = requester(
+      url,
+      {
+        method: "GET",
+        headers: { Accept: "image/*" },
+        lookup
+      },
+      (response) => {
+        const headers = headersFromIncoming(response.headers);
+        const contentLength = Number(headers.get("content-length"));
+        if (Number.isFinite(contentLength) && contentLength > maxBytes) {
+          response.resume();
+          finishError(new Error("IMAGE_TOO_LARGE"));
+          return;
+        }
+
+        const chunks: Buffer[] = [];
+        let received = 0;
+        response.on("data", (chunk: Buffer | string) => {
+          const bytes = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+          received += bytes.byteLength;
+          if (received > maxBytes) {
+            finishError(new Error("IMAGE_TOO_LARGE"));
+            return;
+          }
+          chunks.push(bytes);
+        });
+        response.on("end", () => {
+          if (settled) return;
+          settled = true;
+          resolve({
+            status: response.statusCode ?? 0,
+            ok: (response.statusCode ?? 0) >= 200 && (response.statusCode ?? 0) < 300,
+            headers,
+            bytes: Buffer.concat(chunks)
+          });
+        });
+        response.on("error", (error) => {
+          finishError(error instanceof Error ? error : new Error("IMAGE_DOWNLOAD_FAILED"));
+        });
+      }
+    );
+    requestState.ref.setTimeout(IMAGE_DOWNLOAD_TIMEOUT_MS, () => {
+      finishError(new Error("IMAGE_DOWNLOAD_TIMEOUT"));
+    });
+    requestState.ref.on("error", (error) => {
+      finishError(error instanceof Error ? error : new Error("IMAGE_DOWNLOAD_FAILED"));
+    });
+    requestState.ref.end();
+  });
+}
+
+function headersFromIncoming(headers: IncomingHttpHeaders): Headers {
+  const result = new Headers();
+  for (const [key, value] of Object.entries(headers)) {
+    if (Array.isArray(value)) {
+      for (const item of value) result.append(key, item);
+    } else if (value != null) {
+      result.set(key, String(value));
+    }
   }
+  return result;
 }
 
 function normalizeHostname(hostname: string): string {

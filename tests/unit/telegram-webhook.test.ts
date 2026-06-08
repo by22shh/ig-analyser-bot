@@ -24,6 +24,17 @@ describe("POST /telegram/webhook", () => {
     await app.close();
   });
 
+  it("returns 500 when a retried update is still marked as processing", async () => {
+    const { app } = buildApp("processing");
+    const res = await app.inject({
+      method: "POST",
+      url: "/telegram/webhook",
+      payload: { update_id: 42, message: { text: "x" } }
+    });
+    expect(res.statusCode).toBe(500);
+    await app.close();
+  });
+
   it("returns 200 when the update was processed", async () => {
     const { app, bot } = buildApp("processed");
     const res = await app.inject({

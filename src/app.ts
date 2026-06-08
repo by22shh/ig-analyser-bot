@@ -28,15 +28,16 @@ export function createApp(input: { services: Services; bot: Bot<MyContext> }) {
     await input.bot.handleUpdate(update as never);
     // grammy's bot.catch swallows handler errors, so handleUpdate resolves even
     // when processing failed. Signal a retry to Telegram (HTTP 500) when the
-    // dedup middleware recorded this update as failed; re-delivery is safe
-    // because claimUpdate re-processes failed updates and handlers are
-    // idempotent (otherwise a transient failure would silently drop e.g. a paid
-    // Telegram Stars grant).
+    // dedup middleware recorded this update as failed, or when a redelivery was
+    // skipped because a previous process left the update in "processing".
+    // Re-delivery is safe because claimUpdate re-processes failed/stale updates
+    // and handlers are idempotent (otherwise a transient failure would silently
+    // drop e.g. a paid Telegram Stars grant).
     if (update?.update_id != null) {
       const tracked = await input.services.prisma.telegramUpdate.findUnique({
         where: { updateId: BigInt(update.update_id) }
       });
-      if (tracked?.status === "failed") {
+      if (tracked?.status === "failed" || tracked?.status === "processing") {
         reply.code(500);
         return { ok: false };
       }

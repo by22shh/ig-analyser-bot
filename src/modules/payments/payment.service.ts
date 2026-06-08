@@ -95,7 +95,7 @@ export class PaymentService {
     description?: string;
   }) {
     const pkg = getPackage(input.packageCode);
-    if (!pkg?.starsAmount) throw new Error("PACKAGE_NOT_FOUND");
+    if (!pkg?.starsAmount || !pkg.isPublic) throw new Error("PACKAGE_NOT_FOUND");
     const dbPkg = await this.prisma.creditPackage.findUniqueOrThrow({ where: { code: pkg.code } });
     const price = await this.prisma.creditPackagePrice.findFirstOrThrow({
       where: { packageId: dbPkg.id, provider: "telegram_stars", currency: "XTR", isActive: true }
@@ -213,7 +213,7 @@ export class PaymentService {
     description?: string;
   }) {
     const pkg = getPackage(input.packageCode);
-    if (!pkg?.starsAmount) throw new Error("PACKAGE_NOT_FOUND");
+    if (!pkg?.starsAmount || !pkg.isPublic) throw new Error("PACKAGE_NOT_FOUND");
     const dbPkg = await this.prisma.creditPackage.findUniqueOrThrow({ where: { code: pkg.code } });
     const price = await this.prisma.creditPackagePrice.findFirstOrThrow({
       where: { packageId: dbPkg.id, provider: "telegram_stars", currency: "XTR", isActive: true }

@@ -4,8 +4,120 @@ const dnsMocks = vi.hoisted(() => ({
   lookup: vi.fn()
 }));
 
+const imageRequestMocks = vi.hoisted(() => {
+  const state = {
+    responses: [] as Array<{
+      statusCode: number;
+      headers?: Record<string, string | string[]>;
+      chunks?: Array<Buffer | string>;
+      error?: Error;
+    }>,
+    calls: [] as Array<{
+      protocol: string;
+      url: string;
+      lookupAddress?: string;
+      lookupFamily?: number;
+    }>,
+    reset() {
+      this.responses = [];
+      this.calls = [];
+    }
+  };
+
+  const makeRequest =
+    (protocol: string) =>
+    (
+      url: URL,
+      options: {
+        lookup?: (
+          hostname: string,
+          options: Record<string, unknown>,
+          callback: (error: Error | null, address: string, family: number) => void
+        ) => void;
+      },
+      callback: (response: {
+        statusCode: number;
+        headers: Record<string, string | string[]>;
+        resume: () => void;
+        on: (event: string, handler: (chunk?: Buffer | string | Error) => void) => unknown;
+      }) => void
+    ) => {
+      const requestListeners: Record<string, Array<(error: Error) => void>> = {};
+      const call: (typeof state.calls)[number] = { protocol, url: url.toString() };
+      state.calls.push(call);
+
+      const request = {
+        setTimeout: vi.fn(),
+        on: vi.fn((event: string, handler: (error: Error) => void) => {
+          (requestListeners[event] ??= []).push(handler);
+          return request;
+        }),
+        end: vi.fn(() => {
+          const queued = state.responses.shift();
+          if (!queued) {
+            for (const handler of requestListeners.error ?? []) {
+              handler(new Error("IMAGE_REQUEST_NOT_MOCKED"));
+            }
+            return request;
+          }
+          options.lookup?.(url.hostname, {}, (error, address, family) => {
+            if (error) {
+              for (const handler of requestListeners.error ?? []) handler(error);
+              return;
+            }
+            call.lookupAddress = address;
+            call.lookupFamily = family;
+            if (queued.error) {
+              for (const handler of requestListeners.error ?? []) handler(queued.error);
+              return;
+            }
+
+            const responseListeners: Record<
+              string,
+              Array<(chunk?: Buffer | string | Error) => void>
+            > = {};
+            const response = {
+              statusCode: queued.statusCode,
+              headers: queued.headers ?? {},
+              resume: vi.fn(),
+              on: vi.fn((event: string, handler: (chunk?: Buffer | string | Error) => void) => {
+                (responseListeners[event] ??= []).push(handler);
+                return response;
+              })
+            };
+            callback(response);
+            queueMicrotask(() => {
+              for (const chunk of queued.chunks ?? []) {
+                for (const handler of responseListeners.data ?? []) handler(chunk);
+              }
+              for (const handler of responseListeners.end ?? []) handler();
+            });
+          });
+          return request;
+        }),
+        destroy: vi.fn((error?: Error) => {
+          if (error) {
+            for (const handler of requestListeners.error ?? []) handler(error);
+          }
+          return request;
+        })
+      };
+      return request;
+    };
+
+  return { state, makeRequest };
+});
+
 vi.mock("node:dns/promises", () => ({
   lookup: dnsMocks.lookup
+}));
+
+vi.mock("node:http", () => ({
+  request: imageRequestMocks.makeRequest("http:")
+}));
+
+vi.mock("node:https", () => ({
+  request: imageRequestMocks.makeRequest("https:")
 }));
 
 import { env } from "../../src/config/env.js";
@@ -16,11 +128,13 @@ const originalImageCapMb = env.ANALYSIS_MAX_IMAGE_DOWNLOAD_MB;
 describe("OpenRouterLlmProvider", () => {
   beforeEach(() => {
     dnsMocks.lookup.mockResolvedValue([{ address: "93.184.216.34", family: 4 }]);
+    imageRequestMocks.state.reset();
   });
 
   afterEach(() => {
     env.ANALYSIS_MAX_IMAGE_DOWNLOAD_MB = originalImageCapMb;
     dnsMocks.lookup.mockReset();
+    imageRequestMocks.state.reset();
     vi.unstubAllGlobals();
   });
 
@@ -38,14 +152,13 @@ describe("OpenRouterLlmProvider", () => {
   });
 
   it("falls back to text vision when structured output is not supported", async () => {
+    imageRequestMocks.state.responses.push({
+      statusCode: 200,
+      headers: { "content-type": "image/jpeg" },
+      chunks: [Buffer.from("image-bytes")]
+    });
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(
-        new Response("image-bytes", {
-          status: 200,
-          headers: { "content-type": "image/jpeg" }
-        })
-      )
       .mockResolvedValueOnce(new Response("{}", { status: 400 }))
       .mockResolvedValueOnce(
         new Response(
@@ -85,7 +198,14 @@ describe("OpenRouterLlmProvider", () => {
       ]
     });
 
-    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(imageRequestMocks.state.calls).toHaveLength(1);
+    expect(imageRequestMocks.state.calls[0]).toMatchObject({
+      protocol: "https:",
+      url: "https://cdn.example/post.jpg",
+      lookupAddress: "93.184.216.34",
+      lookupFamily: 4
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(result[0]).toMatchObject({
       postId: "p1",
       status: "completed",
@@ -95,15 +215,14 @@ describe("OpenRouterLlmProvider", () => {
 
   it("marks vision as skipped when the image download exceeds the configured cap", async () => {
     env.ANALYSIS_MAX_IMAGE_DOWNLOAD_MB = 1;
-    const fetchMock = vi.fn().mockResolvedValueOnce(
-      new Response("", {
-        status: 200,
-        headers: {
-          "content-type": "image/jpeg",
-          "content-length": String(2 * 1024 * 1024)
-        }
-      })
-    );
+    imageRequestMocks.state.responses.push({
+      statusCode: 200,
+      headers: {
+        "content-type": "image/jpeg",
+        "content-length": String(2 * 1024 * 1024)
+      }
+    });
+    const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
 
     const provider = new OpenRouterLlmProvider("token");
@@ -137,8 +256,8 @@ describe("OpenRouterLlmProvider", () => {
       ]
     });
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(fetchMock.mock.calls[0]?.[0]).toBe("https://cdn.example/huge.jpg");
+    expect(imageRequestMocks.state.calls[0]?.url).toBe("https://cdn.example/huge.jpg");
+    expect(fetchMock).not.toHaveBeenCalled();
     expect(result[0]).toMatchObject({
       postId: "p1",
       status: "skipped",
@@ -155,6 +274,7 @@ describe("OpenRouterLlmProvider", () => {
     const result = await provider.analyzeVision(visionInput("http://127.0.0.1/internal.jpg"));
 
     expect(dnsMocks.lookup).not.toHaveBeenCalled();
+    expect(imageRequestMocks.state.calls).toHaveLength(0);
     expect(fetchMock).not.toHaveBeenCalled();
     expect(result[0]).toMatchObject({
       postId: "p1",
@@ -172,6 +292,7 @@ describe("OpenRouterLlmProvider", () => {
     const result = await provider.analyzeVision(visionInput("https://cdn.example/private.jpg"));
 
     expect(dnsMocks.lookup).toHaveBeenCalledWith("cdn.example", { all: true, verbatim: true });
+    expect(imageRequestMocks.state.calls).toHaveLength(0);
     expect(fetchMock).not.toHaveBeenCalled();
     expect(result[0]).toMatchObject({
       postId: "p1",
@@ -181,19 +302,19 @@ describe("OpenRouterLlmProvider", () => {
   });
 
   it("checks redirect targets before following image downloads", async () => {
-    const fetchMock = vi.fn().mockResolvedValueOnce(
-      new Response("", {
-        status: 302,
-        headers: { location: "http://127.0.0.1/metadata" }
-      })
-    );
+    imageRequestMocks.state.responses.push({
+      statusCode: 302,
+      headers: { location: "http://127.0.0.1/metadata" }
+    });
+    const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
 
     const provider = new OpenRouterLlmProvider("token");
     const result = await provider.analyzeVision(visionInput("https://cdn.example/redirect.jpg"));
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(fetchMock.mock.calls[0]?.[0]).toBe("https://cdn.example/redirect.jpg");
+    expect(imageRequestMocks.state.calls).toHaveLength(1);
+    expect(imageRequestMocks.state.calls[0]?.url).toBe("https://cdn.example/redirect.jpg");
+    expect(fetchMock).not.toHaveBeenCalled();
     expect(result[0]).toMatchObject({
       postId: "p1",
       status: "skipped",

@@ -273,5 +273,25 @@ async function downloadTelegramFile(
     signal: AbortSignal.timeout(30000)
   });
   if (!response.ok) throw new Error(`TELEGRAM_FILE_DOWNLOAD_${response.status}`);
-  return Buffer.from(await response.arrayBuffer());
+  const maxBytes = Math.max(1, Math.floor((env.PHOTO_UPLOAD_MAX_MB ?? 10) * 1024 * 1024));
+  const contentLength = Number(response.headers.get("content-length"));
+  if (Number.isFinite(contentLength) && contentLength > maxBytes) {
+    throw new Error("PHOTO_TOO_LARGE");
+  }
+  const chunks: Buffer[] = [];
+  let received = 0;
+  const reader = response.body?.getReader();
+  if (reader) {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      received += value.byteLength;
+      if (received > maxBytes) throw new Error("PHOTO_TOO_LARGE");
+      chunks.push(Buffer.from(value));
+    }
+    return Buffer.concat(chunks);
+  }
+  const bytes = Buffer.from(await response.arrayBuffer());
+  if (bytes.byteLength > maxBytes) throw new Error("PHOTO_TOO_LARGE");
+  return bytes;
 }

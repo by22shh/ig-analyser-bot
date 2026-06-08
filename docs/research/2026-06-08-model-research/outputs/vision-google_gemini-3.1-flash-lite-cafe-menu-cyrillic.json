@@ -1,0 +1,41 @@
+{
+  "testCase": {
+    "id": "cafe-menu-cyrillic",
+    "title": "Cafe menu with Cyrillic OCR",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-cafe-menu-cyrillic.png",
+    "caption": "Любимое место для завтрака.",
+    "expectedText": [
+      "MIRA CAFE",
+      "ЗАВТРАК",
+      "РАФ 320",
+      "СКИДКА 15%",
+      "12 ИЮНЯ"
+    ],
+    "expectedObjects": [
+      "menu",
+      "coffee",
+      "cafe"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "google/gemini-3.1-flash-lite",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"A digital graphic displaying a cafe menu or promotional offer.\",\n    \"The text is written in Russian.\",\n    \"The background is a light cream color with a soft grey border.\",\n    \"There is a brown abstract icon in the bottom right corner.\",\n    \"The text includes a cafe name, a heading, two items with prices, a discount offer, and a date.\"\n  ],\n  \"setting\": \"Digital graphic design\",\n  \"objects\": [\n    \"Menu card\",\n    \"Abstract icon\"\n  ],\n  \"textOverlays\": [\n    \"MIRA CAFE\",\n    \"ЗАВТРАК\",\n    \"РАФ 320\",\n    \"КРУАССАН 260\",\n    \"СКИДКА 15%\",\n    \"12 ИЮНЯ\"\n  ],\n  \"textVerbatim\": [\n    \"MIRA CAFE\",\n    \"ЗАВТРАК\",\n    \"РАФ 320\",\n    \"КРУАССАН 260\",\n    \"СКИДКА 15%\",\n    \"12 ИЮНЯ\"\n  ],\n  \"visualStyle\": [\n    \"Minimalist\",\n    \"Graphic design\",\n    \"Sans-serif typography\",\n    \"Neutral color palette\"\n  ],\n  \"isLikelyScreenshot\": false,\n  \"uncertainty\": [\n    \"The physical location of the cafe is not visible.\",\n    \"The purpose of the brown icon is not explicitly defined.\"\n  ]\n}",
+    "latencyMs": 2261,
+    "promptTokens": 1326,
+    "completionTokens": 229,
+    "reasoningTokens": 0,
+    "costUsd": 0.000675
+  },
+  "rendered": "[Image ID: cafe-menu-cyrillic]\n- Visible fact: A digital graphic displaying a cafe menu or promotional offer.\n- Visible fact: The text is written in Russian.\n- Visible fact: The background is a light cream color with a soft grey border.\n- Visible fact: There is a brown abstract icon in the bottom right corner.\n- Visible fact: The text includes a cafe name, a heading, two items with prices, a discount offer, and a date.\n- Setting: Digital graphic design\n- Objects/signals: Menu card, Abstract icon\n- Text in image: MIRA CAFE | ЗАВТРАК | РАФ 320 | КРУАССАН 260 | СКИДКА 15% | 12 ИЮНЯ\n- Text (verbatim): MIRA CAFE | ЗАВТРАК | РАФ 320 | КРУАССАН 260 | СКИДКА 15% | 12 ИЮНЯ\n- Visual style: Minimalist, Graphic design, Sans-serif typography, Neutral color palette\n- Uncertainty: The physical location of the cafe is not visible.; The purpose of the brown icon is not explicitly defined.",
+  "evaluation": {
+    "score": 95,
+    "missedText": [],
+    "missedObjects": [
+      "coffee"
+    ],
+    "forbiddenHits": []
+  }
+}

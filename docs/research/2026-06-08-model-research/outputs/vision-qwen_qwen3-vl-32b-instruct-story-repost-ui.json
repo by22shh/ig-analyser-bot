@@ -1,0 +1,48 @@
+{
+  "testCase": {
+    "id": "story-repost-ui",
+    "title": "Story screenshot/repost UI",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-story-repost.png",
+    "caption": "Утренний кофе и прогулка.",
+    "expectedText": [
+      "@MIRA.STYLE",
+      "STORY REPOST",
+      "COFFEE WALK",
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "expectedObjects": [
+      "story",
+      "repost",
+      "coffee",
+      "send message"
+    ],
+    "expectedScreenshot": true
+  },
+  "result": {
+    "ok": true,
+    "model": "qwen/qwen3-vl-32b-instruct",
+    "tier": "no-structured",
+    "text": "{\n  \"textVerbatim\": \"@MIRA.STYLE\\nSTORY REPOST\\nCOFFEE WALK\",\n  \"isLikelyScreenshot\": true,\n  \"brandOrProductCues\": [\n    \"@MIRA.STYLE\"\n  ],\n  \"sceneOrSettingType\": \"Instagram story repost interface\",\n  \"visibleObjects\": [\n    \"black letterbox bars\",\n    \"rounded rectangular frame with light beige background\",\n    \"green circular profile icon\",\n    \"text label '@MIRA.STYLE'\",\n    \"bold text 'STORY REPOST'\",\n    \"light blue rectangular placeholder with a brown circle and white square inside\",\n    \"partial bold text 'COFFEE WALK' at the bottom\"\n  ],\n  \"compositionNotes\": \"The image shows a UI element typical of Instagram's story repost feature, with a central content placeholder and branding elements. The content area is blank or obscured, suggesting a placeholder or censored media.\",\n  \"captionContext\": \"The caption 'Утренний кофе и прогулка.' (Morning coffee and a walk) suggests the reposted story may have depicted a morning routine involving coffee and walking, though no such content is visible in the image.\"\n}",
+    "latencyMs": 3681,
+    "promptTokens": 1028,
+    "completionTokens": 246,
+    "reasoningTokens": 0,
+    "costUsd": 0.000209248
+  },
+  "rendered": "[Image ID: story-repost-ui]\n- Note: likely a screenshot/repost, not an original upload.",
+  "evaluation": {
+    "score": 58,
+    "missedText": [
+      "@MIRA.STYLE",
+      "COFFEE WALK",
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "missedObjects": [
+      "coffee",
+      "send message"
+    ],
+    "forbiddenHits": []
+  }
+}

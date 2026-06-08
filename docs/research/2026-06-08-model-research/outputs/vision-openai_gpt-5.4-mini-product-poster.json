@@ -1,0 +1,44 @@
+{
+  "testCase": {
+    "id": "product-poster",
+    "title": "Product/fashion poster with English text",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-product-poster.png",
+    "caption": "Новый дроп, спокойные цвета и лен.",
+    "expectedText": [
+      "MIRA STUDIO",
+      "NEW DROP",
+      "LINEN SET",
+      "12 JUN",
+      "SAGE",
+      "IVORY"
+    ],
+    "expectedObjects": [
+      "linen",
+      "sunglasses",
+      "bag",
+      "poster"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "openai/gpt-5.4-mini",
+    "tier": "no-structured",
+    "text": "{\n  \"postId\": \"product-poster\",\n  \"isLikelyScreenshot\": false,\n  \"textVerbatim\": \"MIRA STUDIO\\nNEW DROP\\nLINEN SET / 12 JUN\\nSAGE + IVORY\",\n  \"visibleFacts\": [\n    \"A minimalist promotional poster on a light beige background with a large white rounded-rectangle panel.\",\n    \"The poster contains the brand/name text 'MIRA STUDIO' at the top left.\",\n    \"There are simple abstract shape graphics: a pale sage rounded vertical oval on the left, and a dark rounded rectangle with two overlapping dark circles on the right.\",\n    \"Large headline text near the bottom reads 'NEW DROP'.\",\n    \"Supporting text below reads 'LINEN SET / 12 JUN' and 'SAGE + IVORY'.\",\n    \"The overall design uses muted, neutral tones and a clean product-poster layout.\"\n  ],\n  \"brandAndSceneCues\": [\n    \"MIRA STUDIO\",\n    \"Product/drop announcement poster\",\n    \"Minimalist fashion or home-textile style branding\",\n    \"Linen set colorway cue: sage and ivory\"\n  ]\n}",
+    "latencyMs": 2858,
+    "promptTokens": 1248,
+    "completionTokens": 241,
+    "reasoningTokens": 0,
+    "costUsd": 0.0020205
+  },
+  "rendered": "[Image ID: product-poster]\n- Visible fact: A minimalist promotional poster on a light beige background with a large white rounded-rectangle panel.\n- Visible fact: The poster contains the brand/name text 'MIRA STUDIO' at the top left.\n- Visible fact: There are simple abstract shape graphics: a pale sage rounded vertical oval on the left, and a dark rounded rectangle with two overlapping dark circles on the right.\n- Visible fact: Large headline text near the bottom reads 'NEW DROP'.\n- Visible fact: Supporting text below reads 'LINEN SET / 12 JUN' and 'SAGE + IVORY'.\n- Visible fact: The overall design uses muted, neutral tones and a clean product-poster layout.",
+  "evaluation": {
+    "score": 90,
+    "missedText": [],
+    "missedObjects": [
+      "sunglasses",
+      "bag"
+    ],
+    "forbiddenHits": []
+  }
+}

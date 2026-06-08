@@ -1,0 +1,45 @@
+{
+  "testCase": {
+    "id": "carousel-cover",
+    "title": "Carousel cover / content planning slide",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-carousel-cover.png",
+    "caption": "План контента на июнь.",
+    "expectedText": [
+      "CAROUSEL 1/5",
+      "ROADMAP",
+      "POST IDEAS",
+      "JUNE PLAN"
+    ],
+    "expectedObjects": [
+      "carousel",
+      "roadmap",
+      "planning"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "openai/gpt-5.4-mini",
+    "tier": "no-structured",
+    "text": "{\n  \"postId\": \"carousel-cover\",\n  \"isLikelyScreenshot\": false,\n  \"textVerbatim\": \"ROADMAP\\nPOST IDEAS\\nJUNE PLAN\\nCAROUSEL 1/5\",\n  \"visibleFacts\": [\n    \"A minimalist graphic cover on a pale gray background.\",\n    \"Centered white rounded rectangle containing a light blue rounded panel.\",\n    \"Three lines of bold black text inside the blue panel.\",\n    \"Two horizontal rounded bars below the panel, one pale green and one beige.\",\n    \"Large bold text at the bottom reads a carousel slide count.\"\n  ],\n  \"brandLogoProductCues\": [\n    \"No clear brand logos or product packaging visible.\",\n    \"Design appears to be a social media carousel cover / content-planning graphic.\"\n  ],\n  \"sceneSettingType\": \"Graphic social media carousel cover\"\n}",
+    "latencyMs": 2474,
+    "promptTokens": 1244,
+    "completionTokens": 179,
+    "reasoningTokens": 0,
+    "costUsd": 0.0017385
+  },
+  "rendered": "[Image ID: carousel-cover]\n- Visible fact: A minimalist graphic cover on a pale gray background.\n- Visible fact: Centered white rounded rectangle containing a light blue rounded panel.\n- Visible fact: Three lines of bold black text inside the blue panel.\n- Visible fact: Two horizontal rounded bars below the panel, one pale green and one beige.\n- Visible fact: Large bold text at the bottom reads a carousel slide count.",
+  "evaluation": {
+    "score": 66,
+    "missedText": [
+      "ROADMAP",
+      "POST IDEAS",
+      "JUNE PLAN"
+    ],
+    "missedObjects": [
+      "roadmap",
+      "planning"
+    ],
+    "forbiddenHits": []
+  }
+}

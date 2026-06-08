@@ -97,7 +97,7 @@ fly secrets set YOOKASSA_RETURN_URL="https://your-domain.example/payments/yookas
 
 ## 5. Set Provider Secrets
 
-The default [fly.toml](/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/fly.toml) enables Telegram Stars, YooKassa and real analysis mode in production. The app intentionally refuses to start in `APP_ENV=production` if these enabled integrations would fall back to mock mode.
+The default [fly.toml](/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/fly.toml) enables Telegram Stars and real analysis mode in production, while YooKassa is disabled unless you set `FEATURE_YOOKASSA_PAYMENTS=true`. The app intentionally refuses to start in `APP_ENV=production` if enabled integrations would fall back to mock mode.
 
 ```bash
 fly secrets set \

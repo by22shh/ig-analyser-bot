@@ -1,0 +1,39 @@
+{
+  "testCase": {
+    "id": "cafe-menu-cyrillic",
+    "title": "Cafe menu with Cyrillic OCR",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-cafe-menu-cyrillic.png",
+    "caption": "Любимое место для завтрака.",
+    "expectedText": [
+      "MIRA CAFE",
+      "ЗАВТРАК",
+      "РАФ 320",
+      "СКИДКА 15%",
+      "12 ИЮНЯ"
+    ],
+    "expectedObjects": [
+      "menu",
+      "coffee",
+      "cafe"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "qwen/qwen3-vl-235b-a22b-instruct",
+    "tier": "full",
+    "text": "{  \n  \"visibleFacts\": [  \n    \"Text at top: 'MIRA CAFE'\",  \n    \"Large Cyrillic heading: 'ЗАВТРАК'\",  \n    \"Listed items: 'РАФ 320', 'КРУАССАН 260'\",  \n    \"Promo line: 'СКИДКА 15%'\",  \n    \"Date: '12 ИЮНЯ'\",  \n    \"Small brown icon in bottom-right corner: stylized coffee cup or saucer\"  \n  ],  \n  \"setting\": \"Digital menu card or promotional graphic for a cafe\",  \n  \"objects\": [  \n    \"Text-only layout on light cream background with rounded corners\",  \n    \"No visible people, food, or physical environment\"  \n  ],  \n  \"textOverlays\": [  \n    \"MIRA CAFE\",  \n    \"ЗАВТРАК\",  \n    \"РАФ 320\",  \n    \"КРУАССАН 260\",  \n    \"СКИДКА 15%\",  \n    \"12 ИЮНЯ\"  \n  ],  \n  \"textVerbatim\": [  \n    \"MIRA CAFE\",  \n    \"ЗАВТРАК\",  \n    \"РАФ 320\",  \n    \"КРУАССАН 260\",  \n    \"СКИДКА 15%\",  \n    \"12 ИЮНЯ\"  \n  ],  \n  \"visualStyle\": [  \n    \"Minimalist typography\",  \n    \"High contrast black text on off-white background\",  \n    \"Clean, modern layout\"  \n  ],  \n  \"isLikelyScreenshot\": false  \n  ,  \n  \"uncertainty\": []  \n}",
+    "latencyMs": 9926,
+    "promptTokens": 1030,
+    "completionTokens": 382,
+    "reasoningTokens": 0,
+    "costUsd": 0.00054216
+  },
+  "rendered": "[Image ID: cafe-menu-cyrillic]\n- Visible fact: Text at top: 'MIRA CAFE'\n- Visible fact: Large Cyrillic heading: 'ЗАВТРАК'\n- Visible fact: Listed items: 'РАФ 320', 'КРУАССАН 260'\n- Visible fact: Promo line: 'СКИДКА 15%'\n- Visible fact: Date: '12 ИЮНЯ'\n- Visible fact: Small brown icon in bottom-right corner: stylized coffee cup or saucer\n- Setting: Digital menu card or promotional graphic for a cafe\n- Objects/signals: Text-only layout on light cream background with rounded corners, No visible people, food, or physical environment\n- Text in image: MIRA CAFE | ЗАВТРАК | РАФ 320 | КРУАССАН 260 | СКИДКА 15% | 12 ИЮНЯ\n- Text (verbatim): MIRA CAFE | ЗАВТРАК | РАФ 320 | КРУАССАН 260 | СКИДКА 15% | 12 ИЮНЯ\n- Visual style: Minimalist typography, High contrast black text on off-white background, Clean, modern layout",
+  "evaluation": {
+    "score": 100,
+    "missedText": [],
+    "missedObjects": [],
+    "forbiddenHits": []
+  }
+}

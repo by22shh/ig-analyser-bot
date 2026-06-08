@@ -1,0 +1,41 @@
+{
+  "testCase": {
+    "id": "cafe-menu-cyrillic",
+    "title": "Cafe menu with Cyrillic OCR",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-cafe-menu-cyrillic.png",
+    "caption": "Любимое место для завтрака.",
+    "expectedText": [
+      "MIRA CAFE",
+      "ЗАВТРАК",
+      "РАФ 320",
+      "СКИДКА 15%",
+      "12 ИЮНЯ"
+    ],
+    "expectedObjects": [
+      "menu",
+      "coffee",
+      "cafe"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "x-ai/grok-4.3",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"White rounded rectangle menu card on light background\",\n    \"Dark sans-serif text listing cafe items and prices\",\n    \"Brown circular icon with base at bottom right\",\n    \"Horizontal line separator under cafe name\"\n  ],\n  \"setting\": \"digital menu graphic\",\n  \"objects\": [\n    \"menu card\",\n    \"text list\",\n    \"icon\"\n  ],\n  \"textOverlays\": [\n    \"MIRA CAFE\",\n    \"ЗАВТРАК\",\n    \"РАФ 320\",\n    \"КРУАССАН 260\",\n    \"СКИДКА 15%\",\n    \"12 ИЮНЯ\"\n  ],\n  \"textVerbatim\": [\n    \"MIRA CAFE\",\n    \"ЗАВТРАК\",\n    \"РАФ 320\",\n    \"КРУАССАН 260\",\n    \"СКИДКА 15%\",\n    \"12 ИЮНЯ\"\n  ],\n  \"visualStyle\": [\n    \"minimalist\",\n    \"clean white card\",\n    \"rounded corners\",\n    \"high contrast text\"\n  ],\n  \"isLikelyScreenshot\": false,\n  \"uncertainty\": [\n    \"whether card is physical or digital design\"\n  ]\n}",
+    "latencyMs": 6369,
+    "promptTokens": 1536,
+    "completionTokens": 1225,
+    "reasoningTokens": 971,
+    "costUsd": 0.0048481
+  },
+  "rendered": "[Image ID: cafe-menu-cyrillic]\n- Visible fact: White rounded rectangle menu card on light background\n- Visible fact: Dark sans-serif text listing cafe items and prices\n- Visible fact: Brown circular icon with base at bottom right\n- Visible fact: Horizontal line separator under cafe name\n- Setting: digital menu graphic\n- Objects/signals: menu card, text list, icon\n- Text in image: MIRA CAFE | ЗАВТРАК | РАФ 320 | КРУАССАН 260 | СКИДКА 15% | 12 ИЮНЯ\n- Text (verbatim): MIRA CAFE | ЗАВТРАК | РАФ 320 | КРУАССАН 260 | СКИДКА 15% | 12 ИЮНЯ\n- Visual style: minimalist, clean white card, rounded corners, high contrast text\n- Uncertainty: whether card is physical or digital design",
+  "evaluation": {
+    "score": 95,
+    "missedText": [],
+    "missedObjects": [
+      "coffee"
+    ],
+    "forbiddenHits": []
+  }
+}

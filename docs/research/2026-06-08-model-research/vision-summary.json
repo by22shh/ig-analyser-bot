@@ -1,0 +1,816 @@
+[
+  {
+    "model": "openai/gpt-5.5",
+    "modelName": "OpenAI: GPT-5.5",
+    "priceInPerMTok": 5,
+    "priceOutPerMTok": 30,
+    "averageScore": 92.8,
+    "averageLatencyMs": 8858.4,
+    "totalCostUsd": 0.092155,
+    "cases": [
+      {
+        "caseId": "sochi-screenshot",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 100,
+        "missedText": [],
+        "missedObjects": [],
+        "forbiddenHits": [],
+        "latencyMs": 16980,
+        "costUsd": 0.028755
+      },
+      {
+        "caseId": "product-poster",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 90,
+        "missedText": [],
+        "missedObjects": [
+          "sunglasses",
+          "bag"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 6245,
+        "costUsd": 0.01536
+      },
+      {
+        "caseId": "story-repost-ui",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 79,
+        "missedText": [
+          "08:30",
+          "SEND MESSAGE"
+        ],
+        "missedObjects": [
+          "send message"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 9167,
+        "costUsd": 0.01947
+      },
+      {
+        "caseId": "cafe-menu-cyrillic",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 100,
+        "missedText": [],
+        "missedObjects": [],
+        "forbiddenHits": [],
+        "latencyMs": 6100,
+        "costUsd": 0.01584
+      },
+      {
+        "caseId": "carousel-cover",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "planning"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 5800,
+        "costUsd": 0.01273
+      }
+    ]
+  },
+  {
+    "model": "google/gemini-2.5-flash",
+    "modelName": "Google: Gemini 2.5 Flash",
+    "priceInPerMTok": 0.3,
+    "priceOutPerMTok": 2.5,
+    "averageScore": 91.8,
+    "averageLatencyMs": 2792,
+    "totalCostUsd": 0.006514,
+    "cases": [
+      {
+        "caseId": "sochi-screenshot",
+        "ok": true,
+        "tier": "full",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "two people"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 3648,
+        "costUsd": 0.0016886
+      },
+      {
+        "caseId": "product-poster",
+        "ok": true,
+        "tier": "full",
+        "score": 90,
+        "missedText": [],
+        "missedObjects": [
+          "sunglasses",
+          "bag"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 2502,
+        "costUsd": 0.0011869
+      },
+      {
+        "caseId": "story-repost-ui",
+        "ok": true,
+        "tier": "full",
+        "score": 79,
+        "missedText": [
+          "08:30",
+          "SEND MESSAGE"
+        ],
+        "missedObjects": [
+          "send message"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 2821,
+        "costUsd": 0.0012522
+      },
+      {
+        "caseId": "cafe-menu-cyrillic",
+        "ok": true,
+        "tier": "full",
+        "score": 100,
+        "missedText": [],
+        "missedObjects": [],
+        "forbiddenHits": [],
+        "latencyMs": 2948,
+        "costUsd": 0.00125
+      },
+      {
+        "caseId": "carousel-cover",
+        "ok": true,
+        "tier": "full",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "planning"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 2041,
+        "costUsd": 0.0011363
+      }
+    ]
+  },
+  {
+    "model": "google/gemini-3.5-flash",
+    "modelName": "Google: Gemini 3.5 Flash",
+    "priceInPerMTok": 1.5,
+    "priceOutPerMTok": 9,
+    "averageScore": 91.8,
+    "averageLatencyMs": 6679.2,
+    "totalCostUsd": 0.0529035,
+    "cases": [
+      {
+        "caseId": "sochi-screenshot",
+        "ok": true,
+        "tier": "full",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "two people"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 6365,
+        "costUsd": 0.011643
+      },
+      {
+        "caseId": "product-poster",
+        "ok": true,
+        "tier": "full",
+        "score": 90,
+        "missedText": [],
+        "missedObjects": [
+          "sunglasses",
+          "bag"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 5812,
+        "costUsd": 0.009939
+      },
+      {
+        "caseId": "story-repost-ui",
+        "ok": true,
+        "tier": "full",
+        "score": 79,
+        "missedText": [
+          "08:30",
+          "SEND MESSAGE"
+        ],
+        "missedObjects": [
+          "send message"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 6579,
+        "costUsd": 0.0100665
+      },
+      {
+        "caseId": "cafe-menu-cyrillic",
+        "ok": true,
+        "tier": "full",
+        "score": 100,
+        "missedText": [],
+        "missedObjects": [],
+        "forbiddenHits": [],
+        "latencyMs": 5900,
+        "costUsd": 0.011661
+      },
+      {
+        "caseId": "carousel-cover",
+        "ok": true,
+        "tier": "full",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "planning"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 8740,
+        "costUsd": 0.009594
+      }
+    ]
+  },
+  {
+    "model": "qwen/qwen3-vl-235b-a22b-instruct",
+    "modelName": "Qwen: Qwen3 VL 235B A22B Instruct",
+    "priceInPerMTok": 0.19999999999999998,
+    "priceOutPerMTok": 0.88,
+    "averageScore": 91.2,
+    "averageLatencyMs": 6894.6,
+    "totalCostUsd": 0.0029863199999999998,
+    "cases": [
+      {
+        "caseId": "sochi-screenshot",
+        "ok": true,
+        "tier": "full",
+        "score": 92,
+        "missedText": [
+          "FALL/WINTER"
+        ],
+        "missedObjects": [],
+        "forbiddenHits": [],
+        "latencyMs": 7297,
+        "costUsd": 0.00054096
+      },
+      {
+        "caseId": "product-poster",
+        "ok": true,
+        "tier": "full",
+        "score": 90,
+        "missedText": [],
+        "missedObjects": [
+          "sunglasses",
+          "bag"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 4687,
+        "costUsd": 0.00043276
+      },
+      {
+        "caseId": "story-repost-ui",
+        "ok": true,
+        "tier": "full",
+        "score": 79,
+        "missedText": [
+          "08:30",
+          "SEND MESSAGE"
+        ],
+        "missedObjects": [
+          "send message"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 8030,
+        "costUsd": 0.000788
+      },
+      {
+        "caseId": "cafe-menu-cyrillic",
+        "ok": true,
+        "tier": "full",
+        "score": 100,
+        "missedText": [],
+        "missedObjects": [],
+        "forbiddenHits": [],
+        "latencyMs": 9926,
+        "costUsd": 0.00054216
+      },
+      {
+        "caseId": "carousel-cover",
+        "ok": true,
+        "tier": "full",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "planning"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 4533,
+        "costUsd": 0.00068244
+      }
+    ]
+  },
+  {
+    "model": "anthropic/claude-sonnet-4.6",
+    "modelName": "Anthropic: Claude Sonnet 4.6",
+    "priceInPerMTok": 3,
+    "priceOutPerMTok": 15,
+    "averageScore": 91.2,
+    "averageLatencyMs": 15248.8,
+    "totalCostUsd": 0.042051,
+    "cases": [
+      {
+        "caseId": "sochi-screenshot",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 92,
+        "missedText": [
+          "AUTOMNE"
+        ],
+        "missedObjects": [],
+        "forbiddenHits": [],
+        "latencyMs": 19746,
+        "costUsd": 0.009087
+      },
+      {
+        "caseId": "product-poster",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 90,
+        "missedText": [],
+        "missedObjects": [
+          "sunglasses",
+          "bag"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 14580,
+        "costUsd": 0.008676
+      },
+      {
+        "caseId": "story-repost-ui",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 79,
+        "missedText": [
+          "08:30",
+          "SEND MESSAGE"
+        ],
+        "missedObjects": [
+          "send message"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 15471,
+        "costUsd": 0.008655
+      },
+      {
+        "caseId": "cafe-menu-cyrillic",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 100,
+        "missedText": [],
+        "missedObjects": [],
+        "forbiddenHits": [],
+        "latencyMs": 14932,
+        "costUsd": 0.008322
+      },
+      {
+        "caseId": "carousel-cover",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "planning"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 11515,
+        "costUsd": 0.007311
+      }
+    ]
+  },
+  {
+    "model": "google/gemini-3.1-flash-lite",
+    "modelName": "Google: Gemini 3.1 Flash Lite",
+    "priceInPerMTok": 0.25,
+    "priceOutPerMTok": 1.5,
+    "averageScore": 90.8,
+    "averageLatencyMs": 2632.6,
+    "totalCostUsd": 0.00402625,
+    "cases": [
+      {
+        "caseId": "sochi-screenshot",
+        "ok": true,
+        "tier": "full",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "two people"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 2395,
+        "costUsd": 0.0007335
+      },
+      {
+        "caseId": "product-poster",
+        "ok": true,
+        "tier": "full",
+        "score": 90,
+        "missedText": [],
+        "missedObjects": [
+          "sunglasses",
+          "bag"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 3179,
+        "costUsd": 0.0009245
+      },
+      {
+        "caseId": "story-repost-ui",
+        "ok": true,
+        "tier": "full",
+        "score": 79,
+        "missedText": [
+          "08:30",
+          "SEND MESSAGE"
+        ],
+        "missedObjects": [
+          "send message"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 2324,
+        "costUsd": 0.00078875
+      },
+      {
+        "caseId": "cafe-menu-cyrillic",
+        "ok": true,
+        "tier": "full",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "coffee"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 2261,
+        "costUsd": 0.000675
+      },
+      {
+        "caseId": "carousel-cover",
+        "ok": true,
+        "tier": "full",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "planning"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 3004,
+        "costUsd": 0.0009045
+      }
+    ]
+  },
+  {
+    "model": "x-ai/grok-4.3",
+    "modelName": "xAI: Grok 4.3",
+    "priceInPerMTok": 1.25,
+    "priceOutPerMTok": 2.5,
+    "averageScore": 89.2,
+    "averageLatencyMs": 5311.6,
+    "totalCostUsd": 0.020151750000000003,
+    "cases": [
+      {
+        "caseId": "sochi-screenshot",
+        "ok": true,
+        "tier": "full",
+        "score": 87,
+        "missedText": [
+          "FALL/WINTER"
+        ],
+        "missedObjects": [
+          "lighthouse"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 5947,
+        "costUsd": 0.00419685
+      },
+      {
+        "caseId": "product-poster",
+        "ok": true,
+        "tier": "full",
+        "score": 90,
+        "missedText": [],
+        "missedObjects": [
+          "sunglasses",
+          "bag"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 6367,
+        "costUsd": 0.0035481
+      },
+      {
+        "caseId": "story-repost-ui",
+        "ok": true,
+        "tier": "full",
+        "score": 79,
+        "missedText": [
+          "08:30",
+          "SEND MESSAGE"
+        ],
+        "missedObjects": [
+          "send message"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 4166,
+        "costUsd": 0.0038731
+      },
+      {
+        "caseId": "cafe-menu-cyrillic",
+        "ok": true,
+        "tier": "full",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "coffee"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 6369,
+        "costUsd": 0.0048481
+      },
+      {
+        "caseId": "carousel-cover",
+        "ok": true,
+        "tier": "full",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "planning"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 3709,
+        "costUsd": 0.0036856
+      }
+    ]
+  },
+  {
+    "model": "anthropic/claude-opus-4.8",
+    "modelName": "Anthropic: Claude Opus 4.8",
+    "priceInPerMTok": 5,
+    "priceOutPerMTok": 25,
+    "averageScore": 88.8,
+    "averageLatencyMs": 10294.6,
+    "totalCostUsd": 0.09815499999999999,
+    "cases": [
+      {
+        "caseId": "sochi-screenshot",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 80,
+        "missedText": [],
+        "missedObjects": [],
+        "forbiddenHits": [
+          "in a relationship"
+        ],
+        "latencyMs": 13529,
+        "costUsd": 0.023225
+      },
+      {
+        "caseId": "product-poster",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 90,
+        "missedText": [],
+        "missedObjects": [
+          "sunglasses",
+          "bag"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 8947,
+        "costUsd": 0.0192
+      },
+      {
+        "caseId": "story-repost-ui",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 79,
+        "missedText": [
+          "08:30",
+          "SEND MESSAGE"
+        ],
+        "missedObjects": [
+          "send message"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 7816,
+        "costUsd": 0.01819
+      },
+      {
+        "caseId": "cafe-menu-cyrillic",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 100,
+        "missedText": [],
+        "missedObjects": [],
+        "forbiddenHits": [],
+        "latencyMs": 12488,
+        "costUsd": 0.018355
+      },
+      {
+        "caseId": "carousel-cover",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "planning"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 8693,
+        "costUsd": 0.019185
+      }
+    ]
+  },
+  {
+    "model": "openai/gpt-5.4-mini",
+    "modelName": "OpenAI: GPT-5.4 Mini",
+    "priceInPerMTok": 0.75,
+    "priceOutPerMTok": 4.5,
+    "averageScore": 85,
+    "averageLatencyMs": 2531.6,
+    "totalCostUsd": 0.00931875,
+    "cases": [
+      {
+        "caseId": "sochi-screenshot",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "lighthouse"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 2641,
+        "costUsd": 0.00188775
+      },
+      {
+        "caseId": "product-poster",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 90,
+        "missedText": [],
+        "missedObjects": [
+          "sunglasses",
+          "bag"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 2858,
+        "costUsd": 0.0020205
+      },
+      {
+        "caseId": "story-repost-ui",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 79,
+        "missedText": [
+          "08:30",
+          "SEND MESSAGE"
+        ],
+        "missedObjects": [
+          "send message"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 2552,
+        "costUsd": 0.0018945
+      },
+      {
+        "caseId": "cafe-menu-cyrillic",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 95,
+        "missedText": [],
+        "missedObjects": [
+          "coffee"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 2133,
+        "costUsd": 0.0017775
+      },
+      {
+        "caseId": "carousel-cover",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 66,
+        "missedText": [
+          "ROADMAP",
+          "POST IDEAS",
+          "JUNE PLAN"
+        ],
+        "missedObjects": [
+          "roadmap",
+          "planning"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 2474,
+        "costUsd": 0.0017385
+      }
+    ]
+  },
+  {
+    "model": "qwen/qwen3-vl-32b-instruct",
+    "modelName": "Qwen: Qwen3 VL 32B Instruct",
+    "priceInPerMTok": 0.10400000000000001,
+    "priceOutPerMTok": 0.41600000000000004,
+    "averageScore": 63.4,
+    "averageLatencyMs": 4096.4,
+    "totalCostUsd": 0.001052376,
+    "cases": [
+      {
+        "caseId": "sochi-screenshot",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 56,
+        "missedText": [
+          "AUTOMNE",
+          "FALL/WINTER",
+          "24-25"
+        ],
+        "missedObjects": [
+          "water",
+          "lighthouse",
+          "two people",
+          "black bars"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 4437,
+        "costUsd": 0.000220064
+      },
+      {
+        "caseId": "product-poster",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 37,
+        "missedText": [
+          "MIRA STUDIO",
+          "NEW DROP",
+          "LINEN SET",
+          "12 JUN",
+          "SAGE",
+          "IVORY"
+        ],
+        "missedObjects": [
+          "linen",
+          "sunglasses",
+          "bag"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 3279,
+        "costUsd": 0.000188136
+      },
+      {
+        "caseId": "story-repost-ui",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 58,
+        "missedText": [
+          "@MIRA.STYLE",
+          "COFFEE WALK",
+          "08:30",
+          "SEND MESSAGE"
+        ],
+        "missedObjects": [
+          "coffee",
+          "send message"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 3681,
+        "costUsd": 0.000209248
+      },
+      {
+        "caseId": "cafe-menu-cyrillic",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 100,
+        "missedText": [],
+        "missedObjects": [],
+        "forbiddenHits": [],
+        "latencyMs": 4533,
+        "costUsd": 0.000237744
+      },
+      {
+        "caseId": "carousel-cover",
+        "ok": true,
+        "tier": "no-structured",
+        "score": 66,
+        "missedText": [
+          "ROADMAP",
+          "POST IDEAS",
+          "JUNE PLAN"
+        ],
+        "missedObjects": [
+          "roadmap",
+          "planning"
+        ],
+        "forbiddenHits": [],
+        "latencyMs": 4552,
+        "costUsd": 0.000197184
+      }
+    ]
+  }
+]

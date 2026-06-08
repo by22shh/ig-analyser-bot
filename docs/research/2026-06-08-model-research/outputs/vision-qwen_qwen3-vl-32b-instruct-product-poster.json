@@ -1,0 +1,52 @@
+{
+  "testCase": {
+    "id": "product-poster",
+    "title": "Product/fashion poster with English text",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-product-poster.png",
+    "caption": "Новый дроп, спокойные цвета и лен.",
+    "expectedText": [
+      "MIRA STUDIO",
+      "NEW DROP",
+      "LINEN SET",
+      "12 JUN",
+      "SAGE",
+      "IVORY"
+    ],
+    "expectedObjects": [
+      "linen",
+      "sunglasses",
+      "bag",
+      "poster"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "qwen/qwen3-vl-32b-instruct",
+    "tier": "no-structured",
+    "text": "{\n  \"textVerbatim\": \"MIRA STUDIO\\nNEW DROP\\nLINEN SET / 12 JUN\\nSAGE + IVORY\",\n  \"isLikelyScreenshot\": false,\n  \"brandOrProductCues\": [\n    \"MIRA STUDIO\",\n    \"NEW DROP\",\n    \"LINEN SET\",\n    \"SAGE + IVORY\"\n  ],\n  \"sceneOrSettingType\": \"Product announcement graphic\",\n  \"visibleObjects\": [\n    \"White rounded rectangle background\",\n    \"Light green oval shape\",\n    \"Dark gray rectangle and two black circles\",\n    \"Text in bold black sans-serif font\"\n  ],\n  \"compositionNotes\": \"Minimalist design with color swatches and text centered in a rounded white box on a light beige background. The color swatches are positioned above the text block.\",\n  \"captionContext\": \"Новый дроп, спокойные цвета и лен.\"\n}",
+    "latencyMs": 3279,
+    "promptTokens": 1033,
+    "completionTokens": 194,
+    "reasoningTokens": 0,
+    "costUsd": 0.000188136
+  },
+  "rendered": "[Image ID: product-poster]",
+  "evaluation": {
+    "score": 37,
+    "missedText": [
+      "MIRA STUDIO",
+      "NEW DROP",
+      "LINEN SET",
+      "12 JUN",
+      "SAGE",
+      "IVORY"
+    ],
+    "missedObjects": [
+      "linen",
+      "sunglasses",
+      "bag"
+    ],
+    "forbiddenHits": []
+  }
+}

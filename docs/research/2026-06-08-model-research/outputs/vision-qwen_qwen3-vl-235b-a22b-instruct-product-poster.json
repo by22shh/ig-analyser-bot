@@ -1,0 +1,44 @@
+{
+  "testCase": {
+    "id": "product-poster",
+    "title": "Product/fashion poster with English text",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-product-poster.png",
+    "caption": "Новый дроп, спокойные цвета и лен.",
+    "expectedText": [
+      "MIRA STUDIO",
+      "NEW DROP",
+      "LINEN SET",
+      "12 JUN",
+      "SAGE",
+      "IVORY"
+    ],
+    "expectedObjects": [
+      "linen",
+      "sunglasses",
+      "bag",
+      "poster"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "qwen/qwen3-vl-235b-a22b-instruct",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"Brand name: MIRA STUDIO\",\n    \"Text: NEW DROP\",\n    \"Text: LINEN SET / 12 JUN\",\n    \"Text: SAGE + IVORY\",\n    \"Graphic elements: large light green rounded rectangle, dark brown rounded rectangle, two small black circles\",\n    \"Background: off-white with rounded corners\",\n    \"Layout: minimalist, centered text, abstract shapes\"\n  ],\n  \"setting\": \"Digital product poster / graphic design\",\n  \"objects\": [\n    \"Text blocks\",\n    \"Abstract geometric shapes\"\n  ],\n  \"textOverlays\": [\n    \"MIRA STUDIO\",\n    \"NEW DROP\",\n    \"LINEN SET / 12 JUN\",\n    \"SAGE + IVORY\"\n  ],\n  \"textVerbatim\": [\n    \"MIRA STUDIO\",\n    \"NEW DROP\",\n    \"LINEN SET / 12 JUN\",\n    \"SAGE + IVORY\"\n  ],\n  \"visualStyle\": [\n    \"Minimalist\",\n    \"Clean typography\",\n    \"Flat design\",\n    \"Muted color palette\"\n  ],\n  \"isLikelyScreenshot\": false\n  ,\n  \"uncertainty\": []\n}",
+    "latencyMs": 4687,
+    "promptTokens": 1033,
+    "completionTokens": 257,
+    "reasoningTokens": 0,
+    "costUsd": 0.00043276
+  },
+  "rendered": "[Image ID: product-poster]\n- Visible fact: Brand name: MIRA STUDIO\n- Visible fact: Text: NEW DROP\n- Visible fact: Text: LINEN SET / 12 JUN\n- Visible fact: Text: SAGE + IVORY\n- Visible fact: Graphic elements: large light green rounded rectangle, dark brown rounded rectangle, two small black circles\n- Visible fact: Background: off-white with rounded corners\n- Visible fact: Layout: minimalist, centered text, abstract shapes\n- Setting: Digital product poster / graphic design\n- Objects/signals: Text blocks, Abstract geometric shapes\n- Text in image: MIRA STUDIO | NEW DROP | LINEN SET / 12 JUN | SAGE + IVORY\n- Text (verbatim): MIRA STUDIO | NEW DROP | LINEN SET / 12 JUN | SAGE + IVORY\n- Visual style: Minimalist, Clean typography, Flat design, Muted color palette",
+  "evaluation": {
+    "score": 90,
+    "missedText": [],
+    "missedObjects": [
+      "sunglasses",
+      "bag"
+    ],
+    "forbiddenHits": []
+  }
+}

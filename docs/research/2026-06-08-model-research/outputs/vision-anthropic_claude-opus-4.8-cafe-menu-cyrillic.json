@@ -1,0 +1,39 @@
+{
+  "testCase": {
+    "id": "cafe-menu-cyrillic",
+    "title": "Cafe menu with Cyrillic OCR",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-cafe-menu-cyrillic.png",
+    "caption": "Любимое место для завтрака.",
+    "expectedText": [
+      "MIRA CAFE",
+      "ЗАВТРАК",
+      "РАФ 320",
+      "СКИДКА 15%",
+      "12 ИЮНЯ"
+    ],
+    "expectedObjects": [
+      "menu",
+      "coffee",
+      "cafe"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "anthropic/claude-opus-4.8",
+    "tier": "no-structured",
+    "text": "**Post ID:** cafe-menu-cyrillic\n\n**Description (visible facts only):**\n\nThis is a graphic/digital menu card rather than a photograph. It features a cream-colored rounded rectangle card on a light gray background.\n\n**textVerbatim (transcribed exactly):**\n- \"MIRA CAFE\" (header, with a horizontal underline rule beneath it)\n- \"ЗАВТРАК\" (large bold heading)\n- \"РАФ 320\"\n- \"КРУАССАН 260\"\n- \"СКИДКА 15%\"\n- \"12 ИЮНЯ\"\n\n**Caption (provided):** \"Любимое место для завтрака.\"\n\n**Visual elements:**\n- Dark green/near-black text on the cream card.\n- A simple brown icon in the lower-right area resembling a stylized coffee cup or a circle resting on a horizontal bar/saucer.\n- Clean, minimalist layout with sans-serif typography.\n\n**Production notes:**\n- This appears to be a designed promotional/menu graphic, not an original camera photo.\n- isLikelyScreenshot: false — no app UI chrome, status bar, or letterbox bars are visible.\n\n**Uncertainty:** The brown icon shape is interpretable as a coffee cup/saucer but its exact intent is not certain. No people are visible in the frame.",
+    "latencyMs": 12488,
+    "promptTokens": 1476,
+    "completionTokens": 439,
+    "reasoningTokens": 0,
+    "costUsd": 0.018355
+  },
+  "rendered": "[Image ID: cafe-menu-cyrillic]\n**Post ID:** cafe-menu-cyrillic\n\n**Description (visible facts only):**\n\nThis is a graphic/digital menu card rather than a photograph. It features a cream-colored rounded rectangle card on a light gray background.\n\n**textVerbatim (transcribed exactly):**\n- \"MIRA CAFE\" (header, with a horizontal underline rule beneath it)\n- \"ЗАВТРАК\" (large bold heading)\n- \"РАФ 320\"\n- \"КРУАССАН 260\"\n- \"СКИДКА 15%\"\n- \"12 ИЮНЯ\"\n\n**Caption (provided):** \"Любимое место для завтрака.\"\n\n**Visual elements:**\n- Dark green/near-black text on the cream card.\n- A simple brown icon in the lower-right area resembling a stylized coffee cup or a circle resting on a horizontal bar/saucer.\n- Clean, minimalist layout with sans-serif typography.\n\n**Production notes:**\n- This appears to be a designed promotional/menu graphic, not an original camera photo.\n- isLikelyScreenshot: false — no app UI chrome, status bar, or letterbox bars are visible.\n\n**Uncertainty:** The brown icon shape is interpretable as a coffee cup/saucer but its exact intent is not certain. No people are visible in the frame.",
+  "evaluation": {
+    "score": 100,
+    "missedText": [],
+    "missedObjects": [],
+    "forbiddenHits": []
+  }
+}

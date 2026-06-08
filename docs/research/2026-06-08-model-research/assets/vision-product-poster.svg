@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="820" viewBox="0 0 820 820">
+  <style>
+    .headline { font: 800 64px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+    .kicker { font: 800 34px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+    .copy { font: 650 42px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+    .small { font: 700 30px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+  </style>
+
+      <rect width="820" height="820" fill="#f8f2e8"/>
+      <rect x="62" y="70" width="696" height="680" rx="34" fill="#ffffff"/>
+      <rect x="112" y="162" width="240" height="360" rx="120" fill="#d9e6d2"/>
+      <rect x="472" y="210" width="130" height="190" rx="26" fill="#26231e"/>
+      <circle cx="630" cy="260" r="44" fill="#111"/>
+      <circle cx="674" cy="260" r="44" fill="#111"/>
+      <rect x="148" y="560" width="170" height="40" rx="20" fill="#dbc7aa"/>
+      <text x="100" y="120" class="kicker">MIRA STUDIO</text>
+      <text x="100" y="610" class="headline">NEW DROP</text>
+      <text x="100" y="666" class="copy">LINEN SET / 12 JUN</text>
+      <text x="100" y="716" class="copy">SAGE + IVORY</text>
+</svg>

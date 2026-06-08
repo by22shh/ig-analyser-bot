@@ -9,9 +9,13 @@ describe("ReportChatService.ask idempotency", () => {
         findFirstOrThrow: vi.fn().mockResolvedValue({ id: "r1", rawText: "report", sections: [] })
       },
       reportChatMessage: {
-        findUnique: vi
-          .fn()
-          .mockResolvedValue({ content: "cached answer", model: "m", tokensIn: 3, tokensOut: 7 }),
+        findUnique: vi.fn().mockResolvedValue({
+          role: "assistant",
+          content: "cached answer",
+          model: "m",
+          tokensIn: 3,
+          tokensOut: 7
+        }),
         create: vi.fn()
       },
       reportChatSession: { upsert: vi.fn() }
@@ -41,11 +45,18 @@ describe("ReportChatService.ask idempotency", () => {
 
   it("persists the assistant answer with the idempotency key inside the capture transaction", async () => {
     const txMessageCreate = vi.fn().mockResolvedValue({});
+    const txMessageUpdate = vi.fn().mockResolvedValue({});
     const prisma = {
       report: {
         findFirstOrThrow: vi.fn().mockResolvedValue({ id: "r1", rawText: "report", sections: [] })
       },
-      reportChatMessage: { findUnique: vi.fn().mockResolvedValue(null), create: vi.fn() },
+      reportChatMessage: {
+        findUnique: vi.fn().mockResolvedValue(null),
+        create: vi.fn(async (input: { data: { id: string; role: string } }) => ({
+          id: input.data.id
+        })),
+        deleteMany: vi.fn()
+      },
       reportChatSession: { upsert: vi.fn().mockResolvedValue({ id: "s1" }) },
       apiUsageEvent: { create: vi.fn().mockResolvedValue({}) }
     } as never;
@@ -55,7 +66,11 @@ describe("ReportChatService.ask idempotency", () => {
     const captureReserve = vi
       .fn()
       .mockImplementation(async (input: { within?: (tx: unknown) => Promise<void> }) => {
-        if (input.within) await input.within({ reportChatMessage: { create: txMessageCreate } });
+        if (input.within) {
+          await input.within({
+            reportChatMessage: { create: txMessageCreate, update: txMessageUpdate }
+          });
+        }
       });
     const credits = {
       reserve: vi.fn().mockResolvedValue({ id: "reserve-1" }),
@@ -73,22 +88,49 @@ describe("ReportChatService.ask idempotency", () => {
     });
 
     expect(result.text).toBe("fresh");
+    const reserveInput = (credits as unknown as { reserve: ReturnType<typeof vi.fn> }).reserve.mock
+      .calls[0]?.[0] as { reportChatMessageId?: string };
+    const captureInput = captureReserve.mock.calls[0]?.[0] as { reportChatMessageId?: string };
+    expect(reserveInput.reportChatMessageId).toEqual(expect.any(String));
+    expect(captureInput.reportChatMessageId).toBe(reserveInput.reportChatMessageId);
     expect(captureReserve).toHaveBeenCalledTimes(1);
-    expect(txMessageCreate).toHaveBeenCalledWith(
+    expect(txMessageUpdate).toHaveBeenCalledWith(
       expect.objectContaining({
-        data: expect.objectContaining({ role: "assistant", idempotencyKey: "chat:u1:99" })
+        where: { id: reserveInput.reportChatMessageId },
+        data: expect.objectContaining({
+          role: "assistant",
+          content: "fresh"
+        })
+      })
+    );
+    expect(
+      (prisma as unknown as { reportChatMessage: { create: ReturnType<typeof vi.fn> } })
+        .reportChatMessage.create
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          role: "assistant_pending",
+          idempotencyKey: "chat:u1:99"
+        })
       })
     );
   });
 
   it("persists the user question inside the capture transaction, never as a standalone insert", async () => {
     const txCreate = vi.fn().mockResolvedValue({});
-    const topLevelCreate = vi.fn().mockResolvedValue({});
+    const txUpdate = vi.fn().mockResolvedValue({});
+    const topLevelCreate = vi.fn(async (input: { data: { id: string; role: string } }) => ({
+      id: input.data.id
+    }));
     const prisma = {
       report: {
         findFirstOrThrow: vi.fn().mockResolvedValue({ id: "r1", rawText: "report", sections: [] })
       },
-      reportChatMessage: { findUnique: vi.fn().mockResolvedValue(null), create: topLevelCreate },
+      reportChatMessage: {
+        findUnique: vi.fn().mockResolvedValue(null),
+        create: topLevelCreate,
+        deleteMany: vi.fn()
+      },
       reportChatSession: { upsert: vi.fn().mockResolvedValue({ id: "s1" }) },
       apiUsageEvent: { create: vi.fn().mockResolvedValue({}) }
     } as never;
@@ -98,7 +140,9 @@ describe("ReportChatService.ask idempotency", () => {
     const captureReserve = vi
       .fn()
       .mockImplementation(async (input: { within?: (tx: unknown) => Promise<void> }) => {
-        if (input.within) await input.within({ reportChatMessage: { create: txCreate } });
+        if (input.within) {
+          await input.within({ reportChatMessage: { create: txCreate, update: txUpdate } });
+        }
       });
     const credits = {
       reserve: vi.fn().mockResolvedValue({ id: "reserve-1" }),
@@ -116,13 +160,57 @@ describe("ReportChatService.ask idempotency", () => {
     });
 
     // The question must be written transactionally with the capture (alongside
-    // the assistant answer), never as a standalone pre-LLM insert: otherwise a
-    // webhook retry that re-enters before the assistant answer is cached would
-    // store the same question twice.
-    expect(topLevelCreate).not.toHaveBeenCalled();
+    // the assistant answer), never as a standalone pre-LLM insert. The only
+    // standalone write is the idempotency slot for the pending assistant answer.
+    const topLevelRoles = (topLevelCreate.mock.calls as Array<[{ data: { role: string } }]>).map(
+      (call) => call[0].data.role
+    );
+    expect(topLevelRoles).toEqual(["assistant_pending"]);
     const roles = (txCreate.mock.calls as Array<[{ data: { role: string } }]>).map(
       (call) => call[0].data.role
     );
-    expect(roles).toEqual(["user", "assistant"]);
+    expect(roles).toEqual(["user"]);
+    expect(txUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ role: "assistant", content: "fresh" })
+      })
+    );
+  });
+
+  it("waits for the winning request when inserting the idempotency slot races", async () => {
+    const uniqueError = Object.assign(new Error("Unique constraint failed"), { code: "P2002" });
+    const prisma = {
+      report: {
+        findFirstOrThrow: vi.fn().mockResolvedValue({ id: "r1", rawText: "report", sections: [] })
+      },
+      reportChatMessage: {
+        findUnique: vi.fn().mockResolvedValueOnce(null).mockResolvedValueOnce({
+          role: "assistant",
+          content: "winner answer",
+          model: "m",
+          tokensIn: 4,
+          tokensOut: 8
+        }),
+        create: vi.fn().mockRejectedValue(uniqueError)
+      },
+      reportChatSession: { upsert: vi.fn().mockResolvedValue({ id: "s1" }) }
+    } as never;
+    const llm = { chat: vi.fn() } as never;
+    const credits = { reserve: vi.fn(), captureReserve: vi.fn(), releaseReserve: vi.fn() } as never;
+    const service = new ReportChatService(prisma, llm, credits);
+
+    const result = await service.ask({
+      userId: "u1",
+      reportId: "r1",
+      question: "q",
+      language: "ru",
+      requestId: "101"
+    });
+
+    expect(result.text).toBe("winner answer");
+    expect((llm as unknown as { chat: ReturnType<typeof vi.fn> }).chat).not.toHaveBeenCalled();
+    expect(
+      (credits as unknown as { reserve: ReturnType<typeof vi.fn> }).reserve
+    ).not.toHaveBeenCalled();
   });
 });

@@ -1,0 +1,45 @@
+{
+  "testCase": {
+    "id": "story-repost-ui",
+    "title": "Story screenshot/repost UI",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-story-repost.png",
+    "caption": "Утренний кофе и прогулка.",
+    "expectedText": [
+      "@MIRA.STYLE",
+      "STORY REPOST",
+      "COFFEE WALK",
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "expectedObjects": [
+      "story",
+      "repost",
+      "coffee",
+      "send message"
+    ],
+    "expectedScreenshot": true
+  },
+  "result": {
+    "ok": true,
+    "model": "google/gemini-3.1-flash-lite",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"The image is a digital graphic representing an Instagram story repost interface.\",\n    \"The background is a light cream color with a rounded rectangular frame.\",\n    \"There is a circular profile icon and the handle @MIRA.STYLE at the top.\",\n    \"The text 'STORY REPOST' is displayed in bold, dark font.\",\n    \"A large, light blue rectangular area occupies the center of the frame.\",\n    \"Inside the blue area, there is a brown circle and a white rounded rectangle.\",\n    \"The text 'COFFEE WALK' is visible at the bottom of the frame.\"\n  ],\n  \"setting\": \"Digital interface/graphic design\",\n  \"objects\": [\n    \"profile icon\",\n    \"text labels\",\n    \"geometric shapes\",\n    \"rounded rectangular frame\"\n  ],\n  \"textOverlays\": [\n    \"@MIRA.STYLE\",\n    \"STORY REPOST\",\n    \"COFFEE WALK\"\n  ],\n  \"textVerbatim\": [\n    \"@MIRA.STYLE\",\n    \"STORY REPOST\",\n    \"COFFEE WALK\"\n  ],\n  \"visualStyle\": [\n    \"Minimalist\",\n    \"Graphic design\",\n    \"Flat illustration\",\n    \"Neutral color palette\"\n  ],\n  \"isLikelyScreenshot\": true,\n  \"uncertainty\": [\n    \"The image is a stylized representation of a UI rather than a photograph of a real-world scene.\"\n  ]\n}",
+    "latencyMs": 2324,
+    "promptTokens": 1325,
+    "completionTokens": 305,
+    "reasoningTokens": 0,
+    "costUsd": 0.00078875
+  },
+  "rendered": "[Image ID: story-repost-ui]\n- Visible fact: The image is a digital graphic representing an Instagram story repost interface.\n- Visible fact: The background is a light cream color with a rounded rectangular frame.\n- Visible fact: There is a circular profile icon and the handle @MIRA.STYLE at the top.\n- Visible fact: The text 'STORY REPOST' is displayed in bold, dark font.\n- Visible fact: A large, light blue rectangular area occupies the center of the frame.\n- Visible fact: Inside the blue area, there is a brown circle and a white rounded rectangle.\n- Visible fact: The text 'COFFEE WALK' is visible at the bottom of the frame.\n- Setting: Digital interface/graphic design\n- Objects/signals: profile icon, text labels, geometric shapes, rounded rectangular frame\n- Text in image: @MIRA.STYLE | STORY REPOST | COFFEE WALK\n- Text (verbatim): @MIRA.STYLE | STORY REPOST | COFFEE WALK\n- Visual style: Minimalist, Graphic design, Flat illustration, Neutral color palette\n- Note: likely a screenshot/repost, not an original upload.\n- Uncertainty: The image is a stylized representation of a UI rather than a photograph of a real-world scene.",
+  "evaluation": {
+    "score": 79,
+    "missedText": [
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "missedObjects": [
+      "send message"
+    ],
+    "forbiddenHits": []
+  }
+}

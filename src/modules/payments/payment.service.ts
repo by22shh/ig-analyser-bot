@@ -202,6 +202,137 @@ export class PaymentService {
     };
   }
 
+  async createTelegramStarsInvoiceLink(input: {
+    api: Api<RawApi>;
+    userId: string;
+    telegramUserId: number;
+    chatId: number;
+    packageCode: string;
+    idempotencyKey: string;
+    title?: string;
+    description?: string;
+  }) {
+    const pkg = getPackage(input.packageCode);
+    if (!pkg?.starsAmount) throw new Error("PACKAGE_NOT_FOUND");
+    const dbPkg = await this.prisma.creditPackage.findUniqueOrThrow({ where: { code: pkg.code } });
+    const price = await this.prisma.creditPackagePrice.findFirstOrThrow({
+      where: { packageId: dbPkg.id, provider: "telegram_stars", currency: "XTR", isActive: true }
+    });
+    const existingOrder = await this.prisma.paymentOrder.findFirst({
+      where: {
+        userId: input.userId,
+        packageId: dbPkg.id,
+        provider: "telegram_stars",
+        status: "pending_payment",
+        telegramChatId: BigInt(input.chatId),
+        expiresAt: { gt: new Date() }
+      },
+      include: { telegramStarPayment: true },
+      orderBy: { createdAt: "desc" }
+    });
+    if (
+      existingOrder?.telegramStarPayment &&
+      existingOrder.amountMinor === price.amountMinor &&
+      existingOrder.telegramStarPayment.telegramUserId === BigInt(input.telegramUserId)
+    ) {
+      const invoiceUrl =
+        existingOrder.confirmationUrl ??
+        (await input.api.createInvoiceLink(
+          input.title ?? `${pkg.title}: ${pkg.creditsUnits / 100} credits`,
+          input.description ?? `Credit package ${pkg.title}`,
+          existingOrder.telegramStarPayment.invoicePayload,
+          "",
+          "XTR",
+          [{ label: pkg.title, amount: price.amountMinor }]
+        ));
+      if (!existingOrder.confirmationUrl) {
+        await this.prisma.paymentOrder.update({
+          where: { id: existingOrder.id },
+          data: { confirmationUrl: invoiceUrl }
+        });
+      }
+      return {
+        orderId: existingOrder.id,
+        invoicePayload: existingOrder.telegramStarPayment.invoicePayload,
+        invoiceUrl,
+        starsAmount: price.amountMinor,
+        creditsUnits: existingOrder.creditsUnits,
+        reused: true as const
+      };
+    }
+
+    const order = await this.prisma.paymentOrder.create({
+      data: {
+        userId: input.userId,
+        packageId: dbPkg.id,
+        packagePriceId: price.id,
+        status: "pending_payment",
+        amountMinor: price.amountMinor,
+        currency: "XTR",
+        creditsUnits: pkg.creditsUnits,
+        provider: "telegram_stars",
+        idempotencyKey: input.idempotencyKey,
+        telegramChatId: BigInt(input.chatId),
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000)
+      }
+    });
+    const invoicePayload = encodeInvoicePayload({
+      v: 1,
+      provider: "telegram_stars",
+      orderId: order.id,
+      userId: input.userId,
+      packageCode: pkg.code,
+      currency: "XTR",
+      amountMinor: price.amountMinor
+    });
+    await this.prisma.telegramStarPayment.create({
+      data: {
+        paymentOrderId: order.id,
+        telegramUserId: BigInt(input.telegramUserId),
+        telegramChatId: BigInt(input.chatId),
+        invoicePayload,
+        status: "invoice_link_created",
+        starsAmount: price.amountMinor,
+        currency: "XTR"
+      }
+    });
+    const invoiceUrl = await input.api
+      .createInvoiceLink(
+        input.title ?? `${pkg.title}: ${pkg.creditsUnits / 100} credits`,
+        input.description ?? `Credit package ${pkg.title}`,
+        invoicePayload,
+        "",
+        "XTR",
+        [{ label: pkg.title, amount: price.amountMinor }]
+      )
+      .catch(async (error) => {
+        await this.prisma.paymentOrder.update({
+          where: { id: order.id },
+          data: { status: "invoice_failed" }
+        });
+        await this.prisma.telegramStarPayment.update({
+          where: { paymentOrderId: order.id },
+          data: {
+            status: "invoice_failed",
+            rawSuccessfulPayment: { error: error instanceof Error ? error.message : String(error) }
+          }
+        });
+        throw error;
+      });
+    await this.prisma.paymentOrder.update({
+      where: { id: order.id },
+      data: { confirmationUrl: invoiceUrl }
+    });
+    return {
+      orderId: order.id,
+      invoicePayload,
+      invoiceUrl,
+      starsAmount: price.amountMinor,
+      creditsUnits: pkg.creditsUnits,
+      reused: false as const
+    };
+  }
+
   async handleTelegramPreCheckout(input: {
     preCheckoutQueryId: string;
     telegramUserId: number;
@@ -722,61 +853,141 @@ export class PaymentService {
     adminUserId?: string;
     reason: string;
   }) {
-    const order = await this.prisma.paymentOrder.findUniqueOrThrow({
-      where: { id: input.paymentOrderId },
-      include: { telegramStarPayment: true }
-    });
-    if (!order.telegramStarPayment?.telegramPaymentChargeId)
-      throw new Error("STARS_CHARGE_ID_MISSING");
-    if (order.status !== "paid") throw new Error("ORDER_NOT_PAID");
     if (!env.TELEGRAM_STARS_REFUNDS_ENABLED) throw new Error("STARS_REFUNDS_DISABLED");
-    const existing = await this.prisma.paymentRefund.findFirst({
-      where: { paymentOrderId: order.id, provider: "telegram_stars" },
-      orderBy: { createdAt: "desc" }
-    });
-    if (existing?.status === "succeeded")
-      return { refundId: existing.id, status: "succeeded" as const, alreadyProcessed: true };
-    if (existing) throw new Error("REFUND_ALREADY_EXISTS");
 
-    const snapshot = await this.credits.snapshot(order.userId);
-    if (snapshot.availableUnits < order.creditsUnits) throw new Error("REFUND_CREDITS_SPENT");
+    const prepared = await this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM payment_orders WHERE id = CAST(${input.paymentOrderId} AS uuid) FOR UPDATE`;
+      const order = await tx.paymentOrder.findUniqueOrThrow({
+        where: { id: input.paymentOrderId },
+        include: { telegramStarPayment: true }
+      });
+      if (!order.telegramStarPayment?.telegramPaymentChargeId)
+        throw new Error("STARS_CHARGE_ID_MISSING");
+      if (order.status !== "paid") throw new Error("ORDER_NOT_PAID");
 
-    const refund = await this.prisma.paymentRefund.create({
-      data: {
-        paymentOrderId: order.id,
-        provider: "telegram_stars",
-        providerRefundId: `stars:${order.telegramStarPayment.telegramPaymentChargeId}`,
-        status: "pending",
-        amountMinor: order.amountMinor,
-        currency: "XTR",
-        reason: input.reason,
-        idempotencyKey: `stars-refund:${order.id}`,
-        adminUserId: input.adminUserId
+      const existing = await tx.paymentRefund.findFirst({
+        where: { paymentOrderId: order.id, provider: "telegram_stars" },
+        orderBy: { createdAt: "desc" }
+      });
+      if (existing?.status === "succeeded") {
+        return { order, refund: existing, alreadyProcessed: true as const };
       }
+      if (existing?.status === "pending" || existing?.status === "processing") {
+        const debit = await tx.creditTransaction.findFirst({
+          where: {
+            userId: order.userId,
+            type: "refund",
+            provider: "telegram_stars",
+            providerPaymentId: order.telegramStarPayment.telegramPaymentChargeId,
+            amountUnits: -order.creditsUnits
+          }
+        });
+        if (!debit) {
+          await tx.$queryRaw`SELECT id FROM credit_accounts WHERE "userId" = CAST(${order.userId} AS uuid) FOR UPDATE`;
+          const account = await tx.creditAccount.findUniqueOrThrow({
+            where: { userId: order.userId }
+          });
+          const available = account.balanceUnits - account.reservedUnits;
+          if (available < order.creditsUnits) throw new Error("REFUND_CREDITS_SPENT");
+          const updated = await tx.creditAccount.update({
+            where: { userId: order.userId },
+            data: { balanceUnits: { decrement: order.creditsUnits } }
+          });
+          await tx.creditTransaction.create({
+            data: {
+              userId: order.userId,
+              type: "refund",
+              amountUnits: -order.creditsUnits,
+              balanceAfterUnits: updated.balanceUnits,
+              provider: "telegram_stars",
+              providerPaymentId: order.telegramStarPayment.telegramPaymentChargeId,
+              metadata: { refundId: existing.id, retry: "resume_prepared_refund" }
+            }
+          });
+        }
+        const refund =
+          existing.status === "processing"
+            ? existing
+            : await tx.paymentRefund.update({
+                where: { id: existing.id },
+                data: { status: "processing" }
+              });
+        return { order, refund, alreadyProcessed: false as const };
+      }
+      if (existing) throw new Error("REFUND_ALREADY_EXISTS");
+
+      await tx.$queryRaw`SELECT id FROM credit_accounts WHERE "userId" = CAST(${order.userId} AS uuid) FOR UPDATE`;
+      const account = await tx.creditAccount.findUniqueOrThrow({ where: { userId: order.userId } });
+      const available = account.balanceUnits - account.reservedUnits;
+      if (available < order.creditsUnits) throw new Error("REFUND_CREDITS_SPENT");
+
+      const refund = await tx.paymentRefund.create({
+        data: {
+          paymentOrderId: order.id,
+          provider: "telegram_stars",
+          providerRefundId: `stars:${order.telegramStarPayment.telegramPaymentChargeId}`,
+          status: "processing",
+          amountMinor: order.amountMinor,
+          currency: "XTR",
+          reason: input.reason,
+          idempotencyKey: `stars-refund:${order.id}`,
+          adminUserId: input.adminUserId
+        }
+      });
+      const updated = await tx.creditAccount.update({
+        where: { userId: order.userId },
+        data: { balanceUnits: { decrement: order.creditsUnits } }
+      });
+      await tx.creditTransaction.create({
+        data: {
+          userId: order.userId,
+          type: "refund",
+          amountUnits: -order.creditsUnits,
+          balanceAfterUnits: updated.balanceUnits,
+          provider: "telegram_stars",
+          providerPaymentId: order.telegramStarPayment.telegramPaymentChargeId,
+          metadata: { refundId: refund.id }
+        }
+      });
+      return { order, refund, alreadyProcessed: false as const };
     });
-    await this.credits.debit({
-      userId: order.userId,
-      amountUnits: order.creditsUnits,
-      provider: "telegram_stars",
-      providerPaymentId: order.telegramStarPayment.telegramPaymentChargeId,
-      metadata: { refundId: refund.id },
-      type: "refund"
-    });
+    if (prepared.alreadyProcessed) {
+      return {
+        refundId: prepared.refund.id,
+        status: "succeeded" as const,
+        alreadyProcessed: true
+      };
+    }
+
+    const { order, refund } = prepared;
+    const telegramStarPayment = order.telegramStarPayment;
+    if (!telegramStarPayment?.telegramPaymentChargeId) throw new Error("STARS_CHARGE_ID_MISSING");
+    const telegramPaymentChargeId = telegramStarPayment.telegramPaymentChargeId;
     try {
       await input.api.refundStarPayment(
-        Number(order.telegramStarPayment.telegramUserId),
-        order.telegramStarPayment.telegramPaymentChargeId
+        Number(telegramStarPayment.telegramUserId),
+        telegramPaymentChargeId
       );
       await this.prisma.paymentRefund.update({
         where: { id: refund.id },
         data: { status: "succeeded" }
       });
     } catch (error) {
+      if (isTelegramStarsAlreadyRefundedError(error)) {
+        await this.prisma.paymentRefund.update({
+          where: { id: refund.id },
+          data: {
+            status: "succeeded",
+            raw: { recoveredFrom: error instanceof Error ? error.message : String(error) }
+          }
+        });
+        return { refundId: refund.id, status: "succeeded" as const };
+      }
       await this.credits.grant({
         userId: order.userId,
         amountUnits: order.creditsUnits,
         provider: "telegram_stars",
-        providerPaymentId: order.telegramStarPayment.telegramPaymentChargeId,
+        providerPaymentId: telegramPaymentChargeId,
         metadata: { refundId: refund.id, reason: "telegram_refund_failed" },
         type: "admin_adjustment"
       });
@@ -799,4 +1010,9 @@ function telegramStarsIdentityMatches(
   allowDeletedAccountPlaceholder: boolean
 ): boolean {
   return stored === actual || (allowDeletedAccountPlaceholder && stored === 0n);
+}
+
+function isTelegramStarsAlreadyRefundedError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return /already.+refund|refund.+already/i.test(message);
 }

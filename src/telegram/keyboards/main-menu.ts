@@ -9,7 +9,9 @@ function mark(label: string, active: boolean): string {
 
 export function mainMenuKeyboard(messages: LocaleMessages, isAdmin = false): InlineKeyboard {
   // Primary action gets its own full-width row; everything else is grouped.
-  const kb = new InlineKeyboard().text(messages.buttons.analyze, CB.ANALYZE).row();
+  const kb = new InlineKeyboard();
+  if (env.FEATURE_MINI_APP) kb.webApp(messages.buttons.miniApp, env.MINI_APP_URL).row();
+  kb.text(messages.buttons.analyze, CB.ANALYZE).row();
   if (env.FEATURE_PHOTO_SEARCH) kb.text(messages.buttons.photo, CB.PHOTO).row();
   kb.text(messages.buttons.history, CB.HISTORY)
     .text(messages.buttons.profile, CB.PROFILE)

@@ -1,0 +1,38 @@
+[
+  {
+    "model": "openai/gpt-5.5",
+    "modelName": "OpenAI: GPT-5.5",
+    "priceInPerMTok": 5,
+    "priceOutPerMTok": 30,
+    "ok": true,
+    "tier": "full",
+    "score": 73,
+    "sections": 17,
+    "missingSections": [],
+    "weakSourceSections": 17,
+    "groundingFindings": [],
+    "hasSampleCaveat": true,
+    "readyPhraseCount": 3,
+    "highConfidenceMentions": 7,
+    "latencyMs": 102197,
+    "costUsd": 0.19751
+  },
+  {
+    "model": "openai/gpt-5.4",
+    "modelName": "OpenAI: GPT-5.4",
+    "priceInPerMTok": 2.5,
+    "priceOutPerMTok": 15,
+    "ok": true,
+    "tier": "full",
+    "score": 66,
+    "sections": 17,
+    "missingSections": [],
+    "weakSourceSections": 17,
+    "groundingFindings": [],
+    "hasSampleCaveat": true,
+    "readyPhraseCount": 5,
+    "highConfidenceMentions": 6,
+    "latencyMs": 101993,
+    "costUsd": 0.110005
+  }
+]

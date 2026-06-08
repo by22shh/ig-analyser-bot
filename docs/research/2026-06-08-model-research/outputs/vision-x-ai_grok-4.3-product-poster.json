@@ -1,0 +1,44 @@
+{
+  "testCase": {
+    "id": "product-poster",
+    "title": "Product/fashion poster with English text",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-product-poster.png",
+    "caption": "Новый дроп, спокойные цвета и лен.",
+    "expectedText": [
+      "MIRA STUDIO",
+      "NEW DROP",
+      "LINEN SET",
+      "12 JUN",
+      "SAGE",
+      "IVORY"
+    ],
+    "expectedObjects": [
+      "linen",
+      "sunglasses",
+      "bag",
+      "poster"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "x-ai/grok-4.3",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"White rounded rectangle card on beige background\",\n    \"Top text: MIRA STUDIO\",\n    \"Large light green oval on left side\",\n    \"Dark brown rounded rectangle with two black circles on right\",\n    \"Bold text NEW DROP with beige underline bar\",\n    \"Text below: LINEN SET / 12 JUN and SAGE + IVORY\"\n  ],\n  \"setting\": null,\n  \"objects\": [\n    \"Abstract geometric shapes\",\n    \"Light green oval\",\n    \"Dark brown rectangle\",\n    \"Black circles\",\n    \"Beige underline bar\"\n  ],\n  \"textOverlays\": [\n    \"MIRA STUDIO\",\n    \"NEW DROP\",\n    \"LINEN SET / 12 JUN\",\n    \"SAGE + IVORY\"\n  ],\n  \"textVerbatim\": [\n    \"MIRA STUDIO\",\n    \"NEW DROP\",\n    \"LINEN SET / 12 JUN\",\n    \"SAGE + IVORY\"\n  ],\n  \"visualStyle\": [\n    \"Minimalist flat graphic design\",\n    \"Pastel color palette\",\n    \"Rounded shapes\",\n    \"Clean sans-serif typography\",\n    \"Beige background\"\n  ],\n  \"isLikelyScreenshot\": false,\n  \"uncertainty\": []\n}",
+    "latencyMs": 6367,
+    "promptTokens": 1538,
+    "completionTokens": 704,
+    "reasoningTokens": 445,
+    "costUsd": 0.0035481
+  },
+  "rendered": "[Image ID: product-poster]\n- Visible fact: White rounded rectangle card on beige background\n- Visible fact: Top text: MIRA STUDIO\n- Visible fact: Large light green oval on left side\n- Visible fact: Dark brown rounded rectangle with two black circles on right\n- Visible fact: Bold text NEW DROP with beige underline bar\n- Visible fact: Text below: LINEN SET / 12 JUN and SAGE + IVORY\n- Objects/signals: Abstract geometric shapes, Light green oval, Dark brown rectangle, Black circles, Beige underline bar\n- Text in image: MIRA STUDIO | NEW DROP | LINEN SET / 12 JUN | SAGE + IVORY\n- Text (verbatim): MIRA STUDIO | NEW DROP | LINEN SET / 12 JUN | SAGE + IVORY\n- Visual style: Minimalist flat graphic design, Pastel color palette, Rounded shapes, Clean sans-serif typography, Beige background",
+  "evaluation": {
+    "score": 90,
+    "missedText": [],
+    "missedObjects": [
+      "sunglasses",
+      "bag"
+    ],
+    "forbiddenHits": []
+  }
+}

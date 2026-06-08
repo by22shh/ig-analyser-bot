@@ -1,0 +1,44 @@
+{
+  "testCase": {
+    "id": "product-poster",
+    "title": "Product/fashion poster with English text",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-product-poster.png",
+    "caption": "Новый дроп, спокойные цвета и лен.",
+    "expectedText": [
+      "MIRA STUDIO",
+      "NEW DROP",
+      "LINEN SET",
+      "12 JUN",
+      "SAGE",
+      "IVORY"
+    ],
+    "expectedObjects": [
+      "linen",
+      "sunglasses",
+      "bag",
+      "poster"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "google/gemini-2.5-flash",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"The image is a digital poster advertising a new product drop.\",\n    \"The poster features a minimalist design with abstract shapes.\",\n    \"The color palette includes light green, dark brown, and beige on a white background.\",\n    \"Text on the poster announces a 'NEW DROP' for a 'LINEN SET' on '12 JUN' in 'SAGE + IVORY' colors.\",\n    \"The brand name 'MIRA STUDIO' is displayed at the top.\"\n  ],\n  \"setting\": \"digital poster\",\n  \"objects\": [\n    \"abstract shapes\",\n    \"text\"\n  ],\n  \"textOverlays\": [\n    \"MIRA STUDIO\",\n    \"NEW DROP\",\n    \"LINEN SET / 12 JUN\",\n    \"SAGE + IVORY\"\n  ],\n  \"textVerbatim\": [\n    \"MIRA STUDIO\",\n    \"NEW DROP\",\n    \"LINEN SET / 12 JUN\",\n    \"SAGE + IVORY\"\n  ],\n  \"visualStyle\": [\n    \"minimalist design\",\n    \"abstract art\",\n    \"flat design\",\n    \"clean typography\",\n    \"soft color palette\"\n  ],\n  \"isLikelyScreenshot\": false,\n  \"uncertainty\": []\n}",
+    "latencyMs": 2502,
+    "promptTokens": 1523,
+    "completionTokens": 292,
+    "reasoningTokens": 0,
+    "costUsd": 0.0011869
+  },
+  "rendered": "[Image ID: product-poster]\n- Visible fact: The image is a digital poster advertising a new product drop.\n- Visible fact: The poster features a minimalist design with abstract shapes.\n- Visible fact: The color palette includes light green, dark brown, and beige on a white background.\n- Visible fact: Text on the poster announces a 'NEW DROP' for a 'LINEN SET' on '12 JUN' in 'SAGE + IVORY' colors.\n- Visible fact: The brand name 'MIRA STUDIO' is displayed at the top.\n- Setting: digital poster\n- Objects/signals: abstract shapes, text\n- Text in image: MIRA STUDIO | NEW DROP | LINEN SET / 12 JUN | SAGE + IVORY\n- Text (verbatim): MIRA STUDIO | NEW DROP | LINEN SET / 12 JUN | SAGE + IVORY\n- Visual style: minimalist design, abstract art, flat design, clean typography, soft color palette",
+  "evaluation": {
+    "score": 90,
+    "missedText": [],
+    "missedObjects": [
+      "sunglasses",
+      "bag"
+    ],
+    "forbiddenHits": []
+  }
+}

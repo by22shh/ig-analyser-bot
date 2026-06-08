@@ -1,0 +1,44 @@
+{
+  "testCase": {
+    "id": "product-poster",
+    "title": "Product/fashion poster with English text",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-product-poster.png",
+    "caption": "Новый дроп, спокойные цвета и лен.",
+    "expectedText": [
+      "MIRA STUDIO",
+      "NEW DROP",
+      "LINEN SET",
+      "12 JUN",
+      "SAGE",
+      "IVORY"
+    ],
+    "expectedObjects": [
+      "linen",
+      "sunglasses",
+      "bag",
+      "poster"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "google/gemini-3.1-flash-lite",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"A graphic design poster with a minimalist aesthetic.\",\n    \"The background is a light cream color.\",\n    \"The text is in a dark, sans-serif font.\",\n    \"There is a large, light sage green oval shape on the left.\",\n    \"There is a dark brown rounded rectangle and two dark brown circles on the right.\",\n    \"The text indicates a product launch date and color options.\"\n  ],\n  \"setting\": \"Graphic design poster\",\n  \"objects\": [\n    \"oval shape\",\n    \"rounded rectangle\",\n    \"circles\",\n    \"text\"\n  ],\n  \"textOverlays\": [\n    \"MIRA STUDIO\",\n    \"NEW DROP\",\n    \"LINEN SET / 12 JUN\",\n    \"SAGE + IVORY\"\n  ],\n  \"textVerbatim\": [\n    \"MIRA STUDIO\",\n    \"NEW DROP\",\n    \"LINEN SET / 12 JUN\",\n    \"SAGE + IVORY\"\n  ],\n  \"visualStyle\": [\n    \"minimalist\",\n    \"graphic design\",\n    \"flat vector style\",\n    \"muted color palette\"\n  ],\n  \"isLikelyScreenshot\": false,\n  \"uncertainty\": [\n    \"The actual material of the product is not visible, only described in text.\"\n  ]\n}",
+    "latencyMs": 3179,
+    "promptTokens": 1862,
+    "completionTokens": 306,
+    "reasoningTokens": 0,
+    "costUsd": 0.0009245
+  },
+  "rendered": "[Image ID: product-poster]\n- Visible fact: A graphic design poster with a minimalist aesthetic.\n- Visible fact: The background is a light cream color.\n- Visible fact: The text is in a dark, sans-serif font.\n- Visible fact: There is a large, light sage green oval shape on the left.\n- Visible fact: There is a dark brown rounded rectangle and two dark brown circles on the right.\n- Visible fact: The text indicates a product launch date and color options.\n- Setting: Graphic design poster\n- Objects/signals: oval shape, rounded rectangle, circles, text\n- Text in image: MIRA STUDIO | NEW DROP | LINEN SET / 12 JUN | SAGE + IVORY\n- Text (verbatim): MIRA STUDIO | NEW DROP | LINEN SET / 12 JUN | SAGE + IVORY\n- Visual style: minimalist, graphic design, flat vector style, muted color palette\n- Uncertainty: The actual material of the product is not visible, only described in text.",
+  "evaluation": {
+    "score": 90,
+    "missedText": [],
+    "missedObjects": [
+      "sunglasses",
+      "bag"
+    ],
+    "forbiddenHits": []
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "testCase": {
+    "id": "sochi-screenshot",
+    "title": "Real Instagram-like waterfront screenshot",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-05-bakeoff/test-image.jpg",
+    "caption": "Лучшие прогулки — вдоль моря 🤍 #сочи #морвокзал",
+    "expectedText": [
+      "AUTOMNE",
+      "FALL/WINTER",
+      "24-25"
+    ],
+    "expectedObjects": [
+      "water",
+      "lighthouse",
+      "two people",
+      "black bars"
+    ],
+    "expectedScreenshot": true
+  },
+  "result": {
+    "ok": true,
+    "model": "qwen/qwen3-vl-235b-a22b-instruct",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"Two people standing side-by-side on a paved waterfront promenade next to calm water.\",\n    \"Woman on left: long dark hair, navy blue quarter-zip sweatshirt with yellow text, light blue wide-leg jeans, black wristwatch on left wrist, black handbag strap visible on left shoulder.\",\n    \"Man on right: short dark hair, beard, sunglasses, brown short-sleeve polo shirt, beige trousers, holding a smartphone in right hand.\",\n    \"Background: pebble beach, white low-rise buildings, trees, a lighthouse-style tower, and a large stadium-like structure on a hill.\",\n    \"Sky is clear and pale blue.\",\n    \"Text on woman’s sweatshirt: 'AUTOMNE-H', 'FALL-WINTER 24-25 COLLECTION', 'Couture Edition'.\",\n    \"Image has black letterbox bars at top and bottom, indicating it is a screenshot or repost.\",\n    \"No visible street signs, business names, or other branded signage beyond the sweatshirt text.\"\n  ],\n  \"setting\": \"Outdoor waterfront promenade with sea, beach, and distant architecture under daylight.\",\n  \"objects\": [\n    \"Smartphone\",\n    \"Wristwatch\",\n    \"Handbag\",\n    \"Sunglasses\"\n  ],\n  \"textOverlays\": [\n    \"AUTOMNE-H\",\n    \"FALL-WINTER 24-25 COLLECTION\",\n    \"Couture Edition\"\n  ],\n  \"textVerbatim\": [\n    \"AUTOMNE-H\",\n    \"FALL-WINTER 24-25 COLLECTION\",\n    \"Couture Edition\"\n  ],\n  \"visualStyle\": [\n    \"Casual lifestyle photo\",\n    \"Natural daylight\",\n    \"Slightly elevated camera angle\"\n  ],\n  \"isLikelyScreenshot\": true\n  ,\n  \"uncertainty\": []\n}",
+    "latencyMs": 7297,
+    "promptTokens": 980,
+    "completionTokens": 392,
+    "reasoningTokens": 0,
+    "costUsd": 0.00054096
+  },
+  "rendered": "[Image ID: sochi-screenshot]\n- Visible fact: Two people standing side-by-side on a paved waterfront promenade next to calm water.\n- Visible fact: Woman on left: long dark hair, navy blue quarter-zip sweatshirt with yellow text, light blue wide-leg jeans, black wristwatch on left wrist, black handbag strap visible on left shoulder.\n- Visible fact: Man on right: short dark hair, beard, sunglasses, brown short-sleeve polo shirt, beige trousers, holding a smartphone in right hand.\n- Visible fact: Background: pebble beach, white low-rise buildings, trees, a lighthouse-style tower, and a large stadium-like structure on a hill.\n- Visible fact: Sky is clear and pale blue.\n- Visible fact: Text on woman’s sweatshirt: 'AUTOMNE-H', 'FALL-WINTER 24-25 COLLECTION', 'Couture Edition'.\n- Visible fact: Image has black letterbox bars at top and bottom, indicating it is a screenshot or repost.\n- Visible fact: No visible street signs, business names, or other branded signage beyond the sweatshirt text.\n- Setting: Outdoor waterfront promenade with sea, beach, and distant architecture under daylight.\n- Objects/signals: Smartphone, Wristwatch, Handbag, Sunglasses\n- Text in image: AUTOMNE-H | FALL-WINTER 24-25 COLLECTION | Couture Edition\n- Text (verbatim): AUTOMNE-H | FALL-WINTER 24-25 COLLECTION | Couture Edition\n- Visual style: Casual lifestyle photo, Natural daylight, Slightly elevated camera angle\n- Note: likely a screenshot/repost, not an original upload.",
+  "evaluation": {
+    "score": 92,
+    "missedText": [
+      "FALL/WINTER"
+    ],
+    "missedObjects": [],
+    "forbiddenHits": []
+  }
+}

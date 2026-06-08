@@ -1,0 +1,39 @@
+{
+  "testCase": {
+    "id": "cafe-menu-cyrillic",
+    "title": "Cafe menu with Cyrillic OCR",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-cafe-menu-cyrillic.png",
+    "caption": "Любимое место для завтрака.",
+    "expectedText": [
+      "MIRA CAFE",
+      "ЗАВТРАК",
+      "РАФ 320",
+      "СКИДКА 15%",
+      "12 ИЮНЯ"
+    ],
+    "expectedObjects": [
+      "menu",
+      "coffee",
+      "cafe"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "anthropic/claude-sonnet-4.6",
+    "tier": "no-structured",
+    "text": "**Post ID: cafe-menu-cyrillic**\n\n**isLikelyScreenshot:** false\n\n**Scene/Setting:** Flat-lay style graphic card — a promotional menu tile with a cream/off-white rounded rectangle on a light grey background. No photographic elements; entirely typographic/illustrative design.\n\n**Brand/Logo Cues:** \"MIRA CAFE\" (bold sans-serif, top of card, underlined by a thin rule). A small minimalist brown icon in the lower-right corner depicts a stylised cup/coffee figure (circle atop a horizontal bar).\n\n**textVerbatim:**\n> MIRA CAFE\n> ЗАВТРАК\n> РАФ 320\n> КРУАССАН 260\n> СКИДКА 15%\n> 12 ИЮНЯ\n\n**Observable details:** Dark green/near-black sans-serif typography throughout. The card lists two menu items with prices (РАФ 320, КРУАССАН 260), a 15% discount, and a date (12 ИЮНЯ / 12 June). Layout is clean, minimal, consistent with a branded café promotional graphic. Caption reads \"Любимое место для завтрака\" (provided as caption context).",
+    "latencyMs": 14932,
+    "promptTokens": 1359,
+    "completionTokens": 283,
+    "reasoningTokens": 0,
+    "costUsd": 0.008322
+  },
+  "rendered": "[Image ID: cafe-menu-cyrillic]\n**Post ID: cafe-menu-cyrillic**\n\n**isLikelyScreenshot:** false\n\n**Scene/Setting:** Flat-lay style graphic card — a promotional menu tile with a cream/off-white rounded rectangle on a light grey background. No photographic elements; entirely typographic/illustrative design.\n\n**Brand/Logo Cues:** \"MIRA CAFE\" (bold sans-serif, top of card, underlined by a thin rule). A small minimalist brown icon in the lower-right corner depicts a stylised cup/coffee figure (circle atop a horizontal bar).\n\n**textVerbatim:**\n> MIRA CAFE\n> ЗАВТРАК\n> РАФ 320\n> КРУАССАН 260\n> СКИДКА 15%\n> 12 ИЮНЯ\n\n**Observable details:** Dark green/near-black sans-serif typography throughout. The card lists two menu items with prices (РАФ 320, КРУАССАН 260), a 15% discount, and a date (12 ИЮНЯ / 12 June). Layout is clean, minimal, consistent with a branded café promotional graphic. Caption reads \"Любимое место для завтрака\" (provided as caption context).",
+  "evaluation": {
+    "score": 100,
+    "missedText": [],
+    "missedObjects": [],
+    "forbiddenHits": []
+  }
+}

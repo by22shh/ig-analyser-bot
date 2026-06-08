@@ -1,0 +1,41 @@
+{
+  "testCase": {
+    "id": "cafe-menu-cyrillic",
+    "title": "Cafe menu with Cyrillic OCR",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-cafe-menu-cyrillic.png",
+    "caption": "Любимое место для завтрака.",
+    "expectedText": [
+      "MIRA CAFE",
+      "ЗАВТРАК",
+      "РАФ 320",
+      "СКИДКА 15%",
+      "12 ИЮНЯ"
+    ],
+    "expectedObjects": [
+      "menu",
+      "coffee",
+      "cafe"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "openai/gpt-5.4-mini",
+    "tier": "no-structured",
+    "text": "{\n  \"postId\": \"cafe-menu-cyrillic\",\n  \"isLikelyScreenshot\": false,\n  \"sceneType\": \"cafe menu / promotional graphic\",\n  \"brandCues\": [\n    \"MIRA CAFE\",\n    \"cafe breakfast promotion\"\n  ],\n  \"textVerbatim\": [\n    \"MIRA CAFE\",\n    \"ЗАВТРАК\",\n    \"РАФ 320\",\n    \"КРУАССАН 260\",\n    \"СКИДКА 15%\",\n    \"12 ИЮНЯ\"\n  ],\n  \"visibleFacts\": [\n    \"A minimalist square menu-style graphic on a light background.\",\n    \"Cream-colored panel with rounded corners and dark text.\",\n    \"Large Cyrillic headline for breakfast and a list of items/prices.\",\n    \"Small brown circular-and-bar logo-like mark in the lower right.\"\n  ]\n}",
+    "latencyMs": 2133,
+    "promptTokens": 1248,
+    "completionTokens": 187,
+    "reasoningTokens": 0,
+    "costUsd": 0.0017775
+  },
+  "rendered": "[Image ID: cafe-menu-cyrillic]\n- Visible fact: A minimalist square menu-style graphic on a light background.\n- Visible fact: Cream-colored panel with rounded corners and dark text.\n- Visible fact: Large Cyrillic headline for breakfast and a list of items/prices.\n- Visible fact: Small brown circular-and-bar logo-like mark in the lower right.\n- Text (verbatim): MIRA CAFE | ЗАВТРАК | РАФ 320 | КРУАССАН 260 | СКИДКА 15% | 12 ИЮНЯ",
+  "evaluation": {
+    "score": 95,
+    "missedText": [],
+    "missedObjects": [
+      "coffee"
+    ],
+    "forbiddenHits": []
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "testCase": {
+    "id": "cafe-menu-cyrillic",
+    "title": "Cafe menu with Cyrillic OCR",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-cafe-menu-cyrillic.png",
+    "caption": "Любимое место для завтрака.",
+    "expectedText": [
+      "MIRA CAFE",
+      "ЗАВТРАК",
+      "РАФ 320",
+      "СКИДКА 15%",
+      "12 ИЮНЯ"
+    ],
+    "expectedObjects": [
+      "menu",
+      "coffee",
+      "cafe"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "qwen/qwen3-vl-32b-instruct",
+    "tier": "no-structured",
+    "text": "**textVerbatim:**\nMIRA CAFE\nЗАВТРАК\nРАФ 320\nКРУАССАН 260\nСКИДКА 15%\n12 ИЮНЯ\n\n**isLikelyScreenshot:** false\n\n**Scene/Setting Type:** Digital menu graphic or promotional card for a café.\n\n**Recurring Brand/Logo/Product Cues:**\n- Brand name: \"MIRA CAFE\" (in Latin script at top).\n- Menu item: \"ЗАВТРАК\" (Breakfast) — Cyrillic text.\n- Items listed: \"РАФ 320\" (likely \"Раф\" = Raff, a coffee drink), \"КРУАССАН 260\" (Croissant), with prices in numerical form.\n- Promotion: \"СКИДКА 15%\" (Discount 15%).\n- Date: \"12 ИЮНЯ\" (June 12).\n- Simple icon at bottom right: brown circular shape above a horizontal bar, resembling a stylized coffee cup or sunrise.\n\n**Visual Style:**\n- Clean, minimalist design with rounded corners.\n- Light cream background, dark text.\n- No photographic elements; entirely typographic and graphic.\n\n**Caption Context (from provided caption):**\n\"Любимое место для завтрака.\" — \"Favorite place for breakfast.\" (This is not visible in the image but provided as caption context.)",
+    "latencyMs": 4533,
+    "promptTokens": 1030,
+    "completionTokens": 314,
+    "reasoningTokens": 0,
+    "costUsd": 0.000237744
+  },
+  "rendered": "[Image ID: cafe-menu-cyrillic]\n**textVerbatim:**\nMIRA CAFE\nЗАВТРАК\nРАФ 320\nКРУАССАН 260\nСКИДКА 15%\n12 ИЮНЯ\n\n**isLikelyScreenshot:** false\n\n**Scene/Setting Type:** Digital menu graphic or promotional card for a café.\n\n**Recurring Brand/Logo/Product Cues:**\n- Brand name: \"MIRA CAFE\" (in Latin script at top).\n- Menu item: \"ЗАВТРАК\" (Breakfast) — Cyrillic text.\n- Items listed: \"РАФ 320\" (likely \"Раф\" = Raff, a coffee drink), \"КРУАССАН 260\" (Croissant), with prices in numerical form.\n- Promotion: \"СКИДКА 15%\" (Discount 15%).\n- Date: \"12 ИЮНЯ\" (June 12).\n- Simple icon at bottom right: brown circular shape above a horizontal bar, resembling a stylized coffee cup or sunrise.\n\n**Visual Style:**\n- Clean, minimalist design with rounded corners.\n- Light cream background, dark text.\n- No photographic elements; entirely typographic and graphic.\n\n**Caption Context (from provided caption):**\n\"Любимое место для завтрака.\" — \"Favorite place for breakfast.\" (This is not visible in the image but provided as caption context.)",
+  "evaluation": {
+    "score": 100,
+    "missedText": [],
+    "missedObjects": [],
+    "forbiddenHits": []
+  }
+}

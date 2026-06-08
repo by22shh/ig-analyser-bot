@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="820" viewBox="0 0 820 820">
+  <style>
+    .headline { font: 800 64px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+    .kicker { font: 800 34px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+    .copy { font: 650 42px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+    .small { font: 700 30px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+  </style>
+
+      <rect width="820" height="820" fill="#edf2f0"/>
+      <rect x="94" y="74" width="632" height="672" rx="28" fill="#fffaf2"/>
+      <rect x="144" y="144" width="532" height="2" fill="#1f2a25"/>
+      <text x="144" y="126" class="kicker">MIRA CAFE</text>
+      <text x="144" y="240" class="headline">ЗАВТРАК</text>
+      <text x="144" y="318" class="copy">РАФ 320</text>
+      <text x="144" y="386" class="copy">КРУАССАН 260</text>
+      <text x="144" y="454" class="copy">СКИДКА 15%</text>
+      <text x="144" y="522" class="copy">12 ИЮНЯ</text>
+      <circle cx="610" cy="612" r="52" fill="#795f4e"/>
+      <rect x="522" y="656" width="176" height="24" rx="12" fill="#795f4e"/>
+</svg>

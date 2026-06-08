@@ -1,0 +1,40 @@
+{
+  "testCase": {
+    "id": "carousel-cover",
+    "title": "Carousel cover / content planning slide",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-carousel-cover.png",
+    "caption": "План контента на июнь.",
+    "expectedText": [
+      "CAROUSEL 1/5",
+      "ROADMAP",
+      "POST IDEAS",
+      "JUNE PLAN"
+    ],
+    "expectedObjects": [
+      "carousel",
+      "roadmap",
+      "planning"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "anthropic/claude-opus-4.8",
+    "tier": "no-structured",
+    "text": "**Post ID:** carousel-cover\n\n**Visual description:**\n\nA graphic/illustrated carousel cover slide (not a photo) on a light lavender background. The layout is a flat-design mockup with simple geometric shapes.\n\n- A white rounded-rectangle \"card\" sits in the center.\n- Inside it, a light blue rounded rectangle contains stacked dark text.\n- Below the blue block are two horizontal rounded bars (placeholder/divider shapes): one sage-green, one tan/beige.\n\n**Text transcription (verbatim):**\n- \"ROADMAP\"\n- \"POST IDEAS\"\n- \"JUNE PLAN\"\n- \"CAROUSEL 1/5\"\n\n**Other observable details:**\n- \"CAROUSEL 1/5\" appears in large dark bold text below the card, indicating this is the first of five carousel slides.\n- The design uses a muted, minimal color palette (lavender, light blue, sage green, tan).\n- No logos, photographs, faces, or brand marks are visible.\n\n**Screenshot assessment:** isLikelyScreenshot = false. There are no app UI elements, status bar, or letterbox bars — it appears to be an original designed graphic rather than a repost screenshot.\n\n**Caption context:** The caption \"План контента на июнь.\" (Russian for \"Content plan for June.\") aligns with the slide text \"JUNE PLAN,\" but I cannot verify anything beyond what is shown.",
+    "latencyMs": 8693,
+    "promptTokens": 1467,
+    "completionTokens": 474,
+    "reasoningTokens": 0,
+    "costUsd": 0.019185
+  },
+  "rendered": "[Image ID: carousel-cover]\n**Post ID:** carousel-cover\n\n**Visual description:**\n\nA graphic/illustrated carousel cover slide (not a photo) on a light lavender background. The layout is a flat-design mockup with simple geometric shapes.\n\n- A white rounded-rectangle \"card\" sits in the center.\n- Inside it, a light blue rounded rectangle contains stacked dark text.\n- Below the blue block are two horizontal rounded bars (placeholder/divider shapes): one sage-green, one tan/beige.\n\n**Text transcription (verbatim):**\n- \"ROADMAP\"\n- \"POST IDEAS\"\n- \"JUNE PLAN\"\n- \"CAROUSEL 1/5\"\n\n**Other observable details:**\n- \"CAROUSEL 1/5\" appears in large dark bold text below the card, indicating this is the first of five carousel slides.\n- The design uses a muted, minimal color palette (lavender, light blue, sage green, tan).\n- No logos, photographs, faces, or brand marks are visible.\n\n**Screenshot assessment:** isLikelyScreenshot = false. There are no app UI elements, status bar, or letterbox bars — it appears to be an original designed graphic rather than a repost screenshot.\n\n**Caption context:** The caption \"План контента на июнь.\" (Russian for \"Content plan for June.\") aligns with the slide text \"JUNE PLAN,\" but I cannot verify anything beyond what is shown.",
+  "evaluation": {
+    "score": 95,
+    "missedText": [],
+    "missedObjects": [
+      "planning"
+    ],
+    "forbiddenHits": []
+  }
+}

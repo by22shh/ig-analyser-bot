@@ -7,6 +7,7 @@ import type { ReportMetrics, ReportSummaryView } from "../../modules/reports/typ
 export const en = {
   brand: env.BRAND_NAME,
   buttons: {
+    miniApp: "🚀 Open Mini App",
     analyze: "🔎 Profile analysis",
     photo: "🖼 Photo search",
     history: "🗂 History",
@@ -456,6 +457,17 @@ export const en = {
       support +
       terms +
       privacy
+    );
+  },
+  paymentSupport(supportUrl: string): string {
+    const support = supportUrl
+      ? `\n\nSupport: <a href="${escapeHtml(supportUrl)}">${escapeHtml(supportUrl)}</a>`
+      : "";
+    return (
+      "💳 <b>Payment support</b>\n\n" +
+      "If the payment succeeded but credits were not granted, send the date, amount, payment method and a screenshot of the payment status.\n" +
+      "For a Telegram Stars or YooKassa refund, include the reason and order number if you have it. Refunds are available only for unused credits." +
+      support
     );
   },
   cancelled(): string {

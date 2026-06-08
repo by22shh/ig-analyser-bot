@@ -1,0 +1,42 @@
+{
+  "testCase": {
+    "id": "sochi-screenshot",
+    "title": "Real Instagram-like waterfront screenshot",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-05-bakeoff/test-image.jpg",
+    "caption": "Лучшие прогулки — вдоль моря 🤍 #сочи #морвокзал",
+    "expectedText": [
+      "AUTOMNE",
+      "FALL/WINTER",
+      "24-25"
+    ],
+    "expectedObjects": [
+      "water",
+      "lighthouse",
+      "two people",
+      "black bars"
+    ],
+    "expectedScreenshot": true
+  },
+  "result": {
+    "ok": true,
+    "model": "x-ai/grok-4.3",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"Two people standing on a gravel waterfront path beside the sea\",\n    \"Woman wearing navy quarter-zip sweatshirt with yellow text and light-wash jeans\",\n    \"Man wearing brown polo shirt and beige trousers holding a smartphone\",\n    \"Background shows calm water, distant buildings including a tower, trees and promenade structures under clear sky\",\n    \"Image framed with solid black bars at top and bottom plus thin white bar at very bottom\"\n  ],\n  \"setting\": \"Seaside promenade / waterfront path\",\n  \"objects\": [\n    \"navy sweatshirt\",\n    \"light-wash jeans\",\n    \"brown polo shirt\",\n    \"beige trousers\",\n    \"smartphone\",\n    \"body of water\",\n    \"gravel path\",\n    \"distant buildings and tower\"\n  ],\n  \"textOverlays\": [],\n  \"textVerbatim\": [\n    \"AUTOMNE-H\",\n    \"FALL WINTER 24-25 COLLECTION\",\n    \"Luxury Culture\"\n  ],\n  \"visualStyle\": [\n    \"Natural daylight\",\n    \"Outdoor snapshot\",\n    \"Casual clothing\",\n    \"Phone screenshot framing\"\n  ],\n  \"isLikelyScreenshot\": true,\n  \"uncertainty\": [\n    \"Exact location name\",\n    \"Any additional off-frame text\"\n  ]\n}",
+    "latencyMs": 5947,
+    "promptTokens": 1465,
+    "completionTokens": 1000,
+    "reasoningTokens": 730,
+    "costUsd": 0.00419685
+  },
+  "rendered": "[Image ID: sochi-screenshot]\n- Visible fact: Two people standing on a gravel waterfront path beside the sea\n- Visible fact: Woman wearing navy quarter-zip sweatshirt with yellow text and light-wash jeans\n- Visible fact: Man wearing brown polo shirt and beige trousers holding a smartphone\n- Visible fact: Background shows calm water, distant buildings including a tower, trees and promenade structures under clear sky\n- Visible fact: Image framed with solid black bars at top and bottom plus thin white bar at very bottom\n- Setting: Seaside promenade / waterfront path\n- Objects/signals: navy sweatshirt, light-wash jeans, brown polo shirt, beige trousers, smartphone, body of water, gravel path, distant buildings and tower\n- Text (verbatim): AUTOMNE-H | FALL WINTER 24-25 COLLECTION | Luxury Culture\n- Visual style: Natural daylight, Outdoor snapshot, Casual clothing, Phone screenshot framing\n- Note: likely a screenshot/repost, not an original upload.\n- Uncertainty: Exact location name; Any additional off-frame text",
+  "evaluation": {
+    "score": 87,
+    "missedText": [
+      "FALL/WINTER"
+    ],
+    "missedObjects": [
+      "lighthouse"
+    ],
+    "forbiddenHits": []
+  }
+}

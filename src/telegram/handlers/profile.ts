@@ -15,6 +15,7 @@ import { editOrSendHtml, sendHtml } from "./helpers.js";
 export function registerProfileHandlers(bot: import("grammy").Bot<MyContext>) {
   bot.command(["balance", "credits"], async (ctx) => showBalance(ctx));
   bot.command(["buy", "topup"], async (ctx) => showPaywall(ctx));
+  bot.command("paysupport", async (ctx) => showPaymentSupport(ctx));
   bot.command("settings", async (ctx) => showSettings(ctx));
   bot.command("help", async (ctx) => showHelp(ctx));
   bot.command("cancel", async (ctx) => {
@@ -186,4 +187,9 @@ async function showHelp(ctx: MyContext) {
     messages.help(env.SUPPORT_URL, env.TOS_URL, env.PRIVACY_URL),
     helpKeyboard(messages)
   );
+}
+
+async function showPaymentSupport(ctx: MyContext) {
+  const messages = t(ctx.user?.language);
+  await editOrSendHtml(ctx, messages.paymentSupport(env.SUPPORT_URL), helpKeyboard(messages));
 }

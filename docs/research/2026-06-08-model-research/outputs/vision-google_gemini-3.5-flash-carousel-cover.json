@@ -1,0 +1,40 @@
+{
+  "testCase": {
+    "id": "carousel-cover",
+    "title": "Carousel cover / content planning slide",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-carousel-cover.png",
+    "caption": "План контента на июнь.",
+    "expectedText": [
+      "CAROUSEL 1/5",
+      "ROADMAP",
+      "POST IDEAS",
+      "JUNE PLAN"
+    ],
+    "expectedObjects": [
+      "carousel",
+      "roadmap",
+      "planning"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "google/gemini-3.5-flash",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"A minimalist graphic illustration featuring a white rounded card on a light blue background.\",\n    \"The card contains a light blue block with the text 'ROADMAP', 'POST IDEAS', and 'JUNE PLAN'.\",\n    \"Below the blue block are two horizontal pill-shaped colored bars in muted green and beige.\",\n    \"The text 'CAROUSEL 1/5' is displayed in bold dark grey letters at the bottom of the image.\"\n  ],\n  \"setting\": null,\n  \"objects\": [\n    \"graphic card\",\n    \"text blocks\",\n    \"colored bars\"\n  ],\n  \"textOverlays\": [\n    \"ROADMAP\",\n    \"POST IDEAS\",\n    \"JUNE PLAN\",\n    \"CAROUSEL 1/5\"\n  ],\n  \"textVerbatim\": [\n    \"ROADMAP\",\n    \"POST IDEAS\",\n    \"JUNE PLAN\",\n    \"CAROUSEL 1/5\"\n  ],\n  \"visualStyle\": [\n    \"minimalist graphic design\",\n    \"pastel color palette\",\n    \"flat design\",\n    \"rounded corners\"\n  ],\n  \"isLikelyScreenshot\": false,\n  \"uncertainty\": [\n    \"The specific purpose of the colored bars\",\n    \"The content of the remaining carousel slides\"\n  ]\n}",
+    "latencyMs": 8740,
+    "promptTokens": 1860,
+    "completionTokens": 756,
+    "reasoningTokens": 453,
+    "costUsd": 0.009594
+  },
+  "rendered": "[Image ID: carousel-cover]\n- Visible fact: A minimalist graphic illustration featuring a white rounded card on a light blue background.\n- Visible fact: The card contains a light blue block with the text 'ROADMAP', 'POST IDEAS', and 'JUNE PLAN'.\n- Visible fact: Below the blue block are two horizontal pill-shaped colored bars in muted green and beige.\n- Visible fact: The text 'CAROUSEL 1/5' is displayed in bold dark grey letters at the bottom of the image.\n- Objects/signals: graphic card, text blocks, colored bars\n- Text in image: ROADMAP | POST IDEAS | JUNE PLAN | CAROUSEL 1/5\n- Text (verbatim): ROADMAP | POST IDEAS | JUNE PLAN | CAROUSEL 1/5\n- Visual style: minimalist graphic design, pastel color palette, flat design, rounded corners\n- Uncertainty: The specific purpose of the colored bars; The content of the remaining carousel slides",
+  "evaluation": {
+    "score": 95,
+    "missedText": [],
+    "missedObjects": [
+      "planning"
+    ],
+    "forbiddenHits": []
+  }
+}

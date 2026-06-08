@@ -1,0 +1,40 @@
+{
+  "testCase": {
+    "id": "carousel-cover",
+    "title": "Carousel cover / content planning slide",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-carousel-cover.png",
+    "caption": "План контента на июнь.",
+    "expectedText": [
+      "CAROUSEL 1/5",
+      "ROADMAP",
+      "POST IDEAS",
+      "JUNE PLAN"
+    ],
+    "expectedObjects": [
+      "carousel",
+      "roadmap",
+      "planning"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "qwen/qwen3-vl-235b-a22b-instruct",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"Text in light blue rounded rectangle: 'ROADMAP', 'POST IDEAS', 'JUNE PLAN'\",\n    \"Two horizontal rounded bars below: one olive green, one beige\",\n    \"Text at bottom: 'CAROUSEL 1/5'\",\n    \"Background: light gray\",\n    \"Overall layout: minimalist graphic with centered text and bars inside a white rounded rectangle\"\n  ],\n  \"setting\": \"Digital graphic / social media carousel cover\",\n  \"objects\": [\n    \"Text blocks\",\n    \"Rounded rectangular shapes\",\n    \"Progress-style bars\"\n  ],\n  \"textOverlays\": [\n    \"ROADMAP\",\n    \"POST IDEAS\",\n    \"JUNE PLAN\",\n    \"CAROUSEL 1/5\"\n  ],\n  \"textVerbatim\": [\n    \"ROADMAP\",\n    \"POST IDEAS\",\n    \"JUNE PLAN\",\n    \"CAROUSEL 1/5\"\n  ],\n  \"visualStyle\": [\n    \"Minimalist\",\n    \"Flat design\",\n    \"Corporate/organizational aesthetic\"\n  ],\n  \"isLikelyScreenshot\": false\n  ,\n  \"uncertainty\": []\n}",
+    "latencyMs": 4533,
+    "promptTokens": 1024,
+    "completionTokens": 246,
+    "reasoningTokens": 0,
+    "costUsd": 0.00068244
+  },
+  "rendered": "[Image ID: carousel-cover]\n- Visible fact: Text in light blue rounded rectangle: 'ROADMAP', 'POST IDEAS', 'JUNE PLAN'\n- Visible fact: Two horizontal rounded bars below: one olive green, one beige\n- Visible fact: Text at bottom: 'CAROUSEL 1/5'\n- Visible fact: Background: light gray\n- Visible fact: Overall layout: minimalist graphic with centered text and bars inside a white rounded rectangle\n- Setting: Digital graphic / social media carousel cover\n- Objects/signals: Text blocks, Rounded rectangular shapes, Progress-style bars\n- Text in image: ROADMAP | POST IDEAS | JUNE PLAN | CAROUSEL 1/5\n- Text (verbatim): ROADMAP | POST IDEAS | JUNE PLAN | CAROUSEL 1/5\n- Visual style: Minimalist, Flat design, Corporate/organizational aesthetic",
+  "evaluation": {
+    "score": 95,
+    "missedText": [],
+    "missedObjects": [
+      "planning"
+    ],
+    "forbiddenHits": []
+  }
+}

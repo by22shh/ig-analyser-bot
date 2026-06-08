@@ -1,0 +1,39 @@
+{
+  "testCase": {
+    "id": "cafe-menu-cyrillic",
+    "title": "Cafe menu with Cyrillic OCR",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-cafe-menu-cyrillic.png",
+    "caption": "Любимое место для завтрака.",
+    "expectedText": [
+      "MIRA CAFE",
+      "ЗАВТРАК",
+      "РАФ 320",
+      "СКИДКА 15%",
+      "12 ИЮНЯ"
+    ],
+    "expectedObjects": [
+      "menu",
+      "coffee",
+      "cafe"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "google/gemini-2.5-flash",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"The image displays a menu or promotional card for a cafe.\",\n    \"The card features a light beige background with dark brown text.\",\n    \"A stylized coffee cup icon is present in the bottom right corner.\",\n    \"The text includes a cafe name, a meal type, two food/drink items with prices, a discount percentage, and a date.\"\n  ],\n  \"setting\": \"cafe menu\",\n  \"objects\": [\n    \"menu card\",\n    \"text\",\n    \"coffee cup icon\"\n  ],\n  \"textOverlays\": [\n    \"MIRA CAFE\",\n    \"ЗАВТРАК\",\n    \"РАФ 320\",\n    \"КРУАССАН 260\",\n    \"СКИДКА 15%\",\n    \"12 ИЮНЯ\"\n  ],\n  \"textVerbatim\": [\n    \"MIRA CAFE\",\n    \"ЗАВТРАК\",\n    \"РАФ 320\",\n    \"КРУАССАН 260\",\n    \"СКИДКА 15%\",\n    \"12 ИЮНЯ\"\n  ],\n  \"visualStyle\": [\n    \"minimalist design\",\n    \"flat colors\",\n    \"clean typography\",\n    \"simple icon\"\n  ],\n  \"isLikelyScreenshot\": false,\n  \"uncertainty\": []\n}",
+    "latencyMs": 2948,
+    "promptTokens": 1525,
+    "completionTokens": 317,
+    "reasoningTokens": 0,
+    "costUsd": 0.00125
+  },
+  "rendered": "[Image ID: cafe-menu-cyrillic]\n- Visible fact: The image displays a menu or promotional card for a cafe.\n- Visible fact: The card features a light beige background with dark brown text.\n- Visible fact: A stylized coffee cup icon is present in the bottom right corner.\n- Visible fact: The text includes a cafe name, a meal type, two food/drink items with prices, a discount percentage, and a date.\n- Setting: cafe menu\n- Objects/signals: menu card, text, coffee cup icon\n- Text in image: MIRA CAFE | ЗАВТРАК | РАФ 320 | КРУАССАН 260 | СКИДКА 15% | 12 ИЮНЯ\n- Text (verbatim): MIRA CAFE | ЗАВТРАК | РАФ 320 | КРУАССАН 260 | СКИДКА 15% | 12 ИЮНЯ\n- Visual style: minimalist design, flat colors, clean typography, simple icon",
+  "evaluation": {
+    "score": 100,
+    "missedText": [],
+    "missedObjects": [],
+    "forbiddenHits": []
+  }
+}

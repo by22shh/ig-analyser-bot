@@ -1,0 +1,47 @@
+{
+  "testCase": {
+    "id": "sochi-screenshot",
+    "title": "Real Instagram-like waterfront screenshot",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-05-bakeoff/test-image.jpg",
+    "caption": "Лучшие прогулки — вдоль моря 🤍 #сочи #морвокзал",
+    "expectedText": [
+      "AUTOMNE",
+      "FALL/WINTER",
+      "24-25"
+    ],
+    "expectedObjects": [
+      "water",
+      "lighthouse",
+      "two people",
+      "black bars"
+    ],
+    "expectedScreenshot": true
+  },
+  "result": {
+    "ok": true,
+    "model": "qwen/qwen3-vl-32b-instruct",
+    "tier": "no-structured",
+    "text": "{\n  \"textVerbatim\": \"Лучшие прогулки — вдоль моря 🤍 #сочи #морвокзал\",\n  \"isLikelyScreenshot\": true,\n  \"sceneType\": \"outdoor seaside promenade\",\n  \"visibleObjects\": [\n    \"two people standing side-by-side\",\n    \"woman wearing navy blue sweatshirt with text 'AUTOMNE-H FALL/WINTER 24-25 COLLECTION Vintage Edition', light blue jeans, black handbag, and black watch\",\n    \"man wearing brown polo shirt, beige trousers, sunglasses, holding a smartphone\",\n    \"gravel or stone walkway beside water\",\n    \"background buildings including a tower with a dome, trees, and a modern structure with a curved roof\",\n    \"other people visible in the background\",\n    \"clear sky with soft lighting suggesting late afternoon or early evening\"\n  ],\n  \"brandCues\": [\n    \"AUTOMNE-H (on sweatshirt)\",\n    \"Vintage Edition (on sweatshirt)\"\n  ],\n  \"settingDetails\": \"coastal urban area, likely a public seaside walkway or pier, with architectural features suggesting a resort or city waterfront (possibly Sochi's Morskoy Vokzal as indicated by hashtag)\",\n  \"composition\": \"medium shot, centered on two individuals, with background scenery providing context of location\"\n}",
+    "latencyMs": 4437,
+    "promptTokens": 980,
+    "completionTokens": 284,
+    "reasoningTokens": 0,
+    "costUsd": 0.000220064
+  },
+  "rendered": "[Image ID: sochi-screenshot]\n- Note: likely a screenshot/repost, not an original upload.",
+  "evaluation": {
+    "score": 56,
+    "missedText": [
+      "AUTOMNE",
+      "FALL/WINTER",
+      "24-25"
+    ],
+    "missedObjects": [
+      "water",
+      "lighthouse",
+      "two people",
+      "black bars"
+    ],
+    "forbiddenHits": []
+  }
+}

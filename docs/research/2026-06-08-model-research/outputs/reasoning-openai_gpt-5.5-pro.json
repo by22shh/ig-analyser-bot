@@ -1,0 +1,48 @@
+{
+  "model": "openai/gpt-5.5-pro",
+  "result": {
+    "ok": false,
+    "model": "openai/gpt-5.5-pro",
+    "tier": "full",
+    "text": "",
+    "latencyMs": 1031,
+    "error": "HTTP_402: {\"error\":{\"message\":\"This request requires more credits, or fewer max_tokens. You requested up to 9000 tokens, but can only afford 4281. To increase, visit https://openrouter.ai/settings/credits and add more credits\",\"code\":402,\"metadata\":{\"provider_name\":null}},\"user_id\":\"user_35geAtxZlKmqZ0DhG6vmAFOnZ5r\"}"
+  },
+  "rendered": "",
+  "evaluation": {
+    "model": "openai/gpt-5.5-pro",
+    "modelName": "OpenAI: GPT-5.5 Pro",
+    "priceInPerMTok": 30,
+    "priceOutPerMTok": 180,
+    "ok": false,
+    "tier": "full",
+    "score": 0,
+    "sections": 0,
+    "missingSections": [
+      "Основные темы и приоритеты",
+      "Повторяющиеся визуальные и текстовые паттерны",
+      "Поведение и вовлеченность",
+      "Аудитория и комментарии",
+      "Стиль общения",
+      "Профессия и статус",
+      "Отличие от типичных аккаунтов",
+      "Отсутствия как сигнал",
+      "Потенциальная польза от контакта",
+      "Триггеры и зацепки",
+      "Коммуникационные рекомендации",
+      "Готовые фразы для входа в диалог",
+      "Неочевидные наблюдения",
+      "Общая оценка ценности профиля",
+      "Поведенческие сигналы",
+      "Ошибки, слепые зоны, барьеры",
+      "Образ как у бренда"
+    ],
+    "weakSourceSections": 17,
+    "groundingFindings": [],
+    "hasSampleCaveat": false,
+    "readyPhraseCount": 0,
+    "highConfidenceMentions": 0,
+    "latencyMs": 1031,
+    "error": "HTTP_402: {\"error\":{\"message\":\"This request requires more credits, or fewer max_tokens. You requested up to 9000 tokens, but can only afford 4281. To increase, visit https://openrouter.ai/settings/credits and add more credits\",\"code\":402,\"metadata\":{\"provider_name\":null}},\"user_id\":\"user_35geAtxZlKmqZ0DhG6vmAFOnZ5r\"}"
+  }
+}

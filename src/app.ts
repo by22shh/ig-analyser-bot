@@ -5,6 +5,7 @@ import { isIP } from "node:net";
 import { env } from "./config/env.js";
 import { childLogger } from "./config/logger.js";
 import type { Services } from "./modules/container.js";
+import { registerMiniAppRoutes } from "./mini-app/routes.js";
 import type { MyContext } from "./telegram/context.js";
 
 const log = childLogger("server");
@@ -13,6 +14,7 @@ export function createApp(input: { services: Services; bot: Bot<MyContext> }) {
   const app = Fastify({ logger: false, trustProxy: false });
 
   app.get("/health", async () => ({ ok: true, env: env.APP_ENV }));
+  registerMiniAppRoutes(app, input);
 
   app.post("/telegram/webhook", async (request, reply) => {
     if (env.TELEGRAM_WEBHOOK_SECRET) {

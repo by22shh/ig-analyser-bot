@@ -1,0 +1,44 @@
+{
+  "testCase": {
+    "id": "product-poster",
+    "title": "Product/fashion poster with English text",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-product-poster.png",
+    "caption": "Новый дроп, спокойные цвета и лен.",
+    "expectedText": [
+      "MIRA STUDIO",
+      "NEW DROP",
+      "LINEN SET",
+      "12 JUN",
+      "SAGE",
+      "IVORY"
+    ],
+    "expectedObjects": [
+      "linen",
+      "sunglasses",
+      "bag",
+      "poster"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "anthropic/claude-opus-4.8",
+    "tier": "no-structured",
+    "text": "**Post ID: product-poster**\n\n**Format:** This appears to be an original graphic design / promotional poster (not a screenshot). No app UI chrome, status bar, or letterbox bars are visible. `isLikelyScreenshot=false`\n\n**Layout & composition:**\n- Square graphic on a cream/off-white background with a rounded white inner panel.\n- Top-left brand text in bold dark lettering.\n- Abstract geometric shapes: a tall vertical sage-green oval/pill on the left; a dark rounded rectangle paired with two overlapping near-black circles on the upper right.\n- A pale tan/beige highlight bar sits behind part of the headline text in the lower area.\n\n**textVerbatim (transcribed exactly):**\n- \"MIRA STUDIO\"\n- \"NEW DROP\"\n- \"LINEN SET / 12 JUN\"\n- \"SAGE + IVORY\"\n\n**Color palette:** Cream/ivory background, sage green, dark charcoal/black accent shapes, tan highlight.\n\n**Brand cue:** \"MIRA STUDIO\" presented as the brand/logo wordmark.\n\n**Caption context (from provided text, not image):** The caption (in Russian) refers to a new drop, calm colors, and linen — consistent with the poster's \"NEW DROP / LINEN SET\" and \"SAGE + IVORY\" text.\n\nNo people, faces, or other identifying details are present in the frame.",
+    "latencyMs": 8947,
+    "promptTokens": 1475,
+    "completionTokens": 473,
+    "reasoningTokens": 0,
+    "costUsd": 0.0192
+  },
+  "rendered": "[Image ID: product-poster]\n**Post ID: product-poster**\n\n**Format:** This appears to be an original graphic design / promotional poster (not a screenshot). No app UI chrome, status bar, or letterbox bars are visible. `isLikelyScreenshot=false`\n\n**Layout & composition:**\n- Square graphic on a cream/off-white background with a rounded white inner panel.\n- Top-left brand text in bold dark lettering.\n- Abstract geometric shapes: a tall vertical sage-green oval/pill on the left; a dark rounded rectangle paired with two overlapping near-black circles on the upper right.\n- A pale tan/beige highlight bar sits behind part of the headline text in the lower area.\n\n**textVerbatim (transcribed exactly):**\n- \"MIRA STUDIO\"\n- \"NEW DROP\"\n- \"LINEN SET / 12 JUN\"\n- \"SAGE + IVORY\"\n\n**Color palette:** Cream/ivory background, sage green, dark charcoal/black accent shapes, tan highlight.\n\n**Brand cue:** \"MIRA STUDIO\" presented as the brand/logo wordmark.\n\n**Caption context (from provided text, not image):** The caption (in Russian) refers to a new drop, calm colors, and linen — consistent with the poster's \"NEW DROP / LINEN SET\" and \"SAGE + IVORY\" text.\n\nNo people, faces, or other identifying details are present in the frame.",
+  "evaluation": {
+    "score": 90,
+    "missedText": [],
+    "missedObjects": [
+      "sunglasses",
+      "bag"
+    ],
+    "forbiddenHits": []
+  }
+}

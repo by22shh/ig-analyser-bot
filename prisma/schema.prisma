@@ -9,23 +9,24 @@ datasource db {
 }
 
 model User {
-  id                String    @id @default(uuid()) @db.Uuid
-  telegramId        BigInt    @unique
-  telegramUsername  String?
-  firstName         String?
-  lastName          String?
-  language          String    @default("ru")
-  role              String    @default("user")
-  status            String    @default("active")
-  timezone          String?
-  consentVersion    String?
-  consentAcceptedAt DateTime?
-  email             String?
-  referralCode      String?   @unique
-  referredByUserId  String?   @db.Uuid
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  deletedAt         DateTime?
+  id                   String    @id @default(uuid()) @db.Uuid
+  telegramId           BigInt    @unique
+  telegramIdentityHash String?   @unique
+  telegramUsername     String?
+  firstName            String?
+  lastName             String?
+  language             String    @default("ru")
+  role                 String    @default("user")
+  status               String    @default("active")
+  timezone             String?
+  consentVersion       String?
+  consentAcceptedAt    DateTime?
+  email                String?
+  referralCode         String?   @unique
+  referredByUserId     String?   @db.Uuid
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  deletedAt            DateTime?
 
   settings            UserSettings?
   creditAccount       CreditAccount?
@@ -73,17 +74,18 @@ model CreditAccount {
 }
 
 model CreditTransaction {
-  id                String   @id @default(uuid()) @db.Uuid
-  userId            String   @db.Uuid
-  analysisJobId     String?  @db.Uuid
-  photoSearchJobId  String?  @db.Uuid
-  type              String
-  amountUnits       Int
-  balanceAfterUnits Int
-  provider          String?
-  providerPaymentId String?
-  metadata          Json?
-  createdAt         DateTime @default(now())
+  id                  String   @id @default(uuid()) @db.Uuid
+  userId              String   @db.Uuid
+  analysisJobId       String?  @db.Uuid
+  photoSearchJobId    String?  @db.Uuid
+  reportChatMessageId String?  @db.Uuid
+  type                String
+  amountUnits         Int
+  balanceAfterUnits   Int
+  provider            String?
+  providerPaymentId   String?
+  metadata            Json?
+  createdAt           DateTime @default(now())
 
   user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   analysisJob    AnalysisJob?    @relation(fields: [analysisJobId], references: [id], onDelete: SetNull)
@@ -92,6 +94,7 @@ model CreditTransaction {
   @@index([userId, createdAt])
   @@index([analysisJobId])
   @@index([photoSearchJobId])
+  @@index([reportChatMessageId])
   @@index([provider, providerPaymentId])
   @@map("credit_transactions")
 }

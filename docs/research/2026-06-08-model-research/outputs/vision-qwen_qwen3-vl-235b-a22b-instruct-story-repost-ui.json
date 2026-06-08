@@ -1,0 +1,45 @@
+{
+  "testCase": {
+    "id": "story-repost-ui",
+    "title": "Story screenshot/repost UI",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-story-repost.png",
+    "caption": "Утренний кофе и прогулка.",
+    "expectedText": [
+      "@MIRA.STYLE",
+      "STORY REPOST",
+      "COFFEE WALK",
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "expectedObjects": [
+      "story",
+      "repost",
+      "coffee",
+      "send message"
+    ],
+    "expectedScreenshot": true
+  },
+  "result": {
+    "ok": true,
+    "model": "qwen/qwen3-vl-235b-a22b-instruct",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"The image is a graphic UI mockup of a social media story repost interface.\",\n    \"Top bar shows a circular green avatar placeholder next to the handle '@MIRA.STYLE' in black sans-serif font.\",\n    \"Below that, the text 'STORY REPOST' appears in bold, uppercase, black sans-serif font.\",\n    \"A light blue rectangular frame contains two abstract shapes: a solid brown circle on the left and a white rounded square on the right.\",\n    \"At the bottom, partially visible text reads 'COFFFF WALK' in bold, uppercase, black sans-serif font — likely a stylized version of 'COFFEE WALK'.\",\n    \"The overall layout mimics a mobile story interface with rounded corners and a beige background.\"\n  ],\n  \"setting\": \"Digital UI mockup / graphic design\",\n  \"objects\": [\n    \"Avatar placeholder\",\n    \"Text labels: '@MIRA.STYLE', 'STORY REPOST', 'COFFFF WALK'\",\n    \"Abstract shapes: brown circle, white rounded square\",\n    \"Light blue content frame\",\n    \"Beige background with rounded corners\"\n  ],\n  \"textOverlays\": [\n    \"@MIRA.STYLE\",\n    \"STORY REPOST\",\n    \"COFFFF WALK\"\n  ],\n  \"textVerbatim\": [\n    \"@MIRA.STYLE\",\n    \"STORY REPOST\",\n    \"COFFFF WALK\"\n  ],\n  \"visualStyle\": [\n    \"Minimalist\",\n    \"Flat design\",\n    \"Pastel color palette\",\n    \"Rounded UI elements\"\n  ],\n  \"isLikelyScreenshot\": false\n  ,\n  \"uncertainty\": []\n}",
+    "latencyMs": 8030,
+    "promptTokens": 1028,
+    "completionTokens": 354,
+    "reasoningTokens": 0,
+    "costUsd": 0.000788
+  },
+  "rendered": "[Image ID: story-repost-ui]\n- Visible fact: The image is a graphic UI mockup of a social media story repost interface.\n- Visible fact: Top bar shows a circular green avatar placeholder next to the handle '@MIRA.STYLE' in black sans-serif font.\n- Visible fact: Below that, the text 'STORY REPOST' appears in bold, uppercase, black sans-serif font.\n- Visible fact: A light blue rectangular frame contains two abstract shapes: a solid brown circle on the left and a white rounded square on the right.\n- Visible fact: At the bottom, partially visible text reads 'COFFFF WALK' in bold, uppercase, black sans-serif font — likely a stylized version of 'COFFEE WALK'.\n- Visible fact: The overall layout mimics a mobile story interface with rounded corners and a beige background.\n- Setting: Digital UI mockup / graphic design\n- Objects/signals: Avatar placeholder, Text labels: '@MIRA.STYLE', 'STORY REPOST', 'COFFFF WALK', Abstract shapes: brown circle, white rounded square, Light blue content frame, Beige background with rounded corners\n- Text in image: @MIRA.STYLE | STORY REPOST | COFFFF WALK\n- Text (verbatim): @MIRA.STYLE | STORY REPOST | COFFFF WALK\n- Visual style: Minimalist, Flat design, Pastel color palette, Rounded UI elements",
+  "evaluation": {
+    "score": 79,
+    "missedText": [
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "missedObjects": [
+      "send message"
+    ],
+    "forbiddenHits": []
+  }
+}

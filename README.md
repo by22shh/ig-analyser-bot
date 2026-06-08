@@ -7,6 +7,7 @@ The bot is backend-first: Telegram handlers are thin, long work is queued in Bul
 ## What Is Implemented
 
 - Telegram UX with `grammy`: `/start`, `/menu`, `/analyze`, `/photo`, `/history`, `/credits`, `/balance`, `/buy`, `/topup`, `/settings`, `/help`, `/cancel`, `/reset`, `/delete_me`, admin shell.
+- Telegram Mini App at `/mini-app`: profile analysis, job progress, report history, sections, exports, report chat, credits, payments and settings.
 - Public Instagram username normalization and analysis wizard.
 - BullMQ workers for analysis and photo search.
 - Mock and real adapters for Apify, OpenRouter, FaceCheck, YooKassa, storage and PDF.
@@ -48,6 +49,9 @@ Production should use webhook mode:
 TELEGRAM_WEBHOOK_URL=https://your-domain.example/telegram/webhook
 TELEGRAM_WEBHOOK_SECRET=...
 ```
+
+The Mini App is enabled by default and is opened from the first button in the bot menu.
+`MINI_APP_URL` defaults to `APP_BASE_URL + /mini-app`; set it only if the web app is served from another HTTPS URL.
 
 For Fly.io + Neon deployment, use [docs/deployment/fly-neon.md](./docs/deployment/fly-neon.md). The Fly config runs `web` and `worker` as separate process groups and runs Prisma migrations through the release command before each release.
 

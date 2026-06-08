@@ -116,6 +116,7 @@ export class CreditsService {
     userId: string;
     analysisJobId?: string;
     photoSearchJobId?: string;
+    reportChatMessageId?: string;
     amountUnits: number;
     metadata?: Prisma.InputJsonValue;
   }) {
@@ -136,6 +137,7 @@ export class CreditsService {
           userId: input.userId,
           analysisJobId: input.analysisJobId,
           photoSearchJobId: input.photoSearchJobId,
+          reportChatMessageId: input.reportChatMessageId,
           type: "reserve",
           amountUnits: -input.amountUnits,
           balanceAfterUnits: updated.balanceUnits,
@@ -149,6 +151,7 @@ export class CreditsService {
     userId: string;
     analysisJobId?: string;
     photoSearchJobId?: string;
+    reportChatMessageId?: string;
     reserveTransactionId?: string;
     amountUnits: number;
     metadata?: Prisma.InputJsonValue;
@@ -177,6 +180,7 @@ export class CreditsService {
           userId: input.userId,
           analysisJobId: input.analysisJobId,
           photoSearchJobId: input.photoSearchJobId,
+          reportChatMessageId: input.reportChatMessageId,
           type: "refund",
           amountUnits: amount,
           balanceAfterUnits: updated.balanceUnits,
@@ -190,6 +194,7 @@ export class CreditsService {
     userId: string;
     analysisJobId?: string;
     photoSearchJobId?: string;
+    reportChatMessageId?: string;
     amountUnits: number;
     metadata?: Prisma.InputJsonValue;
     // Extra writes (e.g. marking the owning job completed) committed atomically
@@ -219,6 +224,7 @@ export class CreditsService {
           userId: input.userId,
           analysisJobId: input.analysisJobId,
           photoSearchJobId: input.photoSearchJobId,
+          reportChatMessageId: input.reportChatMessageId,
           type: "capture",
           amountUnits: -amount,
           balanceAfterUnits: updated.balanceUnits,
@@ -236,14 +242,21 @@ export class CreditsService {
 
   private async scopedOutstandingReserve(
     tx: Prisma.TransactionClient,
-    input: { userId: string; analysisJobId?: string; photoSearchJobId?: string }
+    input: {
+      userId: string;
+      analysisJobId?: string;
+      photoSearchJobId?: string;
+      reportChatMessageId?: string;
+    }
   ): Promise<number | undefined> {
     const scope =
       input.analysisJobId != null
         ? { analysisJobId: input.analysisJobId }
         : input.photoSearchJobId != null
           ? { photoSearchJobId: input.photoSearchJobId }
-          : undefined;
+          : input.reportChatMessageId != null
+            ? { reportChatMessageId: input.reportChatMessageId }
+            : undefined;
     if (!scope) return undefined;
     const transactions = await tx.creditTransaction.findMany({
       where: {

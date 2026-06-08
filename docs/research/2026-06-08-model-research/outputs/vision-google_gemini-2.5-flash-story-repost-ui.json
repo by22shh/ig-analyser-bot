@@ -1,0 +1,45 @@
+{
+  "testCase": {
+    "id": "story-repost-ui",
+    "title": "Story screenshot/repost UI",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-story-repost.png",
+    "caption": "Утренний кофе и прогулка.",
+    "expectedText": [
+      "@MIRA.STYLE",
+      "STORY REPOST",
+      "COFFEE WALK",
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "expectedObjects": [
+      "story",
+      "repost",
+      "coffee",
+      "send message"
+    ],
+    "expectedScreenshot": true
+  },
+  "result": {
+    "ok": true,
+    "model": "google/gemini-2.5-flash",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"The image displays a user interface for a story repost, featuring a profile handle and a placeholder for the story content.\",\n    \"The profile handle is \\\"@MIRA.STYLE\\\".\",\n    \"The text \\\"STORY REPOST\\\" is prominently displayed.\",\n    \"A light blue rectangular area with rounded corners represents the story content.\",\n    \"Inside the story content area, there is a brown circle and a white rounded square, acting as abstract placeholders.\",\n    \"The background of the UI is a light beige color.\",\n    \"The overall image is framed within a black background, suggesting a screenshot or a digital display.\"\n  ],\n  \"setting\": \"digital user interface\",\n  \"objects\": [\n    \"user interface\",\n    \"profile handle\",\n    \"text overlay\",\n    \"placeholder shapes (circle, square)\"\n  ],\n  \"textOverlays\": [\n    \"@MIRA.STYLE\",\n    \"STORY REPOST\",\n    \"COFFEE WALK\"\n  ],\n  \"textVerbatim\": [\n    \"@MIRA.STYLE\",\n    \"STORY REPOST\",\n    \"COFFEE WALK\"\n  ],\n  \"visualStyle\": [\n    \"minimalist design\",\n    \"flat design\",\n    \"abstract shapes\",\n    \"digital rendering\",\n    \"clean typography\"\n  ],\n  \"isLikelyScreenshot\": true,\n  \"uncertainty\": []\n}",
+    "latencyMs": 2821,
+    "promptTokens": 1524,
+    "completionTokens": 318,
+    "reasoningTokens": 0,
+    "costUsd": 0.0012522
+  },
+  "rendered": "[Image ID: story-repost-ui]\n- Visible fact: The image displays a user interface for a story repost, featuring a profile handle and a placeholder for the story content.\n- Visible fact: The profile handle is \"@MIRA.STYLE\".\n- Visible fact: The text \"STORY REPOST\" is prominently displayed.\n- Visible fact: A light blue rectangular area with rounded corners represents the story content.\n- Visible fact: Inside the story content area, there is a brown circle and a white rounded square, acting as abstract placeholders.\n- Visible fact: The background of the UI is a light beige color.\n- Visible fact: The overall image is framed within a black background, suggesting a screenshot or a digital display.\n- Setting: digital user interface\n- Objects/signals: user interface, profile handle, text overlay, placeholder shapes (circle, square)\n- Text in image: @MIRA.STYLE | STORY REPOST | COFFEE WALK\n- Text (verbatim): @MIRA.STYLE | STORY REPOST | COFFEE WALK\n- Visual style: minimalist design, flat design, abstract shapes, digital rendering, clean typography\n- Note: likely a screenshot/repost, not an original upload.",
+  "evaluation": {
+    "score": 79,
+    "missedText": [
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "missedObjects": [
+      "send message"
+    ],
+    "forbiddenHits": []
+  }
+}

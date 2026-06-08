@@ -1,0 +1,45 @@
+{
+  "testCase": {
+    "id": "story-repost-ui",
+    "title": "Story screenshot/repost UI",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-story-repost.png",
+    "caption": "Утренний кофе и прогулка.",
+    "expectedText": [
+      "@MIRA.STYLE",
+      "STORY REPOST",
+      "COFFEE WALK",
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "expectedObjects": [
+      "story",
+      "repost",
+      "coffee",
+      "send message"
+    ],
+    "expectedScreenshot": true
+  },
+  "result": {
+    "ok": true,
+    "model": "openai/gpt-5.4-mini",
+    "tier": "no-structured",
+    "text": "{\n  \"postId\": \"story-repost-ui\",\n  \"isLikelyScreenshot\": true,\n  \"textVerbatim\": [\n    \"@MIRA.STYLE\",\n    \"STORY REPOST\",\n    \"COFFEE WALK\"\n  ],\n  \"visibleFacts\": \"A story-repost style UI on a black background with a rounded cream-colored card. At the top is a circular avatar placeholder next to the handle '@MIRA.STYLE'. Below it, bold text reads 'STORY REPOST'. The main content area is a large light-blue rounded rectangle containing a brown circle on the left and a white rounded rectangle near the center-right. The bottom edge shows the top of large text 'COFFEE WALK', partially cut off. No real photo content is visible; this appears to be a repost/template screen.\",\n  \"sceneSettingType\": \"social media story repost UI / template screen\",\n  \"brandLogoProductCues\": [\n    \"Instagram story/repost framing\",\n    \"username handle display\"\n  ]\n}",
+    "latencyMs": 2552,
+    "promptTokens": 1248,
+    "completionTokens": 213,
+    "reasoningTokens": 0,
+    "costUsd": 0.0018945
+  },
+  "rendered": "[Image ID: story-repost-ui]\n- Text (verbatim): @MIRA.STYLE | STORY REPOST | COFFEE WALK\n- Note: likely a screenshot/repost, not an original upload.",
+  "evaluation": {
+    "score": 79,
+    "missedText": [
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "missedObjects": [
+      "send message"
+    ],
+    "forbiddenHits": []
+  }
+}

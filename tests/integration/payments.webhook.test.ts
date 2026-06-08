@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { CreditsService } from "../../src/modules/billing/credits.service.js";
 import { MockYooKassaAdapter } from "../../src/modules/payments/adapters/yookassa.adapter.js";
 import { encodeInvoicePayload } from "../../src/modules/payments/invoice-payload.js";
@@ -60,6 +60,41 @@ describe.skipIf(!dbAvailable)("Payment webhooks (integration)", () => {
       }
     });
     return { user: u, providerPaymentId };
+  }
+
+  async function paidStarsOrder(input: { balanceUnits: number; creditsUnits: number }) {
+    const u = await user(input.balanceUnits);
+    const chatId = Number(uniqueBigInt() % 1_000_000_000n);
+    const telegramUserId = Number(uniqueBigInt() % 1_000_000_000n);
+    const chargeId = `charge_${uniqueBigInt()}`;
+    const order = await prisma.paymentOrder.create({
+      data: {
+        userId: u.id,
+        packageId: startPackageId,
+        status: "paid",
+        amountMinor: 690,
+        currency: "XTR",
+        creditsUnits: input.creditsUnits,
+        provider: "telegram_stars",
+        providerPaymentId: chargeId,
+        idempotencyKey: `it-${uniqueBigInt()}`,
+        telegramChatId: BigInt(chatId),
+        paidAt: new Date()
+      }
+    });
+    await prisma.telegramStarPayment.create({
+      data: {
+        paymentOrderId: order.id,
+        telegramUserId: BigInt(telegramUserId),
+        telegramChatId: BigInt(chatId),
+        invoicePayload: `payload-${uniqueBigInt()}`,
+        telegramPaymentChargeId: chargeId,
+        status: "paid",
+        starsAmount: 690,
+        currency: "XTR"
+      }
+    });
+    return { user: u, order, telegramUserId, chargeId };
   }
 
   it("grants YooKassa credits once and ignores a duplicate webhook", async () => {
@@ -212,5 +247,48 @@ describe.skipIf(!dbAvailable)("Payment webhooks (integration)", () => {
     expect(restored.status).toBe("active");
     expect(restored.telegramId).toBe(BigInt(telegramUserId));
     expect((await credits.snapshot(u.id)).balanceUnits).toBe(300);
+  });
+
+  it("refunds Telegram Stars and debits unused credits atomically", async () => {
+    const {
+      user: u,
+      order,
+      telegramUserId,
+      chargeId
+    } = await paidStarsOrder({
+      balanceUnits: 300,
+      creditsUnits: 300
+    });
+    const api = { refundStarPayment: vi.fn().mockResolvedValue(true) };
+
+    const result = await payments.refundTelegramStarsPayment({
+      api: api as never,
+      paymentOrderId: order.id,
+      reason: "integration_refund"
+    });
+
+    expect(result.status).toBe("succeeded");
+    expect(api.refundStarPayment).toHaveBeenCalledWith(telegramUserId, chargeId);
+    expect((await credits.snapshot(u.id)).balanceUnits).toBe(0);
+    const refund = await prisma.paymentRefund.findUniqueOrThrow({ where: { id: result.refundId } });
+    expect(refund.status).toBe("succeeded");
+  });
+
+  it("does not leave a pending Stars refund when credits were already spent", async () => {
+    const { order } = await paidStarsOrder({ balanceUnits: 0, creditsUnits: 300 });
+    const api = { refundStarPayment: vi.fn().mockResolvedValue(true) };
+
+    await expect(
+      payments.refundTelegramStarsPayment({
+        api: api as never,
+        paymentOrderId: order.id,
+        reason: "integration_refund"
+      })
+    ).rejects.toThrow("REFUND_CREDITS_SPENT");
+
+    expect(api.refundStarPayment).not.toHaveBeenCalled();
+    await expect(
+      prisma.paymentRefund.findFirstOrThrow({ where: { paymentOrderId: order.id } })
+    ).rejects.toThrow();
   });
 });

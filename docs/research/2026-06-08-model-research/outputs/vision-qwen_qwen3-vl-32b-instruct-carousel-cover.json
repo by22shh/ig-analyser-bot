@@ -1,0 +1,45 @@
+{
+  "testCase": {
+    "id": "carousel-cover",
+    "title": "Carousel cover / content planning slide",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-carousel-cover.png",
+    "caption": "План контента на июнь.",
+    "expectedText": [
+      "CAROUSEL 1/5",
+      "ROADMAP",
+      "POST IDEAS",
+      "JUNE PLAN"
+    ],
+    "expectedObjects": [
+      "carousel",
+      "roadmap",
+      "planning"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "qwen/qwen3-vl-32b-instruct",
+    "tier": "no-structured",
+    "text": "{\n  \"textVerbatim\": \"ROADMAP\\nPOST IDEAS\\nJUNE PLAN\\nCAROUSEL 1/5\",\n  \"isLikelyScreenshot\": false,\n  \"sceneSetting\": \"Digital graphic design, likely a social media carousel cover image.\",\n  \"brandOrProductCues\": [],\n  \"visualElements\": [\n    \"Light blue rounded rectangle containing three lines of bold, black, uppercase text: 'ROADMAP', 'POST IDEAS', 'JUNE PLAN'.\",\n    \"Two horizontal bars below the blue rectangle: one light green, one light beige, both rounded.\",\n    \"White rounded rectangle background containing the above elements.\",\n    \"Text at the bottom: 'CAROUSEL 1/5' in bold, black, uppercase letters.\",\n    \"Overall background is light gray or off-white.\"\n  ],\n  \"captionContext\": \"The caption states 'План контента на июнь.' which translates to 'Content plan for June.' This aligns with the visible text 'JUNE PLAN' and 'POST IDEAS'.\"\n}",
+    "latencyMs": 4552,
+    "promptTokens": 1024,
+    "completionTokens": 218,
+    "reasoningTokens": 0,
+    "costUsd": 0.000197184
+  },
+  "rendered": "[Image ID: carousel-cover]",
+  "evaluation": {
+    "score": 66,
+    "missedText": [
+      "ROADMAP",
+      "POST IDEAS",
+      "JUNE PLAN"
+    ],
+    "missedObjects": [
+      "roadmap",
+      "planning"
+    ],
+    "forbiddenHits": []
+  }
+}

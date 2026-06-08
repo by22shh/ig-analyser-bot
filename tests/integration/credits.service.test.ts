@@ -1,4 +1,5 @@
 import { afterAll, describe, expect, it } from "vitest";
+import { randomUUID } from "node:crypto";
 import {
   CreditsService,
   InsufficientCreditsError
@@ -97,6 +98,42 @@ describe.skipIf(!dbAvailable)("CreditsService (integration)", () => {
 
     const snap = await credits.snapshot(u.id);
     expect(snap.balanceUnits).toBe(700);
+    expect(snap.reservedUnits).toBe(0);
+  });
+
+  it("chat-scoped release and capture do not consume another chat reserve", async () => {
+    const u = await user(1000);
+    const firstMessageId = randomUUID();
+    const secondMessageId = randomUUID();
+
+    await credits.reserve({
+      userId: u.id,
+      reportChatMessageId: firstMessageId,
+      amountUnits: 100
+    });
+    await credits.reserve({
+      userId: u.id,
+      reportChatMessageId: secondMessageId,
+      amountUnits: 200
+    });
+    await credits.releaseReserve({
+      userId: u.id,
+      reportChatMessageId: firstMessageId,
+      amountUnits: 100
+    });
+
+    let snap = await credits.snapshot(u.id);
+    expect(snap.balanceUnits).toBe(1000);
+    expect(snap.reservedUnits).toBe(200);
+
+    await credits.captureReserve({
+      userId: u.id,
+      reportChatMessageId: secondMessageId,
+      amountUnits: 200
+    });
+
+    snap = await credits.snapshot(u.id);
+    expect(snap.balanceUnits).toBe(800);
     expect(snap.reservedUnits).toBe(0);
   });
 });

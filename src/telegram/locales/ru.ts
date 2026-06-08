@@ -7,6 +7,7 @@ import type { ReportMetrics, ReportSummaryView } from "../../modules/reports/typ
 export const ru = {
   brand: env.BRAND_NAME,
   buttons: {
+    miniApp: "🚀 Открыть Mini App",
     analyze: "🔎 Анализ профиля",
     photo: "🖼 Поиск по фото",
     history: "🗂 История",
@@ -464,6 +465,17 @@ export const ru = {
       support +
       terms +
       privacy
+    );
+  },
+  paymentSupport(supportUrl: string): string {
+    const support = supportUrl
+      ? `\n\nПоддержка: <a href="${escapeHtml(supportUrl)}">${escapeHtml(supportUrl)}</a>`
+      : "";
+    return (
+      "💳 <b>Поддержка платежей</b>\n\n" +
+      "Если оплата прошла, но кредиты не начислились, пришлите дату, сумму, способ оплаты и скрин статуса платежа.\n" +
+      "Для возврата Telegram Stars или YooKassa укажите причину и номер заказа, если он есть. Возврат возможен только для неиспользованных кредитов." +
+      support
     );
   },
   cancelled(): string {

@@ -1,0 +1,39 @@
+{
+  "testCase": {
+    "id": "cafe-menu-cyrillic",
+    "title": "Cafe menu with Cyrillic OCR",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-cafe-menu-cyrillic.png",
+    "caption": "Любимое место для завтрака.",
+    "expectedText": [
+      "MIRA CAFE",
+      "ЗАВТРАК",
+      "РАФ 320",
+      "СКИДКА 15%",
+      "12 ИЮНЯ"
+    ],
+    "expectedObjects": [
+      "menu",
+      "coffee",
+      "cafe"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "openai/gpt-5.5",
+    "tier": "no-structured",
+    "text": "Post ID: cafe-menu-cyrillic\n\nisLikelyScreenshot: false\n\nVisible public facts:\n- A minimalist cafe menu/promotional graphic on a pale gray background.\n- Centered off-white rounded rectangle card with dark green/black bold typography.\n- A thin horizontal line appears under the cafe name.\n- Bottom-right has a simple brown icon resembling a cup or coffee-related mark.\n- Brand/cue shown: MIRA CAFE.\n- Scene/setting type: cafe breakfast menu or promotional offer graphic.\n\ntextVerbatim:\n- MIRA CAFE\n- ЗАВТРАК\n- РАФ 320\n- КРУАССАН 260\n- СКИДКА 15%\n- 12 ИЮНЯ\n\nCaption context:\n- Caption provided: “Любимое место для завтрака.”  \n- This indicates the post caption refers to a favorite breakfast place, but that comes from caption text, not the image itself.",
+    "latencyMs": 6100,
+    "promptTokens": 1248,
+    "completionTokens": 320,
+    "reasoningTokens": 120,
+    "costUsd": 0.01584
+  },
+  "rendered": "[Image ID: cafe-menu-cyrillic]\nPost ID: cafe-menu-cyrillic\n\nisLikelyScreenshot: false\n\nVisible public facts:\n- A minimalist cafe menu/promotional graphic on a pale gray background.\n- Centered off-white rounded rectangle card with dark green/black bold typography.\n- A thin horizontal line appears under the cafe name.\n- Bottom-right has a simple brown icon resembling a cup or coffee-related mark.\n- Brand/cue shown: MIRA CAFE.\n- Scene/setting type: cafe breakfast menu or promotional offer graphic.\n\ntextVerbatim:\n- MIRA CAFE\n- ЗАВТРАК\n- РАФ 320\n- КРУАССАН 260\n- СКИДКА 15%\n- 12 ИЮНЯ\n\nCaption context:\n- Caption provided: “Любимое место для завтрака.”  \n- This indicates the post caption refers to a favorite breakfast place, but that comes from caption text, not the image itself.",
+  "evaluation": {
+    "score": 100,
+    "missedText": [],
+    "missedObjects": [],
+    "forbiddenHits": []
+  }
+}

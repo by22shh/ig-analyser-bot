@@ -24,6 +24,7 @@ const optionalUrl = z
 const schema = z.object({
   APP_ENV: z.enum(["development", "test", "staging", "production"]).default("development"),
   APP_BASE_URL: z.string().url().default("http://localhost:3000"),
+  MINI_APP_URL: optionalUrl,
   PORT: optionalNumber(3000),
   BRAND_NAME: z.string().min(1).default("SocialAnalyserBot"),
 
@@ -132,6 +133,7 @@ const schema = z.object({
   FEATURE_PHOTO_SEARCH: boolFromString.default(false),
   FEATURE_TELEGRAM_STARS: boolFromString.default(true),
   FEATURE_YOOKASSA_PAYMENTS: boolFromString.default(true),
+  FEATURE_MINI_APP: boolFromString.default(true),
   // Require channel membership to use the bot. Off by default so dev/tests stay
   // inert; enable in production where the bot is an admin of the channel.
   FEATURE_REQUIRE_CHANNEL_SUB: boolFromString.default(false),
@@ -141,11 +143,13 @@ const schema = z.object({
   OTEL_EXPORTER_OTLP_ENDPOINT: optionalString,
 
   MODEL_VISION: z.string().default("google/gemini-2.5-flash"),
-  // Default reasoning model. Swapped from gemini-2.5-pro to gpt-5.5 after the
-  // 2026-06-05 bake-off: gemini-2.5-pro violated the relationship/identity
-  // guardrail (inferred romantic status); gpt-5.5 respects it, supports
-  // structured outputs, and stays within the per-report cost budget for one
-  // call. A/B alternatives: anthropic/claude-opus-4.8, google/gemini-2.5-pro.
+  // Default reasoning model. Kept on gpt-5.5 for premium-safe analysis after
+  // the 2026-06-05 bake-off; the 2026-06-08 OpenRouter research found
+  // x-ai/grok-4.3 to be the best cost/latency/structured-output A/B candidate.
+  // Caveat: gpt-5.5 strict JSON can truncate at an 8000 output-token budget on
+  // full 17-section reports; raise the budget and retest before relying on
+  // strict structured output only. Other A/B alternatives: openai/gpt-5.4,
+  // anthropic/claude-opus-4.8.
   MODEL_REASONING: z.string().default("openai/gpt-5.5"),
   // Reasoning effort passed through to the reasoning model. medium balances
   // latency (~85 s for a full standard report) against depth.
@@ -170,6 +174,7 @@ const publicBaseUrl = parsed.data.APP_BASE_URL.replace(/\/+$/, "");
 
 export const env = {
   ...parsed.data,
+  MINI_APP_URL: parsed.data.MINI_APP_URL || `${publicBaseUrl}/mini-app`,
   YOOKASSA_RETURN_URL:
     parsed.data.YOOKASSA_RETURN_URL || `${publicBaseUrl}/payments/yookassa/return`,
   // Effective channel identifier for membership checks: explicit override or the
@@ -254,6 +259,7 @@ function assertProductionConfiguration(data: ParsedEnv) {
 
   requireUrl("APP_BASE_URL");
   forbidLocalhostUrl("APP_BASE_URL");
+  forbidLocalhostUrl("MINI_APP_URL");
   requireConnectionUrl("DATABASE_URL");
   requireConnectionUrl("DIRECT_URL");
   requireConnectionUrl("REDIS_URL");

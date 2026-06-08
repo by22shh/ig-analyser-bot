@@ -1,0 +1,45 @@
+{
+  "testCase": {
+    "id": "story-repost-ui",
+    "title": "Story screenshot/repost UI",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-story-repost.png",
+    "caption": "Утренний кофе и прогулка.",
+    "expectedText": [
+      "@MIRA.STYLE",
+      "STORY REPOST",
+      "COFFEE WALK",
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "expectedObjects": [
+      "story",
+      "repost",
+      "coffee",
+      "send message"
+    ],
+    "expectedScreenshot": true
+  },
+  "result": {
+    "ok": true,
+    "model": "anthropic/claude-sonnet-4.6",
+    "tier": "no-structured",
+    "text": "**Post ID:** story-repost-ui\n**isLikelyScreenshot:** true\n\n**textVerbatim:**\n> @MIRA.STYLE\n> STORY REPOST\n> COFFEE WALK (partially visible, cropped at bottom)\n\n**Visual facts:**\n- Black letterbox bars visible at top and left edges, indicating screenshot/repost framing.\n- The frame shows a stylized UI mockup card with a cream/off-white rounded-rectangle background.\n- A profile row at the top contains a muted green circular avatar placeholder and the username **@MIRA.STYLE**.\n- Label **\"STORY REPOST\"** appears in bold dark text below the profile row.\n- A light blue rounded rectangle serves as a content placeholder area, containing two abstract shapes: a brown circle (left) and a white rounded rectangle (right) — likely illustrative stand-ins for a coffee cup and a card/image.\n- Large bold text **\"COFFEE WALK\"** is partially visible at the bottom, cropped by the frame edge.\n- Overall aesthetic: minimal, flat-design illustration style; muted earth and pastel tones.\n- Caption context (Russian): \"Утренний кофе и прогулка\" = \"Morning coffee and a walk\" — consistent with the visible \"COFFEE WALK\" text overlay.",
+    "latencyMs": 15471,
+    "promptTokens": 1360,
+    "completionTokens": 305,
+    "reasoningTokens": 0,
+    "costUsd": 0.008655
+  },
+  "rendered": "[Image ID: story-repost-ui]\n**Post ID:** story-repost-ui\n**isLikelyScreenshot:** true\n\n**textVerbatim:**\n> @MIRA.STYLE\n> STORY REPOST\n> COFFEE WALK (partially visible, cropped at bottom)\n\n**Visual facts:**\n- Black letterbox bars visible at top and left edges, indicating screenshot/repost framing.\n- The frame shows a stylized UI mockup card with a cream/off-white rounded-rectangle background.\n- A profile row at the top contains a muted green circular avatar placeholder and the username **@MIRA.STYLE**.\n- Label **\"STORY REPOST\"** appears in bold dark text below the profile row.\n- A light blue rounded rectangle serves as a content placeholder area, containing two abstract shapes: a brown circle (left) and a white rounded rectangle (right) — likely illustrative stand-ins for a coffee cup and a card/image.\n- Large bold text **\"COFFEE WALK\"** is partially visible at the bottom, cropped by the frame edge.\n- Overall aesthetic: minimal, flat-design illustration style; muted earth and pastel tones.\n- Caption context (Russian): \"Утренний кофе и прогулка\" = \"Morning coffee and a walk\" — consistent with the visible \"COFFEE WALK\" text overlay.",
+  "evaluation": {
+    "score": 79,
+    "missedText": [
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "missedObjects": [
+      "send message"
+    ],
+    "forbiddenHits": []
+  }
+}

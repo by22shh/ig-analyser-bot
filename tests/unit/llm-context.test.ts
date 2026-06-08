@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { env } from "../../src/config/env.js";
 import { buildReportUserMessage } from "../../src/modules/llm/openrouter.adapter.js";
 import type { InstagramPost, InstagramProfile } from "../../src/modules/instagram/types.js";
 import { computeReportMetrics } from "../../src/modules/reports/metrics.js";
@@ -107,5 +108,61 @@ describe("buildReportUserMessage", () => {
     const context = JSON.parse(message) as { sectionGuides: Record<string, string> };
 
     expect(context.sectionGuides["Основные темы и приоритеты"]).toBeTruthy();
+  });
+
+  it("keeps oversized report contexts as valid JSON under the configured budget", () => {
+    const previousBudget = env.LLM_FINAL_INPUT_TOKEN_BUDGET;
+    env.LLM_FINAL_INPUT_TOKEN_BUDGET = 24000;
+    try {
+      const posts: InstagramPost[] = Array.from({ length: 30 }, (_, index) => ({
+        id: `p${index}`,
+        type: "Image",
+        caption: `caption ${index} ${"x".repeat(5000)}`,
+        hashtags: ["launch", "public"],
+        mentions: ["partner"],
+        likesCount: 100 + index,
+        commentsCount: 10,
+        latestComments: Array.from({ length: 8 }, (__, commentIndex) => ({
+          ownerUsername: `commenter${commentIndex}`,
+          text: `comment ${commentIndex} ${"y".repeat(800)}`,
+          timestamp: "2026-06-01T00:00:00Z"
+        })),
+        timestamp: "2026-06-01T00:00:00Z",
+        url: `https://www.instagram.com/p/${index}/`,
+        isPinned: false,
+        childPosts: [],
+        taggedUsers: []
+      }));
+      const profile: InstagramProfile = {
+        username: "alice",
+        followersCount: 1000,
+        followsCount: 100,
+        postsCount: 30,
+        isVerified: false,
+        relatedProfiles: [],
+        posts
+      };
+
+      const message = buildReportUserMessage({
+        mode: "standard",
+        language: "ru",
+        profile,
+        posts,
+        vision: posts.map((post) => ({
+          postId: post.id,
+          status: "completed",
+          description: `[Image ID: ${post.id}] ${"z".repeat(3000)}`,
+          model: "m",
+          promptVersion: "v"
+        })),
+        metrics: computeReportMetrics(profile, posts)
+      });
+      const context = JSON.parse(message) as { posts: unknown[] };
+
+      expect(message.length).toBeLessThanOrEqual(24000);
+      expect(context.posts.length).toBeLessThan(posts.length);
+    } finally {
+      env.LLM_FINAL_INPUT_TOKEN_BUDGET = previousBudget;
+    }
   });
 });

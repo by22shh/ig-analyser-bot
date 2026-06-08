@@ -1,0 +1,40 @@
+{
+  "testCase": {
+    "id": "sochi-screenshot",
+    "title": "Real Instagram-like waterfront screenshot",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-05-bakeoff/test-image.jpg",
+    "caption": "Лучшие прогулки — вдоль моря 🤍 #сочи #морвокзал",
+    "expectedText": [
+      "AUTOMNE",
+      "FALL/WINTER",
+      "24-25"
+    ],
+    "expectedObjects": [
+      "water",
+      "lighthouse",
+      "two people",
+      "black bars"
+    ],
+    "expectedScreenshot": true
+  },
+  "result": {
+    "ok": true,
+    "model": "openai/gpt-5.4-mini",
+    "tier": "no-structured",
+    "text": "Post ID: sochi-screenshot\n\nisLikelyScreenshot: true\n\nScene/setting type: seaside promenade / waterfront walkway with harbor area in the background\n\nVisible public facts:\n- Two adults are walking outdoors near the water.\n- Left person wears a dark navy pullover, blue jeans, and holds a black bag; a watch is visible.\n- Right person wears a brown polo shirt, beige pants, and sunglasses, and is holding a smartphone.\n- Background shows a waterfront with railings, people, trees, buildings, and a small tower-like structure.\n- The sky is clear and bright.\n\nRecurring brand/logo/product cues:\n- Clothing text on the left person’s pullover suggests a fashion/collection label.\n- No clearly identifiable brand logos are visible beyond the clothing text.\n\ntextVerbatim:\n- “Лучшие прогулки — вдоль моря 🤍 #сочи #морвокзал”\n- On the pullover:\n  - “AUTOMNE-H”\n  - “FALL/WINTER 24-25 COLLECTION”\n  - “Everyday Edition”",
+    "latencyMs": 2641,
+    "promptTokens": 1161,
+    "completionTokens": 226,
+    "reasoningTokens": 0,
+    "costUsd": 0.00188775
+  },
+  "rendered": "[Image ID: sochi-screenshot]\nPost ID: sochi-screenshot\n\nisLikelyScreenshot: true\n\nScene/setting type: seaside promenade / waterfront walkway with harbor area in the background\n\nVisible public facts:\n- Two adults are walking outdoors near the water.\n- Left person wears a dark navy pullover, blue jeans, and holds a black bag; a watch is visible.\n- Right person wears a brown polo shirt, beige pants, and sunglasses, and is holding a smartphone.\n- Background shows a waterfront with railings, people, trees, buildings, and a small tower-like structure.\n- The sky is clear and bright.\n\nRecurring brand/logo/product cues:\n- Clothing text on the left person’s pullover suggests a fashion/collection label.\n- No clearly identifiable brand logos are visible beyond the clothing text.\n\ntextVerbatim:\n- “Лучшие прогулки — вдоль моря 🤍 #сочи #морвокзал”\n- On the pullover:\n  - “AUTOMNE-H”\n  - “FALL/WINTER 24-25 COLLECTION”\n  - “Everyday Edition”",
+  "evaluation": {
+    "score": 95,
+    "missedText": [],
+    "missedObjects": [
+      "lighthouse"
+    ],
+    "forbiddenHits": []
+  }
+}

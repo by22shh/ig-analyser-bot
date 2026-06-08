@@ -1,0 +1,45 @@
+{
+  "testCase": {
+    "id": "story-repost-ui",
+    "title": "Story screenshot/repost UI",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-story-repost.png",
+    "caption": "Утренний кофе и прогулка.",
+    "expectedText": [
+      "@MIRA.STYLE",
+      "STORY REPOST",
+      "COFFEE WALK",
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "expectedObjects": [
+      "story",
+      "repost",
+      "coffee",
+      "send message"
+    ],
+    "expectedScreenshot": true
+  },
+  "result": {
+    "ok": true,
+    "model": "google/gemini-3.5-flash",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"A minimalist graphic design depicting a social media story repost interface.\",\n    \"Features a user handle placeholder '@MIRA.STYLE' at the top.\",\n    \"Contains the text 'STORY REPOST' and 'COFFEE WALK'.\",\n    \"Displays abstract geometric shapes including a brown circle and a white rounded square inside a light blue frame.\"\n  ],\n  \"setting\": null,\n  \"objects\": [\n    \"Graphic card\",\n    \"Abstract shapes\",\n    \"Text elements\"\n  ],\n  \"textOverlays\": [\n    \"@MIRA.STYLE\",\n    \"STORY REPOST\",\n    \"COFFEE WALK\"\n  ],\n  \"textVerbatim\": [\n    \"@MIRA.STYLE\",\n    \"STORY REPOST\",\n    \"COFFEE WALK\"\n  ],\n  \"visualStyle\": [\n    \"Minimalist graphic design\",\n    \"Flat vector illustration style\",\n    \"Beige, light blue, brown, and black color palette\",\n    \"Rounded corners\"\n  ],\n  \"isLikelyScreenshot\": false,\n  \"uncertainty\": [\n    \"The exact purpose of the graphic beyond the caption's mention of morning coffee and walk.\"\n  ]\n}",
+    "latencyMs": 6579,
+    "promptTokens": 1863,
+    "completionTokens": 808,
+    "reasoningTokens": 530,
+    "costUsd": 0.0100665
+  },
+  "rendered": "[Image ID: story-repost-ui]\n- Visible fact: A minimalist graphic design depicting a social media story repost interface.\n- Visible fact: Features a user handle placeholder '@MIRA.STYLE' at the top.\n- Visible fact: Contains the text 'STORY REPOST' and 'COFFEE WALK'.\n- Visible fact: Displays abstract geometric shapes including a brown circle and a white rounded square inside a light blue frame.\n- Objects/signals: Graphic card, Abstract shapes, Text elements\n- Text in image: @MIRA.STYLE | STORY REPOST | COFFEE WALK\n- Text (verbatim): @MIRA.STYLE | STORY REPOST | COFFEE WALK\n- Visual style: Minimalist graphic design, Flat vector illustration style, Beige, light blue, brown, and black color palette, Rounded corners\n- Uncertainty: The exact purpose of the graphic beyond the caption's mention of morning coffee and walk.",
+  "evaluation": {
+    "score": 79,
+    "missedText": [
+      "08:30",
+      "SEND MESSAGE"
+    ],
+    "missedObjects": [
+      "send message"
+    ],
+    "forbiddenHits": []
+  }
+}

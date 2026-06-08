@@ -1,0 +1,39 @@
+{
+  "testCase": {
+    "id": "cafe-menu-cyrillic",
+    "title": "Cafe menu with Cyrillic OCR",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-cafe-menu-cyrillic.png",
+    "caption": "Любимое место для завтрака.",
+    "expectedText": [
+      "MIRA CAFE",
+      "ЗАВТРАК",
+      "РАФ 320",
+      "СКИДКА 15%",
+      "12 ИЮНЯ"
+    ],
+    "expectedObjects": [
+      "menu",
+      "coffee",
+      "cafe"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "google/gemini-3.5-flash",
+    "tier": "full",
+    "text": "{\n  \"visibleFacts\": [\n    \"A minimalist digital graphic card displaying a breakfast menu or promotion.\",\n    \"The text is written in both English and Cyrillic characters.\",\n    \"The card lists items like 'РАФ' (Raf coffee) and 'КРУАССАН' (Croissant) with numbers, likely prices.\",\n    \"It mentions a 15% discount ('СКИДКА 15%') and a date, June 12 ('12 ИЮНЯ').\",\n    \"A brown abstract icon resembling a stamp or bell is located in the bottom right corner.\"\n  ],\n  \"setting\": null,\n  \"objects\": [\n    \"digital graphic card\",\n    \"brown abstract icon\"\n  ],\n  \"textOverlays\": [\n    \"MIRA CAFE\",\n    \"ЗАВТРАК\",\n    \"РАФ 320\",\n    \"КРУАССАН 260\",\n    \"СКИДКА 15%\",\n    \"12 ИЮНЯ\"\n  ],\n  \"textVerbatim\": [\n    \"MIRA CAFE\",\n    \"ЗАВТРАК\",\n    \"РАФ 320\",\n    \"КРУАССАН 260\",\n    \"СКИДКА 15%\",\n    \"12 ИЮНЯ",
+    "latencyMs": 5900,
+    "promptTokens": 1864,
+    "completionTokens": 985,
+    "reasoningTokens": 687,
+    "costUsd": 0.011661
+  },
+  "rendered": "[Image ID: cafe-menu-cyrillic]\n{\n  \"visibleFacts\": [\n    \"A minimalist digital graphic card displaying a breakfast menu or promotion.\",\n    \"The text is written in both English and Cyrillic characters.\",\n    \"The card lists items like 'РАФ' (Raf coffee) and 'КРУАССАН' (Croissant) with numbers, likely prices.\",\n    \"It mentions a 15% discount ('СКИДКА 15%') and a date, June 12 ('12 ИЮНЯ').\",\n    \"A brown abstract icon resembling a stamp or bell is located in the bottom right corner.\"\n  ],\n  \"setting\": null,\n  \"objects\": [\n    \"digital graphic card\",\n    \"brown abstract icon\"\n  ],\n  \"textOverlays\": [\n    \"MIRA CAFE\",\n    \"ЗАВТРАК\",\n    \"РАФ 320\",\n    \"КРУАССАН 260\",\n    \"СКИДКА 15%\",\n    \"12 ИЮНЯ\"\n  ],\n  \"textVerbatim\": [\n    \"MIRA CAFE\",\n    \"ЗАВТРАК\",\n    \"РАФ 320\",\n    \"КРУАССАН 260\",\n    \"СКИДКА 15%\",\n    \"12 ИЮНЯ",
+  "evaluation": {
+    "score": 100,
+    "missedText": [],
+    "missedObjects": [],
+    "forbiddenHits": []
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "testCase": {
+    "id": "product-poster",
+    "title": "Product/fashion poster with English text",
+    "imagePath": "/Users/Bayramov_N/Desktop/Other/ig-analyser-telegram-bot/docs/research/2026-06-08-model-research/assets/vision-product-poster.png",
+    "caption": "Новый дроп, спокойные цвета и лен.",
+    "expectedText": [
+      "MIRA STUDIO",
+      "NEW DROP",
+      "LINEN SET",
+      "12 JUN",
+      "SAGE",
+      "IVORY"
+    ],
+    "expectedObjects": [
+      "linen",
+      "sunglasses",
+      "bag",
+      "poster"
+    ],
+    "expectedScreenshot": false
+  },
+  "result": {
+    "ok": true,
+    "model": "anthropic/claude-sonnet-4.6",
+    "tier": "no-structured",
+    "text": "## Visual Facts — Post ID: product-poster\n\n**isLikelyScreenshot:** false\n\n---\n\n### Text (verbatim)\n> **MIRA STUDIO**\n> **NEW DROP**\n> LINEN SET / 12 JUN\n> SAGE + IVORY\n\n---\n\n### Scene & Composition\n- Square-format graphic/poster with a warm off-white (cream) outer background and a white rounded-rectangle card in the centre.\n- Minimalist, flat-design aesthetic — no photography, only geometric shapes used as colour swatches or abstract product stand-ins.\n\n### Graphic Elements\n- **Left shape:** Large soft sage-green oval/pill shape — likely representing the \"Sage\" colourway.\n- **Right shape:** Dark near-black rounded rectangle with a dark circle overlapping its top-right corner — likely representing the \"Ivory\" or dark colourway contrast element (or a stylised product silhouette).\n\n### Brand / Product Cues\n- Brand name: **MIRA STUDIO** (bold, top-left of card).\n- Product announced: **Linen Set** in colourways **Sage + Ivory**, dropping **12 June**.\n- Palette used in the poster: sage green, near-black/dark brown, cream/ivory — consistent with the stated calm, neutral colour story.",
+    "latencyMs": 14580,
+    "promptTokens": 1362,
+    "completionTokens": 306,
+    "reasoningTokens": 0,
+    "costUsd": 0.008676
+  },
+  "rendered": "[Image ID: product-poster]\n## Visual Facts — Post ID: product-poster\n\n**isLikelyScreenshot:** false\n\n---\n\n### Text (verbatim)\n> **MIRA STUDIO**\n> **NEW DROP**\n> LINEN SET / 12 JUN\n> SAGE + IVORY\n\n---\n\n### Scene & Composition\n- Square-format graphic/poster with a warm off-white (cream) outer background and a white rounded-rectangle card in the centre.\n- Minimalist, flat-design aesthetic — no photography, only geometric shapes used as colour swatches or abstract product stand-ins.\n\n### Graphic Elements\n- **Left shape:** Large soft sage-green oval/pill shape — likely representing the \"Sage\" colourway.\n- **Right shape:** Dark near-black rounded rectangle with a dark circle overlapping its top-right corner — likely representing the \"Ivory\" or dark colourway contrast element (or a stylised product silhouette).\n\n### Brand / Product Cues\n- Brand name: **MIRA STUDIO** (bold, top-left of card).\n- Product announced: **Linen Set** in colourways **Sage + Ivory**, dropping **12 June**.\n- Palette used in the poster: sage green, near-black/dark brown, cream/ivory — consistent with the stated calm, neutral colour story.",
+  "evaluation": {
+    "score": 90,
+    "missedText": [],
+    "missedObjects": [
+      "sunglasses",
+      "bag"
+    ],
+    "forbiddenHits": []
+  }
+}

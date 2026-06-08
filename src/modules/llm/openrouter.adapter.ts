@@ -1,3 +1,4 @@
+import { Buffer } from "node:buffer";
 import { env } from "../../config/env.js";
 import { sectionGuidesForMode } from "../../prompts/section-guides.js";
 import { mapWithConcurrency } from "../../util/concurrency.js";
@@ -41,6 +42,8 @@ type OpenRouterResponse = {
   // fall back to text mode instead of failing as an empty response.
   error?: { message?: string; code?: number };
 };
+
+const IMAGE_DOWNLOAD_TIMEOUT_MS = 30_000;
 
 export class MockLlmProvider implements LlmProvider {
   async analyzeVision(input: VisionInput) {
@@ -91,13 +94,14 @@ export class OpenRouterLlmProvider implements LlmProvider {
     // "failed" item instead of rejecting the batch; result order is preserved.
     return mapWithConcurrency(posts, env.VISION_BATCH_SIZE ?? 5, async (post) => {
       try {
+        const imageUrl = await boundedImageDataUrl(post.displayUrl);
         const visionRequest = {
           model: env.MODEL_VISION,
           system: prompts.vision.system,
           user: buildVisionUserContent({
             postId: post.id,
             caption: post.caption,
-            imageUrl: post.displayUrl
+            imageUrl
           }),
           maxTokens: env.LLM_VISION_OUTPUT_TOKEN_BUDGET ?? 700,
           responseFormat: env.LLM_STRUCTURED_OUTPUTS ? visionResponseFormat : undefined,
@@ -334,13 +338,82 @@ function buildBudgetedReportContext(
     { captionChars: 140, commentCount: 1, commentChars: 90, visionChars: 450 }
   ];
 
-  let last = "";
-  for (const attempt of attempts) {
-    const json = JSON.stringify(buildReportContext(input, repair, attempt), null, 2);
-    last = json;
-    if (json.length <= budget) return json;
+  for (const postLimit of budgetedPostLimits(input.posts.length)) {
+    const limitedInput = limitReportInput(input, postLimit);
+    for (const attempt of attempts) {
+      const json = JSON.stringify(buildReportContext(limitedInput, repair, attempt), null, 2);
+      if (json.length <= budget) return json;
+    }
   }
-  return last.slice(0, budget);
+
+  return JSON.stringify(buildMinimalReportContext(input, repair), null, 2);
+}
+
+function budgetedPostLimits(totalPosts: number): number[] {
+  if (totalPosts <= 0) return [0];
+  return [
+    ...new Set([totalPosts, 24, 18, 12, 8, 5, 3, 1, 0].filter((limit) => limit <= totalPosts))
+  ];
+}
+
+function limitReportInput(input: ReportInput, postLimit: number): ReportInput {
+  if (postLimit >= input.posts.length) return input;
+  const posts = input.posts.slice(0, postLimit);
+  const keptPostIds = new Set(posts.map((post) => post.id));
+  return {
+    ...input,
+    posts,
+    vision: input.vision.filter((item) => keptPostIds.has(item.postId))
+  };
+}
+
+function buildMinimalReportContext(
+  input: ReportInput,
+  repair: {
+    repair: boolean;
+    rawText?: string;
+    missingSections?: string[];
+    weakSourceSections?: string[];
+    groundingFindings?: string[];
+  }
+) {
+  const prompt = reportPromptForMode(input.mode);
+  return {
+    task: repair.repair ? "repair_report" : "generate_report",
+    language: input.language,
+    mode: input.mode,
+    targetPosition: input.targetPosition,
+    goal: input.goal,
+    requiredSections: prompt.requiredSections,
+    sectionGuides: sectionGuidesForMode(input.mode),
+    qualityRules: [
+      "Use only the compact profile and metric evidence in this payload.",
+      "Explicitly say when post-level evidence was compressed out of the context.",
+      "Do not infer protected traits, private life facts, identity, medical, political, religious, or sensitive attributes."
+    ],
+    profile: {
+      username: input.profile.username,
+      fullName: input.profile.fullName,
+      biography: truncate(input.profile.biography, 280),
+      followersCount: input.profile.followersCount,
+      followsCount: input.profile.followsCount,
+      postsCount: input.profile.postsCount,
+      externalUrl: input.profile.externalUrl,
+      isVerified: input.profile.isVerified
+    },
+    metrics: input.metrics,
+    sourceCatalog: [],
+    posts: [],
+    vision: [],
+    repair: repair.repair
+      ? {
+          missingSections: repair.missingSections,
+          weakSourceSections: repair.weakSourceSections,
+          groundingFindings: repair.groundingFindings,
+          previousReport: truncate(repair.rawText, 1200)
+        }
+      : undefined
+  };
 }
 
 function buildReportContext(
@@ -446,6 +519,65 @@ function tryRenderStructuredVision(postId: string, text: string): string {
     return renderVisionDescription(postId, parseStructuredVision(text));
   } catch {
     return `[Image ID: ${postId}] ${text}`;
+  }
+}
+
+async function boundedImageDataUrl(
+  imageUrl: string | null | undefined
+): Promise<string | undefined> {
+  if (!imageUrl || !isHttpUrl(imageUrl)) return undefined;
+  try {
+    const maxBytes = Math.max(
+      1,
+      Math.floor((env.ANALYSIS_MAX_IMAGE_DOWNLOAD_MB ?? 8) * 1024 * 1024)
+    );
+    const response = await fetch(imageUrl, {
+      signal: AbortSignal.timeout(IMAGE_DOWNLOAD_TIMEOUT_MS)
+    });
+    if (!response.ok) throw new Error(`IMAGE_DOWNLOAD_${response.status}`);
+    const contentLength = Number(response.headers.get("content-length"));
+    if (Number.isFinite(contentLength) && contentLength > maxBytes) {
+      throw new Error("IMAGE_TOO_LARGE");
+    }
+    const rawContentType = response.headers
+      .get("content-type")
+      ?.split(";", 1)[0]
+      ?.trim()
+      .toLowerCase();
+    if (rawContentType && !rawContentType.startsWith("image/")) {
+      throw new Error("IMAGE_UNSUPPORTED_TYPE");
+    }
+
+    const chunks: Buffer[] = [];
+    let received = 0;
+    const reader = response.body?.getReader();
+    if (reader) {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        received += value.byteLength;
+        if (received > maxBytes) throw new Error("IMAGE_TOO_LARGE");
+        chunks.push(Buffer.from(value));
+      }
+    } else {
+      const bytes = Buffer.from(await response.arrayBuffer());
+      received = bytes.byteLength;
+      if (received > maxBytes) throw new Error("IMAGE_TOO_LARGE");
+      chunks.push(bytes);
+    }
+
+    return `data:${rawContentType || "image/jpeg"};base64,${Buffer.concat(chunks).toString("base64")}`;
+  } catch {
+    return undefined;
+  }
+}
+
+function isHttpUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
   }
 }
 

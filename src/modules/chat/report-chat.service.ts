@@ -1,10 +1,22 @@
 import type { PrismaClient } from "@prisma/client";
+import { randomUUID } from "node:crypto";
+import { setTimeout as delay } from "node:timers/promises";
 import { env } from "../../config/env.js";
 import type { Locale } from "../../telegram/constants.js";
 import { MODE_COST_UNITS } from "../billing/packages.js";
 import type { CreditsService } from "../billing/credits.service.js";
 import type { LlmProvider } from "../llm/types.js";
 import { recordUsage, recordUsageSafe } from "../observability/usage.js";
+
+const PENDING_ASSISTANT_ROLE = "assistant_pending";
+const IDEMPOTENCY_POLL_MS = 250;
+const IDEMPOTENCY_WAIT_MS = 5_000;
+
+export class ChatRequestInProgressError extends Error {
+  constructor() {
+    super("CHAT_REQUEST_IN_PROGRESS");
+  }
+}
 
 export class ReportChatService {
   constructor(
@@ -34,12 +46,9 @@ export class ReportChatService {
         where: { idempotencyKey: answerKey }
       });
       if (existing) {
-        return {
-          text: existing.content,
-          model: existing.model ?? "",
-          tokensIn: existing.tokensIn ?? undefined,
-          tokensOut: existing.tokensOut ?? undefined
-        };
+        return existing.role === PENDING_ASSISTANT_ROLE
+          ? this.waitForIdempotentAnswer(answerKey)
+          : messageToAnswer(existing);
       }
     }
     const session = await this.prisma.reportChatSession
@@ -53,12 +62,39 @@ export class ReportChatService {
           data: { reportId: report.id, userId: input.userId, status: "active" }
         })
       );
-    await this.credits.reserve({
-      userId: input.userId,
-      amountUnits: MODE_COST_UNITS.chat_message,
-      metadata: { type: "report_chat", reportId: report.id }
-    });
+    let assistantMessageId: string = randomUUID();
+    let ownsIdempotencySlot = false;
+    if (answerKey) {
+      try {
+        const pending = await this.prisma.reportChatMessage.create({
+          data: {
+            id: assistantMessageId,
+            sessionId: session.id,
+            role: PENDING_ASSISTANT_ROLE,
+            content: "",
+            idempotencyKey: answerKey
+          }
+        });
+        assistantMessageId = pending.id;
+        ownsIdempotencySlot = true;
+      } catch (error) {
+        if (!isUniqueConstraintError(error)) throw error;
+        return this.waitForIdempotentAnswer(answerKey);
+      }
+    }
+    let reserved = false;
     try {
+      await this.credits.reserve({
+        userId: input.userId,
+        reportChatMessageId: assistantMessageId,
+        amountUnits: MODE_COST_UNITS.chat_message,
+        metadata: {
+          type: "report_chat",
+          reportId: report.id,
+          reportChatMessageId: assistantMessageId
+        }
+      });
+      reserved = true;
       const reportText = [
         report.rawText,
         ...report.sections.map((section) => `${section.title}\n${section.content}`)
@@ -91,46 +127,107 @@ export class ReportChatService {
       // after it short-circuits on the cached answer above.
       await this.credits.captureReserve({
         userId: input.userId,
+        reportChatMessageId: assistantMessageId,
         amountUnits: MODE_COST_UNITS.chat_message,
-        metadata: { type: "report_chat", reportId: report.id },
+        metadata: {
+          type: "report_chat",
+          reportId: report.id,
+          reportChatMessageId: assistantMessageId
+        },
         within: async (tx) => {
           await tx.reportChatMessage.create({
             data: { sessionId: session.id, role: "user", content: input.question }
           });
-          await tx.reportChatMessage.create({
-            data: {
-              sessionId: session.id,
-              role: "assistant",
-              content: answer.text,
-              model: answer.model,
-              tokensIn: answer.tokensIn,
-              tokensOut: answer.tokensOut,
-              idempotencyKey: answerKey
-            }
-          });
+          if (ownsIdempotencySlot) {
+            await tx.reportChatMessage.update({
+              where: { id: assistantMessageId },
+              data: {
+                role: "assistant",
+                content: answer.text,
+                model: answer.model,
+                tokensIn: answer.tokensIn,
+                tokensOut: answer.tokensOut
+              }
+            });
+          } else {
+            await tx.reportChatMessage.create({
+              data: {
+                id: assistantMessageId,
+                sessionId: session.id,
+                role: "assistant",
+                content: answer.text,
+                model: answer.model,
+                tokensIn: answer.tokensIn,
+                tokensOut: answer.tokensOut,
+                idempotencyKey: answerKey
+              }
+            });
+          }
         }
       });
       return answer;
     } catch (error) {
-      await this.credits
-        .releaseReserve({
+      if (reserved) {
+        await this.credits
+          .releaseReserve({
+            userId: input.userId,
+            reportChatMessageId: assistantMessageId,
+            amountUnits: MODE_COST_UNITS.chat_message,
+            metadata: {
+              type: "report_chat",
+              reportId: report.id,
+              reportChatMessageId: assistantMessageId,
+              reason: error instanceof Error ? error.message : "chat_failed"
+            }
+          })
+          .catch(() => undefined);
+        await recordUsage(this.prisma, {
           userId: input.userId,
-          amountUnits: MODE_COST_UNITS.chat_message,
-          metadata: {
-            type: "report_chat",
-            reportId: report.id,
-            reason: error instanceof Error ? error.message : "chat_failed"
-          }
-        })
-        .catch(() => undefined);
-      await recordUsage(this.prisma, {
-        userId: input.userId,
-        provider: env.OPENROUTER_API_KEY ? "openrouter" : "mock_llm",
-        operation: "report_chat",
-        status: "failed",
-        errorCode: error instanceof Error ? error.message : "CHAT_FAILED"
-      }).catch(() => undefined);
+          provider: env.OPENROUTER_API_KEY ? "openrouter" : "mock_llm",
+          operation: "report_chat",
+          status: "failed",
+          errorCode: error instanceof Error ? error.message : "CHAT_FAILED"
+        }).catch(() => undefined);
+      }
+      if (ownsIdempotencySlot) {
+        await this.prisma.reportChatMessage
+          .deleteMany({ where: { id: assistantMessageId, role: PENDING_ASSISTANT_ROLE } })
+          .catch(() => undefined);
+      }
       throw error;
     }
   }
+
+  private async waitForIdempotentAnswer(answerKey: string) {
+    const deadline = Date.now() + IDEMPOTENCY_WAIT_MS;
+    while (Date.now() < deadline) {
+      const existing = await this.prisma.reportChatMessage.findUnique({
+        where: { idempotencyKey: answerKey }
+      });
+      if (!existing) throw new ChatRequestInProgressError();
+      if (existing.role !== PENDING_ASSISTANT_ROLE) return messageToAnswer(existing);
+      await delay(IDEMPOTENCY_POLL_MS);
+    }
+    throw new ChatRequestInProgressError();
+  }
+}
+
+function messageToAnswer(message: {
+  content: string;
+  model?: string | null;
+  tokensIn?: number | null;
+  tokensOut?: number | null;
+}) {
+  return {
+    text: message.content,
+    model: message.model ?? "",
+    tokensIn: message.tokensIn ?? undefined,
+    tokensOut: message.tokensOut ?? undefined
+  };
+}
+
+function isUniqueConstraintError(error: unknown): boolean {
+  return (
+    Boolean(error) && typeof error === "object" && (error as { code?: unknown }).code === "P2002"
+  );
 }

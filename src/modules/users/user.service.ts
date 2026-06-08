@@ -21,7 +21,11 @@ export class UserService {
 
   async upsertTelegramUser(identity: TelegramIdentity): Promise<{ user: User; isNew: boolean }> {
     const telegramId = BigInt(identity.id);
-    const existing = await this.prisma.user.findUnique({ where: { telegramId } });
+    const identityHash = telegramIdentityHash(identity.id);
+    const existingByTelegramId = await this.prisma.user.findUnique({ where: { telegramId } });
+    const existing =
+      existingByTelegramId ??
+      (await this.prisma.user.findUnique({ where: { telegramIdentityHash: identityHash } }));
     const language = identity.languageCode?.startsWith("en") ? "en" : env.DEFAULT_LANGUAGE;
     if (existing) {
       if (existing.status === "deleted" && !identity.allowReactivate) {
@@ -30,6 +34,8 @@ export class UserService {
       const user = await this.prisma.user.update({
         where: { id: existing.id },
         data: {
+          telegramId,
+          telegramIdentityHash: identityHash,
           telegramUsername: identity.username,
           firstName: identity.firstName,
           lastName: identity.lastName,
@@ -55,6 +61,7 @@ export class UserService {
     const user = await this.prisma.user.create({
       data: {
         telegramId,
+        telegramIdentityHash: identityHash,
         telegramUsername: identity.username,
         firstName: identity.firstName,
         lastName: identity.lastName,
@@ -196,6 +203,40 @@ export class UserService {
         where: { userId },
         data: { metadata: Prisma.JsonNull }
       });
+      await tx.$queryRaw`SELECT id FROM credit_accounts WHERE "userId" = CAST(${userId} AS uuid) FOR UPDATE`;
+      const account = await tx.creditAccount.findUnique({ where: { userId } });
+      if (account) {
+        if (account.reservedUnits > 0) {
+          const updated = await tx.creditAccount.update({
+            where: { userId },
+            data: { reservedUnits: 0 }
+          });
+          await tx.creditTransaction.create({
+            data: {
+              userId,
+              type: "refund",
+              amountUnits: account.reservedUnits,
+              balanceAfterUnits: updated.balanceUnits,
+              metadata: { reason: "delete_me_release_reserves" }
+            }
+          });
+        }
+        if (account.balanceUnits > 0) {
+          const updated = await tx.creditAccount.update({
+            where: { userId },
+            data: { balanceUnits: 0 }
+          });
+          await tx.creditTransaction.create({
+            data: {
+              userId,
+              type: "admin_adjustment",
+              amountUnits: -account.balanceUnits,
+              balanceAfterUnits: updated.balanceUnits,
+              metadata: { reason: "delete_me_credit_forfeit" }
+            }
+          });
+        }
+      }
       await tx.paymentOrder.updateMany({
         where: {
           userId,
@@ -296,4 +337,8 @@ function anonymizedTelegramId(userId: string): bigint {
   const digest = createHash("sha256").update(userId).digest("hex");
   const positiveSigned64 = BigInt(`0x${digest.slice(0, 16)}`) & ((1n << 63n) - 1n);
   return -(positiveSigned64 || 1n);
+}
+
+function telegramIdentityHash(telegramId: number): string {
+  return createHash("sha256").update(`telegram:${telegramId}`).digest("hex");
 }

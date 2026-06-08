@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="820" viewBox="0 0 820 820">
+  <style>
+    .headline { font: 800 64px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+    .kicker { font: 800 34px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+    .copy { font: 650 42px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+    .small { font: 700 30px -apple-system, BlinkMacSystemFont, "Arial", sans-serif; fill: #1f2a25; letter-spacing: 0; }
+  </style>
+
+      <rect width="820" height="820" fill="#e8ecf6"/>
+      <rect x="82" y="90" width="656" height="590" rx="18" fill="#ffffff"/>
+      <rect x="118" y="126" width="584" height="314" rx="20" fill="#c7d8ef"/>
+      <rect x="164" y="482" width="492" height="38" rx="19" fill="#bfc8ba"/>
+      <rect x="164" y="548" width="320" height="38" rx="19" fill="#d8c2a4"/>
+      <text x="116" y="736" class="headline">CAROUSEL 1/5</text>
+      <text x="164" y="224" class="kicker">ROADMAP</text>
+      <text x="164" y="306" class="copy">POST IDEAS</text>
+      <text x="164" y="372" class="copy">JUNE PLAN</text>
+</svg>

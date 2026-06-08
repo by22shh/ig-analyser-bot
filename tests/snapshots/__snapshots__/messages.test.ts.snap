@@ -153,6 +153,14 @@ exports[`message snapshots > renders start payload 2`] = `
 [
   [
     {
+      "text": "🚀 Открыть Mini App",
+      "web_app": {
+        "url": "http://localhost:3000/mini-app",
+      },
+    },
+  ],
+  [
+    {
       "callback_data": "a:start",
       "text": "🔎 Анализ профиля",
     },

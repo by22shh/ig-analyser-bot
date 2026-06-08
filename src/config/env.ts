@@ -133,7 +133,7 @@ const schema = z.object({
   FEATURE_OSINT_COMPLIANCE_MODE: boolFromString.default(false),
   FEATURE_PHOTO_SEARCH: boolFromString.default(false),
   FEATURE_TELEGRAM_STARS: boolFromString.default(true),
-  FEATURE_YOOKASSA_PAYMENTS: boolFromString.default(true),
+  FEATURE_YOOKASSA_PAYMENTS: boolFromString.default(false),
   FEATURE_MINI_APP: boolFromString.default(true),
   // Require channel membership to use the bot. Off by default so dev/tests stay
   // inert; enable in production where the bot is an admin of the channel.
@@ -144,14 +144,12 @@ const schema = z.object({
   OTEL_EXPORTER_OTLP_ENDPOINT: optionalString,
 
   MODEL_VISION: z.string().default("google/gemini-2.5-flash"),
-  // Default reasoning model. Kept on gpt-5.5 for premium-safe analysis after
-  // the 2026-06-05 bake-off; the 2026-06-08 OpenRouter research found
-  // x-ai/grok-4.3 to be the best cost/latency/structured-output A/B candidate.
-  // Caveat: gpt-5.5 strict JSON can truncate at an 8000 output-token budget on
-  // full 17-section reports; raise the budget and retest before relying on
-  // strict structured output only. Other A/B alternatives: openai/gpt-5.4,
+  // Default reasoning model. The 2026-06-08 OpenRouter research found
+  // x-ai/grok-4.3 to be the best production default for cost, latency and
+  // complete structured 17-section reports. Premium A/B alternatives:
+  // openai/gpt-5.5 (use a larger output budget or text fallback), openai/gpt-5.4,
   // anthropic/claude-opus-4.8.
-  MODEL_REASONING: z.string().default("openai/gpt-5.5"),
+  MODEL_REASONING: z.string().default("x-ai/grok-4.3"),
   // Reasoning effort passed through to the reasoning model. medium balances
   // latency (~85 s for a full standard report) against depth.
   MODEL_REASONING_EFFORT: z.enum(["low", "medium", "high"]).default("medium"),

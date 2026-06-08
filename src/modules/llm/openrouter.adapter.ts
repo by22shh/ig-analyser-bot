@@ -836,6 +836,7 @@ function canFallbackFromStructuredError(error: unknown): boolean {
   return (
     error.message === "STRUCTURED_JSON_PARSE_FAILED" ||
     error.message === "STRUCTURED_REPORT_PARSE_FAILED" ||
+    error.message === "LLM_EMPTY_RESPONSE" ||
     // A provider that does not support response_format (e.g. Anthropic via
     // OpenRouter returns an embedded "Provider returned error" or a 404 route)
     // must degrade to text [[SECTION]] mode rather than fail the whole report.

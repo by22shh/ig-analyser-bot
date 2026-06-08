@@ -18,12 +18,6 @@ exports[`message snapshots > renders paywall and insufficient credits 2`] = `
   ],
   [
     {
-      "callback_data": "pay:yk",
-      "text": "💳 Банковская карта / СБП",
-    },
-  ],
-  [
-    {
       "callback_data": "m:main",
       "text": "🏠 В меню",
     },
@@ -53,12 +47,8 @@ exports[`message snapshots > renders paywall and insufficient credits 3`] = `
   ],
   [
     {
-      "callback_data": "pay",
-      "text": "⬅️ Назад",
-    },
-    {
       "callback_data": "m:main",
-      "text": "🏠 В меню",
+      "text": "⬅️ Назад",
     },
   ],
 ]

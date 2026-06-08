@@ -124,6 +124,7 @@ import { env } from "../../src/config/env.js";
 import { OpenRouterLlmProvider } from "../../src/modules/llm/openrouter.adapter.js";
 
 const originalImageCapMb = env.ANALYSIS_MAX_IMAGE_DOWNLOAD_MB;
+const originalStructuredOutputs = env.LLM_STRUCTURED_OUTPUTS;
 
 describe("OpenRouterLlmProvider", () => {
   beforeEach(() => {
@@ -133,6 +134,7 @@ describe("OpenRouterLlmProvider", () => {
 
   afterEach(() => {
     env.ANALYSIS_MAX_IMAGE_DOWNLOAD_MB = originalImageCapMb;
+    env.LLM_STRUCTURED_OUTPUTS = originalStructuredOutputs;
     dnsMocks.lookup.mockReset();
     imageRequestMocks.state.reset();
     vi.unstubAllGlobals();
@@ -211,6 +213,44 @@ describe("OpenRouterLlmProvider", () => {
       status: "completed",
       description: "[Image ID: p1] Visible public facts."
     });
+  });
+
+  it("falls back to text report when the structured response is empty", async () => {
+    env.LLM_STRUCTURED_OUTPUTS = true;
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ choices: [{ message: { content: " " } }] }))
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            choices: [
+              {
+                message: {
+                  content:
+                    "[[SECTION]]\nОсновные темы и приоритеты\nText fallback report with public evidence."
+                }
+              }
+            ]
+          })
+        )
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const provider = new OpenRouterLlmProvider("token");
+    const result = await provider.generateReport(reportInput());
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    const firstBody = JSON.parse(
+      (fetchMock.mock.calls[0]?.[1] as { body?: string } | undefined)?.body ?? "{}"
+    );
+    const secondBody = JSON.parse(
+      (fetchMock.mock.calls[1]?.[1] as { body?: string } | undefined)?.body ?? "{}"
+    );
+    expect(firstBody.response_format).toBeDefined();
+    expect(secondBody.response_format).toBeUndefined();
+    expect(result.rawText).toContain("Text fallback report");
   });
 
   it("marks vision as skipped when the image download exceeds the configured cap", async () => {
@@ -352,5 +392,40 @@ function visionInput(displayUrl: string) {
         taggedUsers: []
       }
     ]
+  };
+}
+
+function reportInput() {
+  return {
+    mode: "standard" as const,
+    language: "ru" as const,
+    profile: {
+      username: "alice",
+      followersCount: 1000,
+      followsCount: 100,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts: []
+    },
+    posts: [
+      {
+        id: "p1",
+        type: "Image",
+        caption: "Public caption",
+        hashtags: [],
+        mentions: [],
+        likesCount: 10,
+        commentsCount: 1,
+        latestComments: [],
+        timestamp: "2026-06-01T00:00:00Z",
+        displayUrl: "https://cdn.example/post.jpg",
+        url: "https://www.instagram.com/p/p1/",
+        isPinned: false,
+        childPosts: [],
+        taggedUsers: []
+      }
+    ],
+    vision: []
   };
 }

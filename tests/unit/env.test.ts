@@ -59,4 +59,15 @@ describe("production env validation", () => {
       "OPENROUTER_API_KEY must be replaced with a real value in production"
     );
   });
+
+  it("does not require YooKassa credentials when YooKassa payments are disabled", () => {
+    const result = importEnv({
+      FEATURE_YOOKASSA_PAYMENTS: "false",
+      YOOKASSA_SHOP_ID: "",
+      YOOKASSA_SECRET_KEY: ""
+    });
+
+    expect(result.status).toBe(0);
+    expect(result.stderr).toBe("");
+  });
 });

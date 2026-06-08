@@ -74,6 +74,48 @@ const REQUIRED_SECTION_ALIASES: Partial<Record<AnalysisMode, Record<string, stri
     "Поведенческие сигналы": ["Behavioral signals", "Behavioural signals"],
     "Ошибки, слепые зоны, барьеры": ["Mistakes, blind spots, barriers"],
     "Образ как у бренда": ["Brand-like image", "Image as a brand"]
+  },
+  influencer: {
+    "Brand safety": ["Безопасность бренда", "Риски для бренда", "Brand risk"],
+    "Audience quality": ["Качество аудитории", "Audience signals"],
+    "Authenticity check": ["Проверка подлинности", "Аутентичность", "Authenticity signals"],
+    "Advertising blindness / ad saturation": [
+      "Рекламная слепота",
+      "Насыщенность рекламой",
+      "Перегруз рекламой",
+      "Ad saturation"
+    ],
+    "Visual and production value": [
+      "Визуальная и продакшн ценность",
+      "Визуальное качество",
+      "Production value"
+    ],
+    "Hidden insights": ["Скрытые инсайты", "Неочевидные наблюдения"],
+    "Effectiveness forecast": ["Прогноз эффективности", "Forecast"],
+    "Marketer verdict": ["Вердикт маркетолога", "Marketing verdict"]
+  },
+  hr: {
+    "Cultural fit": ["Культурное соответствие", "Culture fit"],
+    "Красные флаги и риски": ["Red flags and risks", "Risks and red flags"],
+    "Soft skills": ["Мягкие навыки", "Soft-skill signals"],
+    "Digital reputation": ["Цифровая репутация"],
+    "Motivation and energy": ["Мотивация и энергия"],
+    "Hidden insights": ["Скрытые инсайты", "Неочевидные наблюдения"],
+    "Interview recommendations": ["Рекомендации для интервью", "Interview checks"],
+    Verdict: ["Вердикт", "HR verdict"]
+  },
+  osint_compliance: {
+    "Public facts": ["Публичные факты", "Open-source facts"],
+    "Asset and lifestyle signals": ["Сигналы активов и образа жизни", "Lifestyle signals"],
+    "Location signals": ["Сигналы локаций", "Geography signals"],
+    "Published contacts": ["Опубликованные контакты", "Public contacts"],
+    "Risk and inconsistency checks": [
+      "Проверки рисков и несостыковок",
+      "Risk checks",
+      "Inconsistency checks"
+    ],
+    "Verification checklist": ["Чеклист проверки", "Verification steps"],
+    "Compliance notes": ["Комплаенс заметки", "Правовые заметки", "Lawful-use notes"]
   }
 };
 

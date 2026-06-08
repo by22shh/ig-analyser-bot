@@ -1,4 +1,14 @@
-const RESERVED_PATHS = new Set(["p", "reel", "tv", "stories", "explore", "accounts", "direct"]);
+const RESERVED_PATHS = new Set([
+  "p",
+  "reel",
+  "reels",
+  "tv",
+  "stories",
+  "explore",
+  "accounts",
+  "direct",
+  "share"
+]);
 const USERNAME_RE = /^[A-Za-z0-9._]{1,30}$/;
 
 export function normalizeInstagramUsername(input: string): string {
@@ -24,6 +34,9 @@ export function normalizeInstagramUsername(input: string): string {
   value = value.replace(/^@+/, "").trim();
   if (value.includes(" ")) throw new Error("USERNAME_HAS_SPACES");
   if (!USERNAME_RE.test(value)) throw new Error("USERNAME_INVALID_CHARS");
+  if (value.startsWith(".") || value.endsWith(".") || value.includes("..")) {
+    throw new Error("USERNAME_INVALID_DOTS");
+  }
   if (RESERVED_PATHS.has(value.toLowerCase())) throw new Error("USERNAME_RESERVED_PATH");
   return value;
 }

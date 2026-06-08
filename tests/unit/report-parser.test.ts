@@ -42,4 +42,52 @@ describe("report parser", () => {
 
     expect(validateRequiredSections("standard", sections)).toEqual([]);
   });
+
+  it("accepts localized aliases for required non-standard sections", () => {
+    const cases = [
+      [
+        "influencer",
+        [
+          "Безопасность бренда",
+          "Качество аудитории",
+          "Проверка подлинности",
+          "Насыщенность рекламой",
+          "Визуальное качество",
+          "Скрытые инсайты",
+          "Прогноз эффективности",
+          "Вердикт маркетолога"
+        ]
+      ],
+      [
+        "hr",
+        [
+          "Культурное соответствие",
+          "Red flags and risks",
+          "Мягкие навыки",
+          "Цифровая репутация",
+          "Мотивация и энергия",
+          "Неочевидные наблюдения",
+          "Рекомендации для интервью",
+          "Вердикт"
+        ]
+      ],
+      [
+        "osint_compliance",
+        [
+          "Публичные факты",
+          "Сигналы активов и образа жизни",
+          "Сигналы локаций",
+          "Опубликованные контакты",
+          "Проверки рисков и несостыковок",
+          "Чеклист проверки",
+          "Комплаенс заметки"
+        ]
+      ]
+    ] as const;
+
+    for (const [mode, titles] of cases) {
+      const sections = titles.map((title) => ({ title, content: "", sources: [] }));
+      expect(validateRequiredSections(mode, sections), mode).toEqual([]);
+    }
+  });
 });

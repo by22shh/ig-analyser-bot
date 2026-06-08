@@ -100,9 +100,9 @@ export const en = {
     return (
       bonusLine +
       "👁 <b>Public Instagram profile analysis</b>\n\n" +
-      "💘 Like someone and want to know what they're into and how to break the ice?\n" +
-      "🕵️ Just met someone and want to check who they really are?\n" +
-      "🤝 Got a business partner and want to read them as a person?\n\n" +
+      "🤝 Preparing for a meeting, partnership, or professional contact?\n" +
+      "🕵️ Need to review the public context of a profile carefully?\n" +
+      "📣 Evaluating a creator, candidate, or personal brand from open data?\n\n" +
       "Send an @username or link — I will turn open data into a clear strategic report.\n\n" +
       "<b>You will get:</b>\n" +
       "• positioning and visible profile signals\n" +
@@ -406,6 +406,13 @@ export const en = {
       ? "🔎 <b>Possible Instagram candidates</b>\n\nThis is not identity confirmation, only a list of possible matches. The percentage is an estimate of visual similarity. Pick a candidate to run a profile analysis."
       : "No Instagram candidates were found for this photo. Try another image or send a username manually.";
   },
+  photoSearchFailed(): string {
+    return (
+      "⚠️ <b>Could not finish photo search</b>\n\n" +
+      "We tried several times, but the search service did not return a result. " +
+      "💎 The reserved credits were returned to your balance — try another photo later or send a username manually."
+    );
+  },
   chatIntro(): string {
     return "💬 <b>Report chat</b>\n\nAsk a question or choose a quick option. Each question costs 0.05 💎.";
   },
@@ -479,7 +486,21 @@ export const en = {
   deleteMeDone(): string {
     return "🧹 Profile, reports and working data have been deleted or anonymized. Financial records may be retained without unnecessary personal fields according to accounting requirements and the retention policy.";
   },
-  analysisFailed(): string {
+  analysisFailed(errorCode?: string): string {
+    if (errorCode === "PROFILE_NOT_FOUND_OR_PRIVATE") {
+      return (
+        "⚠️ <b>Profile not found or private</b>\n\n" +
+        "I can analyze public Instagram profiles only. Check the username or send another public profile.\n\n" +
+        "💎 The reserved credits were returned to your balance."
+      );
+    }
+    if (errorCode === "IDENTITY_MISMATCH") {
+      return (
+        "⚠️ <b>Could not verify the profile</b>\n\n" +
+        "The provider returned data that did not match the requested username. Try again later or check the link manually.\n\n" +
+        "💎 The reserved credits were returned to your balance."
+      );
+    }
     return (
       "⚠️ <b>Could not finish the analysis</b>\n\n" +
       "We tried several times but could not build the report. " +

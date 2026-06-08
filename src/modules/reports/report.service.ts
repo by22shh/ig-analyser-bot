@@ -65,15 +65,12 @@ export class ReportService {
         bytes: html
       }
     ];
-    const pdf = await this.tryRenderPdf(html.toString("utf8"));
-    if (pdf) {
-      objects.push({
-        type: "pdf",
-        contentType: "application/pdf",
-        key: `reports/${reportId}/report.pdf`,
-        bytes: pdf
-      });
-    }
+    objects.push({
+      type: "pdf",
+      contentType: "application/pdf",
+      key: `reports/${reportId}/report.pdf`,
+      bytes: await this.renderPdfRequired(html.toString("utf8"))
+    });
     const storedObjects: Array<{
       type: string;
       key: string;
@@ -149,11 +146,11 @@ export class ReportService {
     });
   }
 
-  private async tryRenderPdf(html: string): Promise<Buffer | undefined> {
+  private async renderPdfRequired(html: string): Promise<Buffer> {
     try {
       return await this.pdf.renderPdf(html);
-    } catch {
-      return undefined;
+    } catch (error) {
+      throw new Error("PDF_RENDER_FAILED", { cause: error });
     }
   }
 

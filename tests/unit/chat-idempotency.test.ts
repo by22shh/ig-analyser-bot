@@ -213,4 +213,88 @@ describe("ReportChatService.ask idempotency", () => {
       (credits as unknown as { reserve: ReturnType<typeof vi.fn> }).reserve
     ).not.toHaveBeenCalled();
   });
+
+  it("recovers a stale pending idempotency slot and processes a fresh answer", async () => {
+    const txMessageCreate = vi.fn().mockResolvedValue({});
+    const txMessageUpdate = vi.fn().mockResolvedValue({});
+    const pendingId = "old-pending";
+    const staleCreatedAt = new Date(Date.now() - 16 * 60 * 1000);
+    const topLevelCreate = vi.fn(async (input: { data: { id: string; role: string } }) => ({
+      id: input.data.id
+    }));
+    const deleteMany = vi.fn().mockResolvedValue({ count: 1 });
+    const prisma = {
+      report: {
+        findFirstOrThrow: vi.fn().mockResolvedValue({ id: "r1", rawText: "report", sections: [] })
+      },
+      reportChatMessage: {
+        findUnique: vi
+          .fn()
+          .mockResolvedValueOnce({
+            id: pendingId,
+            role: "assistant_pending",
+            content: "",
+            createdAt: staleCreatedAt
+          })
+          .mockResolvedValueOnce(null),
+        create: topLevelCreate,
+        deleteMany
+      },
+      reportChatSession: { upsert: vi.fn().mockResolvedValue({ id: "s1" }) },
+      apiUsageEvent: { create: vi.fn().mockResolvedValue({}) }
+    } as never;
+    const llm = {
+      chat: vi.fn().mockResolvedValue({ text: "fresh", model: "m", tokensIn: 1, tokensOut: 2 })
+    } as never;
+    const captureReserve = vi
+      .fn()
+      .mockImplementation(async (input: { within?: (tx: unknown) => Promise<void> }) => {
+        if (input.within) {
+          await input.within({
+            reportChatMessage: { create: txMessageCreate, update: txMessageUpdate }
+          });
+        }
+      });
+    const releaseReserve = vi.fn().mockResolvedValue(undefined);
+    const credits = {
+      reserve: vi.fn().mockResolvedValue({ id: "reserve-1" }),
+      captureReserve,
+      releaseReserve
+    } as never;
+    const service = new ReportChatService(prisma, llm, credits);
+
+    const result = await service.ask({
+      userId: "u1",
+      reportId: "r1",
+      question: "q",
+      language: "ru",
+      requestId: "102"
+    });
+
+    expect(result.text).toBe("fresh");
+    expect(releaseReserve).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: "u1",
+        reportChatMessageId: pendingId,
+        amountUnits: 5,
+        metadata: expect.objectContaining({ reason: "stale_pending_chat_recovered" })
+      })
+    );
+    expect(deleteMany).toHaveBeenCalledWith({
+      where: { id: pendingId, role: "assistant_pending" }
+    });
+    expect(topLevelCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          role: "assistant_pending",
+          idempotencyKey: "chat:u1:102"
+        })
+      })
+    );
+    expect(txMessageUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ role: "assistant", content: "fresh" })
+      })
+    );
+  });
 });

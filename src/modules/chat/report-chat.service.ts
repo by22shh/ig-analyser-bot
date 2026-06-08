@@ -11,6 +11,7 @@ import { recordUsage, recordUsageSafe } from "../observability/usage.js";
 const PENDING_ASSISTANT_ROLE = "assistant_pending";
 const IDEMPOTENCY_POLL_MS = 250;
 const IDEMPOTENCY_WAIT_MS = 5_000;
+const PENDING_ASSISTANT_STALE_MS = 15 * 60 * 1000;
 
 export class ChatRequestInProgressError extends Error {
   constructor() {
@@ -46,9 +47,15 @@ export class ReportChatService {
         where: { idempotencyKey: answerKey }
       });
       if (existing) {
-        return existing.role === PENDING_ASSISTANT_ROLE
-          ? this.waitForIdempotentAnswer(answerKey)
-          : messageToAnswer(existing);
+        if (existing.role !== PENDING_ASSISTANT_ROLE) return messageToAnswer(existing);
+        if (this.pendingIsStale(existing.createdAt)) {
+          await this.recoverStalePendingAnswer({
+            userId: input.userId,
+            messageId: existing.id
+          });
+        } else {
+          return this.waitForIdempotentAnswer(answerKey, input.userId);
+        }
       }
     }
     const session = await this.prisma.reportChatSession
@@ -79,7 +86,7 @@ export class ReportChatService {
         ownsIdempotencySlot = true;
       } catch (error) {
         if (!isUniqueConstraintError(error)) throw error;
-        return this.waitForIdempotentAnswer(answerKey);
+        return this.waitForIdempotentAnswer(answerKey, input.userId);
       }
     }
     let reserved = false;
@@ -198,7 +205,7 @@ export class ReportChatService {
     }
   }
 
-  private async waitForIdempotentAnswer(answerKey: string) {
+  private async waitForIdempotentAnswer(answerKey: string, userId: string) {
     const deadline = Date.now() + IDEMPOTENCY_WAIT_MS;
     while (Date.now() < deadline) {
       const existing = await this.prisma.reportChatMessage.findUnique({
@@ -206,9 +213,35 @@ export class ReportChatService {
       });
       if (!existing) throw new ChatRequestInProgressError();
       if (existing.role !== PENDING_ASSISTANT_ROLE) return messageToAnswer(existing);
+      if (this.pendingIsStale(existing.createdAt)) {
+        await this.recoverStalePendingAnswer({ userId, messageId: existing.id });
+        throw new ChatRequestInProgressError();
+      }
       await delay(IDEMPOTENCY_POLL_MS);
     }
     throw new ChatRequestInProgressError();
+  }
+
+  private pendingIsStale(createdAt: Date): boolean {
+    return Date.now() - createdAt.getTime() > PENDING_ASSISTANT_STALE_MS;
+  }
+
+  private async recoverStalePendingAnswer(input: { userId: string; messageId: string }) {
+    await this.credits
+      .releaseReserve({
+        userId: input.userId,
+        reportChatMessageId: input.messageId,
+        amountUnits: MODE_COST_UNITS.chat_message,
+        metadata: {
+          type: "report_chat",
+          reportChatMessageId: input.messageId,
+          reason: "stale_pending_chat_recovered"
+        }
+      })
+      .catch(() => undefined);
+    await this.prisma.reportChatMessage.deleteMany({
+      where: { id: input.messageId, role: PENDING_ASSISTANT_ROLE }
+    });
   }
 }
 

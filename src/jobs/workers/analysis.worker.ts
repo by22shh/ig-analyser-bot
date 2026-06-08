@@ -214,6 +214,7 @@ export function startAnalysisWorker(input: {
           reportActionsKeyboard(messages, report.id)
         );
       } catch (error) {
+        const errorCode = error instanceof Error ? error.message : "ANALYSIS_FAILED";
         log.error({ error, jobId: row.id, finalAttempt }, "analysis_failed");
         await recordUsage(input.prisma, {
           userId: row.userId,
@@ -221,7 +222,7 @@ export function startAnalysisWorker(input: {
           provider: "analysis_pipeline",
           operation: "analysis",
           status: "failed",
-          errorCode: error instanceof Error ? error.message : "ANALYSIS_FAILED"
+          errorCode
         }).catch(() => undefined);
         if (!finalAttempt) {
           // More retries remain: keep the reserve intact so a successful retry can
@@ -231,7 +232,7 @@ export function startAnalysisWorker(input: {
             data: {
               status: "retrying",
               stage: "retrying",
-              errorCode: error instanceof Error ? error.message : "ANALYSIS_FAILED",
+              errorCode,
               errorMessage: error instanceof Error ? error.message : String(error)
             }
           });
@@ -249,7 +250,7 @@ export function startAnalysisWorker(input: {
           data: {
             status: "failed",
             stage: "failed",
-            errorCode: error instanceof Error ? error.message : "ANALYSIS_FAILED",
+            errorCode,
             errorMessage: error instanceof Error ? error.message : String(error),
             finishedAt: new Date()
           }
@@ -257,7 +258,7 @@ export function startAnalysisWorker(input: {
         await safeNotify(
           input.bot,
           Number(row.telegramChatId),
-          messages.analysisFailed(),
+          messages.analysisFailed(errorCode),
           undefined,
           backMenuKeyboard(messages)
         );

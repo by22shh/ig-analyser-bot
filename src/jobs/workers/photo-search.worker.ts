@@ -13,6 +13,8 @@ import { CB } from "../../telegram/constants.js";
 import { t } from "../../telegram/locales/index.js";
 import { InlineKeyboard } from "grammy";
 import type { MyContext } from "../../telegram/context.js";
+import { safeNotify } from "./notify.js";
+import { backMenuKeyboard } from "../../telegram/keyboards/main-menu.js";
 
 export function startPhotoSearchWorker(input: {
   prisma: PrismaClient;
@@ -152,6 +154,14 @@ export function startPhotoSearchWorker(input: {
             finishedAt: new Date()
           }
         });
+        await safeNotify(
+          input.bot,
+          Number(row.telegramChatId ?? row.user.telegramId),
+          messages.photoSearchFailed(),
+          (notifyError) =>
+            log.warn({ error: notifyError, jobId: row.id }, "photo_search_failed_notify_failed"),
+          backMenuKeyboard(messages)
+        );
         throw error;
       }
     },

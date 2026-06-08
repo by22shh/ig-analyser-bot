@@ -124,6 +124,15 @@ describe("userIsSubscribed", () => {
     expect(await userIsSubscribed(ctx)).toBe(false);
     expect(getChatMember).toHaveBeenCalledTimes(2);
   });
+
+  it("fails closed in staging and does not cache on API errors", async () => {
+    env.APP_ENV = "staging";
+    const { ctx, getChatMember } = makeCtx();
+    getChatMember.mockRejectedValue(new Error("CHAT_ADMIN_REQUIRED"));
+    expect(await userIsSubscribed(ctx)).toBe(false);
+    expect(await userIsSubscribed(ctx)).toBe(false);
+    expect(getChatMember).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe("subscriptionGate middleware", () => {

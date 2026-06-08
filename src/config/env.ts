@@ -170,6 +170,7 @@ if (!parsed.success) {
 }
 
 assertProductionConfiguration(parsed.data);
+assertNonProductionConfiguration(parsed.data);
 
 const databaseUrl = withProductionConnectionDefaults(parsed.data, "DATABASE_URL");
 const directUrl = withProductionConnectionDefaults(parsed.data, "DIRECT_URL");
@@ -207,6 +208,10 @@ export const providerMode = {
   storage: env.S3_BUCKET && env.S3_ACCESS_KEY_ID && env.S3_SECRET_ACCESS_KEY ? "s3" : "local"
 } as const;
 
+export function isLocalRuntimeEnv(appEnv: AppEnv["APP_ENV"] = env.APP_ENV): boolean {
+  return appEnv === "development" || appEnv === "test";
+}
+
 function assertProductionConfiguration(data: ParsedEnv) {
   if (data.APP_ENV !== "production") return;
 
@@ -215,7 +220,12 @@ function assertProductionConfiguration(data: ParsedEnv) {
     key: keyof ParsedEnv,
     message = `${String(key)} is required in production`
   ) => {
-    if (typeof data[key] !== "string" || !(data[key] as string).trim()) errors.push(message);
+    const value = data[key];
+    if (typeof value !== "string" || !value.trim()) {
+      errors.push(message);
+    } else if (isPlaceholderValue(value)) {
+      errors.push(`${String(key)} must be replaced with a real value in production`);
+    }
   };
   const requireNumber = (
     key: keyof ParsedEnv,
@@ -231,7 +241,7 @@ function assertProductionConfiguration(data: ParsedEnv) {
   const requireUrl = (key: keyof ParsedEnv) => {
     requireString(key);
     const value = data[key];
-    if (typeof value === "string" && value.trim()) {
+    if (typeof value === "string" && value.trim() && !isPlaceholderValue(value)) {
       try {
         new URL(value);
       } catch {
@@ -242,7 +252,7 @@ function assertProductionConfiguration(data: ParsedEnv) {
   const requireConnectionUrl = (key: keyof ParsedEnv) => {
     requireString(key);
     const value = data[key];
-    if (typeof value !== "string" || !value.trim()) return;
+    if (typeof value !== "string" || !value.trim() || isPlaceholderValue(value)) return;
     try {
       const url = new URL(value);
       if (isLocalhost(url.hostname)) {
@@ -343,8 +353,79 @@ function assertProductionConfiguration(data: ParsedEnv) {
   }
 }
 
+function assertNonProductionConfiguration(data: ParsedEnv) {
+  if (data.APP_ENV === "production") return;
+
+  const errors: string[] = [];
+  const publicBaseUrl = isPublicRuntimeUrl(data.APP_BASE_URL);
+  const publicWebhookUrl = data.TELEGRAM_WEBHOOK_URL
+    ? isPublicRuntimeUrl(data.TELEGRAM_WEBHOOK_URL)
+    : false;
+  const productionCredentials = productionCredentialKeys(data);
+
+  if (
+    isLocalParsedEnv(data.APP_ENV) &&
+    (publicBaseUrl || publicWebhookUrl) &&
+    productionCredentials.length >= 2
+  ) {
+    errors.push(
+      `APP_ENV must be staging or production when public URLs are used with production credentials (${productionCredentials.join(", ")})`
+    );
+  }
+
+  if (publicWebhookUrl && data.TELEGRAM_BOT_TOKEN.trim() && !data.TELEGRAM_USE_LONG_POLLING) {
+    if (!data.TELEGRAM_WEBHOOK_SECRET.trim()) {
+      errors.push("TELEGRAM_WEBHOOK_SECRET is required when a public webhook URL is configured");
+    } else if (data.TELEGRAM_WEBHOOK_SECRET.length < 16) {
+      errors.push("TELEGRAM_WEBHOOK_SECRET must be at least 16 characters");
+    }
+  }
+
+  if (errors.length) {
+    console.error({ nonProductionConfigErrors: errors });
+    throw new Error("Unsafe non-production environment configuration");
+  }
+}
+
 function isLocalhost(hostname: string): boolean {
   return ["localhost", "127.0.0.1", "::1", "[::1]"].includes(hostname.toLowerCase());
+}
+
+function isLocalParsedEnv(appEnv: ParsedEnv["APP_ENV"]): boolean {
+  return appEnv === "development" || appEnv === "test";
+}
+
+function isPublicRuntimeUrl(value: string): boolean {
+  if (!value.trim()) return false;
+  try {
+    const url = new URL(value);
+    return (url.protocol === "http:" || url.protocol === "https:") && !isLocalhost(url.hostname);
+  } catch {
+    return false;
+  }
+}
+
+function productionCredentialKeys(data: ParsedEnv): string[] {
+  const keys: Array<keyof ParsedEnv> = [
+    "APIFY_TOKEN",
+    "OPENROUTER_API_KEY",
+    "FACECHECK_API_TOKEN",
+    "YOOKASSA_SHOP_ID",
+    "YOOKASSA_SECRET_KEY",
+    "S3_BUCKET",
+    "S3_ACCESS_KEY_ID",
+    "S3_SECRET_ACCESS_KEY"
+  ];
+  return keys.filter(
+    (key) =>
+      typeof data[key] === "string" &&
+      Boolean((data[key] as string).trim()) &&
+      !isPlaceholderValue(data[key] as string)
+  );
+}
+
+function isPlaceholderValue(value: string): boolean {
+  return /^(TODO|PLACEHOLDER|CHANGE_ME|your[_-])/i.test(value.trim());
 }
 
 function withProductionConnectionDefaults(

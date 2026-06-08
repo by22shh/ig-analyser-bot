@@ -4,7 +4,9 @@
 
 ```bash
 docker compose up -d
-DIRECT_URL=postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot pnpm prisma:migrate
+DATABASE_URL=postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot \
+DIRECT_URL=postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot \
+pnpm prisma:migrate
 pnpm prisma:generate
 ```
 

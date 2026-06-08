@@ -6,7 +6,7 @@ import { createReadStream } from "node:fs";
 import { access, readFile } from "node:fs/promises";
 import { basename, extname, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { env } from "../config/env.js";
+import { env, isLocalRuntimeEnv } from "../config/env.js";
 import { InsufficientCreditsError } from "../modules/billing/credits.service.js";
 import { ChatRequestInProgressError } from "../modules/chat/report-chat.service.js";
 import {
@@ -386,7 +386,7 @@ async function authenticateMiniApp(
       }
       telegramUser = validated.user;
       chatId = validated.chat?.id;
-    } else if (env.APP_ENV === "development" || env.APP_ENV === "test") {
+    } else if (isLocalRuntimeEnv(env.APP_ENV)) {
       telegramUser = devTelegramUser(request);
       chatId = devTelegramChatId(request, telegramUser.id);
     } else {
@@ -554,11 +554,9 @@ async function ensureMiniAppSubscription(
 ): Promise<boolean> {
   const subscription = await subscriptionDto(session, services, bot);
   if (subscription.ok) return true;
-  reply.send(
-    apiError(reply, 403, "SUBSCRIPTION_REQUIRED", {
-      channelUrl: subscription.channelUrl
-    })
-  );
+  apiError(reply, 403, "SUBSCRIPTION_REQUIRED", {
+    channelUrl: subscription.channelUrl
+  });
   return false;
 }
 
@@ -608,7 +606,7 @@ async function subscriptionDto(session: MiniAppSession, services: Services, bot:
   if (!env.REQUIRED_CHANNEL_ID) {
     return {
       required: true,
-      ok: env.APP_ENV !== "production",
+      ok: isLocalRuntimeEnv(env.APP_ENV),
       channelUrl: env.CHANNEL_URL,
       misconfigured: true
     };
@@ -626,9 +624,9 @@ async function subscriptionDto(session: MiniAppSession, services: Services, bot:
   } catch {
     return {
       required: true,
-      ok: env.APP_ENV !== "production",
+      ok: isLocalRuntimeEnv(env.APP_ENV),
       channelUrl: env.CHANNEL_URL,
-      failOpen: env.APP_ENV !== "production"
+      failOpen: isLocalRuntimeEnv(env.APP_ENV)
     };
   }
 }
@@ -746,8 +744,7 @@ function apiError(
   code: string,
   details?: Record<string, unknown>
 ) {
-  reply.code(statusCode);
-  return { ok: false, error: { code, ...details } };
+  return reply.code(statusCode).send({ ok: false, error: { code, ...details } });
 }
 
 function contentTypeForArtifact(type: string): string {

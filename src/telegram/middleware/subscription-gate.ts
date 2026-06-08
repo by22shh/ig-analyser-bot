@@ -1,5 +1,5 @@
 import type { NextFunction } from "grammy";
-import { env } from "../../config/env.js";
+import { env, isLocalRuntimeEnv } from "../../config/env.js";
 import { childLogger } from "../../config/logger.js";
 import { CB } from "../constants.js";
 import type { MyContext } from "../context.js";
@@ -31,7 +31,7 @@ function chatMemberIsSubscribed(member: { status: string; is_member?: boolean })
 }
 
 function subscriptionCheckFailsOpen(): boolean {
-  return env.APP_ENV !== "production";
+  return isLocalRuntimeEnv(env.APP_ENV);
 }
 
 /** Test helper: drop the in-memory membership cache between cases. */

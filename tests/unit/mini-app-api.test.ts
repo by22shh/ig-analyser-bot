@@ -40,6 +40,37 @@ describe("Mini App API", () => {
     await app.close();
   });
 
+  it("requires signed init data in staging instead of dev headers", async () => {
+    env.APP_ENV = "staging";
+    env.TELEGRAM_BOT_TOKEN = telegramBotToken;
+    const services = makeServices();
+    const app = createApp({ services: services as never, bot: makeBot() as never });
+
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/mini-app/bootstrap",
+      headers: { "x-mini-app-dev-user": "900000001" }
+    });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.json().error.code).toBe("INIT_DATA_MISSING");
+    expect(services.users.upsertTelegramUser).not.toHaveBeenCalled();
+    await app.close();
+  });
+
+  it("does not register local mock payment routes in staging", async () => {
+    env.APP_ENV = "staging";
+    const app = createApp({ services: makeServices() as never, bot: makeBot() as never });
+
+    const res = await app.inject({
+      method: "GET",
+      url: "/mock/yookassa/pay/test-payment"
+    });
+
+    expect(res.statusCode).toBe(404);
+    await app.close();
+  });
+
   it("does not register Mini App routes when the feature flag is disabled", async () => {
     env.FEATURE_MINI_APP = false;
     const app = createApp({ services: makeServices() as never, bot: makeBot() as never });

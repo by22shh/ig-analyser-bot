@@ -2,7 +2,7 @@ import Fastify from "fastify";
 import type { FastifyRequest } from "fastify";
 import type { Bot } from "grammy";
 import { isIP } from "node:net";
-import { env } from "./config/env.js";
+import { env, isLocalRuntimeEnv } from "./config/env.js";
 import { childLogger } from "./config/logger.js";
 import type { Services } from "./modules/container.js";
 import { registerMiniAppRoutes } from "./mini-app/routes.js";
@@ -75,7 +75,7 @@ export function createApp(input: { services: Services; bot: Bot<MyContext> }) {
     return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Payment</title></head><body><main style="font-family:system-ui,sans-serif;max-width:560px;margin:64px auto;padding:0 20px;line-height:1.5"><h1>Оплата</h1><p>Оплата обрабатывается. Вернитесь в Telegram: кредиты начислятся автоматически после подтверждения платежа.</p><p>Your payment is being processed. Return to Telegram: credits will be granted automatically after confirmation.</p></main></body></html>';
   });
 
-  if (env.APP_ENV !== "production") {
+  if (isLocalRuntimeEnv(env.APP_ENV)) {
     app.get("/mock/yookassa/pay/:id", async (request) => ({
       ok: true,
       id: (request.params as { id: string }).id,
@@ -134,7 +134,7 @@ function firstForwardedIp(header: string | string[] | undefined): string | undef
 }
 
 function isLocalDevIp(ip: string): boolean {
-  return env.APP_ENV !== "production" && ["127.0.0.1", "::1"].includes(normalizeIp(ip));
+  return isLocalRuntimeEnv(env.APP_ENV) && ["127.0.0.1", "::1"].includes(normalizeIp(ip));
 }
 
 function shouldTrustForwardedHeaders(ip: string): boolean {

@@ -61,6 +61,24 @@ describe("Mini App API", () => {
     await app.close();
   });
 
+  it("returns a distinct code when Telegram init data is expired", async () => {
+    env.APP_ENV = "production";
+    env.TELEGRAM_BOT_TOKEN = telegramBotToken;
+    const services = makeServices();
+    const app = createApp({ services: services as never, bot: makeBot() as never });
+
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/mini-app/bootstrap",
+      headers: { authorization: `tma ${signedInitData({ id: 900000001, authDate: "1000" })}` }
+    });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.json().error.code).toBe("AUTH_DATE_EXPIRED");
+    expect(services.users.upsertTelegramUser).not.toHaveBeenCalled();
+    await app.close();
+  });
+
   it("does not register local mock payment routes in staging", async () => {
     env.APP_ENV = "staging";
     const app = createApp({ services: makeServices() as never, bot: makeBot() as never });
@@ -437,9 +455,9 @@ function makeBot(member: Record<string, unknown> | Error = { status: "member" })
   };
 }
 
-function signedInitData(user: { id: number }): string {
+function signedInitData(user: { id: number; authDate?: string }): string {
   const params = new URLSearchParams({
-    auth_date: "1893456000",
+    auth_date: user.authDate ?? "1893456000",
     user: JSON.stringify({
       id: user.id,
       first_name: "Local",

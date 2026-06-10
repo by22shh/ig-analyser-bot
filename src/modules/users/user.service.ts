@@ -22,56 +22,79 @@ export class UserService {
   async upsertTelegramUser(identity: TelegramIdentity): Promise<{ user: User; isNew: boolean }> {
     const telegramId = BigInt(identity.id);
     const identityHash = telegramIdentityHash(identity.id);
-    const existingByTelegramId = await this.prisma.user.findUnique({ where: { telegramId } });
-    const existing =
-      existingByTelegramId ??
-      (await this.prisma.user.findUnique({ where: { telegramIdentityHash: identityHash } }));
     const language = identity.languageCode?.startsWith("en") ? "en" : env.DEFAULT_LANGUAGE;
+    const existing = await this.findTelegramUser(telegramId, identityHash);
     if (existing) {
-      if (existing.status === "deleted" && !identity.allowReactivate) {
-        return { user: existing, isNew: false };
-      }
-      const user = await this.prisma.user.update({
-        where: { id: existing.id },
+      return this.updateTelegramUser(existing, identity, telegramId, identityHash, language);
+    }
+
+    let user: User;
+    try {
+      user = await this.prisma.user.create({
         data: {
           telegramId,
           telegramIdentityHash: identityHash,
           telegramUsername: identity.username,
           firstName: identity.firstName,
           lastName: identity.lastName,
-          language: existing.language || language,
-          role:
-            adminTelegramIds.includes(identity.id) && existing.role === "user"
-              ? "admin"
-              : existing.role,
-          ...(existing.status === "deleted"
-            ? {
-                status: "active",
-                deletedAt: null,
-                consentVersion: null,
-                consentAcceptedAt: null
-              }
-            : {})
+          language,
+          role: adminTelegramIds.includes(identity.id) ? "admin" : "user",
+          referralCode: String(identity.id)
         }
       });
-      await this.ensureSettingsAndAccount(user.id);
-      return { user, isNew: false };
+    } catch (error) {
+      if (!isUniqueConstraintError(error)) throw error;
+      const raced = await this.findTelegramUser(telegramId, identityHash);
+      if (!raced) throw error;
+      return this.updateTelegramUser(raced, identity, telegramId, identityHash, language);
     }
+    await this.ensureSettingsAndAccount(user.id);
+    return { user, isNew: true };
+  }
 
-    const user = await this.prisma.user.create({
+  private async findTelegramUser(telegramId: bigint, identityHash: string): Promise<User | null> {
+    const existingByTelegramId = await this.prisma.user.findUnique({ where: { telegramId } });
+    return (
+      existingByTelegramId ??
+      (await this.prisma.user.findUnique({ where: { telegramIdentityHash: identityHash } }))
+    );
+  }
+
+  private async updateTelegramUser(
+    existing: User,
+    identity: TelegramIdentity,
+    telegramId: bigint,
+    identityHash: string,
+    language: Locale
+  ): Promise<{ user: User; isNew: boolean }> {
+    if (existing.status === "deleted" && !identity.allowReactivate) {
+      return { user: existing, isNew: false };
+    }
+    const user = await this.prisma.user.update({
+      where: { id: existing.id },
       data: {
         telegramId,
         telegramIdentityHash: identityHash,
         telegramUsername: identity.username,
         firstName: identity.firstName,
         lastName: identity.lastName,
-        language,
-        role: adminTelegramIds.includes(identity.id) ? "admin" : "user",
-        referralCode: String(identity.id)
+        language: existing.language || language,
+        role:
+          adminTelegramIds.includes(identity.id) && existing.role === "user"
+            ? "admin"
+            : existing.role,
+        ...(existing.status === "deleted"
+          ? {
+              status: "active",
+              deletedAt: null,
+              consentVersion: null,
+              consentAcceptedAt: null
+            }
+          : {})
       }
     });
     await this.ensureSettingsAndAccount(user.id);
-    return { user, isNew: true };
+    return { user, isNew: false };
   }
 
   async ensureSettingsAndAccount(userId: string): Promise<void> {
@@ -341,4 +364,10 @@ function anonymizedTelegramId(userId: string): bigint {
 
 function telegramIdentityHash(telegramId: number): string {
   return createHash("sha256").update(`telegram:${telegramId}`).digest("hex");
+}
+
+function isUniqueConstraintError(error: unknown): boolean {
+  return (
+    Boolean(error) && typeof error === "object" && (error as { code?: unknown }).code === "P2002"
+  );
 }

@@ -579,6 +579,16 @@ model ApiUsageEvent {
   @@map("api_usage_events")
 }
 
+model RuntimeLease {
+  name      String   @id
+  holderId  String   @map("holder_id")
+  expiresAt DateTime @map("expires_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([expiresAt])
+  @@map("runtime_leases")
+}
+
 model AuditLog {
   id           String   @id @default(uuid()) @db.Uuid
   actorUserId  String?  @db.Uuid

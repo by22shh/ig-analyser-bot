@@ -26,4 +26,4 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/public ./public
 RUN pnpm exec playwright install --with-deps chromium
-CMD ["node", "dist/src/server.js"]
+CMD ["node", "--import", "./dist/src/config/observability.js", "dist/src/server.js"]

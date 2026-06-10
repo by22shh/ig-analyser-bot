@@ -1,4 +1,4 @@
-/* global window, getComputedStyle, document, setInterval, HTMLFormElement, FormData, setTimeout, URL, Headers, fetch, clearTimeout, crypto */
+/* global window, getComputedStyle, document, setInterval, HTMLFormElement, FormData, setTimeout, URL, Headers, fetch, clearTimeout, crypto, console */
 
 const tg = window.Telegram?.WebApp;
 
@@ -86,6 +86,8 @@ const copy = {
     saved: "Настройки сохранены",
     insufficient: "Не хватает кредитов",
     invalidUsername: "Проверьте Instagram username",
+    sessionExpiredTitle: "Сессия истекла",
+    sessionExpiredText: "Закройте и откройте Mini App заново.",
     error: "Что-то пошло не так",
     loading: "Загрузка"
   },
@@ -147,6 +149,8 @@ const copy = {
     saved: "Settings saved",
     insufficient: "Not enough credits",
     invalidUsername: "Check Instagram username",
+    sessionExpiredTitle: "Session expired",
+    sessionExpiredText: "Close and reopen the Mini App.",
     error: "Something went wrong",
     loading: "Loading"
   }
@@ -178,7 +182,7 @@ async function init() {
   await loadBootstrap();
   bindEvents();
   render();
-  setInterval(refreshJobsIfNeeded, 7000);
+  setInterval(() => void refreshJobsIfNeeded().catch(handlePollingError), 7000);
 }
 
 async function loadBootstrap() {
@@ -204,10 +208,14 @@ function bindEvents() {
     const form = event.target;
     if (!(form instanceof HTMLFormElement)) return;
     event.preventDefault();
-    if (form.id === "analysisForm") await startAnalysis(form);
-    if (form.id === "chatForm") await askQuestion(form);
-    if (form.id === "settingsForm") await saveSettings(form);
-    if (form.id === "yookassaForm") await buyYooKassa(form, event.submitter);
+    try {
+      if (form.id === "analysisForm") await startAnalysis(form);
+      else if (form.id === "chatForm") await askQuestion(form);
+      else if (form.id === "settingsForm") await saveSettings(form);
+      else if (form.id === "yookassaForm") await buyYooKassa(form, event.submitter);
+    } catch (error) {
+      handleError(error);
+    }
   });
 
   document.addEventListener("input", (event) => {
@@ -284,6 +292,7 @@ async function handleAction(target) {
 
 function render() {
   syncChrome();
+  if (state.error === "AUTH_DATE_EXPIRED") return renderSessionExpired();
   if (!state.boot) return renderLoading();
   if (!state.boot.user.consentAccepted) return renderConsent();
   if (state.boot.subscription?.required && !state.boot.subscription.ok) return renderSubscription();
@@ -292,6 +301,15 @@ function render() {
   if (state.tab === "credits") return renderCredits();
   if (state.tab === "settings") return renderSettings();
   return renderAnalyze();
+}
+
+function renderSessionExpired() {
+  view.innerHTML = `
+    <section class="gate panel">
+      <h1>${t("sessionExpiredTitle")}</h1>
+      <p>${t("sessionExpiredText")}</p>
+    </section>
+  `;
 }
 
 function syncChrome() {
@@ -668,7 +686,7 @@ async function buyStars(packageCode) {
   if (tg?.openInvoice) {
     tg.openInvoice(result.invoice.invoiceUrl, () => {
       toastMessage(t("paid"));
-      setTimeout(loadBootstrapAndRender, 1200);
+      setTimeout(() => void loadBootstrapAndRender().catch(handleError), 1200);
     });
   } else {
     openExternal(result.invoice.invoiceUrl);
@@ -710,6 +728,7 @@ async function downloadArtifact(path, type) {
 }
 
 async function refreshJobsIfNeeded() {
+  if (state.error === "AUTH_DATE_EXPIRED") return;
   if (!state.boot?.jobs?.some((job) => job.active)) return;
   const result = await api("/api/mini-app/jobs");
   state.boot.jobs = result.jobs;
@@ -740,6 +759,14 @@ async function api(path, options = {}) {
     throw error;
   }
   return json;
+}
+
+function handlePollingError(error) {
+  if (isSessionExpiredError(error)) {
+    handleSessionExpired();
+    return;
+  }
+  console.warn("mini_app_poll_failed", error);
 }
 
 function fetchAuth(path, options = {}) {
@@ -940,6 +967,10 @@ function toastMessage(message) {
 }
 
 function handleError(error) {
+  if (isSessionExpiredError(error)) {
+    handleSessionExpired();
+    return;
+  }
   const code = error?.message || "";
   if (code === "INSUFFICIENT_CREDITS") toastMessage(t("insufficient"));
   else if (code === "USERNAME_INVALID") toastMessage(t("invalidUsername"));
@@ -948,7 +979,23 @@ function handleError(error) {
 }
 
 function showFatal(error) {
+  if (isSessionExpiredError(error)) {
+    handleSessionExpired();
+    return;
+  }
   view.innerHTML = `<section class="gate panel"><h1>${t("error")}</h1><p>${esc(error?.message || "BOOT_FAILED")}</p><button class="button" type="button" data-action="refresh">↻</button></section>`;
+}
+
+function isSessionExpiredError(error) {
+  return error?.message === "AUTH_DATE_EXPIRED";
+}
+
+function handleSessionExpired() {
+  state.busy = false;
+  state.error = "AUTH_DATE_EXPIRED";
+  toastMessage(t("sessionExpiredText"));
+  render();
+  haptic("error");
 }
 
 function openExternal(url) {

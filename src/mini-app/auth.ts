@@ -42,7 +42,7 @@ export class MiniAppAuthError extends Error {
   }
 }
 
-const DEFAULT_MAX_AGE_SECONDS = 24 * 60 * 60;
+const DEFAULT_MAX_AGE_SECONDS = 60 * 60;
 
 export function validateMiniAppInitData(
   initData: string,

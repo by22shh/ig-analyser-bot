@@ -53,3 +53,25 @@ describe("RetentionService.cleanupExpiredReports", () => {
     expect($transaction).toHaveBeenCalledTimes(2);
   });
 });
+
+describe("RetentionService.cleanupExpiredPendingPayments", () => {
+  it("marks expired pending payment orders as expired", async () => {
+    const updateMany = vi.fn(async () => ({ count: 3 }));
+    const service = new RetentionService(
+      { paymentOrder: { updateMany } } as never,
+      { deleteObjects: vi.fn() } as never
+    );
+    const now = new Date("2026-06-10T00:00:00.000Z");
+
+    const count = await service.cleanupExpiredPendingPayments(now);
+
+    expect(count).toBe(3);
+    expect(updateMany).toHaveBeenCalledWith({
+      where: {
+        status: "pending_payment",
+        expiresAt: { lt: now }
+      },
+      data: { status: "expired" }
+    });
+  });
+});

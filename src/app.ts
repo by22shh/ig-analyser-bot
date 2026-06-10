@@ -1,10 +1,13 @@
 import Fastify from "fastify";
-import type { FastifyRequest } from "fastify";
+import type { FastifyInstance, FastifyRequest } from "fastify";
+import fastifyRateLimit from "@fastify/rate-limit";
 import type { Bot } from "grammy";
 import { isIP } from "node:net";
 import { env, isLocalRuntimeEnv } from "./config/env.js";
 import { childLogger } from "./config/logger.js";
+import { setupFastifyObservability } from "./config/observability.js";
 import type { Services } from "./modules/container.js";
+import { validateMiniAppInitData } from "./mini-app/auth.js";
 import { registerMiniAppRoutes } from "./mini-app/routes.js";
 import type { MyContext } from "./telegram/context.js";
 
@@ -12,78 +15,140 @@ const log = childLogger("server");
 
 export function createApp(input: { services: Services; bot: Bot<MyContext> }) {
   const app = Fastify({ logger: false, trustProxy: false });
+  registerRateLimits(app);
 
-  app.get("/health", async () => ({ ok: true, env: env.APP_ENV }));
-  registerMiniAppRoutes(app, input);
+  app.after((error) => {
+    if (error) throw error;
 
-  app.post("/telegram/webhook", async (request, reply) => {
-    if (env.TELEGRAM_WEBHOOK_SECRET) {
-      const secret = request.headers["x-telegram-bot-api-secret-token"];
-      if (secret !== env.TELEGRAM_WEBHOOK_SECRET) {
-        reply.code(401);
-        return { ok: false };
+    app.get("/health", async () => ({ ok: true, env: env.APP_ENV }));
+    registerMiniAppRoutes(app, input);
+
+    app.post("/telegram/webhook", async (request, reply) => {
+      if (env.TELEGRAM_WEBHOOK_SECRET) {
+        const secret = request.headers["x-telegram-bot-api-secret-token"];
+        if (secret !== env.TELEGRAM_WEBHOOK_SECRET) {
+          reply.code(401);
+          return { ok: false };
+        }
       }
-    }
-    const update = request.body as { update_id?: number };
-    await input.bot.handleUpdate(update as never);
-    // grammy's bot.catch swallows handler errors, so handleUpdate resolves even
-    // when processing failed. Signal a retry to Telegram (HTTP 500) when the
-    // dedup middleware recorded this update as failed, or when a redelivery was
-    // skipped because a previous process left the update in "processing".
-    // Re-delivery is safe because claimUpdate re-processes failed/stale updates
-    // and handlers are idempotent (otherwise a transient failure would silently
-    // drop e.g. a paid Telegram Stars grant).
-    if (update?.update_id != null) {
-      const tracked = await input.services.prisma.telegramUpdate.findUnique({
-        where: { updateId: BigInt(update.update_id) }
-      });
-      if (tracked?.status === "failed" || tracked?.status === "processing") {
+      const update = request.body as { update_id?: number };
+      await input.bot.handleUpdate(update as never);
+      // grammy's bot.catch swallows handler errors, so handleUpdate resolves even
+      // when processing failed. Signal a retry to Telegram (HTTP 500) when the
+      // dedup middleware recorded this update as failed, or when a redelivery was
+      // skipped because a previous process left the update in "processing".
+      // Re-delivery is safe because claimUpdate re-processes failed/stale updates
+      // and handlers are idempotent (otherwise a transient failure would silently
+      // drop e.g. a paid Telegram Stars grant).
+      if (update?.update_id != null) {
+        const tracked = await input.services.prisma.telegramUpdate.findUnique({
+          where: { updateId: BigInt(update.update_id) }
+        });
+        if (tracked?.status === "failed" || tracked?.status === "processing") {
+          reply.code(500);
+          return { ok: false };
+        }
+      }
+      return { ok: true };
+    });
+
+    app.post("/webhooks/yookassa", async (request, reply) => {
+      const webhookIp = resolveRequestIp(request);
+      if (
+        env.YOOKASSA_WEBHOOK_ALLOWED_IPS &&
+        !isLocalDevIp(webhookIp) &&
+        !isAllowedWebhookIp(webhookIp, env.YOOKASSA_WEBHOOK_ALLOWED_IPS)
+      ) {
+        reply.code(403);
+        return { accepted: false };
+      }
+      try {
+        const body = request.body as any;
+        const result = await input.services.payments.handleYooKassaWebhook({
+          event: body.event,
+          object: body.object,
+          raw: body
+        });
+        return result;
+      } catch (error) {
+        log.error({ error }, "yookassa_webhook_failed");
         reply.code(500);
-        return { ok: false };
+        return { accepted: false };
       }
-    }
-    return { ok: true };
-  });
+    });
 
-  app.post("/webhooks/yookassa", async (request, reply) => {
-    const webhookIp = resolveRequestIp(request);
-    if (
-      env.YOOKASSA_WEBHOOK_ALLOWED_IPS &&
-      !isLocalDevIp(webhookIp) &&
-      !isAllowedWebhookIp(webhookIp, env.YOOKASSA_WEBHOOK_ALLOWED_IPS)
-    ) {
-      reply.code(403);
-      return { accepted: false };
+    app.get("/payments/yookassa/return", async (_request, reply) => {
+      reply.type("text/html; charset=utf-8");
+      return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Payment</title></head><body><main style="font-family:system-ui,sans-serif;max-width:560px;margin:64px auto;padding:0 20px;line-height:1.5"><h1>Оплата</h1><p>Оплата обрабатывается. Вернитесь в Telegram: кредиты начислятся автоматически после подтверждения платежа.</p><p>Your payment is being processed. Return to Telegram: credits will be granted automatically after confirmation.</p></main></body></html>';
+    });
+
+    if (isLocalRuntimeEnv(env.APP_ENV)) {
+      app.get("/mock/yookassa/pay/:id", async (request) => ({
+        ok: true,
+        id: (request.params as { id: string }).id,
+        message:
+          "Mock payment page. Send a payment.succeeded webhook or use tests to grant credits."
+      }));
     }
+
+    setupFastifyObservability(app);
+  });
+  return app;
+}
+
+function registerRateLimits(app: FastifyInstance): void {
+  if ((env.RATE_LIMIT_MINI_APP_MAX ?? 0) <= 0) return;
+  app.register(fastifyRateLimit, {
+    global: true,
+    max: env.RATE_LIMIT_MINI_APP_MAX,
+    timeWindow: env.RATE_LIMIT_WINDOW_MS ?? 60_000,
+    keyGenerator: rateLimitKey,
+    allowList: (request) => !request.url.startsWith("/api/mini-app"),
+    errorResponseBuilder: (_request, context) => {
+      const error = new Error("Too many requests") as Error & {
+        statusCode: number;
+        code: string;
+        retryAfterSec: number;
+      };
+      error.statusCode = context.statusCode;
+      error.code = "RATE_LIMITED";
+      error.retryAfterSec = Math.max(1, Math.ceil(context.ttl / 1000));
+      return error;
+    }
+  });
+}
+
+function rateLimitKey(request: FastifyRequest): string {
+  if (request.url.startsWith("/api/mini-app")) return miniAppRateLimitKey(request);
+  return `ip:${resolveRequestIp(request)}`;
+}
+
+function miniAppRateLimitKey(request: FastifyRequest): string {
+  const initData = readTelegramInitData(request);
+  if (initData && env.TELEGRAM_BOT_TOKEN.trim()) {
     try {
-      const body = request.body as any;
-      const result = await input.services.payments.handleYooKassaWebhook({
-        event: body.event,
-        object: body.object,
-        raw: body
-      });
-      return result;
-    } catch (error) {
-      log.error({ error }, "yookassa_webhook_failed");
-      reply.code(500);
-      return { accepted: false };
+      const validated = validateMiniAppInitData(initData, env.TELEGRAM_BOT_TOKEN);
+      if (validated.user) return `miniapp:tg:${validated.user.id}`;
+    } catch {
+      // Invalid initData falls back to IP-based limiting; the route handler will
+      // still return the auth error.
     }
-  });
-
-  app.get("/payments/yookassa/return", async (_request, reply) => {
-    reply.type("text/html; charset=utf-8");
-    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Payment</title></head><body><main style="font-family:system-ui,sans-serif;max-width:560px;margin:64px auto;padding:0 20px;line-height:1.5"><h1>Оплата</h1><p>Оплата обрабатывается. Вернитесь в Telegram: кредиты начислятся автоматически после подтверждения платежа.</p><p>Your payment is being processed. Return to Telegram: credits will be granted automatically after confirmation.</p></main></body></html>';
-  });
-
-  if (isLocalRuntimeEnv(env.APP_ENV)) {
-    app.get("/mock/yookassa/pay/:id", async (request) => ({
-      ok: true,
-      id: (request.params as { id: string }).id,
-      message: "Mock payment page. Send a payment.succeeded webhook or use tests to grant credits."
-    }));
   }
 
-  return app;
+  const devUser = request.headers["x-mini-app-dev-user"];
+  const devUserId = typeof devUser === "string" ? Number(devUser) : NaN;
+  if (isLocalRuntimeEnv(env.APP_ENV) && Number.isSafeInteger(devUserId)) {
+    return `miniapp:dev:${devUserId}`;
+  }
+  return `miniapp:ip:${resolveRequestIp(request)}`;
+}
+
+function readTelegramInitData(request: FastifyRequest): string {
+  const header = request.headers.authorization;
+  const value = Array.isArray(header) ? header[0] : header;
+  if (value?.startsWith("tma ")) return value.slice(4).trim();
+  const initDataHeader = request.headers["x-telegram-init-data"];
+  return typeof initDataHeader === "string" ? initDataHeader.trim() : "";
 }
 
 export function resolveRequestIp(request: Pick<FastifyRequest, "headers" | "ip" | "raw">): string {

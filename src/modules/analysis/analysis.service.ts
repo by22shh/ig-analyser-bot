@@ -128,7 +128,7 @@ function analysisStartResult(
   return {
     jobId: job.id,
     status: job.status,
-    estimatedDurationSec: env.OPENROUTER_API_KEY ? 420 : 15,
+    estimatedDurationSec: env.ANALYSIS_ESTIMATED_DURATION_SEC ?? (env.OPENROUTER_API_KEY ? 90 : 15),
     costCreditUnits: job.costCreditUnits,
     reused
   };

@@ -101,6 +101,7 @@ const schema = z.object({
   // costs real provider money (Apify/OpenRouter), so tune with abuse risk in mind.
   WELCOME_BONUS_CREDITS: optionalNumber(1),
   REPORT_RETENTION_DAYS: optionalNumber(30),
+  ANALYSIS_ESTIMATED_DURATION_SEC: optionalNumber(),
   PHOTO_UPLOAD_MAX_MB: optionalNumber(10),
   ANALYSIS_POST_LIMIT: optionalNumber(30),
   VISION_BATCH_SIZE: optionalNumber(5),
@@ -142,7 +143,11 @@ const schema = z.object({
 
   LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
   SENTRY_DSN: optionalString,
+  SENTRY_TRACES_SAMPLE_RATE: optionalNumber(0),
   OTEL_EXPORTER_OTLP_ENDPOINT: optionalString,
+  RATE_LIMIT_WINDOW_MS: optionalNumber(60_000),
+  RATE_LIMIT_MINI_APP_MAX: optionalNumber(120),
+  RATE_LIMIT_BOT_MAX: optionalNumber(30),
 
   MODEL_VISION: z.string().default("google/gemini-2.5-flash"),
   // Default reasoning model. The 2026-06-08 OpenRouter research found

@@ -8,6 +8,25 @@ describe("PaymentService package visibility", () => {
     expect(publicPackages("yookassa").map((pkg) => pkg.code)).toEqual(["start", "pro", "agency"]);
   });
 
+  it("memoizes catalog synchronization after the first successful run", async () => {
+    let packageId = 0;
+    const prisma = {
+      creditPackage: {
+        upsert: vi.fn(async () => ({ id: `package-${++packageId}` }))
+      },
+      creditPackagePrice: {
+        upsert: vi.fn(async () => undefined)
+      }
+    };
+    const payments = new PaymentService(prisma as never, {} as never, {} as never);
+
+    await payments.ensureCatalog();
+    await payments.ensureCatalog();
+
+    expect(prisma.creditPackage.upsert).toHaveBeenCalledTimes(5);
+    expect(prisma.creditPackagePrice.upsert).toHaveBeenCalledTimes(8);
+  });
+
   it("rejects hidden Telegram Stars packages before creating an invoice", async () => {
     const prisma = {
       creditPackage: { findUniqueOrThrow: vi.fn() },

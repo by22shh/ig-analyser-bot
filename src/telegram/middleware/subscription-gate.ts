@@ -14,6 +14,10 @@ const log = childLogger("subscription-gate");
 const CACHE_TTL_MS = 5 * 60 * 1000;
 const membershipCache = new Map<string, { subscribed: boolean; checkedAt: number }>();
 
+type MembershipApi = {
+  getChatMember(chatId: string, userId: number): Promise<{ status: string; is_member?: boolean }>;
+};
+
 /** True when the channel-subscription gate is configured and turned on. */
 export function subscriptionGateEnabled(): boolean {
   return env.FEATURE_REQUIRE_CHANNEL_SUB && Boolean(env.REQUIRED_CHANNEL_ID);
@@ -24,7 +28,7 @@ export function memberStatusIsSubscribed(status: string): boolean {
   return status === "creator" || status === "administrator" || status === "member";
 }
 
-function chatMemberIsSubscribed(member: { status: string; is_member?: boolean }): boolean {
+export function chatMemberIsSubscribed(member: { status: string; is_member?: boolean }): boolean {
   // A "restricted" member is still in the chat only when is_member is true.
   if (member.status === "restricted") return member.is_member === true;
   return memberStatusIsSubscribed(member.status);
@@ -39,17 +43,17 @@ export function clearMembershipCache(): void {
   membershipCache.clear();
 }
 
-export async function userIsSubscribed(
-  ctx: MyContext,
+export async function telegramUserIsSubscribed(
+  api: MembershipApi,
+  telegramUserId: number | undefined,
   opts: { force?: boolean } = {}
 ): Promise<boolean> {
   const channelId = env.REQUIRED_CHANNEL_ID;
-  const telegramUserId = ctx.from?.id;
   // Dev/test stay permissive so local setup mistakes do not lock the app. In
   // production, a missing channel id is treated as unsafe misconfiguration.
   if (!channelId || telegramUserId === undefined) return subscriptionCheckFailsOpen();
 
-  const key = String(telegramUserId);
+  const key = `${channelId}:${telegramUserId}`;
   const now = Date.now();
   if (!opts.force) {
     const cached = membershipCache.get(key);
@@ -57,7 +61,7 @@ export async function userIsSubscribed(
   }
 
   try {
-    const member = await ctx.api.getChatMember(channelId, telegramUserId);
+    const member = await api.getChatMember(channelId, telegramUserId);
     const subscribed = chatMemberIsSubscribed(member);
     membershipCache.set(key, { subscribed, checkedAt: now });
     return subscribed;
@@ -67,6 +71,13 @@ export async function userIsSubscribed(
     log.warn({ error, channelId, telegramUserId }, "channel_membership_check_failed");
     return subscriptionCheckFailsOpen();
   }
+}
+
+export async function userIsSubscribed(
+  ctx: MyContext,
+  opts: { force?: boolean } = {}
+): Promise<boolean> {
+  return telegramUserIsSubscribed(ctx.api, ctx.from?.id, opts);
 }
 
 export async function renderSubscriptionGate(

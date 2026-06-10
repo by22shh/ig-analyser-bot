@@ -7,6 +7,9 @@ import { decodeInvoicePayload, encodeInvoicePayload } from "./invoice-payload.js
 import type { YooKassaAdapter } from "./adapters/yookassa.adapter.js";
 
 export class PaymentService {
+  private catalogSynced = false;
+  private catalogSyncPromise: Promise<void> | undefined;
+
   constructor(
     private readonly prisma: PrismaClient,
     private readonly credits: CreditsService,
@@ -14,6 +17,18 @@ export class PaymentService {
   ) {}
 
   async ensureCatalog() {
+    if (this.catalogSynced) return;
+    this.catalogSyncPromise ??= this.syncCatalog()
+      .then(() => {
+        this.catalogSynced = true;
+      })
+      .finally(() => {
+        this.catalogSyncPromise = undefined;
+      });
+    await this.catalogSyncPromise;
+  }
+
+  private async syncCatalog() {
     for (const pkg of CREDIT_PACKAGES) {
       const created = await this.prisma.creditPackage.upsert({
         where: { code: pkg.code },

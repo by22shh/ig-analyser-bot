@@ -1,3 +1,4 @@
+import { shutdownObservability } from "./config/observability.js";
 import { env } from "./config/env.js";
 import { logger } from "./config/logger.js";
 import { createServices } from "./modules/container.js";
@@ -45,6 +46,7 @@ async function shutdown(signal: string) {
   } catch (error) {
     logger.error({ error }, "server_shutdown_error");
   } finally {
+    await shutdownObservability();
     logger.info("server_shutdown_complete");
     process.exit(0);
   }

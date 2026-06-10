@@ -20,6 +20,8 @@ export type PackageView = {
   rubAmount?: number;
 };
 
+// Stars amounts intentionally mirror RUB package numbers for payout-net parity;
+// the buyer-facing retail price in app stores is higher than the RUB card price.
 export const CREDIT_PACKAGES: PackageView[] = [
   {
     code: "trial",

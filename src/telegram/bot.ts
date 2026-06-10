@@ -1,9 +1,11 @@
 import { Bot } from "grammy";
 import { env } from "../config/env.js";
+import { captureException } from "../config/observability.js";
 import type { Services } from "../modules/container.js";
 import type { MyContext } from "./context.js";
 import { registerHandlers } from "./handlers/index.js";
 import { consentGate } from "./middleware/consent-gate.js";
+import { telegramRateLimit } from "./middleware/rate-limit.js";
 import { subscriptionGate } from "./middleware/subscription-gate.js";
 import { updateDedup } from "./middleware/update-dedup.js";
 import { userContext } from "./middleware/user-context.js";
@@ -18,6 +20,7 @@ export function createBot(services: Services): Bot<MyContext> {
     ctx.services = services;
     await next();
   });
+  bot.use(telegramRateLimit);
   bot.use(updateDedup);
   bot.use(userContext);
   bot.use(consentGate);
@@ -25,6 +28,7 @@ export function createBot(services: Services): Bot<MyContext> {
   registerHandlers(bot);
 
   bot.catch((err) => {
+    captureException(err.error, { updateId: err.ctx.update.update_id });
     services.prisma.auditLog
       .create({
         data: {

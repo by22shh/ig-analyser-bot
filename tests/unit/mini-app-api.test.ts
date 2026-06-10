@@ -2,6 +2,7 @@ import { createHmac } from "node:crypto";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createApp } from "../../src/app.js";
 import { env } from "../../src/config/env.js";
+import { clearMembershipCache } from "../../src/telegram/middleware/subscription-gate.js";
 
 const telegramBotToken = "123456:test-token";
 const originalEnv = {
@@ -12,11 +13,13 @@ const originalEnv = {
   FEATURE_YOOKASSA_PAYMENTS: env.FEATURE_YOOKASSA_PAYMENTS,
   FEATURE_REQUIRE_CHANNEL_SUB: env.FEATURE_REQUIRE_CHANNEL_SUB,
   REQUIRED_CHANNEL_ID: env.REQUIRED_CHANNEL_ID,
-  TELEGRAM_BOT_TOKEN: env.TELEGRAM_BOT_TOKEN
+  TELEGRAM_BOT_TOKEN: env.TELEGRAM_BOT_TOKEN,
+  RATE_LIMIT_MINI_APP_MAX: env.RATE_LIMIT_MINI_APP_MAX
 };
 
 afterEach(() => {
   Object.assign(env, originalEnv);
+  clearMembershipCache();
   vi.clearAllMocks();
 });
 
@@ -84,6 +87,27 @@ describe("Mini App API", () => {
 
     expect(apiRes.statusCode).toBe(404);
     expect(pageRes.statusCode).toBe(404);
+    await app.close();
+  });
+
+  it("rate limits Mini App API requests by Telegram user", async () => {
+    env.RATE_LIMIT_MINI_APP_MAX = 1;
+    const app = createApp({ services: makeServices() as never, bot: makeBot() as never });
+
+    const first = await app.inject({
+      method: "GET",
+      url: "/api/mini-app/bootstrap",
+      headers: { "x-mini-app-dev-user": "900000001" }
+    });
+    const second = await app.inject({
+      method: "GET",
+      url: "/api/mini-app/bootstrap",
+      headers: { "x-mini-app-dev-user": "900000001" }
+    });
+
+    expect(first.statusCode).toBe(200);
+    expect(second.statusCode).toBe(429);
+    expect(second.json().code).toBe("RATE_LIMITED");
     await app.close();
   });
 
@@ -226,6 +250,66 @@ describe("Mini App API", () => {
     expect(res.statusCode).toBe(200);
     expect(res.json().jobs).toEqual([]);
     expect(bot.api.getChatMember).toHaveBeenCalledWith("@required", 900000001);
+    await app.close();
+  });
+
+  it("caches channel membership across Mini App polling requests", async () => {
+    env.FEATURE_REQUIRE_CHANNEL_SUB = true;
+    env.REQUIRED_CHANNEL_ID = "@required";
+    const services = makeServices();
+    const bot = makeBot({ status: "member" });
+    const app = createApp({ services: services as never, bot: bot as never });
+
+    const first = await app.inject({
+      method: "GET",
+      url: "/api/mini-app/jobs",
+      headers: { "x-mini-app-dev-user": "900000001" }
+    });
+    const second = await app.inject({
+      method: "GET",
+      url: "/api/mini-app/jobs",
+      headers: { "x-mini-app-dev-user": "900000001" }
+    });
+
+    expect(first.statusCode).toBe(200);
+    expect(second.statusCode).toBe(200);
+    expect(bot.api.getChatMember).toHaveBeenCalledTimes(1);
+    await app.close();
+  });
+
+  it("uses the Mini App payment request id as the order idempotency key", async () => {
+    env.FEATURE_YOOKASSA_PAYMENTS = true;
+    const services = makeServices();
+    services.payments.createYooKassaOrder.mockResolvedValue({
+      orderId: "order-id",
+      confirmationUrl: "https://pay.example/order",
+      amountMinor: 69000,
+      creditsUnits: 300,
+      reused: false
+    });
+    const app = createApp({ services: services as never, bot: makeBot() as never });
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/mini-app/payments/yookassa",
+      headers: {
+        "content-type": "application/json",
+        "x-mini-app-dev-user": "900000001"
+      },
+      payload: JSON.stringify({
+        packageCode: "pro",
+        email: "buyer@example.com",
+        requestId: "request-1"
+      })
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(services.payments.createYooKassaOrder).toHaveBeenCalledWith(
+      expect.objectContaining({
+        packageCode: "pro",
+        idempotencyKey: "miniapp:yk:user-id:pro:request-1"
+      })
+    );
     await app.close();
   });
 

@@ -80,4 +80,15 @@ export class RetentionService {
     });
     return result.count;
   }
+
+  async cleanupExpiredPendingPayments(now = new Date()) {
+    const result = await this.prisma.paymentOrder.updateMany({
+      where: {
+        status: "pending_payment",
+        expiresAt: { lt: now }
+      },
+      data: { status: "expired" }
+    });
+    return result.count;
+  }
 }

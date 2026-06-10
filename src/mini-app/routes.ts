@@ -19,6 +19,7 @@ import { normalizeInstagramUsername } from "../modules/instagram/normalize.js";
 import type { Services } from "../modules/container.js";
 import type { MyContext } from "../telegram/context.js";
 import { ANALYSIS_MODES, type AnalysisMode } from "../telegram/constants.js";
+import { telegramUserIsSubscribed } from "../telegram/middleware/subscription-gate.js";
 import { MiniAppAuthError, validateMiniAppInitData } from "./auth.js";
 
 type MiniAppSession = {
@@ -273,6 +274,7 @@ export function registerMiniAppRoutes(app: FastifyInstance, input: MiniAppInput)
     if (!miniAppTelegramStarsAvailable()) return apiError(reply, 403, "PAYMENT_METHOD_UNAVAILABLE");
     const body = bodyObject(request);
     const packageCode = typeof body.packageCode === "string" ? body.packageCode : "";
+    const requestId = paymentRequestId(body);
     await input.services.payments.ensureCatalog();
     const invoice = await input.services.payments.createTelegramStarsInvoiceLink({
       api: input.bot.api,
@@ -280,7 +282,7 @@ export function registerMiniAppRoutes(app: FastifyInstance, input: MiniAppInput)
       telegramUserId: session.telegramUserId,
       chatId: session.chatId,
       packageCode,
-      idempotencyKey: `miniapp:stars:${session.user.id}:${packageCode}:${Date.now()}`
+      idempotencyKey: `miniapp:stars:${session.user.id}:${packageCode}:${requestId}`
     });
     return { ok: true, invoice };
   });
@@ -294,6 +296,7 @@ export function registerMiniAppRoutes(app: FastifyInstance, input: MiniAppInput)
     if (!miniAppYooKassaAvailable()) return apiError(reply, 403, "PAYMENT_METHOD_UNAVAILABLE");
     const body = bodyObject(request);
     const packageCode = typeof body.packageCode === "string" ? body.packageCode : "";
+    const requestId = paymentRequestId(body);
     const email =
       typeof body.email === "string" && isValidEmail(body.email)
         ? body.email.trim().toLowerCase()
@@ -309,7 +312,7 @@ export function registerMiniAppRoutes(app: FastifyInstance, input: MiniAppInput)
       chatId: session.chatId,
       packageCode,
       userEmail: email,
-      idempotencyKey: `miniapp:yk:${user.id}:${packageCode}:${Date.now()}`
+      idempotencyKey: `miniapp:yk:${user.id}:${packageCode}:${requestId}`
     });
     return { ok: true, order, user: userDto(user) };
   });
@@ -615,10 +618,9 @@ async function subscriptionDto(session: MiniAppSession, services: Services, bot:
     return { required: true, ok: true, channelUrl: env.CHANNEL_URL, bypass: "admin" };
   }
   try {
-    const member = await bot.api.getChatMember(env.REQUIRED_CHANNEL_ID, session.telegramUserId);
     return {
       required: true,
-      ok: chatMemberIsSubscribed(member),
+      ok: await telegramUserIsSubscribed(bot.api, session.telegramUserId),
       channelUrl: env.CHANNEL_URL
     };
   } catch {
@@ -636,11 +638,6 @@ function miniAppUserIsAdmin(services: Services, user: User): boolean {
     isAdmin?: (candidate: User) => boolean;
   };
   return typeof users.isAdmin === "function" && users.isAdmin(user);
-}
-
-function chatMemberIsSubscribed(member: { status: string; is_member?: boolean }): boolean {
-  if (member.status === "restricted") return member.is_member === true;
-  return ["creator", "administrator", "member"].includes(member.status);
 }
 
 function userDto(user: User) {
@@ -736,6 +733,12 @@ function bodyObject(request: FastifyRequest): Record<string, unknown> {
   return request.body && typeof request.body === "object"
     ? (request.body as Record<string, unknown>)
     : {};
+}
+
+function paymentRequestId(body: Record<string, unknown>): string {
+  return typeof body.requestId === "string" && body.requestId.trim().length <= 80
+    ? body.requestId.trim()
+    : randomUUID();
 }
 
 function apiError(

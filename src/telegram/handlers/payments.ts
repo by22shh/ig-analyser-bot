@@ -59,7 +59,7 @@ export function registerPaymentHandlers(bot: import("grammy").Bot<MyContext>) {
       telegramUserId: ctx.from!.id,
       chatId: ctx.chat!.id,
       packageCode: ctx.match[1],
-      idempotencyKey: `stars:${ctx.user.id}:${ctx.match[1]}:${Date.now()}`,
+      idempotencyKey: paymentIdempotencyKey("stars", ctx, ctx.match[1]),
       title: pkg ? t(ctx.user.language).starsInvoiceTitle(pkg) : undefined,
       description: pkg ? t(ctx.user.language).starsInvoiceDescription(pkg) : undefined
     });
@@ -182,7 +182,7 @@ async function createAndSendYooKassaOrder(ctx: MyContext, packageCode: string, u
     chatId: ctx.chat.id,
     packageCode,
     userEmail,
-    idempotencyKey: `yk:${ctx.user.id}:${packageCode}:${Date.now()}`
+    idempotencyKey: paymentIdempotencyKey("yk", ctx, packageCode)
   });
   await editOrSendHtml(
     ctx,
@@ -198,4 +198,12 @@ async function createAndSendYooKassaOrder(ctx: MyContext, packageCode: string, u
 
 function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(value) && value.length <= 254;
+}
+
+function paymentIdempotencyKey(
+  provider: "stars" | "yk",
+  ctx: MyContext,
+  packageCode: string
+): string {
+  return `${provider}:${ctx.user!.id}:${packageCode}:update:${ctx.update.update_id}`;
 }

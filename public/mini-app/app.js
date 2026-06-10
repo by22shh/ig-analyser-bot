@@ -189,6 +189,11 @@ async function loadBootstrap() {
 
 function bindEvents() {
   document.addEventListener("click", async (event) => {
+    const yookassaPackage = event.target.closest("#yookassaForm [data-package]");
+    if (yookassaPackage?.form) {
+      yookassaPackage.form.dataset.submitterPackage = yookassaPackage.dataset.package || "";
+    }
+
     const target = event.target.closest("[data-action]");
     if (!target) return;
     event.preventDefault();
@@ -202,7 +207,7 @@ function bindEvents() {
     if (form.id === "analysisForm") await startAnalysis(form);
     if (form.id === "chatForm") await askQuestion(form);
     if (form.id === "settingsForm") await saveSettings(form);
-    if (form.id === "yookassaForm") await buyYooKassa(form);
+    if (form.id === "yookassaForm") await buyYooKassa(form, event.submitter);
   });
 
   document.addEventListener("input", (event) => {
@@ -658,7 +663,7 @@ async function saveSettings(form) {
 async function buyStars(packageCode) {
   const result = await api("/api/mini-app/payments/stars", {
     method: "POST",
-    body: JSON.stringify({ packageCode })
+    body: JSON.stringify({ packageCode, requestId: requestId() })
   });
   if (tg?.openInvoice) {
     tg.openInvoice(result.invoice.invoiceUrl, () => {
@@ -670,13 +675,16 @@ async function buyStars(packageCode) {
   }
 }
 
-async function buyYooKassa(form) {
-  const button = document.activeElement?.closest("[data-package]");
-  const packageCode = button?.dataset.package || state.boot.packages.yookassa[0]?.code;
+async function buyYooKassa(form, submitter) {
+  const button = submitter?.closest?.("[data-package]");
+  const packageCode =
+    button?.dataset.package ||
+    form.dataset.submitterPackage ||
+    state.boot.packages.yookassa[0]?.code;
   const email = String(new FormData(form).get("email") || "");
   const result = await api("/api/mini-app/payments/yookassa", {
     method: "POST",
-    body: JSON.stringify({ packageCode, email })
+    body: JSON.stringify({ packageCode, email, requestId: requestId() })
   });
   state.boot.user = result.user || state.boot.user;
   openExternal(result.order.confirmationUrl);

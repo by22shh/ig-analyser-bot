@@ -320,6 +320,48 @@ describe("buildStrategicReport", () => {
     expect(report.rawText).toBe(repairedRaw);
     expect(report.promptVersion).toBe("report.repair");
   });
+
+  it("exposes the content-quality rubric in the report summary", async () => {
+    const post: InstagramPost = {
+      id: "p1",
+      type: "Image",
+      caption: "coffee workshop and city walk",
+      hashtags: [],
+      mentions: [],
+      likesCount: 40,
+      commentsCount: 4,
+      latestComments: [],
+      timestamp: "2026-06-01T00:00:00Z",
+      url: "https://www.instagram.com/p/p1/",
+      isPinned: false,
+      childPosts: [],
+      taggedUsers: []
+    };
+    const profile: InstagramProfile = {
+      username: "alice",
+      followersCount: 1000,
+      followsCount: 300,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts: [post]
+    };
+    const llm: LlmProvider = {
+      analyzeVision: vi.fn(async () => []),
+      generateReport: vi.fn(async () => ({
+        rawText: fullReportRaw(),
+        model: "reasoning",
+        promptVersion: "report"
+      })),
+      chat: vi.fn()
+    };
+
+    const report = await buildStrategicReport({ mode: "standard", language: "ru", profile, llm });
+
+    expect(report.summary.contentQuality?.score).toBeTypeOf("number");
+    expect(report.summary.contentQuality?.dimensions.practicalDetail).toBeTypeOf("number");
+    expect(Array.isArray(report.summary.contentQuality?.findings)).toBe(true);
+  });
 });
 
 function fullReportRaw(input: { sourceLine?: string } = {}): string {

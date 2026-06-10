@@ -2377,7 +2377,7 @@ MVP payment types:
 - no two-stage capture in MVP, but DB supports `waiting_for_capture` for future YooKassa flows;
 - Stars subscriptions are not in MVP.
 
-Canonical credit packages v0.2:
+Canonical credit packages v0.3:
 
 | Package | Credits | Target user             |
 | ------- | ------: | ----------------------- |
@@ -2387,16 +2387,16 @@ Canonical credit packages v0.2:
 | Agency  |      30 | Small teams             |
 | Scale   |     100 | Agencies / negotiated   |
 
-YooKassa RUB prices v0.2:
+YooKassa RUB prices v0.3:
 
-| Package | Price RUB | Gross RUB / credit | Public status                           |
-| ------- | --------: | -----------------: | --------------------------------------- |
-| Start   |       690 |                230 | Public if `audit-economics` passes      |
-| Pro     |     1,990 |                199 | Hidden/reprice until p75 cost is proven |
-| Agency  |     5,490 |                183 | Hidden/reprice until p75 cost is proven |
-| Scale   |    15,900 |                159 | Hidden/negotiated                       |
+| Package | Price RUB | Gross RUB / credit | Public status                      |
+| ------- | --------: | -----------------: | ---------------------------------- |
+| Start   |       690 |                230 | Public if `audit-economics` passes |
+| Pro     |     2,300 |                230 | Public if `audit-economics` passes |
+| Agency  |     6,900 |                230 | Public if `audit-economics` passes |
+| Scale   |    15,900 |                159 | Hidden/negotiated                  |
 
-Telegram Stars prices v0.2:
+Telegram Stars prices v0.3:
 
 | Package | Price XTR | XTR / credit | Public status                                                  |
 | ------- | --------: | -----------: | -------------------------------------------------------------- |
@@ -2405,13 +2405,13 @@ Telegram Stars prices v0.2:
 | Agency  |     6,900 |          230 | Public only if `audit-economics` passes                        |
 | Scale   |    23,000 |          230 | Hidden/negotiated; check Bot API amount limits before enabling |
 
-The initial Stars catalog deliberately avoids bulk discounts until real Stars payout/reward settlement and tax treatment are confirmed.
+The initial public Stars and YooKassa catalogs deliberately avoid bulk discounts until real provider p75 costs, payout/reward settlement, and tax treatment are confirmed.
 
 Rules:
 
 - Packages are configuration/data, not hard-coded.
 - The cheapest public package must not push gross margin below target or below the strict provider-cost multiple.
-- Public availability of Pro/Agency/Scale must be feature-gated until measured provider costs pass `audit-economics`.
+- Public availability of Pro/Agency must keep passing `audit-economics`; Scale stays hidden until repriced or measured provider costs fall enough.
 - Public Stars prices must not create a weaker net RUB/credit floor than the RUB catalog.
 - Enterprise/custom packages may use invoice/manual contract instead of bot checkout.
 - Promotional grants must be marked as `grant`, not `purchase`, for clean financial reporting.
@@ -2437,10 +2437,10 @@ net_after_yookassa = gross_payment - yookassa_fee
 Example for Pro package:
 
 ```text
-gross_payment = 1,990 RUB
+gross_payment = 2,300 RUB
 r_yk_effective = 4.56%
-yookassa_fee = 90.74 RUB
-net_after_yookassa = 1,899.26 RUB
+yookassa_fee = 104.88 RUB
+net_after_yookassa = 2,195.12 RUB
 ```
 
 Telegram Stars economic assumptions:
@@ -2624,18 +2624,18 @@ Illustrative package contribution with `C_standard = 55 RUB`:
 | Package            |  Gross | Net after YooKassa | Assumed provider cost | Contribution | Contribution margin |
 | ------------------ | -----: | -----------------: | --------------------: | -----------: | ------------------: |
 | Start, 3 credits   |    690 |             658.54 |                   165 |       493.54 |               71.5% |
-| Pro, 10 credits    |  1,990 |           1,899.26 |                   550 |     1,349.26 |               67.8% |
-| Agency, 30 credits |  5,490 |           5,239.66 |                 1,650 |     3,589.66 |               65.4% |
+| Pro, 10 credits    |  2,300 |           2,195.12 |                   550 |     1,645.12 |               71.5% |
+| Agency, 30 credits |  6,900 |           6,585.36 |                 1,650 |     4,935.36 |               71.5% |
 | Scale, 100 credits | 15,900 |          15,174.96 |                 5,500 |     9,674.96 |               60.8% |
 
 Strict guardrail check with `C_standard = 55 RUB`, `ECON_PAYMENT_FEE_RESERVE = 20%`, `ECON_TARGET_REVENUE_MULTIPLE = 3`:
 
-| Package | Gross RUB / credit | Guardrail net RUB / credit | Absolute break-even cost | Max provider cost for 3x | Status at 55 RUB              |
-| ------- | -----------------: | -------------------------: | -----------------------: | -----------------------: | ----------------------------- |
-| Start   |             230.00 |                     184.00 |                   184.00 |                    61.33 | Pass                          |
-| Pro     |             199.00 |                     159.20 |                   159.20 |                    53.07 | Fail / reprice or reduce cost |
-| Agency  |             183.00 |                     146.40 |                   146.40 |                    48.80 | Fail / reprice or reduce cost |
-| Scale   |             159.00 |                     127.20 |                   127.20 |                    42.40 | Fail / keep hidden            |
+| Package | Gross RUB / credit | Guardrail net RUB / credit | Absolute break-even cost | Max provider cost for 3x | Status at 55 RUB   |
+| ------- | -----------------: | -------------------------: | -----------------------: | -----------------------: | ------------------ |
+| Start   |             230.00 |                     184.00 |                   184.00 |                    61.33 | Pass               |
+| Pro     |             230.00 |                     184.00 |                   184.00 |                    61.33 | Pass               |
+| Agency  |             230.00 |                     184.00 |                   184.00 |                    61.33 | Pass               |
+| Scale   |             159.00 |                     127.20 |                   127.20 |                    42.40 | Fail / keep hidden |
 
 Stars guardrail check with `230 XTR/credit`, `ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR = 0.01`, `ECON_USD_TO_RUB_BUFFER = 90`, `ECON_STARS_PAYOUT_RESERVE = 20%`:
 
@@ -2647,10 +2647,10 @@ Stars guardrail check with `230 XTR/credit`, `ECON_STARS_USD_PER_STAR_PAYOUT_FLO
 
 Verdict for current package catalog:
 
-- With `C_standard = 55 RUB`, the current packages are not loss-making in the narrow variable-cost sense because 55 RUB is below the conservative net per credit even for Scale.
-- They are not safe for public scaling under the stricter `3x` guardrail: Pro/Agency/Scale are too discounted unless real `C_standard p75` is reduced below their ceilings.
-- Public launch recommendation: show Stars Start first, optionally Stars Pro/Agency at `230 XTR/credit` after payout confirmation; keep discounted YooKassa Pro/Agency behind admin/feature flag until real p75 cost is measured or prices are raised; keep Scale hidden/negotiated until `C_standard p75 <= 42 RUB` or package price is repriced.
-- If keeping `C_standard = 55 RUB`, minimum package prices under the `3x` guardrail are approximately: Start `619 RUB`, Pro `2,063 RUB`, Agency `6,188 RUB`, Scale `20,625 RUB`. Round upward, not downward.
+- With `C_standard = 55 RUB`, the public Start/Pro/Agency packages pass the strict `3x` guardrail at 230 RUB/credit; Stars also pass at 230 XTR/credit, but tightly.
+- Scale remains too discounted for public checkout unless real `C_standard p75` falls below its ceiling or the package is repriced.
+- Public launch recommendation: show Start/Pro/Agency for Stars and YooKassa while `audit-economics` passes; keep Scale hidden/negotiated until `C_standard p75 <= 42 RUB` or package price is repriced.
+- If keeping `C_standard = 55 RUB`, minimum package prices under the `3x` guardrail are approximately: Start `619 RUB`, Pro `2,063 RUB`, Agency `6,188 RUB`, Scale `20,625 RUB`. Public Pro/Agency are rounded upward to `2,300 RUB` and `6,900 RUB`.
 
 These numbers are planning assumptions. Actual provider costs must be recalculated from real API usage before public pricing is finalized and then checked continuously in CI.
 
@@ -2701,8 +2701,8 @@ Illustrative scenario:
 ```text
 F_total = 60,000 RUB/month
 avg_package = Pro
-avg_package_contribution = 1,349 RUB
-break_even_packages = 60,000 / 1,349 = 45 Pro packages/month
+avg_package_contribution = 1,645 RUB
+break_even_packages = 60,000 / 1,645 = 37 Pro packages/month
 ```
 
 Operational targets for beta:

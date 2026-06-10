@@ -5,6 +5,10 @@ import { request as httpsRequest } from "node:https";
 import { isIP } from "node:net";
 import type { LookupFunction } from "node:net";
 import { env } from "../../config/env.js";
+import {
+  PRACTICAL_CONTEXT_INSTRUCTION_EN,
+  PRACTICAL_SECTIONS_GUIDANCE_EN
+} from "../../prompts/practical-requirements.js";
 import { sectionGuidesForMode } from "../../prompts/section-guides.js";
 import { mapWithConcurrency } from "../../util/concurrency.js";
 import { compactAnalysisContext } from "../analysis/context.js";
@@ -269,9 +273,15 @@ export class OpenRouterLlmProvider implements LlmProvider {
 
   async repairReport(input: ReportRepairInput) {
     const prompt = reportPromptForMode(input.mode);
+    // Practical-section requirements name standard-mode sections; other modes get
+    // a mode-neutral deepening instruction instead of dating-style guidance.
+    const contentQualityGuidance =
+      input.mode === "standard"
+        ? `For content-quality findings, expand practical sections: ${PRACTICAL_SECTIONS_GUIDANCE_EN}`
+        : "For content-quality findings, deepen the flagged sections with concrete, evidence-tied, mode-appropriate practical detail without inventing facts.";
     const system = `${prompt.system}
 
-You are repairing a report that was already generated. Preserve supported content, add missing required sections, and attach evidence URLs/post IDs from the supplied source catalog. Do not invent facts. If repair.groundingFindings are present, fix each one: remove or clearly down-confidence forbidden_inference claims (e.g. relationship/identity/health), rephrase unsupported_claim items as hedged hypotheses or drop them, and delete any fabricated_source citation not in the source catalog. If repair.qualityFindings are present, strengthen thin/generic/under-sourced sections with supplied analysisContext evidence and explicit confidence limits. For content-quality findings, expand practical sections: Potential value must explain why the signal matters and what realistic use it has; Triggers/Hooks must include at least 3 concrete evidence-tied hooks; Communication recommendations must include 2-3 respectful next steps and what to avoid; Ready phrases must include at least 3 neutral ready-to-send phrases; Overall value must give a concrete verdict, limits, and next action. Return the complete repaired report.`;
+You are repairing a report that was already generated. Preserve supported content, add missing required sections, and attach evidence URLs/post IDs from the supplied source catalog. Do not invent facts. If repair.groundingFindings are present, fix each one: remove or clearly down-confidence forbidden_inference claims (e.g. relationship/identity/health), rephrase unsupported_claim items as hedged hypotheses or drop them, and delete any fabricated_source citation not in the source catalog. If repair.qualityFindings are present, strengthen thin/generic/under-sourced sections with supplied analysisContext evidence and explicit confidence limits. ${contentQualityGuidance} Return the complete repaired report.`;
     if (env.LLM_STRUCTURED_OUTPUTS) {
       try {
         const content = await this.chatCompletion({
@@ -484,7 +494,7 @@ function buildMinimalReportContext(
       "Treat analysisContext.evidenceMap as prioritized deterministic signals, not as extra private data.",
       "Use analysisHealth to calibrate confidence: low sample coverage, missing vision, or missing comment text must lower certainty.",
       "Explicitly say when post-level evidence was compressed out of the context.",
-      "For practical sections, provide concrete user value: why the signal matters, 3+ hooks when hooks are requested, 2-3 respectful next steps when recommendations are requested, and 3+ neutral ready-to-send phrases when phrases are requested.",
+      PRACTICAL_CONTEXT_INSTRUCTION_EN,
       "Use goal only when it is a user-facing analytical objective; never mention operational test, deploy, pipeline, CI, smoke, or e2e wording in the report.",
       "Do not expose internal schema names (analysisContext, evidenceMap, contentClusters, profileSignals, audienceSignals, riskSignals, opportunitySignals, sourceCatalog, postIds) in user-facing prose; translate them into natural language.",
       "Do not infer protected traits, private life facts, identity, medical, political, religious, or sensitive attributes."
@@ -566,7 +576,7 @@ function buildReportContext(
       "Do not expose internal schema names (analysisContext, evidenceMap, contentClusters, profileSignals, audienceSignals, riskSignals, opportunitySignals, sourceCatalog, postIds) in user-facing prose; translate them into natural language.",
       "Use analysisHealth to calibrate confidence: if sampleCoveragePercent is below 10, frame findings as selected-post/recent-public-content signals, not whole-profile conclusions.",
       "In each substantive section, connect observable evidence to its practical meaning; avoid merely restating metrics or captions.",
-      "For practical sections, provide concrete user value: why the signal matters, 3+ hooks when hooks are requested, 2-3 respectful next steps when recommendations are requested, and 3+ neutral ready-to-send phrases when phrases are requested.",
+      PRACTICAL_CONTEXT_INSTRUCTION_EN,
       "Prefer specific observable facts over generic personality claims.",
       "Use low/medium/high confidence and say when public data is insufficient.",
       "Use goal only when it is a user-facing analytical objective; never mention operational test, deploy, pipeline, CI, smoke, or e2e wording in the report.",
@@ -836,7 +846,7 @@ async function resolvePublicHostname(hostname: string): Promise<PublicAddress[]>
     return [{ address: normalized, family: literalFamily }];
   }
 
-  const addresses = await dnsLookup(normalized, { all: true, verbatim: true });
+  const addresses = await lookupWithTransientRetry(normalized);
   if (!addresses.length) throw new Error("IMAGE_DNS_EMPTY");
   const publicAddresses = addresses.map(({ address, family }) => {
     const parsedFamily = publicAddressFamily(address, family);
@@ -845,6 +855,23 @@ async function resolvePublicHostname(hostname: string): Promise<PublicAddress[]>
   });
   if (!publicAddresses.length) throw new Error("IMAGE_DNS_EMPTY");
   return publicAddresses;
+}
+
+// Instagram CDN hostnames are sharded and occasionally fail a single resolution
+// (seen in prod evals as getaddrinfo ENOTFOUND); one short retry recovers most
+// of these without masking permanent failures.
+const IMAGE_DNS_TRANSIENT_CODES = new Set(["ENOTFOUND", "EAI_AGAIN", "ETIMEDOUT"]);
+const IMAGE_DNS_RETRY_DELAY_MS = 200;
+
+async function lookupWithTransientRetry(hostname: string) {
+  try {
+    return await dnsLookup(hostname, { all: true, verbatim: true });
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException | undefined)?.code;
+    if (!code || !IMAGE_DNS_TRANSIENT_CODES.has(code)) throw error;
+    await new Promise((resolve) => setTimeout(resolve, IMAGE_DNS_RETRY_DELAY_MS));
+    return dnsLookup(hostname, { all: true, verbatim: true });
+  }
 }
 
 function publicAddressFamily(address: string, family: number): 4 | 6 | undefined {

@@ -66,13 +66,13 @@ export class PaymentService {
             provider: "yookassa",
             currency: "RUB",
             amountMinor: pkg.rubAmount * 100,
-            isPublic: pkg.isPublic && pkg.code === "start",
+            isPublic: pkg.isPublic,
             isActive: true,
             yookassaDescription: `${pkg.title} credits`
           },
           update: {
             amountMinor: pkg.rubAmount * 100,
-            isPublic: pkg.isPublic && pkg.code === "start",
+            isPublic: pkg.isPublic,
             isActive: true
           }
         });
@@ -612,8 +612,7 @@ export class PaymentService {
     idempotencyKey: string;
   }) {
     const pkg = getPackage(input.packageCode);
-    if (!pkg?.rubAmount) throw new Error("PACKAGE_NOT_FOUND");
-    if (pkg.code !== "start") throw new Error("PACKAGE_NOT_PUBLIC_FOR_YOOKASSA");
+    if (!pkg?.rubAmount || !pkg.isPublic) throw new Error("PACKAGE_NOT_FOUND");
     const dbPkg = await this.prisma.creditPackage.findUniqueOrThrow({ where: { code: pkg.code } });
     const price = await this.prisma.creditPackagePrice.findFirstOrThrow({
       where: {

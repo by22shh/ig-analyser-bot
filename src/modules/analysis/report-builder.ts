@@ -200,6 +200,7 @@ export async function buildStrategicReport(input: {
       ],
       analysisHealth,
       quality: qualitySummary,
+      contentQuality: contentQualitySummary,
       evidence: analysisContextDigest(analysisContext)
     },
     metrics,

@@ -1,3 +1,4 @@
+import { PRACTICAL_REPAIR_HINT_EN } from "../../prompts/practical-requirements.js";
 import type { ReportMetrics, ReportSectionView } from "../reports/types.js";
 
 export type ContentQualityFinding = {
@@ -184,7 +185,7 @@ function contentQualityRepairHint(id: string): string | undefined {
     return "Expand key user-facing sections with concrete evidence, implication, confidence, and caveat.";
   }
   if (id === "content:weak_practical_detail" || id === "content:low_practical_value") {
-    return "Add practical details: at least 3 evidence-tied hooks, 2-3 respectful next steps, and ready-to-send neutral phrases.";
+    return PRACTICAL_REPAIR_HINT_EN;
   }
   if (id === "content:missing_low_coverage_framing") {
     return "State the report is a selected/recent public-post read and avoid whole-profile conclusions.";

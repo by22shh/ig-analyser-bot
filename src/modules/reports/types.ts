@@ -1,5 +1,6 @@
 import type { AnalysisMode } from "../../telegram/constants.js";
 import type { AnalysisContext, AnalysisContextDigest } from "../analysis/context.js";
+import type { ContentQualityRubric } from "../analysis/content-quality.js";
 import type { ReportQualitySummary } from "../analysis/report-quality.js";
 import type { InstagramPost, InstagramProfile } from "../instagram/types.js";
 
@@ -76,6 +77,7 @@ export type ReportSummaryView = {
   warnings: string[];
   analysisHealth?: ReportAnalysisHealth;
   quality?: ReportQualitySummary;
+  contentQuality?: ContentQualityRubric;
   evidence?: AnalysisContextDigest;
 };
 

@@ -1,7 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
+import { publicPackages } from "../../src/modules/billing/packages.js";
 import { PaymentService } from "../../src/modules/payments/payment.service.js";
 
 describe("PaymentService package visibility", () => {
+  it("exposes every public RUB package through YooKassa", () => {
+    expect(publicPackages("yookassa").map((pkg) => pkg.code)).toEqual(["start", "pro", "agency"]);
+  });
+
   it("rejects hidden Telegram Stars packages before creating an invoice", async () => {
     const prisma = {
       creditPackage: { findUniqueOrThrow: vi.fn() },
@@ -35,5 +40,28 @@ describe("PaymentService package visibility", () => {
     expect(prisma.creditPackagePrice.findFirstOrThrow).not.toHaveBeenCalled();
     expect(api.sendInvoice).not.toHaveBeenCalled();
     expect(api.createInvoiceLink).not.toHaveBeenCalled();
+  });
+
+  it("rejects hidden YooKassa packages before creating an order", async () => {
+    const prisma = {
+      creditPackage: { findUniqueOrThrow: vi.fn() },
+      creditPackagePrice: { findFirstOrThrow: vi.fn() },
+      paymentOrder: { findFirst: vi.fn(), create: vi.fn() }
+    };
+    const yookassa = { createPayment: vi.fn() };
+    const payments = new PaymentService(prisma as never, {} as never, yookassa as never);
+
+    await expect(
+      payments.createYooKassaOrder({
+        userId: "user-1",
+        chatId: 100,
+        packageCode: "scale",
+        idempotencyKey: "yk-hidden-1"
+      })
+    ).rejects.toThrow("PACKAGE_NOT_FOUND");
+
+    expect(prisma.creditPackage.findUniqueOrThrow).not.toHaveBeenCalled();
+    expect(prisma.creditPackagePrice.findFirstOrThrow).not.toHaveBeenCalled();
+    expect(yookassa.createPayment).not.toHaveBeenCalled();
   });
 });

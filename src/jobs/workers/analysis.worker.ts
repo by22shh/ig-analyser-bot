@@ -205,6 +205,16 @@ export async function processAnalysisJob(
     });
     if (!cachedVision)
       await persistVision(input.prisma, row.id, strategicReport.vision, postSnapshotIds);
+    log.info(
+      {
+        jobId: row.id,
+        promptVersion: strategicReport.promptVersion,
+        qualityScore: strategicReport.summary.quality?.score,
+        contentQualityScore: strategicReport.summary.contentQuality?.score,
+        contentQualityFindings: strategicReport.summary.contentQuality?.findings.length
+      },
+      "analysis_report_quality"
+    );
     // Best-effort: a logging hiccup must not throw out of the success path and
     // trigger a retry that re-runs the already-paid Apify + OpenRouter work.
     await recordUsageSafe(

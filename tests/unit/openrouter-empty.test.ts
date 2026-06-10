@@ -377,6 +377,35 @@ describe("OpenRouterLlmProvider", () => {
     expect(result.rawText).toContain("Text fallback report");
   });
 
+  it("scopes practical-section repair guidance to standard mode", async () => {
+    env.LLM_STRUCTURED_OUTPUTS = false;
+    const fetchMock = vi.fn().mockImplementation(
+      async () =>
+        new Response(
+          JSON.stringify({
+            choices: [
+              { message: { content: "[[SECTION]]\nCultural fit\nRepaired public-data content." } }
+            ]
+          })
+        )
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const provider = new OpenRouterLlmProvider("token");
+    await provider.repairReport(repairInput("hr"));
+    await provider.repairReport(repairInput("standard"));
+
+    const systemFor = (index: number) =>
+      String(
+        JSON.parse(
+          (fetchMock.mock.calls[index]?.[1] as { body?: string } | undefined)?.body ?? "{}"
+        ).messages[0].content
+      );
+    expect(systemFor(0)).not.toContain("Ready phrases");
+    expect(systemFor(0)).toContain("repairing a report");
+    expect(systemFor(1)).toContain("Ready phrases");
+  });
+
   it("marks vision as skipped when the image download exceeds the configured cap", async () => {
     env.ANALYSIS_MAX_IMAGE_DOWNLOAD_MB = 1;
     imageRequestMocks.state.responses.push({
@@ -428,6 +457,40 @@ describe("OpenRouterLlmProvider", () => {
       description: null,
       errorCode: "IMAGE_TOO_LARGE"
     });
+  });
+
+  it("retries a transient DNS failure once before skipping the image", async () => {
+    dnsMocks.lookup
+      .mockRejectedValueOnce(
+        Object.assign(new Error("getaddrinfo ENOTFOUND cdn.example"), { code: "ENOTFOUND" })
+      )
+      .mockResolvedValueOnce([{ address: "93.184.216.34", family: 4 }]);
+    imageRequestMocks.state.responses.push({
+      statusCode: 200,
+      headers: { "content-type": "image/jpeg" },
+      chunks: [Buffer.from("image-bytes")]
+    });
+    const fetchMock = vi.fn().mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          choices: [
+            {
+              message: {
+                content:
+                  "Visible public facts: the image shows a person in a bright outdoor public setting with clear clothing, background objects, and a calm lifestyle composition. The scene is public and does not support private-life claims."
+              }
+            }
+          ]
+        })
+      )
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const provider = new OpenRouterLlmProvider("token");
+    const result = await provider.analyzeVision(visionInput("https://cdn.example/post.jpg"));
+
+    expect(dnsMocks.lookup).toHaveBeenCalledTimes(2);
+    expect(result[0]).toMatchObject({ postId: "p1", status: "completed" });
   });
 
   it("does not fetch private IP literal image URLs", async () => {
@@ -516,6 +579,17 @@ function visionInput(displayUrl: string) {
         taggedUsers: []
       }
     ]
+  };
+}
+
+function repairInput(mode: "standard" | "hr") {
+  return {
+    ...reportInput(),
+    mode,
+    rawText: "[[SECTION]]\nCultural fit\nThin content.",
+    missingSections: [],
+    weakSourceSections: [],
+    qualityFindings: ["MEDIUM [content:key_sections_too_short]: Key sections are too short."]
   };
 }
 

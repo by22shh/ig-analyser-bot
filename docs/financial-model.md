@@ -1,8 +1,8 @@
 # Финансовая модель Telegram-бота для Instagram-анализа
 
-Версия: 0.3.
+Версия: 0.4.
 
-Дата: 2026-06-03.
+Дата: 2026-06-10.
 
 Цель документа: зафиксировать стартовую модель монетизации, pricing, unit economics, YooKassa fees, Telegram Stars, credit ledger, метрики прибыльности и no-loss guardrails для Telegram-бота.
 
@@ -30,20 +30,20 @@ MVP продает предоплаченные пакеты кредитов ч
 
 ### 1.1. Executive verdict: будем ли терять?
 
-Короткий ответ: при текущей иллюстративной себестоимости `C_standard = 55 RUB` мы не теряем деньги в узком variable-cost смысле, но Pro/Agency/Scale не проходят строгий защитный стандарт, который уже используется в соседнем проекте `ai-assistant-bot`.
+Короткий ответ: при текущей иллюстративной себестоимости `C_standard = 55 RUB` публичные Start/Pro/Agency проходят строгий защитный стандарт; Scale остается скрытым/договорным.
 
 Разница:
 
 - Абсолютный no-loss: себестоимость одного анализа ниже net revenue за списанные credits.
 - Здоровая платная экономика: net revenue покрывает себестоимость минимум в `3x`, чтобы выдержать рост цен провайдеров, возвраты, ошибки, поддержку, курс, налоговые и платежные отклонения.
 
-С текущими пакетами и консервативным платежным резервом `20%`:
+С текущими публичными YooKassa-пакетами и консервативным платежным резервом `20%`:
 
 | Package | RUB / credit | Net guardrail RUB / credit | Max provider cost without variable loss | Max provider cost for 3x safety | Status at `C_standard = 55 RUB` |
 | ------- | -----------: | -------------------------: | --------------------------------------: | ------------------------------: | ------------------------------- |
 | Start   |       230.00 |                     184.00 |                                  184.00 |                           61.33 | Safe                            |
-| Pro     |       199.00 |                     159.20 |                                  159.20 |                           53.07 | Too cheap for 3x                |
-| Agency  |       183.00 |                     146.40 |                                  146.40 |                           48.80 | Too cheap for 3x                |
+| Pro     |       230.00 |                     184.00 |                                  184.00 |                           61.33 | Safe                            |
+| Agency  |       230.00 |                     184.00 |                                  184.00 |                           61.33 | Safe                            |
 | Scale   |       159.00 |                     127.20 |                                  127.20 |                           42.40 | Too cheap for 3x                |
 
 С новым Stars-каталогом `230 XTR/credit` и conservative floor `0.01 USD/XTR`, `90 RUB/USD`, `20%` reserve:
@@ -56,13 +56,11 @@ MVP продает предоплаченные пакеты кредитов ч
 
 Решение для launch:
 
-- Stars Start можно оставлять публичным при `C_standard p75 <= 55 RUB`, если payout floor подтвержден.
-- YooKassa Start можно оставлять публичным при `C_standard p75 <= 61 RUB`.
-- Pro можно включать только если `C_standard p75 <= 53 RUB` или поднять цену минимум до `2,063 RUB` за 10 credits.
-- Agency можно включать только если `C_standard p75 <= 48 RUB` или поднять цену минимум до `6,188 RUB` за 30 credits.
+- Stars Start/Pro/Agency можно оставлять публичными при `C_standard p75 <= 55 RUB`, если payout floor подтвержден.
+- YooKassa Start/Pro/Agency можно оставлять публичными при `C_standard p75 <= 61 RUB`.
 - Scale нельзя включать публично при `C_standard = 55 RUB`; нужно либо `C_standard p75 <= 42 RUB`, либо цена минимум `20,625 RUB` за 100 credits, либо ручная продажа/договор.
 
-Практический вывод: на старте лучше продавать Stars Start и/или YooKassa Start, а discounted YooKassa Pro/Agency/Scale держать скрытыми/feature-gated до измерения реальной p75 себестоимости минимум на 50-100 отчетах. Stars Pro/Agency можно включать только без bulk-discount: `230 XTR/credit` или выше.
+Практический вывод: на старте можно продавать Start/Pro/Agency в Stars и YooKassa без bulk-discount (`230 XTR/RUB per credit` или выше), пока `audit-economics` проходит. Scale держать скрытым/feature-gated до измерения реальной p75 себестоимости минимум на 50-100 отчетах или репрайса.
 
 ### 1.2. Принципы, взятые из `ai-assistant-bot`
 
@@ -100,7 +98,7 @@ MVP продает предоплаченные пакеты кредитов ч
 
 ## 3. Launch packages
 
-Рекомендуемые пакеты v0.2:
+Рекомендуемые пакеты v0.3:
 
 | Package | Credits | Notes                                          |
 | ------- | ------: | ---------------------------------------------- |
@@ -112,12 +110,12 @@ MVP продает предоплаченные пакеты кредитов ч
 
 YooKassa RUB prices:
 
-| Package | Price RUB | RUB / credit | Notes                                   |
-| ------- | --------: | -----------: | --------------------------------------- |
-| Start   |       690 |          230 | Public if `audit-economics` passes      |
-| Pro     |     1,990 |          199 | Hidden/reprice until p75 cost is proven |
-| Agency  |     5,490 |          183 | Hidden/reprice until p75 cost is proven |
-| Scale   |    15,900 |          159 | Negotiated/hidden                       |
+| Package | Price RUB | RUB / credit | Notes                              |
+| ------- | --------: | -----------: | ---------------------------------- |
+| Start   |       690 |          230 | Public if `audit-economics` passes |
+| Pro     |     2,300 |          230 | Public if `audit-economics` passes |
+| Agency  |     6,900 |          230 | Public if `audit-economics` passes |
+| Scale   |    15,900 |          159 | Negotiated/hidden                  |
 
 Telegram Stars prices:
 
@@ -346,8 +344,8 @@ r_yk_effective = 4.56%
 | Package | Gross RUB | Net after YooKassa | Provider cost | Contribution | Contribution margin |
 | ------- | --------: | -----------------: | ------------: | -----------: | ------------------: |
 | Start   |       690 |             658.54 |           165 |       493.54 |               71.5% |
-| Pro     |     1,990 |           1,899.26 |           550 |     1,349.26 |               67.8% |
-| Agency  |     5,490 |           5,239.66 |         1,650 |     3,589.66 |               65.4% |
+| Pro     |     2,300 |           2,195.12 |           550 |     1,645.12 |               71.5% |
+| Agency  |     6,900 |           6,585.36 |         1,650 |     4,935.36 |               71.5% |
 | Scale   |    15,900 |          15,174.96 |         5,500 |     9,674.96 |               60.8% |
 
 Stars contribution model:
@@ -365,7 +363,7 @@ ECON_STARS_PAYOUT_RESERVE = 20%
 | Pro     | 2,300 |           1,656.00 |           550 |                1,106.00 |                 3.01x |
 | Agency  | 6,900 |           4,968.00 |         1,650 |                3,318.00 |                 3.01x |
 
-Stars are intentionally priced without bulk discount in v0.2. At `C_standard = 55 RUB`, `230 XTR/credit` is just above the strict `3x` threshold. If real `C_standard p75` is higher than 55 RUB, Stars prices must increase or affected packages must be disabled.
+Public Stars and YooKassa packages are intentionally priced without bulk discount in v0.3. At `C_standard = 55 RUB`, `230 XTR/credit` is just above the strict `3x` threshold. If real `C_standard p75` is higher than 55 RUB, prices must increase or affected packages must be disabled.
 
 Same packages under strict guardrail:
 
@@ -379,18 +377,18 @@ required_gross_rub_per_credit = 55 * 3 / (1 - 0.20) = 206.25 RUB
 | Package | Gross RUB / credit | Net guardrail RUB / credit | Net/provider multiple | 3x result |
 | ------- | -----------------: | -------------------------: | --------------------: | --------- |
 | Start   |             230.00 |                     184.00 |                 3.35x | Pass      |
-| Pro     |             199.00 |                     159.20 |                 2.89x | Fail      |
-| Agency  |             183.00 |                     146.40 |                 2.66x | Fail      |
+| Pro     |             230.00 |                     184.00 |                 3.35x | Pass      |
+| Agency  |             230.00 |                     184.00 |                 3.35x | Pass      |
 | Scale   |             159.00 |                     127.20 |                 2.31x | Fail      |
 
 To keep `C_standard = 55 RUB` and pass the `3x` rule, minimum package prices are:
 
-| Package            | Current price | Minimum strict price | Recommended action                                  |
-| ------------------ | ------------: | -------------------: | --------------------------------------------------- |
-| Start, 3 credits   |           690 |                  619 | Keep                                                |
-| Pro, 10 credits    |         1,990 |                2,063 | Raise to 2,090+ or enable only after cost reduction |
-| Agency, 30 credits |         5,490 |                6,188 | Raise to 6,190+ or keep hidden                      |
-| Scale, 100 credits |        15,900 |               20,625 | Keep hidden / negotiated / reprice to 20,900+       |
+| Package            | Current price | Minimum strict price | Recommended action                            |
+| ------------------ | ------------: | -------------------: | --------------------------------------------- |
+| Start, 3 credits   |           690 |                  619 | Keep                                          |
+| Pro, 10 credits    |         2,300 |                2,063 | Keep                                          |
+| Agency, 30 credits |         6,900 |                6,188 | Keep                                          |
+| Scale, 100 credits |        15,900 |               20,625 | Keep hidden / negotiated / reprice to 20,900+ |
 
 If `C_standard = 80 RUB`:
 
@@ -431,11 +429,11 @@ Example:
 ```text
 F_total = 60,000 RUB/month
 avg_package = Pro
-avg_package_contribution = 1,349 RUB
-break_even_packages = 60,000 / 1,349 = 45 Pro packages/month
+avg_package_contribution = 1,645 RUB
+break_even_packages = 60,000 / 1,645 = 37 Pro packages/month
 ```
 
-This break-even example is valid only if Pro is allowed by `audit-economics`. If Pro is hidden at launch, use Start contribution or the actually enabled package mix.
+This break-even example is valid while Pro remains allowed by `audit-economics`. If Pro is hidden later, use Start contribution or the actually enabled package mix.
 
 ## 9. Refund economics
 

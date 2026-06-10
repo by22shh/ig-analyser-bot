@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { publicPackages } from "../../src/modules/billing/packages.js";
+import { MockYooKassaAdapter } from "../../src/modules/payments/adapters/yookassa.adapter.js";
 import { PaymentService } from "../../src/modules/payments/payment.service.js";
 
 describe("PaymentService package visibility", () => {
@@ -63,5 +64,25 @@ describe("PaymentService package visibility", () => {
     expect(prisma.creditPackage.findUniqueOrThrow).not.toHaveBeenCalled();
     expect(prisma.creditPackagePrice.findFirstOrThrow).not.toHaveBeenCalled();
     expect(yookassa.createPayment).not.toHaveBeenCalled();
+  });
+
+  it("keeps mock YooKassa payment amounts for non-start packages", async () => {
+    const yookassa = new MockYooKassaAdapter();
+
+    const payment = await yookassa.createPayment({
+      idempotencyKey: "pro-order",
+      amountMinor: 230000,
+      description: "Pro credits",
+      returnUrl: "http://localhost:3000/payments/yookassa/return",
+      metadata: { order_id: "order-1", user_id: "user-1", package_code: "pro" }
+    });
+    const reconciled = await yookassa.getPayment(payment.id);
+
+    expect(reconciled).toMatchObject({
+      id: payment.id,
+      status: "succeeded",
+      paid: true,
+      amountMinor: 230000
+    });
   });
 });

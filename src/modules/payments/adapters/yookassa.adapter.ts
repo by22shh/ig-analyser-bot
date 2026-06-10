@@ -33,9 +33,11 @@ export interface YooKassaAdapter {
 }
 
 export class MockYooKassaAdapter implements YooKassaAdapter {
+  private readonly payments = new Map<string, YooKassaPaymentView>();
+
   async createPayment(input: CreateYooKassaPaymentInput): Promise<YooKassaPaymentView> {
     const id = `mock_yk_${input.idempotencyKey}`;
-    return {
+    const payment: YooKassaPaymentView = {
       id,
       status: "pending",
       paid: false,
@@ -46,9 +48,21 @@ export class MockYooKassaAdapter implements YooKassaAdapter {
       test: true,
       raw: { mock: true }
     };
+    this.payments.set(id, payment);
+    return payment;
   }
 
   async getPayment(paymentId: string): Promise<YooKassaPaymentView> {
+    const stored = this.payments.get(paymentId);
+    if (stored) {
+      return {
+        ...stored,
+        status: "succeeded",
+        paid: true,
+        refundable: true,
+        raw: { mock: true }
+      };
+    }
     return {
       id: paymentId,
       status: "succeeded",

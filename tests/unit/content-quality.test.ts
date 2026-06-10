@@ -104,10 +104,7 @@ describe("content quality rubric", () => {
 
     expect(quality.score).toBeLessThan(90);
     expect(quality.findings.map((finding) => finding.id)).toEqual(
-      expect.arrayContaining([
-        "content:key_sections_too_short",
-        "content:weak_practical_detail"
-      ])
+      expect.arrayContaining(["content:key_sections_too_short", "content:weak_practical_detail"])
     );
   });
 });

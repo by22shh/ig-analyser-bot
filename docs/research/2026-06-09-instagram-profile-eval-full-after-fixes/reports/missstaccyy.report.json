@@ -1,0 +1,2515 @@
+{
+  "mode": "standard",
+  "username": "missstaccyy",
+  "language": "ru",
+  "model": "x-ai/grok-4.3",
+  "promptVersion": "report.standard.v5.repair",
+  "sections": [
+    {
+      "title": "Основные темы и приоритеты",
+      "content": "Центральный фокус — визуальная эстетика и путешествия. 18 постов попадают в кластер visual_identity (стиль, дизайн, эстетика), 6 — в lifestyle_and_travel (горы, города, отели).\n\nEvidence:\n\n- [3722341000816986827] Горный пейзаж: Кадр на фоне гор с закрытыми глазами, акцент на одежде и природном фоне (high) https://www.instagram.com/p/DOoaWsekYrL/\n\n- [3441622057949313313] Швейцария: Видео с видом на горы и озеро, подпись «Slow Swiss life» (high) https://www.instagram.com/p/C_DGQb3N7kh/\n\n- [3902468283497615574] Дисней: Кадры из тематического парка с фейерверками и замком (high) https://www.instagram.com/p/DYoWjpJGpDW/\n\nConfidence: high\n\nCaveats:\n\n- Анализ по 22 из 23 постов\n\n- Сторис недоступны",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DOoaWsekYrL/",
+          "postId": "3722341000816986827",
+          "label": "[3722341000816986827] Горный пейзаж: Кадр на фоне гор с закрытыми глазами, акцент на одежде и природном фоне (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "postId": "3441622057949313313",
+          "label": "[3441622057949313313] Швейцария: Видео с видом на горы и озеро, подпись «Slow Swiss life» (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+          "postId": "3902468283497615574",
+          "label": "[3902468283497615574] Дисней: Кадры из тематического парка с фейерверками и замком (high)"
+        }
+      ]
+    },
+    {
+      "title": "Повторяющиеся визуальные и текстовые паттерны",
+      "content": "Устойчивая подача: портреты на чистом фоне или природе, минималистичные подписи из эмодзи или коротких слов, преобладание sidecar.\n\nEvidence:\n\n- [3766373022051794113] Студийный портрет: Два кадра на белом фоне в тёмном свитшоте с логотипом (high) https://www.instagram.com/p/DRE2E73AvzB/\n\n- [3549966998887312725] Чёрное платье: Кадры с сумкой Coach на лестнице (high) https://www.instagram.com/p/DFEBC1NCa1V/\n\nConfidence: high\n\nCaveats:\n\n- Паттерны по 18 постам кластера visual_identity",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "postId": "3766373022051794113",
+          "label": "[3766373022051794113] Студийный портрет: Два кадра на белом фоне в тёмном свитшоте с логотипом (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+          "postId": "3549966998887312725",
+          "label": "[3549966998887312725] Чёрное платье: Кадры с сумкой Coach на лестнице (high)"
+        }
+      ]
+    },
+    {
+      "title": "Поведение и вовлеченность",
+      "content": "ER ~22,7 % — высокий для аккаунта такого размера. Лайки чаще 110–180, комментарии 3–14. Публикации редкие (в среднем раз в 85 дней).\n\nEvidence:\n\n- [2610197762335423711] Рекордные метрики: 231 лайк и 20 комментариев — максимум по выборке (high) https://www.instagram.com/p/CQ5SQkRhbzf/\n\n- [3016385021446816176] Высокие комментарии: 194 лайка и 12 комментариев (high) https://www.instagram.com/p/CncWjINJYGw/\n\nConfidence: high\n\nCaveats:\n\n- Метрики по 22 постам\n\n- Старые посты могут иметь искажённые данные",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+          "postId": "2610197762335423711",
+          "label": "[2610197762335423711] Рекордные метрики: 231 лайк и 20 комментариев — максимум по выборке (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/CncWjINJYGw/",
+          "postId": "3016385021446816176",
+          "label": "[3016385021446816176] Высокие комментарии: 194 лайка и 12 комментариев (high)"
+        }
+      ]
+    },
+    {
+      "title": "Аудитория и комментарии",
+      "content": "Комментарии в основном комплиментарные («красотка», «красавица»). Повторяющиеся комментаторы: lizarulka_ (9), zhelez.nat (5), lumicowik (4). Плотность комментариев средняя.\n\nEvidence:\n\n- [3766373022051794113] Комментарии ко дню рождения: Несколько поздравлений и ответы от автора (medium) https://www.instagram.com/p/DRE2E73AvzB/\n\n- [2610197762335423711] Комплименты: «Вы красотка», «Какая красавица» (high) https://www.instagram.com/p/CQ5SQkRhbzf/\n\nConfidence: medium\n\nCaveats:\n\n- Комментарии проанализированы у 16 постов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "postId": "3766373022051794113",
+          "label": "[3766373022051794113] Комментарии ко дню рождения: Несколько поздравлений и ответы от автора (medium)"
+        },
+        {
+          "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+          "postId": "2610197762335423711",
+          "label": "[2610197762335423711] Комплименты: «Вы красотка», «Какая красавица» (high)"
+        }
+      ]
+    },
+    {
+      "title": "Стиль общения",
+      "content": "Подписи очень короткие (1–3 слова или эмодзи). Ответы на комментарии тёплые и краткие («спасибо, Настюша»).\n\nEvidence:\n\n- [3766373022051794113] Ответ автору: «@biyayws Настюша, чмок 🤍🤍» (high) https://www.instagram.com/p/DRE2E73AvzB/\n\n- [3902468283497615574] Ответ: «@lizarulka_ спасибо, Лизочка ❤️» (high) https://www.instagram.com/p/DYoWjpJGpDW/\n\nConfidence: high\n\nCaveats:\n\n- Стиль в личных сообщениях неизвестен",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "postId": "3766373022051794113",
+          "label": "[3766373022051794113] Ответ автору: «@biyayws Настюша, чмок 🤍🤍» (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+          "postId": "3902468283497615574",
+          "label": "[3902468283497615574] Ответ: «@lizarulka_ спасибо, Лизочка ❤️» (high)"
+        }
+      ]
+    },
+    {
+      "title": "Профессия и статус",
+      "content": "Явных публичных признаков профессии почти нет. Один пост упоминает диплом экономического факультета.\n\nEvidence:\n\n- [3396247716147706866] Диплом: «Диплом на пять 🩷 Спасибо всем, кто был рядом!» (high) https://www.instagram.com/p/C8h5U3CNzvy/\n\nConfidence: low\n\nCaveats:\n\n- Данных недостаточно для выводов о текущей деятельности",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+          "postId": "3396247716147706866",
+          "label": "[3396247716147706866] Диплом: «Диплом на пять 🩷 Спасибо всем, кто был рядом!» (high)"
+        }
+      ]
+    },
+    {
+      "title": "Отличие от типичных аккаунтов",
+      "content": "Почти нет текстовых историй, брендовых тегов и коммерческого контента. Фокус исключительно на визуальной подаче.\n\nEvidence:\n\n- [3441622057949313313] Видео: Единственный пост-видео с пейзажем без людей (high) https://www.instagram.com/p/C_DGQb3N7kh/\n\nConfidence: medium\n\nCaveats:\n\n- Сравнение условное — база типичных аккаунтов ниши ограничена",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "postId": "3441622057949313313",
+          "label": "[3441622057949313313] Видео: Единственный пост-видео с пейзажем без людей (high)"
+        }
+      ]
+    },
+    {
+      "title": "Отсутствия как сигнал",
+      "content": "Отсутствуют теги брендов, ссылки, CTA, упоминания работы. Аккаунт выглядит некоммерческим.\n\nEvidence:\n\n- [3163655203529922331] Минимальный пост: Пост без подписи и хэштегов (medium) https://www.instagram.com/p/Cvnj6VWN5cb/\n\nConfidence: medium\n\nCaveats:\n\n- Отсутствие не всегда несёт осознанный сигнал",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/Cvnj6VWN5cb/",
+          "postId": "3163655203529922331",
+          "label": "[3163655203529922331] Минимальный пост: Пост без подписи и хэштегов (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Потенциальная польза от контакта",
+      "content": "Может быть интересен по темам путешествий (горы, Европа) и визуальной эстетики. Гипотезы ограничены.\n\nEvidence:\n\n- [3396247716147706866] Диплом: Пост о завершении обучения (medium) https://www.instagram.com/p/C8h5U3CNzvy/\n\nConfidence: low\n\nCaveats:\n\n- Готовность к диалогу не подтверждена",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+          "postId": "3396247716147706866",
+          "label": "[3396247716147706866] Диплом: Пост о завершении обучения (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Триггеры и зацепки",
+      "content": "Безопасные зацепки: Швейцария, Алтай, Стамбул, Диснейленд, пост с дипломом.\n\nEvidence:\n\n- [3441622057949313313] Швейцария: «Slow Swiss life 🦭» (high) https://www.instagram.com/p/C_DGQb3N7kh/\n\n- [3135195977509996676] Алтай: «Алтай>» (high) https://www.instagram.com/p/CuCdCFst4iE/\n\nConfidence: medium\n\nCaveats:\n\n- Зацепки должны оставаться нейтральными",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "postId": "3441622057949313313",
+          "label": "[3441622057949313313] Швейцария: «Slow Swiss life 🦭» (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/CuCdCFst4iE/",
+          "postId": "3135195977509996676",
+          "label": "[3135195977509996676] Алтай: «Алтай>» (high)"
+        }
+      ]
+    },
+    {
+      "title": "Коммуникационные рекомендации",
+      "content": "Начинать с уважительного комментария к конкретному кадру или локации (например, к видам Швейцарии или Алтая). Избегать оценок внешности и давления.\n\nEvidence:\n\n- [3441622057949313313] Зацепка: Пост про Швейцарию (high) https://www.instagram.com/p/C_DGQb3N7kh/\n\nConfidence: medium\n\nCaveats:\n\n- Рекомендации основаны на публичных постах",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "postId": "3441622057949313313",
+          "label": "[3441622057949313313] Зацепка: Пост про Швейцарию (high)"
+        }
+      ]
+    },
+    {
+      "title": "Готовые фразы для входа в диалог",
+      "content": "Нейтральные фразы, опирающиеся на конкретные посты.\n\nEvidence:\n\n- [3441622057949313313] Зацепка: Пост про Швейцарию (high) https://www.instagram.com/p/C_DGQb3N7kh/\n\n- [3396247716147706866] Зацепка: Пост про диплом (high) https://www.instagram.com/p/C8h5U3CNzvy/\n\nConfidence: medium\n\nCaveats:\n\n- Фразы нужно адаптировать под контекст",
+      "kind": "phrases",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "postId": "3441622057949313313",
+          "label": "[3441622057949313313] Зацепка: Пост про Швейцарию (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+          "postId": "3396247716147706866",
+          "label": "[3396247716147706866] Зацепка: Пост про диплом (high)"
+        }
+      ]
+    },
+    {
+      "title": "Неочевидные наблюдения",
+      "content": "Почти не использует face-тэги и не отмечает других людей, за исключением редких случаев.\n\nEvidence:\n\n- [3766373022051794113] Тэг: Единственный тэг другого пользователя — ph.dlsnk (medium) https://www.instagram.com/p/DRE2E73AvzB/\n\nConfidence: low\n\nCaveats:\n\n- Наблюдение ограничено выборкой",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "postId": "3766373022051794113",
+          "label": "[3766373022051794113] Тэг: Единственный тэг другого пользователя — ph.dlsnk (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Общая оценка ценности профиля",
+      "content": "Профиль представляет ценность как источник визуального вдохновения и минималистичного эстетического контента. Для глубокого диалога данных недостаточно.\n\nEvidence:\n\n- [3441622057949313313] Пример визуального контента: Пост со швейцарским пейзажем (medium) https://www.instagram.com/p/C_DGQb3N7kh/\n\nConfidence: medium\n\nCaveats:\n\n- Оценка относится к публичному контенту",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "postId": "3441622057949313313",
+          "label": "[3441622057949313313] Пример визуального контента: Пост со швейцарским пейзажем (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Поведенческие сигналы",
+      "content": "Публикации нерегулярные, но визуально последовательные. Часто использует sidecar. Ответы на комментарии появляются в течение 1–2 дней.\n\nEvidence:\n\n- [3766373022051794113] Ответ: Ответ через сутки после комментария (high) https://www.instagram.com/p/DRE2E73AvzB/\n\nConfidence: high\n\nCaveats:\n\n- Частота рассчитана по доступным датам",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "postId": "3766373022051794113",
+          "label": "[3766373022051794113] Ответ: Ответ через сутки после комментария (high)"
+        }
+      ]
+    },
+    {
+      "title": "Ошибки, слепые зоны, барьеры",
+      "content": "Нет доступа к сторис и ответам в директ. 5 % постов не проанализировано. Возможны спам-комментарии в старых публикациях. Низкая вероятность ответа на холодное сообщение.\n\nEvidence:\n\n- [2610197762335423711] Пример старого поста: Пост 2021 года с возможными спам-комментариями (medium) https://www.instagram.com/p/CQ5SQkRhbzf/\n\nConfidence: medium\n\nCaveats:\n\n- Анализ только публичных данных",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+          "postId": "2610197762335423711",
+          "label": "[2610197762335423711] Пример старого поста: Пост 2021 года с возможными спам-комментариями (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Образ как у бренда",
+      "content": "Личный mood-аккаунт с чёткой визуальной формулой: эстетичные портреты + путешествия. Не носит экспертного или рекламного характера.\n\nEvidence:\n\n- [3163654593954813174] Istanbul: Кадры с яхтой и рестораном, без коммерческих намёков (medium) https://www.instagram.com/p/CvnjxdotZT2/\n\nConfidence: high\n\nCaveats:\n\n- Образ оценивается по публичным постам",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/CvnjxdotZT2/",
+          "postId": "3163654593954813174",
+          "label": "[3163654593954813174] Istanbul: Кадры с яхтой и рестораном, без коммерческих намёков (medium)"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "executiveSummary": "Что это значит: это near-full public-post read по публичным данным Instagram. Покрытие: 22/23 постов (95.7%), vision 22/22, покрытие комментариев 16/22 (72.7%), текстовых комментариев: 65. Главный сигнал: Высокий ER (~22.7 %) при 587 подписчиках, с пиками лайков 231 и комментариев 20 на постах с визуальным акцентом (https://www.instagram.com/p/CQ5SQkRhbzf/).",
+    "bullets": [
+      "Высокий ER (~22.7 %) при 587 подписчиках, с пиками лайков 231 и комментариев 20 на постах с визуальным акцентом (https://www.instagram.com/p/CQ5SQkRhbzf/).",
+      "Доминируют кластеры visual_identity (18 постов) и lifestyle/travel (6 постов): студийные портреты, горы, европейские локации.",
+      "Короткие подписи (эмодзи или 1–3 слова) и частое использование sidecar (13 из 22), ответы на комментарии в течение 1–2 дней.",
+      "Повторяющиеся комментаторы lizarulka_ (9), zhelez.nat (5) оставляют в основном комплиментарные отзывы.",
+      "Один явный сигнал о статусе — пост о дипломе экономического факультета (https://www.instagram.com/p/C8h5U3CNzvy/)."
+    ],
+    "warnings": [],
+    "analysisHealth": {
+      "formatLabel": "near-full public-post read",
+      "analyzedPosts": 22,
+      "postsCount": 23,
+      "sampleCoveragePercent": 95.7,
+      "sampleCoverageLevel": "near_full",
+      "visionCompleted": 22,
+      "visionTotal": 22,
+      "visionCompletionPercent": 100,
+      "postsWithCommentText": 16,
+      "commentCoveragePercent": 72.7,
+      "commentTextCount": 65
+    },
+    "quality": {
+      "score": 100,
+      "findings": []
+    },
+    "evidence": {
+      "selectedPostIds": [
+        "3766373022051794113",
+        "2610197762335423711",
+        "3878628768138585623",
+        "3722341000816986827",
+        "3902468283497615574",
+        "3549966998887312725",
+        "3016385021446816176",
+        "3040828789916096582",
+        "3396791555811926473",
+        "3135195977509996676",
+        "3441622057949313313",
+        "3338707494451467606",
+        "2640952649257582599",
+        "3449749113605988036",
+        "2870320094480201673",
+        "3435303631081408608",
+        "3011289528904055279",
+        "3431490927686108990",
+        "3396247716147706866",
+        "3430370911453808782",
+        "3163654593954813174",
+        "3163655203529922331"
+      ],
+      "postSelection": [
+        {
+          "postId": "3766373022051794113",
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "timestamp": "2025-11-15T11:37:53.000Z",
+          "score": 65,
+          "reasons": [
+            "recent",
+            "high_comments",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "2610197762335423711",
+          "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+          "timestamp": "2021-07-04T06:24:02.000Z",
+          "score": 65,
+          "reasons": [
+            "high_likes",
+            "high_comments",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3878628768138585623",
+          "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+          "timestamp": "2026-04-19T08:50:01.000Z",
+          "score": 59,
+          "reasons": [
+            "recent",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3722341000816986827",
+          "url": "https://www.instagram.com/p/DOoaWsekYrL/",
+          "timestamp": "2025-09-15T17:34:07.000Z",
+          "score": 59,
+          "reasons": [
+            "recent",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3902468283497615574",
+          "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+          "timestamp": "2026-05-22T06:14:53.000Z",
+          "score": 58,
+          "reasons": [
+            "recent",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3549966998887312725",
+          "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+          "timestamp": "2025-01-20T21:37:45.000Z",
+          "score": 53,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3016385021446816176",
+          "url": "https://www.instagram.com/p/CncWjINJYGw/",
+          "timestamp": "2023-01-15T16:45:37.000Z",
+          "score": 51,
+          "reasons": [
+            "high_likes",
+            "high_comments",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3040828789916096582",
+          "url": "https://www.instagram.com/p/CozMaxluthG/",
+          "timestamp": "2023-02-18T10:11:01.000Z",
+          "score": 44,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3396791555811926473",
+          "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+          "timestamp": "2024-06-23T13:25:29.000Z",
+          "score": 39,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3135195977509996676",
+          "url": "https://www.instagram.com/p/CuCdCFst4iE/",
+          "timestamp": "2023-06-28T15:01:46.000Z",
+          "score": 38,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3441622057949313313",
+          "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+          "timestamp": "2024-08-24T09:56:09.000Z",
+          "score": 34,
+          "reasons": [
+            "recent",
+            "format_diversity",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3338707494451467606",
+          "url": "https://www.instagram.com/p/C5VeMbnttVW/",
+          "timestamp": "2024-04-04T10:02:50.000Z",
+          "score": 33,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "2640952649257582599",
+          "url": "https://www.instagram.com/p/CSmjHEvoAAH/",
+          "timestamp": "2021-08-15T16:48:30.000Z",
+          "score": 32,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3449749113605988036",
+          "url": "https://www.instagram.com/p/C_f-IqQtB7E/",
+          "timestamp": "2024-09-04T15:02:42.000Z",
+          "score": 31,
+          "reasons": [
+            "recent",
+            "high_likes",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "2870320094480201673",
+          "url": "https://www.instagram.com/p/CfVbOsXKHfJ/",
+          "timestamp": "2022-06-28T04:00:40.000Z",
+          "score": 28,
+          "reasons": [
+            "high_likes",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3435303631081408608",
+          "url": "https://www.instagram.com/p/C-spnOSN4hg/",
+          "timestamp": "2024-08-15T16:42:06.000Z",
+          "score": 27,
+          "reasons": [
+            "recent",
+            "visual_signal"
+          ]
+        }
+      ],
+      "profileSignals": {
+        "publicContacts": [],
+        "publicLinks": [],
+        "platformHandles": [],
+        "professionHints": [],
+        "locationHints": [],
+        "bioKeywords": [
+          "𝐴𝑁𝐴𝑆𝑇𝐴𝑆𝐼𝐼𝐴"
+        ]
+      },
+      "contentClusters": [
+        {
+          "label": "visual_identity",
+          "count": 18,
+          "postIds": [
+            "3766373022051794113",
+            "2610197762335423711",
+            "3878628768138585623",
+            "3722341000816986827",
+            "3902468283497615574",
+            "3549966998887312725",
+            "3040828789916096582",
+            "3135195977509996676"
+          ],
+          "keywords": [
+            "style",
+            "design",
+            "aesthetic",
+            "стиль",
+            "дизайн"
+          ]
+        },
+        {
+          "label": "lifestyle_and_travel",
+          "count": 6,
+          "postIds": [
+            "2610197762335423711",
+            "3878628768138585623",
+            "3016385021446816176",
+            "3040828789916096582",
+            "3396791555811926473",
+            "3163654593954813174"
+          ],
+          "keywords": [
+            "travel",
+            "city",
+            "hotel",
+            "trip",
+            "путешествие",
+            "город"
+          ]
+        },
+        {
+          "label": "work_and_expertise",
+          "count": 2,
+          "postIds": [
+            "3396247716147706866",
+            "3163655203529922331"
+          ],
+          "keywords": [
+            "founder",
+            "startup",
+            "business",
+            "work",
+            "career",
+            "expert",
+            "эксперт",
+            "бизнес"
+          ]
+        },
+        {
+          "label": "commercial_or_ads",
+          "count": 1,
+          "postIds": [
+            "3163655203529922331"
+          ],
+          "keywords": [
+            "ad",
+            "promo",
+            "brand",
+            "sale",
+            "реклама",
+            "скидка",
+            "партнер"
+          ]
+        },
+        {
+          "label": "community_and_events",
+          "count": 1,
+          "postIds": [
+            "3902468283497615574"
+          ],
+          "keywords": [
+            "event",
+            "team",
+            "meetup",
+            "community",
+            "команда",
+            "мероприятие"
+          ]
+        }
+      ],
+      "audienceSignals": {
+        "frequentCommenters": [
+          {
+            "username": "lizarulka_",
+            "count": 9
+          },
+          {
+            "username": "zhelez.nat",
+            "count": 5
+          },
+          {
+            "username": "lumicowik",
+            "count": 4
+          },
+          {
+            "username": "biyayws",
+            "count": 3
+          },
+          {
+            "username": "dlsnk__",
+            "count": 2
+          },
+          {
+            "username": "kldvrnn",
+            "count": 1
+          },
+          {
+            "username": "ka_atet",
+            "count": 1
+          },
+          {
+            "username": "beautytoday_rezerv",
+            "count": 1
+          },
+          {
+            "username": "23wines4u",
+            "count": 1
+          },
+          {
+            "username": "nikit_k23",
+            "count": 1
+          }
+        ],
+        "repeatedCommentTerms": [
+          {
+            "term": "oчeнь",
+            "count": 4
+          },
+          {
+            "term": "какая",
+            "count": 3
+          },
+          {
+            "term": "моя",
+            "count": 2
+          },
+          {
+            "term": "днем",
+            "count": 2
+          },
+          {
+            "term": "рождения",
+            "count": 2
+          },
+          {
+            "term": "красотка",
+            "count": 2
+          },
+          {
+            "term": "красавица",
+            "count": 2
+          },
+          {
+            "term": "ждy",
+            "count": 2
+          },
+          {
+            "term": "ответ",
+            "count": 2
+          },
+          {
+            "term": "жду",
+            "count": 2
+          },
+          {
+            "term": "запрoсы",
+            "count": 2
+          },
+          {
+            "term": "мне",
+            "count": 2
+          }
+        ],
+        "commentDensity": "medium",
+        "highCommentPostIds": [
+          "2610197762335423711",
+          "3766373022051794113",
+          "3016385021446816176",
+          "3040828789916096582",
+          "3878628768138585623"
+        ]
+      },
+      "riskSignals": [],
+      "opportunitySignals": [
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "2610197762335423711",
+            "3766373022051794113",
+            "3016385021446816176"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/CQ5SQkRhbzf/",
+            "https://www.instagram.com/p/DRE2E73AvzB/",
+            "https://www.instagram.com/p/CncWjINJYGw/"
+          ]
+        }
+      ],
+      "modeGuidance": {
+        "mode": "standard",
+        "evidencePriorities": [
+          "recurring themes across selected posts",
+          "audience and comment evidence",
+          "visual/textual patterns",
+          "practical but safe communication recommendations"
+        ],
+        "scoringFocus": [
+          "specificity",
+          "source-backed hypotheses",
+          "actionability",
+          "confidence calibration"
+        ],
+        "cautionRules": [
+          "Avoid personality certainty",
+          "No harassment, doxing, pressure or privacy bypass"
+        ]
+      },
+      "evidenceMap": [
+        {
+          "id": "post:3766373022051794113",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_comments, audience_signal, visual_signal; score 65.",
+          "confidence": "high",
+          "postIds": [
+            "3766373022051794113"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DRE2E73AvzB/"
+          ]
+        },
+        {
+          "id": "post:2610197762335423711",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, high_comments, audience_signal, visual_signal; score 65.",
+          "confidence": "high",
+          "postIds": [
+            "2610197762335423711"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/CQ5SQkRhbzf/"
+          ]
+        },
+        {
+          "id": "post:3878628768138585623",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, audience_signal, visual_signal; score 59.",
+          "confidence": "high",
+          "postIds": [
+            "3878628768138585623"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DXTqFCUguYX/"
+          ]
+        },
+        {
+          "id": "post:3722341000816986827",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, format_diversity, audience_signal, visual_signal; score 59.",
+          "confidence": "high",
+          "postIds": [
+            "3722341000816986827"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DOoaWsekYrL/"
+          ]
+        },
+        {
+          "id": "post:3902468283497615574",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, format_diversity, audience_signal, visual_signal; score 58.",
+          "confidence": "high",
+          "postIds": [
+            "3902468283497615574"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYoWjpJGpDW/"
+          ]
+        },
+        {
+          "id": "post:3549966998887312725",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 53.",
+          "confidence": "high",
+          "postIds": [
+            "3549966998887312725"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DFEBC1NCa1V/"
+          ]
+        },
+        {
+          "id": "post:3016385021446816176",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, high_comments, audience_signal, visual_signal; score 51.",
+          "confidence": "high",
+          "postIds": [
+            "3016385021446816176"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/CncWjINJYGw/"
+          ]
+        },
+        {
+          "id": "post:3040828789916096582",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 44.",
+          "confidence": "high",
+          "postIds": [
+            "3040828789916096582"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/CozMaxluthG/"
+          ]
+        },
+        {
+          "id": "post:3396791555811926473",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 39.",
+          "confidence": "high",
+          "postIds": [
+            "3396791555811926473"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C8j0-xMN2HJ/"
+          ]
+        },
+        {
+          "id": "post:3135195977509996676",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 38.",
+          "confidence": "high",
+          "postIds": [
+            "3135195977509996676"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/CuCdCFst4iE/"
+          ]
+        },
+        {
+          "id": "post:3441622057949313313",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, format_diversity, visual_signal; score 34.",
+          "confidence": "high",
+          "postIds": [
+            "3441622057949313313"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C_DGQb3N7kh/"
+          ]
+        },
+        {
+          "id": "post:3338707494451467606",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, audience_signal, visual_signal; score 33.",
+          "confidence": "high",
+          "postIds": [
+            "3338707494451467606"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C5VeMbnttVW/"
+          ]
+        },
+        {
+          "id": "cluster:visual_identity",
+          "type": "content_cluster",
+          "label": "visual_identity",
+          "detail": "18 selected posts match keywords: style, design, aesthetic, стиль, дизайн",
+          "confidence": "high",
+          "postIds": [
+            "3766373022051794113",
+            "2610197762335423711",
+            "3878628768138585623",
+            "3722341000816986827",
+            "3902468283497615574",
+            "3549966998887312725",
+            "3040828789916096582",
+            "3135195977509996676"
+          ]
+        },
+        {
+          "id": "cluster:lifestyle_and_travel",
+          "type": "content_cluster",
+          "label": "lifestyle_and_travel",
+          "detail": "6 selected posts match keywords: travel, city, hotel, trip, путешествие, город",
+          "confidence": "high",
+          "postIds": [
+            "2610197762335423711",
+            "3878628768138585623",
+            "3016385021446816176",
+            "3040828789916096582",
+            "3396791555811926473",
+            "3163654593954813174"
+          ]
+        },
+        {
+          "id": "cluster:work_and_expertise",
+          "type": "content_cluster",
+          "label": "work_and_expertise",
+          "detail": "2 selected posts match keywords: founder, startup, business, work, career, expert",
+          "confidence": "medium",
+          "postIds": [
+            "3396247716147706866",
+            "3163655203529922331"
+          ]
+        },
+        {
+          "id": "cluster:commercial_or_ads",
+          "type": "content_cluster",
+          "label": "commercial_or_ads",
+          "detail": "1 selected posts match keywords: ad, promo, brand, sale, реклама, скидка",
+          "confidence": "medium",
+          "postIds": [
+            "3163655203529922331"
+          ]
+        },
+        {
+          "id": "cluster:community_and_events",
+          "type": "content_cluster",
+          "label": "community_and_events",
+          "detail": "1 selected posts match keywords: event, team, meetup, community, команда, мероприятие",
+          "confidence": "medium",
+          "postIds": [
+            "3902468283497615574"
+          ]
+        },
+        {
+          "id": "audience:frequent_commenters",
+          "type": "audience",
+          "label": "Recurring commenters",
+          "detail": "lizarulka_ (9), zhelez.nat (5), lumicowik (4), biyayws (3), dlsnk__ (2), kldvrnn (1), ka_atet (1), beautytoday_rezerv (1), 23wines4u (1), nikit_k23 (1)",
+          "confidence": "medium"
+        },
+        {
+          "id": "audience:high_comment_posts",
+          "type": "audience",
+          "label": "High-comment posts",
+          "detail": "medium comment density across selected posts.",
+          "confidence": "medium",
+          "postIds": [
+            "2610197762335423711",
+            "3766373022051794113",
+            "3016385021446816176",
+            "3040828789916096582",
+            "3878628768138585623"
+          ]
+        },
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "2610197762335423711",
+            "3766373022051794113",
+            "3016385021446816176"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/CQ5SQkRhbzf/",
+            "https://www.instagram.com/p/DRE2E73AvzB/",
+            "https://www.instagram.com/p/CncWjINJYGw/"
+          ]
+        },
+        {
+          "id": "mode:standard",
+          "type": "mode",
+          "label": "standard priorities",
+          "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+          "confidence": "high"
+        }
+      ]
+    }
+  },
+  "metrics": {
+    "followersCount": 587,
+    "followsCount": 319,
+    "postsCount": 23,
+    "analyzedPosts": 22,
+    "avgLikes": 128.63636363636363,
+    "avgComments": 4.454545454545454,
+    "medianLikes": 127.5,
+    "medianComments": 3,
+    "engagementRate": 22.67306798822983,
+    "frequencyDays": 84.90445932539683,
+    "pinnedPostsCount": 0,
+    "uniqueLocations": [],
+    "uniqueMusic": [],
+    "relatedProfiles": [],
+    "topPostsByLikes": [
+      {
+        "postId": "2610197762335423711",
+        "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+        "likesCount": 231
+      },
+      {
+        "postId": "3016385021446816176",
+        "url": "https://www.instagram.com/p/CncWjINJYGw/",
+        "likesCount": 194
+      },
+      {
+        "postId": "3396791555811926473",
+        "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+        "likesCount": 180
+      }
+    ],
+    "topPostsByComments": [
+      {
+        "postId": "2610197762335423711",
+        "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+        "commentsCount": 20
+      },
+      {
+        "postId": "3766373022051794113",
+        "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+        "commentsCount": 14
+      },
+      {
+        "postId": "3016385021446816176",
+        "url": "https://www.instagram.com/p/CncWjINJYGw/",
+        "commentsCount": 12
+      }
+    ],
+    "postTypeDistribution": {
+      "Sidecar": 13,
+      "Image": 8,
+      "Video": 1
+    },
+    "hashtagFrequency": {},
+    "mentionFrequency": {},
+    "digitalCircle": [
+      {
+        "username": "zhelez.nat",
+        "type": "commenter",
+        "score": 11.4,
+        "lastInteractionDate": "2026-04-19T09:32:54.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DRE2E73AvzB/",
+          "commented: https://www.instagram.com/p/DXTqFCUguYX/",
+          "commented: https://www.instagram.com/p/CncWjINJYGw/",
+          "commented: https://www.instagram.com/p/CozMaxluthG/"
+        ]
+      },
+      {
+        "username": "lizarulka_",
+        "type": "commenter",
+        "score": 9.9,
+        "lastInteractionDate": "2026-05-22T14:04:28.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DXTqFCUguYX/",
+          "commented: https://www.instagram.com/p/DYoWjpJGpDW/",
+          "commented: https://www.instagram.com/p/CncWjINJYGw/",
+          "commented: https://www.instagram.com/p/C-fGtFitMc-/"
+        ]
+      },
+      {
+        "username": "biyayws",
+        "type": "commenter",
+        "score": 7.2,
+        "lastInteractionDate": "2026-04-19T09:41:40.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DRE2E73AvzB/",
+          "commented: https://www.instagram.com/p/DXTqFCUguYX/",
+          "commented: https://www.instagram.com/p/DFEBC1NCa1V/"
+        ]
+      },
+      {
+        "username": "lumicowik",
+        "type": "commenter",
+        "score": 3.5,
+        "lastInteractionDate": "2025-01-20T21:49:09.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DFEBC1NCa1V/",
+          "commented: https://www.instagram.com/p/C5VeMbnttVW/"
+        ]
+      },
+      {
+        "username": "kldvrnn",
+        "type": "commenter",
+        "score": 3,
+        "lastInteractionDate": "2025-11-15T18:34:47.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DRE2E73AvzB/"
+        ]
+      },
+      {
+        "username": "mariaaakle",
+        "type": "commenter",
+        "score": 3,
+        "lastInteractionDate": "2021-07-04T08:06:33.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/CQ5SQkRhbzf/"
+        ]
+      },
+      {
+        "username": "tolchinskaya_s",
+        "type": "commenter",
+        "score": 3,
+        "lastInteractionDate": "2026-04-19T09:08:11.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DXTqFCUguYX/"
+        ]
+      },
+      {
+        "username": "abraham_rodri1698",
+        "type": "commenter",
+        "score": 3,
+        "lastInteractionDate": "2025-09-15T17:36:40.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DOoaWsekYrL/"
+        ]
+      }
+    ]
+  },
+  "contentQuality": {
+    "score": 64,
+    "findings": [
+      {
+        "id": "content:key_sections_too_short",
+        "severity": "medium",
+        "detail": "Key sections are too short to be useful: Отсутствия как сигнал (33w), Потенциальная польза от контакта (31w), Триггеры и зацепки (36w), Коммуникационные рекомендации (36w), Готовые фразы для входа в диалог (37w), Общая оценка ценности профиля (37w)."
+      },
+      {
+        "id": "content:weak_practical_detail",
+        "severity": "medium",
+        "detail": "Practical/action sections need more concrete next steps, hooks, or examples: Потенциальная польза от контакта, Триггеры и зацепки, Коммуникационные рекомендации, Готовые фразы для входа в диалог, Общая оценка ценности профиля."
+      }
+    ],
+    "dimensions": {
+      "specificity": 100,
+      "practicalValue": 100,
+      "practicalDetail": 0,
+      "confidenceCalibration": 100,
+      "depth": 86,
+      "keySectionDepth": 27,
+      "healthTransparency": 100
+    }
+  },
+  "sourceMap": [
+    {
+      "url": "https://www.instagram.com/p/DOoaWsekYrL/",
+      "postId": "3722341000816986827",
+      "label": "[3722341000816986827] Горный пейзаж: Кадр на фоне гор с закрытыми глазами, акцент на одежде и природном фоне (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "postId": "3441622057949313313",
+      "label": "[3441622057949313313] Швейцария: Видео с видом на горы и озеро, подпись «Slow Swiss life» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+      "postId": "3902468283497615574",
+      "label": "[3902468283497615574] Дисней: Кадры из тематического парка с фейерверками и замком (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "postId": "3766373022051794113",
+      "label": "[3766373022051794113] Студийный портрет: Два кадра на белом фоне в тёмном свитшоте с логотипом (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+      "postId": "3549966998887312725",
+      "label": "[3549966998887312725] Чёрное платье: Кадры с сумкой Coach на лестнице (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+      "postId": "2610197762335423711",
+      "label": "[2610197762335423711] Рекордные метрики: 231 лайк и 20 комментариев — максимум по выборке (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/CncWjINJYGw/",
+      "postId": "3016385021446816176",
+      "label": "[3016385021446816176] Высокие комментарии: 194 лайка и 12 комментариев (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "postId": "3766373022051794113",
+      "label": "[3766373022051794113] Комментарии ко дню рождения: Несколько поздравлений и ответы от автора (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+      "postId": "2610197762335423711",
+      "label": "[2610197762335423711] Комплименты: «Вы красотка», «Какая красавица» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "postId": "3766373022051794113",
+      "label": "[3766373022051794113] Ответ автору: «@biyayws Настюша, чмок 🤍🤍» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+      "postId": "3902468283497615574",
+      "label": "[3902468283497615574] Ответ: «@lizarulka_ спасибо, Лизочка ❤️» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+      "postId": "3396247716147706866",
+      "label": "[3396247716147706866] Диплом: «Диплом на пять 🩷 Спасибо всем, кто был рядом!» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "postId": "3441622057949313313",
+      "label": "[3441622057949313313] Видео: Единственный пост-видео с пейзажем без людей (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/Cvnj6VWN5cb/",
+      "postId": "3163655203529922331",
+      "label": "[3163655203529922331] Минимальный пост: Пост без подписи и хэштегов (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+      "postId": "3396247716147706866",
+      "label": "[3396247716147706866] Диплом: Пост о завершении обучения (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "postId": "3441622057949313313",
+      "label": "[3441622057949313313] Швейцария: «Slow Swiss life 🦭» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/CuCdCFst4iE/",
+      "postId": "3135195977509996676",
+      "label": "[3135195977509996676] Алтай: «Алтай>» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "postId": "3441622057949313313",
+      "label": "[3441622057949313313] Зацепка: Пост про Швейцарию (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "postId": "3441622057949313313",
+      "label": "[3441622057949313313] Зацепка: Пост про Швейцарию (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+      "postId": "3396247716147706866",
+      "label": "[3396247716147706866] Зацепка: Пост про диплом (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "postId": "3766373022051794113",
+      "label": "[3766373022051794113] Тэг: Единственный тэг другого пользователя — ph.dlsnk (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "postId": "3441622057949313313",
+      "label": "[3441622057949313313] Пример визуального контента: Пост со швейцарским пейзажем (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "postId": "3766373022051794113",
+      "label": "[3766373022051794113] Ответ: Ответ через сутки после комментария (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+      "postId": "2610197762335423711",
+      "label": "[2610197762335423711] Пример старого поста: Пост 2021 года с возможными спам-комментариями (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/CvnjxdotZT2/",
+      "postId": "3163654593954813174",
+      "label": "[3163654593954813174] Istanbul: Кадры с яхтой и рестораном, без коммерческих намёков (medium)"
+    }
+  ],
+  "posts": [
+    {
+      "id": "3766373022051794113",
+      "type": "Sidecar",
+      "timestamp": "2025-11-15T11:37:53.000Z",
+      "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+      "caption": "24 🤍",
+      "likesCount": 110,
+      "commentsCount": 14,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [
+        "ph.dlsnk"
+      ]
+    },
+    {
+      "id": "2610197762335423711",
+      "type": "Image",
+      "timestamp": "2021-07-04T06:24:02.000Z",
+      "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+      "caption": "Chin-chin ❤️",
+      "likesCount": 231,
+      "commentsCount": 20,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3878628768138585623",
+      "type": "Sidecar",
+      "timestamp": "2026-04-19T08:50:01.000Z",
+      "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+      "caption": "🤍🌷🌸💌",
+      "likesCount": 108,
+      "commentsCount": 8,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3722341000816986827",
+      "type": "Image",
+      "timestamp": "2025-09-15T17:34:07.000Z",
+      "url": "https://www.instagram.com/p/DOoaWsekYrL/",
+      "caption": "🏔️❤️",
+      "likesCount": 110,
+      "commentsCount": 4,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3902468283497615574",
+      "type": "Sidecar",
+      "timestamp": "2026-05-22T06:14:53.000Z",
+      "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+      "caption": "Magical day 🪄❤️",
+      "likesCount": 77,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3549966998887312725",
+      "type": "Sidecar",
+      "timestamp": "2025-01-20T21:37:45.000Z",
+      "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+      "caption": "🖤",
+      "likesCount": 134,
+      "commentsCount": 6,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3016385021446816176",
+      "type": "Sidecar",
+      "timestamp": "2023-01-15T16:45:37.000Z",
+      "url": "https://www.instagram.com/p/CncWjINJYGw/",
+      "caption": "1 - до 🍰\n2 - после 🍰",
+      "likesCount": 194,
+      "commentsCount": 12,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [
+        "soma_kidss"
+      ]
+    },
+    {
+      "id": "3040828789916096582",
+      "type": "Image",
+      "timestamp": "2023-02-18T10:11:01.000Z",
+      "url": "https://www.instagram.com/p/CozMaxluthG/",
+      "caption": "Ты вся светишься 🫂",
+      "likesCount": 165,
+      "commentsCount": 9,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3396791555811926473",
+      "type": "Sidecar",
+      "timestamp": "2024-06-23T13:25:29.000Z",
+      "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+      "caption": "🩷",
+      "likesCount": 180,
+      "commentsCount": 4,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3135195977509996676",
+      "type": "Sidecar",
+      "timestamp": "2023-06-28T15:01:46.000Z",
+      "url": "https://www.instagram.com/p/CuCdCFst4iE/",
+      "caption": "Алтай>",
+      "likesCount": 177,
+      "commentsCount": 4,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3441622057949313313",
+      "type": "Video",
+      "timestamp": "2024-08-24T09:56:09.000Z",
+      "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+      "caption": "Slow Swiss life 🦭",
+      "likesCount": 66,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3338707494451467606",
+      "type": "Sidecar",
+      "timestamp": "2024-04-04T10:02:50.000Z",
+      "url": "https://www.instagram.com/p/C5VeMbnttVW/",
+      "caption": "NSU 🤍",
+      "likesCount": 151,
+      "commentsCount": 4,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "2640952649257582599",
+      "type": "Image",
+      "timestamp": "2021-08-15T16:48:30.000Z",
+      "url": "https://www.instagram.com/p/CSmjHEvoAAH/",
+      "caption": "🏔 ❤️",
+      "likesCount": 153,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3449749113605988036",
+      "type": "Image",
+      "timestamp": "2024-09-04T15:02:42.000Z",
+      "url": "https://www.instagram.com/p/C_f-IqQtB7E/",
+      "caption": "🕊️ 🤍",
+      "likesCount": 119,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "2870320094480201673",
+      "type": "Image",
+      "timestamp": "2022-06-28T04:00:40.000Z",
+      "url": "https://www.instagram.com/p/CfVbOsXKHfJ/",
+      "caption": "💖💖",
+      "likesCount": 147,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3435303631081408608",
+      "type": "Sidecar",
+      "timestamp": "2024-08-15T16:42:06.000Z",
+      "url": "https://www.instagram.com/p/C-spnOSN4hg/",
+      "caption": "pleasure 🏔️",
+      "likesCount": 113,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3011289528904055279",
+      "type": "Sidecar",
+      "timestamp": "2023-01-08T16:01:47.000Z",
+      "url": "https://www.instagram.com/p/CnKP98-Lfnv/",
+      "caption": "👼🏻",
+      "likesCount": 130,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3431490927686108990",
+      "type": "Image",
+      "timestamp": "2024-08-10T10:26:57.000Z",
+      "url": "https://www.instagram.com/p/C-fGtFitMc-/",
+      "caption": "one summer evening 🤍",
+      "likesCount": 125,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3396247716147706866",
+      "type": "Sidecar",
+      "timestamp": "2024-06-22T19:24:59.000Z",
+      "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+      "caption": "Диплом на пять 🩷\n\nСпасибо всем, кто был рядом!",
+      "likesCount": 147,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3430370911453808782",
+      "type": "Sidecar",
+      "timestamp": "2024-08-08T21:21:40.000Z",
+      "url": "https://www.instagram.com/p/C-bICtJCYiO/",
+      "caption": "🩵",
+      "likesCount": 89,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3163654593954813174",
+      "type": "Sidecar",
+      "timestamp": "2023-08-06T21:23:58.000Z",
+      "url": "https://www.instagram.com/p/CvnjxdotZT2/",
+      "caption": "Istanbul vibes",
+      "likesCount": 101,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    },
+    {
+      "id": "3163655203529922331",
+      "type": "Image",
+      "timestamp": "2023-08-06T21:25:10.000Z",
+      "url": "https://www.instagram.com/p/Cvnj6VWN5cb/",
+      "likesCount": 3,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": []
+    }
+  ],
+  "vision": [
+    {
+      "postId": "3766373022051794113",
+      "status": "completed",
+      "description": "[Image ID: 3766373022051794113]\n- Visible fact: A young woman with long, straight brown hair is featured in both images.\n- Visible fact: She is wearing a dark blue crewneck sweatshirt.\n- Visible fact: In the first image, she is looking to her right, with both hands near her head, fingers spread.\n- Visible fact: The sweatshirt in the first image has white text and a logo on the front.\n- Visible fact: In the second image, she is shown in profile, looking to her right, with her back partially turned to the viewer.\n- Visible fact: Both images are taken against a plain white or light grey background.\n- Setting: Indoor studio setting\n- Objects/signals: young woman, long brown hair, dark blue crewneck sweatshirt, white text on sweatshirt, logo on sweatshirt\n- Text in image: Voyage Club | SCULPTED BY SUN & SEA | We are where the sun meets the sea | Moscow | EST. 2018\n- Text (verbatim): Voyage Club | SCULPTED BY SUN & SEA | We are where the sun meets the sea | Moscow | EST. 2018\n- Visual style: Studio photography, Clean background, Focus on subject and apparel, Natural lighting\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "2610197762335423711",
+      "status": "completed",
+      "description": "[Image ID: 2610197762335423711]\n- Visible fact: A person with long brown hair is seated at a wooden table, holding a glass of champagne.\n- Visible fact: The person is wearing a black dress with puffed sleeves.\n- Visible fact: The background shows a restaurant or bar setting with a well-stocked bar area.\n- Visible fact: There are bottles of alcohol and hanging glasses visible behind the person.\n- Visible fact: The restaurant has a modern industrial aesthetic with exposed brick and metal shelving.\n- Visible fact: Wooden chairs and tables are part of the restaurant's furniture.\n- Setting: restaurant or bar\n- Objects/signals: person, champagne glass, champagne, wooden table, black dress, bar, alcohol bottles, hanging glasses, wooden chairs, restaurant interior\n- Visual style: natural lighting, shallow depth of field, portrait orientation, warm color palette",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3878628768138585623",
+      "status": "completed",
+      "description": "[Image ID: 3878628768138585623]\n- Visible fact: A person with long, wavy brown hair is seated at a table in what appears to be a cafe or restaurant.\n- Visible fact: The person is wearing a light-colored, possibly beige or light grey, long-sleeved top with a zipper detail.\n- Visible fact: In the first image, the person is looking directly at the camera with a slight smile.\n- Visible fact: In the second image, the person is looking to their left, with their hands clasped together on the table.\n- Visible fact: The background shows other patrons, tables with white tablecloths, and modern interior design elements including wooden panels, light fixtures, and large windows.\n- Visible fact: The lighting appears to be a mix of natural light from windows and artificial overhead lighting.\n- Setting: cafe or restaurant\n- Objects/signals: person, table, chair, white tablecloth, light fixtures, wooden panels, windows, plant\n- Visual style: natural lighting, candid pose in second image, direct gaze in first image, modern interior design\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3722341000816986827",
+      "status": "completed",
+      "description": "[Image ID: 3722341000816986827]\n- Visible fact: A person with long brown hair is shown from the chest up, facing forward with eyes closed and head tilted slightly upwards.\n- Visible fact: They are wearing a white t-shirt under an open dark red hooded zipper jacket.\n- Visible fact: A white strap from a bag is visible across their chest.\n- Visible fact: In the foreground, to the left, there is a planter filled with vibrant red and pink flowers.\n- Visible fact: The background features a dramatic mountain landscape with steep, forested slopes.\n- Visible fact: A large glacier or snowfield is visible in the distant mountains.\n- Visible fact: The sky is partly cloudy with patches of blue visible.\n- Setting: Mountainous outdoor landscape with a balcony or terrace in the foreground\n- Objects/signals: person, hooded jacket, t-shirt, bag strap, flowers, planter, mountains, forest, glacier, sky\n- Visual style: Outdoor photography, Natural lighting, Portrait orientation, Depth of field with foreground and background elements",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3902468283497615574",
+      "status": "completed",
+      "description": "[Image ID: 3902468283497615574]\n- Visible fact: The first image shows a person wearing Minnie Mouse ears with a red and white polka dot bow, standing on a cobblestone path.\n- Visible fact: In the background of the first image, a Disney castle is visible, along with trees and other people.\n- Visible fact: The second image displays a large Disney castle illuminated with colorful lights and fireworks exploding in the night sky.\n- Visible fact: A crowd of people is visible in the foreground of the second image, holding up phones to capture the fireworks display.\n- Setting: Disney theme park\n- Objects/signals: Minnie Mouse ears, Disney castle, fireworks, stroller, mobile phones\n- Visual style: Daytime photography in the first image, Nighttime photography in the second image, Candid style in the first image, Event photography in the second image\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3549966998887312725",
+      "status": "completed",
+      "description": "[Image ID: 3549966998887312725]\n- Visible fact: A person with long brown hair is featured in both images, wearing a black dress.\n- Visible fact: In the first image, the person is holding a white Coach handbag with a monogram pattern.\n- Visible fact: The second image shows the person walking down a staircase, with the handbag still visible.\n- Visible fact: The staircase has white steps and a white railing with integrated lighting.\n- Visible fact: The background features wooden paneling.\n- Visible fact: The person is wearing a sleeveless black dress in both images, with a high neckline in the first image and a scoop neck in the second.\n- Setting: Indoor staircase\n- Objects/signals: person, black dress, Coach handbag, staircase, wooden paneling, bracelet, ring\n- Text (verbatim): Coach\n- Visual style: portrait orientation, well-lit, natural lighting\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3016385021446816176",
+      "status": "completed",
+      "description": "[Image ID: 3016385021446816176] This post contains two images of a person seated at a table in a restaurant setting.\n\n**Image 1:**\nThe person is looking towards the camera, with their left hand resting on their head. They are wearing a white long-sleeved shirt. In the background, a decorated Christmas tree with lights and ornaments is visible on the left. To the right of the tree, there's a bar area with bottles and wooden crates. Further back, two people are visible, one appearing to be a server. A large green plant is on the right side of the frame. The table has a patterned plate and cutlery.\n\n**Image 2:**\nThe person is looking upwards and to the right, with their arms crossed on the table. They are wearing the same white long-sleeved shirt. A slice of cheesecake with a berry topping is on the patterned plate in front of them. The background elements are consistent with Image 1, showing the Christmas tree, bar area, and green plant. The lighting and overall scene are similar to the first image.\n\n**Comparison of Images:**\nBoth images feature the same person, in the same restaurant setting, wearing the same attire. The key difference is the presence of the cheesecake in Image 2, which is not in Image 1. The person's pose and gaze also differ between the two images.\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3040828789916096582",
+      "status": "completed",
+      "description": "[Image ID: 3040828789916096582]\n- Visible fact: A person with long, wavy brown hair and light green eyes is shown in a close-up selfie.\n- Visible fact: They are wearing a light-colored top, possibly beige or cream.\n- Visible fact: A delicate necklace with a circular pendant is visible around their neck.\n- Visible fact: The background shows exposed wooden beams and what appears to be industrial-style lighting fixtures.\n- Visible fact: One light fixture with a glowing bulb is visible in the upper left of the frame.\n- Visible fact: Another light fixture and a silver-colored pipe are visible in the upper right background.\n- Setting: Indoors, possibly a cafe or industrial-style interior\n- Objects/signals: person, long hair, necklace, circular pendant, light-colored top, wooden beams, light fixtures, glowing bulb, silver pipe\n- Visual style: Close-up shot, Selfie perspective, Natural lighting, Soft focus on background\n- Uncertainty: The exact color of the top (beige or cream); The material of the pendant; The precise nature of the indoor setting",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3396791555811926473",
+      "status": "completed",
+      "description": "[Image ID: 3396791555811926473] This post contains two images of a person sitting outdoors at a cafe or restaurant.\n\n**Image 1:**\nA person with light skin and dark hair pulled back is seated at a table. They are wearing a white strapless top or dress and a pink textured jacket with gold-colored buttons. Their left hand is resting on their chest. The background features a brick building, large windows, and some green plants. A blue sign with white text that reads \"999\" is visible on the brick wall. The lighting suggests late afternoon or early evening, with sunlight hitting the person and parts of the background.\n\n**Image 2:**\nThis image is very similar to Image 1, showing the same person in the same setting and attire. The main difference is the person's pose; they are looking to their left (viewer's right) in profile, with their left hand still resting on their chest. The lighting and background elements are consistent with Image 1.\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3135195977509996676",
+      "status": "completed",
+      "description": "[Image ID: 3135195977509996676]\n- Visible fact: A person is seated outdoors on a patio with a mountain backdrop.\n- Visible fact: The person is wearing a long-sleeved olive green top with a white logo in the first image.\n- Visible fact: In the second image, the person is wearing a white crop top and white shorts, with an olive green jacket draped over their shoulders.\n- Visible fact: A brown handbag is visible next to the person in both images.\n- Visible fact: The outdoor setting includes potted evergreen trees and wooden structures.\n- Visible fact: The sky is blue with white clouds.\n- Visible fact: The person has long, light brown hair.\n- Setting: outdoor patio with mountain view\n- Objects/signals: person, olive green long-sleeved top, white crop top, white shorts, olive green jacket, brown handbag, outdoor chair, potted evergreen trees, mountains, wooden deck\n- Text in image: Marc O'Polo\n- Text (verbatim): Marc O'Polo\n- Visual style: outdoor photography, natural lighting, casual fashion\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3441622057949313313",
+      "status": "completed",
+      "description": "[Image ID: 3441622057949313313]\n- Visible fact: A large white boat with multiple decks is docked at a pier, with people visible on its upper deck.\n- Visible fact: A red flag with a white cross, resembling the Swiss flag, is flying from the boat.\n- Visible fact: Mountains are visible in the background under a clear sky.\n- Visible fact: A body of water, likely a lake or river, is in the foreground with reflections.\n- Visible fact: A paved walkway or pier is in the bottom right of the image.\n- Visible fact: Green foliage from a tree is visible in the upper right and top of the frame.\n- Visible fact: Smaller boats are docked next to the large boat, covered with tarps.\n- Visible fact: A bridge with buildings, including a tower, is visible in the distance across the water.\n- Setting: Lakeside or riverside pier with mountains in the background\n- Objects/signals: boat, pier, mountains, water, flag, tree foliage, bridge, buildings\n- Visual style: Outdoor photography, Daylight lighting, Landscape orientation",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3338707494451467606",
+      "status": "completed",
+      "description": "[Image ID: 3338707494451467606]\n- Visible fact: A person is standing indoors, wearing a black cardigan with light-colored buttons, wide-leg grey jeans, and pointed-toe shoes.\n- Visible fact: The background features a modern building interior with multiple levels, glass railings, and light-colored walls.\n- Visible fact: There is a large map or graphic on a glass partition behind the person.\n- Visible fact: A potted plant is visible on the right side of the frame.\n- Visible fact: The lighting appears bright and even, suggesting an indoor setting with natural light.\n- Visible fact: The person is holding a black handbag over their left shoulder.\n- Visible fact: In the first image, the person is looking to their right, while in the second image, they are looking directly at the camera.\n- Setting: Modern building interior, possibly a university or office lobby\n- Objects/signals: person, black cardigan, light-colored buttons, grey wide-leg jeans, pointed-toe shoes, black handbag, glass railings, map/graphic on glass, potted plant, building interior\n- Text in image: РОССИЙСКОЕ | ОГУЩЕСТВО | РИРАТСТВЕТ | ЕТ СИБИРЬЮ | ЕВЕРНЫМ | ОКЕАНОМ\n- Text (verbatim): РОССИЙСКОЕ | ОГУЩЕСТВО | РИРАТСТВЕТ | ЕТ СИБИРЬЮ | ЕВЕРНЫМ | ОКЕАНОМ\n- Visual style: Full-body shot, Bright, even lighting, Clean, modern aesthetic, Consistent framing across both images\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "2640952649257582599",
+      "status": "completed",
+      "description": "[Image ID: 2640952649257582599]\n- Visible fact: A person with long brown hair is sitting on a large rock, facing away from the camera, looking out at a body of water.\n- Visible fact: The person is wearing a black long-sleeved top, light-colored (possibly white or off-white) leggings, and light-colored sneakers with white socks.\n- Visible fact: The body of water appears to be a lake, surrounded by mountains.\n- Visible fact: The mountains are rocky and have patches of green vegetation.\n- Visible fact: The sky is overcast.\n- Visible fact: The foreground consists of rocks and sparse green plants.\n- Setting: mountain lake\n- Objects/signals: person, long brown hair, black long-sleeved top, light-colored leggings, light-colored sneakers, white socks, large rock, lake, mountains, green vegetation\n- Visual style: outdoor photography, natural light, back view composition",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3449749113605988036",
+      "status": "completed",
+      "description": "[Image ID: 3449749113605988036]\n- Visible fact: A person with long brown hair is standing on a cobblestone street.\n- Visible fact: They are wearing a white dress with cut-outs at the waist and long, flowing sleeves.\n- Visible fact: The person is shielding their eyes from the sun with their right hand.\n- Visible fact: Sunlight illuminates their hair and parts of the street.\n- Visible fact: In the background, there are old stone buildings with windows and a dark wooden door.\n- Visible fact: Green plants in pots are visible near the buildings.\n- Visible fact: A brown bag is held by the person's left side.\n- Setting: An old European-style cobblestone street with stone buildings.\n- Objects/signals: person, white dress, cobblestone street, stone buildings, windows, wooden door, potted plants, brown bag, manhole cover, trash can\n- Visual style: Outdoor photography, Natural lighting, Sun flare, Full body shot",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "2870320094480201673",
+      "status": "completed",
+      "description": "[Image ID: 2870320094480201673] A person with long, light brown hair is shown from the chest up, looking upwards and to the left. They are wearing a black dress with thin straps and holding a bouquet of pink flowers, tied with a white ribbon, in their left arm. A gold bracelet is visible on their left wrist.\n\nThe background features a street scene with buildings. To the left, there's a modern building with orange-brown bricks and multiple windows. To the right, there's an",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3435303631081408608",
+      "status": "completed",
+      "description": "[Image ID: 3435303631081408608] This carousel of three images depicts a mountainous, rural landscape with lush greenery under a clear blue sky.\n\n**Image 1:**\nThe foreground features a vibrant green field with a large, leafy tree on the right. In the midground, several houses with dark roofs are visible, some with solar panels. The background is dominated by a large, rugged mountain range with visible rock formations and forested slopes. The lighting suggests a bright, sunny day.\n\n**Image 2:**\nThis image shows a paved road winding through a forested area. Two individuals are walking away from the camera on the road, and a dark-colored car is parked further ahead. On the right, a building with a mossy, tiled roof and a trimmed hedge is visible. The background continues to show forested mountains.\n\n**Image 3:**\nThis wider shot captures a similar scene to Image 1, with a paved road on the left leading into the distance. A bright green field stretches across the midground, bordered by a wire fence with wooden posts. In the distance, several buildings are nestled among trees at the base of a large mountain range. The sky is clear and blue.\n\n**Recurring Visual Signals:**\nAll three images share a consistent theme of a serene, natural landscape featuring prominent mountains, dense forests, and bright green fields. The clear blue sky and bright sunlight are also consistent across the carousel. The presence of houses and roads suggests a rural or semi-rural setting.\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3011289528904055279",
+      "status": "completed",
+      "description": "[Image ID: 3011289528904055279]\n- Visible fact: Two individuals are captured in a selfie-style photograph against a backdrop of snow-capped mountains and a clear blue sky.\n- Visible fact: The person on the left wears a black puffer jacket over a red and white patterned turtleneck sweater.\n- Visible fact: The person on the right wears a cream-colored knit beanie and a black jacket, with long brown hair visible.\n- Visible fact: In the first image, both individuals are looking towards the camera.\n- Visible fact: In the second image, the person on the left has their eyes closed, and the person on the right is looking to their left.\n- Visible fact: The background features distant snow-covered mountain peaks under a bright blue sky in both images.\n- Setting: Mountainous outdoor environment with snow\n- Objects/signals: snow-capped mountains, blue sky, puffer jacket, turtleneck sweater, knit beanie, jacket\n- Visual style: Selfie perspective, Bright natural lighting, Outdoor photography\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3431490927686108990",
+      "status": "completed",
+      "description": "[Image ID: 3431490927686108990]\n- Visible fact: A person with long brown hair and green eyes is taking a selfie.\n- Visible fact: The person is wearing a black tank top and a silver necklace with a small charm.\n- Visible fact: The background shows a body of water, likely a canal, with reflections.\n- Visible fact: Part of a wooden boat or gondola is visible.\n- Visible fact: Another person's arm, wearing a white shirt, is visible on the left side of the frame.\n- Setting: On a boat or gondola in a canal\n- Objects/signals: person, long brown hair, green eyes, black tank top, silver necklace, small charm, body of water, canal, wooden boat, gondola\n- Visual style: Selfie perspective, Natural lighting, Close-up shot\n- Uncertainty: The exact type of boat (gondola or other wooden boat) cannot be definitively determined.; The specific location of the canal is not visible.",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3396247716147706866",
+      "status": "completed",
+      "description": "[Image ID: 3396247716147706866]\n- Visible fact: A young woman is holding a document in front of a wall with text.\n- Visible fact: The woman is wearing a pink jacket and white pants.\n- Visible fact: The wall has text in both Cyrillic and English.\n- Visible fact: The document appears to be a diploma or certificate.\n- Visible fact: In the first image, the woman is looking towards the camera.\n- Visible fact: In the second image, the woman is looking to her left, away from the camera.\n- Setting: Indoors, possibly a university or academic building hallway\n- Objects/signals: woman, document, wall, text, logo\n- Text in image: ЭКОНОМИЧЕСКИЙ ФАКУЛЬТЕТ | Faculty of Economics | ВЫПУСКНАЯ КВАЛИФИКАЦИОННАЯ РАБОТА | ЭКОНОМИЧЕСКИЙ ФАКУЛЬТЕТ | Направление подготовки | Профиль\n- Text (verbatim): ЭКОНОМИЧЕСКИЙ ФАКУЛЬТЕТ | Faculty of Economics | ВЫПУСКНАЯ | КВАЛИФИКАЦИОННАЯ РАБОТА | ЭКОНОМИЧЕСКИЙ ФАКУЛЬТЕТ | Направление подготовки | Профиль\n- Visual style: Bright lighting, Clear focus on the subject, Modern architectural background\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3430370911453808782",
+      "status": "completed",
+      "description": "[Image ID: 3430370911453808782] This post contains two images, both featuring a boat ride in Venice, Italy, at sunset.\n\nImage 1:\nThe image shows a view from the back of a wooden boat, looking towards a canal lined with historic buildings. The water is choppy, with ripples and wakes visible. On the left, a white public transport boat with the text \"VE 9334\" is docked or moving slowly near a building. The building behind it is ornate, with multiple windows, columns, and balconies, and appears to be a palace or grand structure. A banner or sign on this building reads \"LORENZO\" and \"CA' REZZONICO\". The sky is a clear, light blue, transitioning to a warmer hue near the horizon. A small Italian flag is visible on the back of the boat from which the photo is taken.\n\nImage 2:\nThis image also shows a view from the back of a wooden boat, similar to the first, with the same Italian flag visible. The boat is moving through open water, creating a significant wake. In the distance, a low-lying cityscape or coastline is visible under a clear, warm-toned sky, suggesting sunset. Another white boat is visible in the distance on the left, also moving. The water is rougher than in the first image, with more pronounced waves and foam.\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3163654593954813174",
+      "status": "completed",
+      "description": "[Image ID: 3163654593954813174]\n- Visible fact: Image 1 shows an outdoor restaurant patio with tables set for dining.\n- Visible fact: Image 2 shows a yacht on the water with people on board.\n- Visible fact: Image 3 shows a modern building complex with landscaping and a retail storefront.\n- Visible fact: The restaurant in Image 1 has white tablecloths and wicker chairs.\n- Visible fact: The yacht in Image 2 has the name \"KADERIM 9\" on its stern.\n- Visible fact: A Turkish flag is visible on the yacht in Image 2.\n- Visible fact: Image 1 and 3 feature modern architecture and lush greenery.\n- Visible fact: Image 1 and 3 show a sunny outdoor environment.\n- Setting: Outdoor urban environment with a restaurant, waterfront, and modern buildings.\n- Objects/signals: restaurant tables, chairs, yacht, water, buildings, trees, plants, Louis Vuitton store, Loro Piana store, Turkish flag\n- Text in image: LOUIS VUITTON | KADERIM 9 | Loro Piana\n- Text (verbatim): LOUIS VUITTON | KADERIM 9 | Loro Piana\n- Visual style: Clear, bright daylight photography, Focus on architectural and natural elements, Mix of close-up and wider shots\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3163655203529922331",
+      "status": "completed",
+      "description": "[Image ID: 3163655203529922331] The image shows a person standing outdoors on a paved surface next to a building with large glass windows and green bushes. The person is wearing a light-colored, possibly off-white or cream, form-fitting midi-length dress with thin straps and a lace-up detail on the back. They are holding a brown leather handbag with a top handle and a shoulder strap. On their feet, they are wearing light-colored, possibly cream or beige, open-toed sandals with a braided or woven strap design. The person has long, light brown hair that appears to be blowing slightly in the wind. In the background, through the glass windows of the building, a mannequin or poster of a person wearing a light-colored top is visible. There is also a partial view of a sign that includes the brand name \"GODIVA\". The setting appears to be an urban or commercial area, possibly a shopping district, on a sunny day, indicated by the bright light and shadows on the ground.",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    }
+  ],
+  "analysisContext": {
+    "selectedPostIds": [
+      "3766373022051794113",
+      "2610197762335423711",
+      "3878628768138585623",
+      "3722341000816986827",
+      "3902468283497615574",
+      "3549966998887312725",
+      "3016385021446816176",
+      "3040828789916096582",
+      "3396791555811926473",
+      "3135195977509996676",
+      "3441622057949313313",
+      "3338707494451467606",
+      "2640952649257582599",
+      "3449749113605988036",
+      "2870320094480201673",
+      "3435303631081408608",
+      "3011289528904055279",
+      "3431490927686108990",
+      "3396247716147706866",
+      "3430370911453808782",
+      "3163654593954813174",
+      "3163655203529922331"
+    ],
+    "postSelection": [
+      {
+        "postId": "3766373022051794113",
+        "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+        "timestamp": "2025-11-15T11:37:53.000Z",
+        "score": 65,
+        "reasons": [
+          "recent",
+          "high_comments",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "2610197762335423711",
+        "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+        "timestamp": "2021-07-04T06:24:02.000Z",
+        "score": 65,
+        "reasons": [
+          "high_likes",
+          "high_comments",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3878628768138585623",
+        "url": "https://www.instagram.com/p/DXTqFCUguYX/",
+        "timestamp": "2026-04-19T08:50:01.000Z",
+        "score": 59,
+        "reasons": [
+          "recent",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3722341000816986827",
+        "url": "https://www.instagram.com/p/DOoaWsekYrL/",
+        "timestamp": "2025-09-15T17:34:07.000Z",
+        "score": 59,
+        "reasons": [
+          "recent",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3902468283497615574",
+        "url": "https://www.instagram.com/p/DYoWjpJGpDW/",
+        "timestamp": "2026-05-22T06:14:53.000Z",
+        "score": 58,
+        "reasons": [
+          "recent",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3549966998887312725",
+        "url": "https://www.instagram.com/p/DFEBC1NCa1V/",
+        "timestamp": "2025-01-20T21:37:45.000Z",
+        "score": 53,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3016385021446816176",
+        "url": "https://www.instagram.com/p/CncWjINJYGw/",
+        "timestamp": "2023-01-15T16:45:37.000Z",
+        "score": 51,
+        "reasons": [
+          "high_likes",
+          "high_comments",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3040828789916096582",
+        "url": "https://www.instagram.com/p/CozMaxluthG/",
+        "timestamp": "2023-02-18T10:11:01.000Z",
+        "score": 44,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3396791555811926473",
+        "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+        "timestamp": "2024-06-23T13:25:29.000Z",
+        "score": 39,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3135195977509996676",
+        "url": "https://www.instagram.com/p/CuCdCFst4iE/",
+        "timestamp": "2023-06-28T15:01:46.000Z",
+        "score": 38,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3441622057949313313",
+        "url": "https://www.instagram.com/p/C_DGQb3N7kh/",
+        "timestamp": "2024-08-24T09:56:09.000Z",
+        "score": 34,
+        "reasons": [
+          "recent",
+          "format_diversity",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3338707494451467606",
+        "url": "https://www.instagram.com/p/C5VeMbnttVW/",
+        "timestamp": "2024-04-04T10:02:50.000Z",
+        "score": 33,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "2640952649257582599",
+        "url": "https://www.instagram.com/p/CSmjHEvoAAH/",
+        "timestamp": "2021-08-15T16:48:30.000Z",
+        "score": 32,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3449749113605988036",
+        "url": "https://www.instagram.com/p/C_f-IqQtB7E/",
+        "timestamp": "2024-09-04T15:02:42.000Z",
+        "score": 31,
+        "reasons": [
+          "recent",
+          "high_likes",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "2870320094480201673",
+        "url": "https://www.instagram.com/p/CfVbOsXKHfJ/",
+        "timestamp": "2022-06-28T04:00:40.000Z",
+        "score": 28,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3435303631081408608",
+        "url": "https://www.instagram.com/p/C-spnOSN4hg/",
+        "timestamp": "2024-08-15T16:42:06.000Z",
+        "score": 27,
+        "reasons": [
+          "recent",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3011289528904055279",
+        "url": "https://www.instagram.com/p/CnKP98-Lfnv/",
+        "timestamp": "2023-01-08T16:01:47.000Z",
+        "score": 26,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3431490927686108990",
+        "url": "https://www.instagram.com/p/C-fGtFitMc-/",
+        "timestamp": "2024-08-10T10:26:57.000Z",
+        "score": 25,
+        "reasons": [
+          "high_likes",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3396247716147706866",
+        "url": "https://www.instagram.com/p/C8h5U3CNzvy/",
+        "timestamp": "2024-06-22T19:24:59.000Z",
+        "score": 20,
+        "reasons": [
+          "high_likes",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3430370911453808782",
+        "url": "https://www.instagram.com/p/C-bICtJCYiO/",
+        "timestamp": "2024-08-08T21:21:40.000Z",
+        "score": 18,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3163654593954813174",
+        "url": "https://www.instagram.com/p/CvnjxdotZT2/",
+        "timestamp": "2023-08-06T21:23:58.000Z",
+        "score": 15,
+        "reasons": [
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3163655203529922331",
+        "url": "https://www.instagram.com/p/Cvnj6VWN5cb/",
+        "timestamp": "2023-08-06T21:25:10.000Z",
+        "score": 5,
+        "reasons": [
+          "visual_signal"
+        ]
+      }
+    ],
+    "profileSignals": {
+      "publicContacts": [],
+      "publicLinks": [],
+      "platformHandles": [],
+      "professionHints": [],
+      "locationHints": [],
+      "bioKeywords": [
+        "𝐴𝑁𝐴𝑆𝑇𝐴𝑆𝐼𝐼𝐴"
+      ]
+    },
+    "contentClusters": [
+      {
+        "label": "visual_identity",
+        "count": 18,
+        "postIds": [
+          "3766373022051794113",
+          "2610197762335423711",
+          "3878628768138585623",
+          "3722341000816986827",
+          "3902468283497615574",
+          "3549966998887312725",
+          "3040828789916096582",
+          "3135195977509996676"
+        ],
+        "keywords": [
+          "style",
+          "design",
+          "aesthetic",
+          "стиль",
+          "дизайн"
+        ]
+      },
+      {
+        "label": "lifestyle_and_travel",
+        "count": 6,
+        "postIds": [
+          "2610197762335423711",
+          "3878628768138585623",
+          "3016385021446816176",
+          "3040828789916096582",
+          "3396791555811926473",
+          "3163654593954813174"
+        ],
+        "keywords": [
+          "travel",
+          "city",
+          "hotel",
+          "trip",
+          "путешествие",
+          "город"
+        ]
+      },
+      {
+        "label": "work_and_expertise",
+        "count": 2,
+        "postIds": [
+          "3396247716147706866",
+          "3163655203529922331"
+        ],
+        "keywords": [
+          "founder",
+          "startup",
+          "business",
+          "work",
+          "career",
+          "expert",
+          "эксперт",
+          "бизнес"
+        ]
+      },
+      {
+        "label": "commercial_or_ads",
+        "count": 1,
+        "postIds": [
+          "3163655203529922331"
+        ],
+        "keywords": [
+          "ad",
+          "promo",
+          "brand",
+          "sale",
+          "реклама",
+          "скидка",
+          "партнер"
+        ]
+      },
+      {
+        "label": "community_and_events",
+        "count": 1,
+        "postIds": [
+          "3902468283497615574"
+        ],
+        "keywords": [
+          "event",
+          "team",
+          "meetup",
+          "community",
+          "команда",
+          "мероприятие"
+        ]
+      }
+    ],
+    "audienceSignals": {
+      "frequentCommenters": [
+        {
+          "username": "lizarulka_",
+          "count": 9
+        },
+        {
+          "username": "zhelez.nat",
+          "count": 5
+        },
+        {
+          "username": "lumicowik",
+          "count": 4
+        },
+        {
+          "username": "biyayws",
+          "count": 3
+        },
+        {
+          "username": "dlsnk__",
+          "count": 2
+        },
+        {
+          "username": "kldvrnn",
+          "count": 1
+        },
+        {
+          "username": "ka_atet",
+          "count": 1
+        },
+        {
+          "username": "beautytoday_rezerv",
+          "count": 1
+        },
+        {
+          "username": "23wines4u",
+          "count": 1
+        },
+        {
+          "username": "nikit_k23",
+          "count": 1
+        }
+      ],
+      "repeatedCommentTerms": [
+        {
+          "term": "oчeнь",
+          "count": 4
+        },
+        {
+          "term": "какая",
+          "count": 3
+        },
+        {
+          "term": "моя",
+          "count": 2
+        },
+        {
+          "term": "днем",
+          "count": 2
+        },
+        {
+          "term": "рождения",
+          "count": 2
+        },
+        {
+          "term": "красотка",
+          "count": 2
+        },
+        {
+          "term": "красавица",
+          "count": 2
+        },
+        {
+          "term": "ждy",
+          "count": 2
+        },
+        {
+          "term": "ответ",
+          "count": 2
+        },
+        {
+          "term": "жду",
+          "count": 2
+        },
+        {
+          "term": "запрoсы",
+          "count": 2
+        },
+        {
+          "term": "мне",
+          "count": 2
+        }
+      ],
+      "commentDensity": "medium",
+      "highCommentPostIds": [
+        "2610197762335423711",
+        "3766373022051794113",
+        "3016385021446816176",
+        "3040828789916096582",
+        "3878628768138585623"
+      ]
+    },
+    "riskSignals": [],
+    "opportunitySignals": [
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "2610197762335423711",
+          "3766373022051794113",
+          "3016385021446816176"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/CQ5SQkRhbzf/",
+          "https://www.instagram.com/p/DRE2E73AvzB/",
+          "https://www.instagram.com/p/CncWjINJYGw/"
+        ]
+      }
+    ],
+    "modeGuidance": {
+      "mode": "standard",
+      "evidencePriorities": [
+        "recurring themes across selected posts",
+        "audience and comment evidence",
+        "visual/textual patterns",
+        "practical but safe communication recommendations"
+      ],
+      "scoringFocus": [
+        "specificity",
+        "source-backed hypotheses",
+        "actionability",
+        "confidence calibration"
+      ],
+      "cautionRules": [
+        "Avoid personality certainty",
+        "No harassment, doxing, pressure or privacy bypass"
+      ]
+    },
+    "evidenceMap": [
+      {
+        "id": "post:3766373022051794113",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_comments, audience_signal, visual_signal; score 65.",
+        "confidence": "high",
+        "postIds": [
+          "3766373022051794113"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DRE2E73AvzB/"
+        ]
+      },
+      {
+        "id": "post:2610197762335423711",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, high_comments, audience_signal, visual_signal; score 65.",
+        "confidence": "high",
+        "postIds": [
+          "2610197762335423711"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/CQ5SQkRhbzf/"
+        ]
+      },
+      {
+        "id": "post:3878628768138585623",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, audience_signal, visual_signal; score 59.",
+        "confidence": "high",
+        "postIds": [
+          "3878628768138585623"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DXTqFCUguYX/"
+        ]
+      },
+      {
+        "id": "post:3722341000816986827",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, format_diversity, audience_signal, visual_signal; score 59.",
+        "confidence": "high",
+        "postIds": [
+          "3722341000816986827"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DOoaWsekYrL/"
+        ]
+      },
+      {
+        "id": "post:3902468283497615574",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, format_diversity, audience_signal, visual_signal; score 58.",
+        "confidence": "high",
+        "postIds": [
+          "3902468283497615574"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYoWjpJGpDW/"
+        ]
+      },
+      {
+        "id": "post:3549966998887312725",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, high_likes, audience_signal, visual_signal; score 53.",
+        "confidence": "high",
+        "postIds": [
+          "3549966998887312725"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DFEBC1NCa1V/"
+        ]
+      },
+      {
+        "id": "post:3016385021446816176",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, high_comments, audience_signal, visual_signal; score 51.",
+        "confidence": "high",
+        "postIds": [
+          "3016385021446816176"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/CncWjINJYGw/"
+        ]
+      },
+      {
+        "id": "post:3040828789916096582",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 44.",
+        "confidence": "high",
+        "postIds": [
+          "3040828789916096582"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/CozMaxluthG/"
+        ]
+      },
+      {
+        "id": "post:3396791555811926473",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 39.",
+        "confidence": "high",
+        "postIds": [
+          "3396791555811926473"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C8j0-xMN2HJ/"
+        ]
+      },
+      {
+        "id": "post:3135195977509996676",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 38.",
+        "confidence": "high",
+        "postIds": [
+          "3135195977509996676"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/CuCdCFst4iE/"
+        ]
+      },
+      {
+        "id": "post:3441622057949313313",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, format_diversity, visual_signal; score 34.",
+        "confidence": "high",
+        "postIds": [
+          "3441622057949313313"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C_DGQb3N7kh/"
+        ]
+      },
+      {
+        "id": "post:3338707494451467606",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, audience_signal, visual_signal; score 33.",
+        "confidence": "high",
+        "postIds": [
+          "3338707494451467606"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C5VeMbnttVW/"
+        ]
+      },
+      {
+        "id": "cluster:visual_identity",
+        "type": "content_cluster",
+        "label": "visual_identity",
+        "detail": "18 selected posts match keywords: style, design, aesthetic, стиль, дизайн",
+        "confidence": "high",
+        "postIds": [
+          "3766373022051794113",
+          "2610197762335423711",
+          "3878628768138585623",
+          "3722341000816986827",
+          "3902468283497615574",
+          "3549966998887312725",
+          "3040828789916096582",
+          "3135195977509996676"
+        ]
+      },
+      {
+        "id": "cluster:lifestyle_and_travel",
+        "type": "content_cluster",
+        "label": "lifestyle_and_travel",
+        "detail": "6 selected posts match keywords: travel, city, hotel, trip, путешествие, город",
+        "confidence": "high",
+        "postIds": [
+          "2610197762335423711",
+          "3878628768138585623",
+          "3016385021446816176",
+          "3040828789916096582",
+          "3396791555811926473",
+          "3163654593954813174"
+        ]
+      },
+      {
+        "id": "cluster:work_and_expertise",
+        "type": "content_cluster",
+        "label": "work_and_expertise",
+        "detail": "2 selected posts match keywords: founder, startup, business, work, career, expert",
+        "confidence": "medium",
+        "postIds": [
+          "3396247716147706866",
+          "3163655203529922331"
+        ]
+      },
+      {
+        "id": "cluster:commercial_or_ads",
+        "type": "content_cluster",
+        "label": "commercial_or_ads",
+        "detail": "1 selected posts match keywords: ad, promo, brand, sale, реклама, скидка",
+        "confidence": "medium",
+        "postIds": [
+          "3163655203529922331"
+        ]
+      },
+      {
+        "id": "cluster:community_and_events",
+        "type": "content_cluster",
+        "label": "community_and_events",
+        "detail": "1 selected posts match keywords: event, team, meetup, community, команда, мероприятие",
+        "confidence": "medium",
+        "postIds": [
+          "3902468283497615574"
+        ]
+      },
+      {
+        "id": "audience:frequent_commenters",
+        "type": "audience",
+        "label": "Recurring commenters",
+        "detail": "lizarulka_ (9), zhelez.nat (5), lumicowik (4), biyayws (3), dlsnk__ (2), kldvrnn (1), ka_atet (1), beautytoday_rezerv (1), 23wines4u (1), nikit_k23 (1)",
+        "confidence": "medium"
+      },
+      {
+        "id": "audience:high_comment_posts",
+        "type": "audience",
+        "label": "High-comment posts",
+        "detail": "medium comment density across selected posts.",
+        "confidence": "medium",
+        "postIds": [
+          "2610197762335423711",
+          "3766373022051794113",
+          "3016385021446816176",
+          "3040828789916096582",
+          "3878628768138585623"
+        ]
+      },
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "2610197762335423711",
+          "3766373022051794113",
+          "3016385021446816176"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/CQ5SQkRhbzf/",
+          "https://www.instagram.com/p/DRE2E73AvzB/",
+          "https://www.instagram.com/p/CncWjINJYGw/"
+        ]
+      },
+      {
+        "id": "mode:standard",
+        "type": "mode",
+        "label": "standard priorities",
+        "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+        "confidence": "high"
+      }
+    ]
+  }
+}

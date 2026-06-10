@@ -20,6 +20,13 @@ export type ContentQualityRubric = {
   };
 };
 
+const REPAIR_WORTHY_FINDING_IDS = new Set([
+  "content:key_sections_too_short",
+  "content:weak_practical_detail",
+  "content:low_practical_value",
+  "content:missing_low_coverage_framing"
+]);
+
 export function evaluateReportContentQuality(input: {
   sections: ReportSectionView[];
   executiveSummary?: string;
@@ -87,14 +94,16 @@ export function evaluateReportContentQuality(input: {
     findings.push({
       id: "content:low_practical_value",
       severity: "medium",
-      detail: "Report should better translate observations into useful recommendations or implications."
+      detail:
+        "Report should better translate observations into useful recommendations or implications."
     });
   }
   if (dimensions.confidenceCalibration < 60) {
     findings.push({
       id: "content:weak_confidence_calibration",
       severity: "medium",
-      detail: "Report should state confidence limits, sample-size caveats, and public-data limits more clearly."
+      detail:
+        "Report should state confidence limits, sample-size caveats, and public-data limits more clearly."
     });
   }
   if (dimensions.depth < 55) {
@@ -150,6 +159,43 @@ export function evaluateReportContentQuality(input: {
     findings,
     dimensions
   };
+}
+
+export function contentQualityFindingsNeedRepair(findings: ContentQualityFinding[]): boolean {
+  const mediumCount = findings.filter((finding) => finding.severity === "medium").length;
+  return (
+    findings.some((finding) => finding.severity === "high") ||
+    findings.some((finding) => REPAIR_WORTHY_FINDING_IDS.has(finding.id)) ||
+    mediumCount >= 3
+  );
+}
+
+export function renderContentQualityFindings(findings: ContentQualityFinding[]): string[] {
+  return findings.slice(0, 20).map((finding) => {
+    const fix = contentQualityRepairHint(finding.id);
+    return `${finding.severity.toUpperCase()} [${finding.id}]: ${finding.detail}${
+      fix ? ` Fix: ${fix}` : ""
+    }`;
+  });
+}
+
+function contentQualityRepairHint(id: string): string | undefined {
+  if (id === "content:key_sections_too_short") {
+    return "Expand key user-facing sections with concrete evidence, implication, confidence, and caveat.";
+  }
+  if (id === "content:weak_practical_detail" || id === "content:low_practical_value") {
+    return "Add practical details: at least 3 evidence-tied hooks, 2-3 respectful next steps, and ready-to-send neutral phrases.";
+  }
+  if (id === "content:missing_low_coverage_framing") {
+    return "State the report is a selected/recent public-post read and avoid whole-profile conclusions.";
+  }
+  if (id === "content:weak_confidence_calibration") {
+    return "Name confidence level, sample limits, public-data limits, and what cannot be inferred.";
+  }
+  if (id === "content:low_specificity") {
+    return "Replace generic claims with post/comment/metric/vision-backed observations.";
+  }
+  return undefined;
 }
 
 function severityPenalty(findings: ContentQualityFinding[]): number {

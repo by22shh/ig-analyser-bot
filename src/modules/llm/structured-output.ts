@@ -137,7 +137,7 @@ export function reportResponseFormat(
                 content: {
                   type: "string",
                   description:
-                    "Section body in the requested language. Mention uncertainty and avoid unsupported claims."
+                    "Section body in the requested language. Mention uncertainty and avoid unsupported claims. For practical sections, include concrete user value: why it matters, evidence-tied hooks, respectful next steps, or ready-to-send neutral phrases as appropriate."
                 },
                 evidence: {
                   type: "array",

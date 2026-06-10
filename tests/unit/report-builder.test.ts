@@ -174,12 +174,7 @@ describe("buildStrategicReport", () => {
       relatedProfiles: [],
       posts: [post]
     };
-    const raw = REQUIRED_SECTIONS.standard
-      .map(
-        (title) =>
-          `[[SECTION]]\n${title}\nПрофиль содержит публичную ссылку в био.\nEvidence:\n- profile link: https://example.com/alice`
-      )
-      .join("\n\n");
+    const raw = fullReportRaw({ sourceLine: "- profile link: https://example.com/alice" });
     const llm: LlmProvider = {
       analyzeVision: vi.fn(async () => []),
       generateReport: vi.fn(async () => ({
@@ -226,12 +221,7 @@ describe("buildStrategicReport", () => {
       relatedProfiles: [],
       posts: [post]
     };
-    const raw = REQUIRED_SECTIONS.standard
-      .map(
-        (title) =>
-          `[[SECTION]]\n${title}\nConfidence: medium. Наблюдение по публичным данным.\nEvidence:\n- [p1] факт https://www.instagram.com/p/p1/`
-      )
-      .join("\n\n");
+    const raw = fullReportRaw();
     const llm: LlmProvider = {
       analyzeVision: vi.fn(async () => []),
       generateReport: vi.fn(async () => ({
@@ -254,4 +244,121 @@ describe("buildStrategicReport", () => {
       "тематические кластеры и сигналы аудитории дают самые сильные сигналы по ID постов."
     );
   });
+
+  it("repairs structurally valid reports when practical sections are too thin", async () => {
+    const post: InstagramPost = {
+      id: "p1",
+      type: "Image",
+      caption: "coffee workshop and city walk",
+      hashtags: [],
+      mentions: [],
+      likesCount: 40,
+      commentsCount: 4,
+      latestComments: [
+        {
+          ownerUsername: "viewer",
+          text: "Где это место?",
+          timestamp: "2026-06-01T01:00:00Z"
+        }
+      ],
+      timestamp: "2026-06-01T00:00:00Z",
+      url: "https://www.instagram.com/p/p1/",
+      isPinned: false,
+      childPosts: [],
+      taggedUsers: []
+    };
+    const profile: InstagramProfile = {
+      username: "alice",
+      followersCount: 1000,
+      followsCount: 300,
+      postsCount: 18,
+      isVerified: false,
+      relatedProfiles: [],
+      posts: [post]
+    };
+    const thinRaw = REQUIRED_SECTIONS.standard
+      .map(
+        (title) =>
+          `[[SECTION]]\n${title}\n${thinPracticalContent(title)}\nEvidence:\n- [p1] public post: факт https://www.instagram.com/p/p1/`
+      )
+      .join("\n\n");
+    const repairedRaw = fullReportRaw();
+    const llm: LlmProvider = {
+      analyzeVision: vi.fn(async () => [
+        {
+          postId: "p1",
+          status: "completed" as const,
+          description:
+            "[Image ID: p1] coffee workshop table, city street, public caption context and visible object details",
+          model: "vision",
+          promptVersion: "vision"
+        }
+      ]),
+      generateReport: vi.fn(async () => ({
+        rawText: thinRaw,
+        model: "reasoning",
+        promptVersion: "report"
+      })),
+      repairReport: vi.fn(async () => ({
+        rawText: repairedRaw,
+        model: "reasoning",
+        promptVersion: "report.repair"
+      })),
+      chat: vi.fn()
+    };
+
+    const report = await buildStrategicReport({ mode: "standard", language: "ru", profile, llm });
+
+    expect(llm.repairReport).toHaveBeenCalledWith(
+      expect.objectContaining({
+        missingSections: [],
+        qualityFindings: expect.arrayContaining([
+          expect.stringContaining("content:weak_practical_detail")
+        ])
+      })
+    );
+    expect(report.rawText).toBe(repairedRaw);
+    expect(report.promptVersion).toBe("report.repair");
+  });
 });
+
+function fullReportRaw(input: { sourceLine?: string } = {}): string {
+  const sourceLine = input.sourceLine ?? "- [p1] факт https://www.instagram.com/p/p1/";
+  return REQUIRED_SECTIONS.standard
+    .map(
+      (title) => `[[SECTION]]\n${title}\n${richPracticalContent(title)}\nEvidence:\n${sourceLine}`
+    )
+    .join("\n\n");
+}
+
+function thinPracticalContent(title: string): string {
+  if (
+    title === "Потенциальная польза от контакта" ||
+    title === "Триггеры и зацепки" ||
+    title === "Коммуникационные рекомендации" ||
+    title === "Готовые фразы для входа в диалог" ||
+    title === "Общая оценка ценности профиля"
+  ) {
+    return "Есть полезный сигнал, но практических деталей мало. Confidence: medium. Caveat: public data only.";
+  }
+  return "Наблюдение опирается на публичный пост, комментарий, vision и metrics. Confidence: medium. Caveat: public data only.";
+}
+
+function richPracticalContent(title: string): string {
+  if (title === "Потенциальная польза от контакта") {
+    return "Confidence: medium. Профиль полезен как источник мягкого входа через публичные интересы: caption про городской маршрут, vision с кофейным столом и комментарий с вопросом о месте дают безопасную тему, которая не залезает в личную жизнь. Почему это важно: пользователь получает повод начать диалог не с оценки внешности, а с конкретного общего контекста. Реалистичный шаг: уточнить место, спросить о формате прогулки и предложить обмениться рекомендациями. Caveat: готовность к контакту не выводится из постов.";
+  }
+  if (title === "Триггеры и зацепки") {
+    return "Confidence: medium. 1. Зацепка по локации: спросить, где находится место из публичного поста, потому что комментарии уже показывают интерес к географии. 2. Зацепка по объекту: отметить кофейный стол или мастерскую из vision как нейтральную деталь, не превращая это в личную оценку. 3. Зацепка по маршруту: аккуратно спросить, есть ли у автора любимые городские точки. Caveat: не использовать приватные предположения и не давить повторными сообщениями.";
+  }
+  if (title === "Коммуникационные рекомендации") {
+    return "Confidence: medium. Начинать лучше коротко и предметно: сначала сослаться на публичный пост, затем задать один открытый вопрос, потом оставить пространство не отвечать. Второй шаг: если ответ есть, развивать тему через рекомендации по месту или формату прогулки. Третий шаг: предложить свой похожий опыт без самопродажи. Избегать давления, флирта, оценок внешности, вопросов о личной жизни и выводов о статусе. Caveat: стиль личной переписки неизвестен.";
+  }
+  if (title === "Готовые фразы для входа в диалог") {
+    return "Confidence: medium. «Привет! Увидел пост с городским маршрутом: можешь подсказать, где это место?» «Классная деталь с кофейным столом в посте, похоже на спокойный формат выходного. Есть любимые точки в этом районе?» «В комментариях спрашивали про локацию, мне тоже стало интересно: это больше прогулка или конкретное место?» Фразы нейтральные, привязаны к public evidence и не содержат флирта. Caveat: отправлять одну фразу, без серии повторов.";
+  }
+  if (title === "Общая оценка ценности профиля") {
+    return "Confidence: medium. Вердикт: профиль дает достаточно публичных сигналов для уважительного первого контакта, но недостаточно для сильных выводов о личности или намерениях. Практическая ценность в том, что есть несколько безопасных тем: город, места, визуальные детали и комментарии. Главный лимит: выборка мала и не показывает сторис или личные ответы. Следующий разумный шаг: выбрать одну evidence-tied фразу, задать один вопрос и остановиться, если реакции нет.";
+  }
+  return "Confidence: medium. Наблюдение строится на публичном посте, caption, vision, комментариях и metrics: повторяется городской контекст, предметная визуальная деталь и мягкий интерес аудитории к месту. Практический смысл в том, что профиль лучше читать как selected public-post read, а не как полную картину человека. Рекомендация: использовать только подтвержденные темы, прямо признавать ограниченность выборки и не делать выводов о приватной жизни. Caveat: посты, сторис и личные ответы вне выборки не анализировались.";
+}

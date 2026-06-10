@@ -16,6 +16,12 @@ import type {
   StrategicReportView,
   VisionAnalysisItemView
 } from "../reports/types.js";
+import {
+  contentQualityFindingsNeedRepair,
+  evaluateReportContentQuality,
+  renderContentQualityFindings,
+  type ContentQualityRubric
+} from "./content-quality.js";
 import { analysisContextDigest, buildAnalysisContext, selectAnalysisPosts } from "./context.js";
 import {
   evaluateReportQuality,
@@ -80,12 +86,25 @@ export async function buildStrategicReport(input: {
     metrics,
     analysisContext
   });
+  const analysisHealth = buildReportAnalysisHealth(metrics, vision, posts);
+  const healthWarnings = analysisHealthWarnings(input.language, analysisHealth);
+  let contentQualitySummary = evaluateReportContentQuality({
+    sections,
+    executiveSummary: buildExecutiveSummary(
+      input.language,
+      analysisHealth,
+      summaryBulletsFor(generated, sections, input.language)
+    ),
+    warnings: healthWarnings,
+    metrics
+  });
 
   if (
     (missing.length ||
       shouldRepairSources(sections, weakSourceSections) ||
       groundingFindings.length ||
-      qualityFindingsNeedRepair(qualitySummary.findings)) &&
+      qualityFindingsNeedRepair(qualitySummary.findings) ||
+      contentQualityFindingsNeedRepair(contentQualitySummary.findings)) &&
     input.llm.repairReport
   ) {
     const repaired = await input.llm
@@ -103,7 +122,10 @@ export async function buildStrategicReport(input: {
         missingSections: missing,
         weakSourceSections,
         groundingFindings: renderGroundingFindings(groundingFindings),
-        qualityFindings: renderQualityFindings(qualitySummary.findings)
+        qualityFindings: [
+          ...renderQualityFindings(qualitySummary.findings),
+          ...renderContentQualityFindings(contentQualitySummary.findings)
+        ]
       })
       .catch(() => undefined);
     if (repaired) {
@@ -117,13 +139,31 @@ export async function buildStrategicReport(input: {
         metrics,
         analysisContext
       });
+      const repairedContentQualitySummary = evaluateReportContentQuality({
+        sections: repairedSections,
+        executiveSummary: buildExecutiveSummary(
+          input.language,
+          analysisHealth,
+          summaryBulletsFor(repaired, repairedSections, input.language)
+        ),
+        warnings: healthWarnings,
+        metrics
+      });
       if (
         reportIssueScore(
           repairedSections,
           repairedMissing,
           repairedGrounding,
-          repairedQualitySummary.findings
-        ) < reportIssueScore(sections, missing, groundingFindings, qualitySummary.findings)
+          repairedQualitySummary.findings,
+          repairedContentQualitySummary
+        ) <
+        reportIssueScore(
+          sections,
+          missing,
+          groundingFindings,
+          qualitySummary.findings,
+          contentQualitySummary
+        )
       ) {
         generated = repaired;
         sections = repairedSections;
@@ -131,20 +171,14 @@ export async function buildStrategicReport(input: {
         weakSourceSections = repairedWeakSourceSections;
         groundingFindings = repairedGrounding;
         qualitySummary = repairedQualitySummary;
+        contentQualitySummary = repairedContentQualitySummary;
       }
     }
   }
 
   const sourceMap = sections.flatMap((section) => section.sources);
-  const bullets = generated.summaryBullets?.length
-    ? generated.summaryBullets.map((bullet) => cleanSummaryBullet(bullet, input.language))
-    : sections
-        .slice(0, 5)
-        .map(
-          (section) => `${section.title}: ${section.content.slice(0, 140).replace(/\s+/g, " ")}...`
-        );
+  const bullets = summaryBulletsFor(generated, sections, input.language);
   const qualityWarning = renderQualityWarning(qualitySummary);
-  const analysisHealth = buildReportAnalysisHealth(metrics, vision, posts);
   const executiveSummary = buildExecutiveSummary(input.language, analysisHealth, bullets);
 
   return {
@@ -157,7 +191,7 @@ export async function buildStrategicReport(input: {
       executiveSummary,
       bullets: bullets.length ? bullets : [`Public profile @${profile.username} was analyzed.`],
       warnings: [
-        ...analysisHealthWarnings(input.language, analysisHealth),
+        ...healthWarnings,
         ...(missing.length ? [`Missing/weak sections: ${missing.join(", ")}`] : []),
         ...(groundingFindings.length
           ? [`Unresolved grounding flags: ${groundingFindings.length}`]
@@ -177,6 +211,20 @@ export async function buildStrategicReport(input: {
     vision,
     analysisContext
   };
+}
+
+function summaryBulletsFor(
+  generated: { summaryBullets?: string[] },
+  sections: ReportSectionView[],
+  language: Locale
+): string[] {
+  return generated.summaryBullets?.length
+    ? generated.summaryBullets.map((bullet) => cleanSummaryBullet(bullet, language))
+    : sections
+        .slice(0, 5)
+        .map(
+          (section) => `${section.title}: ${section.content.slice(0, 140).replace(/\s+/g, " ")}...`
+        );
 }
 
 function buildReportAnalysisHealth(
@@ -329,18 +377,28 @@ function reportIssueScore(
   sections: Array<{ sources: unknown[] }>,
   missingSections: string[],
   groundingFindings: GroundingFinding[] = [],
-  qualityFindings: SectionQualityFinding[] = []
+  qualityFindings: SectionQualityFinding[] = [],
+  contentQuality?: ContentQualityRubric
 ): number {
   const qualityPenalty = qualityFindings.reduce((sum, finding) => {
     if (finding.severity === "high") return sum + 6;
     if (finding.severity === "medium") return sum + 3;
     return sum;
   }, 0);
+  const contentQualityPenalty = contentQuality
+    ? Math.ceil((100 - contentQuality.score) / 5) +
+      contentQuality.findings.reduce((sum, finding) => {
+        if (finding.severity === "high") return sum + 8;
+        if (finding.severity === "medium") return sum + 4;
+        return sum + 1;
+      }, 0)
+    : 0;
   return (
     missingSections.length * 10 +
     sections.filter((section) => !section.sources.length).length +
     groundingFindings.length * 5 +
-    qualityPenalty
+    qualityPenalty +
+    contentQualityPenalty
   );
 }
 

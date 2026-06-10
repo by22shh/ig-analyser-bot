@@ -532,8 +532,7 @@ function buildRiskSignals(
     });
   }
   const failedVision = vision.filter(
-    (item) =>
-      item.status === "failed" || item.status === "skipped" || item.status === "low_quality"
+    (item) => item.status === "failed" || item.status === "skipped" || item.status === "low_quality"
   );
   if (failedVision.length) {
     risks.push({

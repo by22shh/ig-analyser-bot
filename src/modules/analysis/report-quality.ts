@@ -1,6 +1,7 @@
 import type { AnalysisMode } from "../../telegram/constants.js";
 import type { AnalysisContext } from "./context.js";
 import type { ReportMetrics, ReportSectionView } from "../reports/types.js";
+import { findUserFacingInstructionLeaks } from "./instruction-leak.js";
 
 export type SectionQualitySeverity = "low" | "medium" | "high";
 
@@ -102,6 +103,17 @@ export function evaluateReportQuality(input: {
     });
   }
 
+  const instructionLeaks = findUserFacingInstructionLeaks(
+    input.sections.map((section) => section.content).join("\n")
+  );
+  if (instructionLeaks.length) {
+    findings.push({
+      id: "report:user_facing_instruction_leak",
+      severity: "high",
+      detail: `Report exposes internal generation/rubric wording: ${instructionLeaks.join(", ")}.`
+    });
+  }
+
   if (input.analysisContext?.riskSignals.some((signal) => signal.id === "risk:vision_gaps")) {
     findings.push({
       id: "report:vision_evidence_gap",
@@ -152,7 +164,8 @@ export function qualityFindingsNeedRepair(findings: SectionQualityFinding[]): bo
   return (
     findings.some((finding) => finding.severity === "high") ||
     mediumCount >= 3 ||
-    findings.some((finding) => finding.id === "report:low_evidence_coverage")
+    findings.some((finding) => finding.id === "report:low_evidence_coverage") ||
+    findings.some((finding) => finding.id.endsWith(":missing_source"))
   );
 }
 

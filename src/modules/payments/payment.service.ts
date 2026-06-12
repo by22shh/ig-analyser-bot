@@ -1,4 +1,4 @@
-import type { PrismaClient, Prisma } from "@prisma/client";
+import { Prisma, type PrismaClient } from "@prisma/client";
 import type { Api, RawApi } from "grammy";
 import { env } from "../../config/env.js";
 import { CREDIT_PACKAGES, getPackage, publicPackages } from "../billing/packages.js";
@@ -660,25 +660,57 @@ export class PaymentService {
         reused: true as const
       };
     }
-    const order = await this.prisma.paymentOrder.create({
-      data: {
-        userId: input.userId,
-        packageId: dbPkg.id,
-        packagePriceId: price.id,
-        status: "pending_payment",
-        amountMinor: price.amountMinor,
-        currency: "RUB",
-        creditsUnits: pkg.creditsUnits,
-        provider: "yookassa",
-        idempotencyKey: input.idempotencyKey,
-        telegramChatId: BigInt(input.chatId),
-        userEmail: input.userEmail,
-        expiresAt: new Date(Date.now() + 60 * 60 * 1000)
-      }
+    const existingIdempotentOrder = await this.prisma.paymentOrder.findUnique({
+      where: { idempotencyKey: input.idempotencyKey }
     });
+    let order =
+      existingIdempotentOrder ??
+      (await this.prisma.paymentOrder
+        .create({
+          data: {
+            userId: input.userId,
+            packageId: dbPkg.id,
+            packagePriceId: price.id,
+            status: "pending_payment",
+            amountMinor: price.amountMinor,
+            currency: "RUB",
+            creditsUnits: pkg.creditsUnits,
+            provider: "yookassa",
+            idempotencyKey: input.idempotencyKey,
+            telegramChatId: BigInt(input.chatId),
+            userEmail: input.userEmail,
+            expiresAt: new Date(Date.now() + 60 * 60 * 1000)
+          }
+        })
+        .catch(async (error) => {
+          if (!isUniqueConstraint(error)) throw error;
+          return this.prisma.paymentOrder.findUniqueOrThrow({
+            where: { idempotencyKey: input.idempotencyKey }
+          });
+        }));
+    if (
+      order.userId !== input.userId ||
+      order.packageId !== dbPkg.id ||
+      order.provider !== "yookassa" ||
+      order.amountMinor !== price.amountMinor ||
+      order.currency !== "RUB" ||
+      order.telegramChatId !== BigInt(input.chatId) ||
+      (order.userEmail ?? null) !== (input.userEmail ?? null)
+    ) {
+      throw new Error("IDEMPOTENCY_KEY_CONFLICT");
+    }
+    if (order.confirmationUrl) {
+      return {
+        orderId: order.id,
+        confirmationUrl: order.confirmationUrl,
+        amountMinor: order.amountMinor,
+        creditsUnits: order.creditsUnits,
+        reused: true as const
+      };
+    }
     const payment = await this.yookassa
       .createPayment({
-        idempotencyKey: order.id,
+        idempotencyKey: input.idempotencyKey,
         amountMinor: price.amountMinor,
         description: `${pkg.title}: ${pkg.creditsUnits / 100} credits`,
         returnUrl: env.YOOKASSA_RETURN_URL,
@@ -692,41 +724,67 @@ export class PaymentService {
         });
         throw error;
       });
-    await this.prisma.paymentOrder.update({
-      where: { id: order.id },
-      data: { providerPaymentId: payment.id, confirmationUrl: payment.confirmationUrl }
-    });
-    await this.prisma.yooKassaPayment.create({
-      data: {
-        paymentOrderId: order.id,
-        yookassaPaymentId: payment.id,
-        status: payment.status,
-        paid: payment.paid,
-        amountMinor: payment.amountMinor,
-        currency: payment.currency,
-        refundable: payment.refundable,
-        test: payment.test,
-        raw: payment.raw as never
-      }
-    });
-    if (env.YOOKASSA_USE_RECEIPTS && input.userEmail) {
-      await this.prisma.fiscalReceipt.create({
+    order = await this.prisma.$transaction(async (tx) => {
+      const updatedOrder = await tx.paymentOrder.update({
+        where: { id: order.id },
         data: {
-          paymentOrderId: order.id,
-          provider: "yookassa",
-          type: "payment",
-          status: "pending",
-          customerEmail: input.userEmail,
-          amountMinor: price.amountMinor,
-          currency: "RUB",
-          taxSystemCode: env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE
-            ? Number(env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE)
-            : undefined,
-          vatCode: env.YOOKASSA_DEFAULT_VAT_CODE,
-          payload: { orderId: order.id, packageCode: pkg.code }
+          status: "pending_payment",
+          providerPaymentId: payment.id,
+          confirmationUrl: payment.confirmationUrl
         }
       });
-    }
+      await tx.yooKassaPayment.upsert({
+        where: { paymentOrderId: order.id },
+        create: {
+          paymentOrderId: order.id,
+          yookassaPaymentId: payment.id,
+          status: payment.status,
+          paid: payment.paid,
+          amountMinor: payment.amountMinor,
+          currency: payment.currency,
+          refundable: payment.refundable,
+          test: payment.test,
+          metadata: payment.metadata as never,
+          raw: payment.raw as never
+        },
+        update: {
+          yookassaPaymentId: payment.id,
+          status: payment.status,
+          paid: payment.paid,
+          amountMinor: payment.amountMinor,
+          currency: payment.currency,
+          refundable: payment.refundable,
+          test: payment.test,
+          metadata: payment.metadata as never,
+          raw: payment.raw as never
+        }
+      });
+      if (env.YOOKASSA_USE_RECEIPTS && input.userEmail) {
+        const existingReceipt = await tx.fiscalReceipt.findFirst({
+          where: { paymentOrderId: order.id, provider: "yookassa", type: "payment" },
+          select: { id: true }
+        });
+        if (!existingReceipt) {
+          await tx.fiscalReceipt.create({
+            data: {
+              paymentOrderId: order.id,
+              provider: "yookassa",
+              type: "payment",
+              status: "pending",
+              customerEmail: input.userEmail,
+              amountMinor: price.amountMinor,
+              currency: "RUB",
+              taxSystemCode: env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE
+                ? Number(env.YOOKASSA_DEFAULT_TAX_SYSTEM_CODE)
+                : undefined,
+              vatCode: env.YOOKASSA_DEFAULT_VAT_CODE,
+              payload: { orderId: order.id, packageCode: pkg.code }
+            }
+          });
+        }
+      }
+      return updatedOrder;
+    });
     return {
       orderId: order.id,
       confirmationUrl: payment.confirmationUrl,
@@ -772,6 +830,7 @@ export class PaymentService {
       return { accepted: true, processed: false };
     }
     const payment = await this.yookassa.getPayment(providerObjectId);
+    const metadataOrderId = yookassaOrderIdFrom(payment);
     if (!payment.paid || payment.status !== "succeeded") {
       await this.prisma.paymentEvent.update({
         where: { id: event.id },
@@ -787,10 +846,70 @@ export class PaymentService {
       const orderLocks = await tx.$queryRaw<
         Array<{ id: string }>
       >`SELECT id FROM payment_orders WHERE "providerPaymentId" = ${providerObjectId} FOR UPDATE`;
-      const orderId = orderLocks[0]?.id;
-      if (!orderId) throw new Error("PAYMENT_ORDER_NOT_FOUND");
-      const order = await tx.paymentOrder.findUniqueOrThrow({ where: { id: orderId } });
+      let orderId = orderLocks[0]?.id;
+      if (!orderId && metadataOrderId) {
+        const metadataOrderLocks = await tx.$queryRaw<
+          Array<{ id: string }>
+        >`SELECT id FROM payment_orders WHERE id = CAST(${metadataOrderId} AS uuid) FOR UPDATE`;
+        orderId = metadataOrderLocks[0]?.id;
+      }
+      if (!orderId) {
+        await tx.paymentEvent.update({
+          where: { id: event.id },
+          data: {
+            processingStatus: "failed",
+            errorCode: "PAYMENT_ORDER_NOT_FOUND",
+            processedAt: new Date()
+          }
+        });
+        return { accepted: true, processed: false };
+      }
+      const order = await tx.paymentOrder.findUniqueOrThrow({
+        where: { id: orderId },
+        include: { package: { select: { code: true } } }
+      });
+      if (
+        order.provider !== "yookassa" ||
+        (order.providerPaymentId && order.providerPaymentId !== providerObjectId)
+      ) {
+        await tx.paymentEvent.update({
+          where: { id: event.id },
+          data: {
+            paymentOrderId: order.id,
+            processingStatus: "failed",
+            errorCode: "PAYMENT_PROVIDER_MISMATCH",
+            processedAt: new Date()
+          }
+        });
+        return { accepted: true, processed: false, orderId: order.id };
+      }
       if (order.status === "paid") {
+        await tx.yooKassaPayment.upsert({
+          where: { paymentOrderId: order.id },
+          create: {
+            paymentOrderId: order.id,
+            yookassaPaymentId: payment.id,
+            status: payment.status,
+            paid: payment.paid,
+            amountMinor: payment.amountMinor,
+            currency: payment.currency,
+            refundable: payment.refundable,
+            test: payment.test,
+            metadata: payment.metadata as never,
+            raw: payment.raw as never
+          },
+          update: {
+            yookassaPaymentId: payment.id,
+            status: payment.status,
+            paid: payment.paid,
+            amountMinor: payment.amountMinor,
+            currency: payment.currency,
+            refundable: payment.refundable,
+            test: payment.test,
+            metadata: payment.metadata as never,
+            raw: payment.raw as never
+          }
+        });
         await tx.paymentEvent.update({
           where: { id: event.id },
           data: { paymentOrderId: order.id, processingStatus: "processed", processedAt: new Date() }
@@ -809,7 +928,25 @@ export class PaymentService {
         });
         return { accepted: true, processed: false, orderId: order.id };
       }
+      const metadataMismatch = yookassaOrderMetadataMismatch(payment, order);
+      if (metadataMismatch) {
+        await tx.paymentEvent.update({
+          where: { id: event.id },
+          data: {
+            paymentOrderId: order.id,
+            processingStatus: "failed",
+            errorCode: metadataMismatch,
+            processedAt: new Date()
+          }
+        });
+        return { accepted: true, processed: false, orderId: order.id };
+      }
 
+      await tx.creditAccount.upsert({
+        where: { userId: order.userId },
+        create: { userId: order.userId },
+        update: {}
+      });
       await tx.$queryRaw`SELECT id FROM credit_accounts WHERE "userId" = CAST(${order.userId} AS uuid) FOR UPDATE`;
       const account = await tx.creditAccount.update({
         where: { userId: order.userId },
@@ -828,14 +965,31 @@ export class PaymentService {
       });
       await tx.paymentOrder.update({
         where: { id: order.id },
-        data: { status: "paid", paidAt: new Date() }
+        data: { status: "paid", providerPaymentId: providerObjectId, paidAt: new Date() }
       });
-      await tx.yooKassaPayment.update({
+      await tx.yooKassaPayment.upsert({
         where: { paymentOrderId: order.id },
-        data: {
+        create: {
+          paymentOrderId: order.id,
+          yookassaPaymentId: payment.id,
           status: payment.status,
           paid: payment.paid,
+          amountMinor: payment.amountMinor,
+          currency: payment.currency,
           refundable: payment.refundable,
+          test: payment.test,
+          metadata: payment.metadata as never,
+          raw: payment.raw as never
+        },
+        update: {
+          yookassaPaymentId: payment.id,
+          status: payment.status,
+          paid: payment.paid,
+          amountMinor: payment.amountMinor,
+          currency: payment.currency,
+          refundable: payment.refundable,
+          test: payment.test,
+          metadata: payment.metadata as never,
           raw: payment.raw as never
         }
       });
@@ -1029,4 +1183,53 @@ function telegramStarsIdentityMatches(
 function isTelegramStarsAlreadyRefundedError(error: unknown): boolean {
   const message = error instanceof Error ? error.message : String(error);
   return /already.+refund|refund.+already/i.test(message);
+}
+
+function isUniqueConstraint(error: unknown): boolean {
+  return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
+}
+
+function yookassaOrderIdFrom(payment: { metadata?: Record<string, string>; raw?: unknown }) {
+  const fromPayment = stringValue(
+    payment.metadata?.order_id ?? metadataValue(payment.raw, "order_id")
+  );
+  return fromPayment && isUuid(fromPayment) ? fromPayment : undefined;
+}
+
+function yookassaOrderMetadataMismatch(
+  payment: { metadata?: Record<string, string>; raw?: unknown },
+  order: { id: string; userId: string; package: { code: string } }
+): string | undefined {
+  const orderId = yookassaOrderIdFrom(payment);
+  if (orderId && orderId !== order.id) return "PAYMENT_METADATA_ORDER_MISMATCH";
+
+  const userId = yookassaPaymentMetadataString(payment, "user_id");
+  if (userId && userId !== order.userId) return "PAYMENT_METADATA_USER_MISMATCH";
+
+  const packageCode = yookassaPaymentMetadataString(payment, "package_code");
+  if (packageCode && packageCode !== order.package.code) return "PAYMENT_METADATA_PACKAGE_MISMATCH";
+
+  return undefined;
+}
+
+function yookassaPaymentMetadataString(
+  payment: { metadata?: Record<string, string>; raw?: unknown },
+  key: string
+): string | undefined {
+  return stringValue(payment.metadata?.[key] ?? metadataValue(payment.raw, key));
+}
+
+function metadataValue(value: unknown, key: string): unknown {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+  const metadata = (value as { metadata?: unknown }).metadata;
+  if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) return undefined;
+  return (metadata as Record<string, unknown>)[key];
+}
+
+function stringValue(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim() ? value.trim() : undefined;
+}
+
+function isUuid(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
 }

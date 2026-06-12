@@ -1,5 +1,9 @@
-import { PRACTICAL_REPAIR_HINT_EN } from "../../prompts/practical-requirements.js";
+import {
+  PRACTICAL_REPAIR_HINT_EN,
+  PRACTICAL_REQUIREMENTS
+} from "../../prompts/practical-requirements.js";
 import type { ReportMetrics, ReportSectionView } from "../reports/types.js";
+import { findUserFacingInstructionLeaks } from "./instruction-leak.js";
 
 export type ContentQualityFinding = {
   id: string;
@@ -25,7 +29,8 @@ const REPAIR_WORTHY_FINDING_IDS = new Set([
   "content:key_sections_too_short",
   "content:weak_practical_detail",
   "content:low_practical_value",
-  "content:missing_low_coverage_framing"
+  "content:missing_low_coverage_framing",
+  "content:user_facing_instruction_leak"
 ]);
 
 export function evaluateReportContentQuality(input: {
@@ -61,6 +66,7 @@ export function evaluateReportContentQuality(input: {
     text,
     /recent \d+-post read|покрыт|coverage|vision|комментар|comment text|выборк/giu
   );
+  const instructionLeaks = findUserFacingInstructionLeaks(text);
   const keyShortfalls = keySectionShortfalls(input.sections);
   const practicalShortfalls = practicalDetailShortfalls(input.sections);
   const keySectionDepth =
@@ -144,6 +150,13 @@ export function evaluateReportContentQuality(input: {
       });
     }
   }
+  if (instructionLeaks.length) {
+    findings.push({
+      id: "content:user_facing_instruction_leak",
+      severity: "high",
+      detail: `Report exposes internal generation/rubric wording: ${instructionLeaks.join(", ")}.`
+    });
+  }
 
   const weightedScore = Math.round(
     dimensions.specificity * 0.22 +
@@ -189,6 +202,9 @@ function contentQualityRepairHint(id: string): string | undefined {
   }
   if (id === "content:missing_low_coverage_framing") {
     return "State the report is a selected/recent public-post read and avoid whole-profile conclusions.";
+  }
+  if (id === "content:user_facing_instruction_leak") {
+    return "Rewrite leaked instruction/rubric wording as natural user-facing analysis; do not mention counts, word-count targets, rubric targets, or repair instructions.";
   }
   if (id === "content:weak_confidence_calibration") {
     return "Name confidence level, sample limits, public-data limits, and what cannot be inferred.";
@@ -268,7 +284,11 @@ function practicalDetailShortfalls(sections: ReportSectionView[]): {
         words: wordCount(section.content),
         detailMarkers: practicalDetailMarkers(section.content)
       }))
-      .filter((section) => section.words < 50 || section.detailMarkers < 2)
+      .filter(
+        (section) =>
+          section.words < PRACTICAL_REQUIREMENTS.minPracticalSectionWords ||
+          section.detailMarkers < 3
+      )
   };
 }
 

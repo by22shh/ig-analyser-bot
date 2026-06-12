@@ -463,8 +463,9 @@ export const en = {
     analyzingSignals: "Analyzing visual and text signals",
     generatingExports: "Generating PDF/Markdown/HTML"
   },
-  adminGrantUsage(): string {
-    return "Usage: /admin_grant <telegram_id> <credits>";
+  adminGrantUsage(input?: { maxCredits?: number }): string {
+    const limit = input?.maxCredits ? `, maximum ${input.maxCredits} credits per command` : "";
+    return `Usage: /admin_grant <telegram_id> <credits>${limit}`;
   },
   adminUserNotFound(): string {
     return "User not found.";

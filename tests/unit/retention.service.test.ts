@@ -5,31 +5,48 @@ function fakeTx() {
   return {
     reportArtifact: { deleteMany: vi.fn(async () => undefined) },
     report: { delete: vi.fn(async () => undefined) },
+    analysisJob: { delete: vi.fn(async () => undefined) },
     auditLog: { create: vi.fn(async () => undefined) }
   };
 }
 
 function buildService(
-  reports: Array<{ id: string; userId: string; artifacts: Array<{ storageKey: string }> }>,
+  reports: Array<{
+    id: string;
+    userId: string;
+    analysisJobId: string;
+    artifacts: Array<{ storageKey: string }>;
+  }>,
   failKey?: string
 ) {
+  const tx = fakeTx();
   const $transaction = vi.fn(async (cb: (tx: ReturnType<typeof fakeTx>) => Promise<unknown>) =>
-    cb(fakeTx())
+    cb(tx)
   );
   const prisma = { report: { findMany: vi.fn(async () => reports) }, $transaction };
   const deleteObjects = vi.fn(async (keys: string[]) => {
     if (failKey && keys.includes(failKey)) throw new Error("S3_DOWN");
   });
   const service = new RetentionService(prisma as never, { deleteObjects } as never);
-  return { service, prisma, deleteObjects, $transaction };
+  return { service, prisma, deleteObjects, $transaction, tx };
 }
 
 describe("RetentionService.cleanupExpiredReports", () => {
   it("keeps cleaning the batch when one report fails, returning only successes", async () => {
     const { service, $transaction } = buildService(
       [
-        { id: "a", userId: "u1", artifacts: [{ storageKey: "reports/a/x.pdf" }] },
-        { id: "b", userId: "u2", artifacts: [{ storageKey: "reports/b/x.pdf" }] }
+        {
+          id: "a",
+          userId: "u1",
+          analysisJobId: "job-a",
+          artifacts: [{ storageKey: "reports/a/x.pdf" }]
+        },
+        {
+          id: "b",
+          userId: "u2",
+          analysisJobId: "job-b",
+          artifacts: [{ storageKey: "reports/b/x.pdf" }]
+        }
       ],
       "reports/a/x.pdf"
     );
@@ -42,15 +59,17 @@ describe("RetentionService.cleanupExpiredReports", () => {
   });
 
   it("returns the full count when every report cleans successfully", async () => {
-    const { service, $transaction } = buildService([
-      { id: "a", userId: "u1", artifacts: [] },
-      { id: "b", userId: "u2", artifacts: [] }
+    const { service, $transaction, tx } = buildService([
+      { id: "a", userId: "u1", analysisJobId: "job-a", artifacts: [] },
+      { id: "b", userId: "u2", analysisJobId: "job-b", artifacts: [] }
     ]);
 
     const count = await service.cleanupExpiredReports(new Date());
 
     expect(count).toBe(2);
     expect($transaction).toHaveBeenCalledTimes(2);
+    expect(tx.analysisJob.delete).toHaveBeenCalledWith({ where: { id: "job-a" } });
+    expect(tx.analysisJob.delete).toHaveBeenCalledWith({ where: { id: "job-b" } });
   });
 });
 

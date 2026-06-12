@@ -16,13 +16,13 @@ describe("practical requirements constants", () => {
   it("keeps Russian section guides in sync with the shared minimums", () => {
     const guides = sectionGuidesForMode("standard");
     expect(guides["Триггеры и зацепки"]).toContain(
-      `Не меньше ${PRACTICAL_REQUIREMENTS.minHooks} конкретных безопасных зацепок`
+      `Дай ${PRACTICAL_REQUIREMENTS.minHooks} конкретные безопасные зацепки`
     );
     expect(guides["Готовые фразы для входа в диалог"]).toContain(
-      `Не меньше ${PRACTICAL_REQUIREMENTS.minReadyPhrases} готовых вступительных фраз`
+      `Дай ${PRACTICAL_REQUIREMENTS.minReadyPhrases} готовые вступительные фразы`
     );
     expect(guides["Коммуникационные рекомендации"]).toContain(
-      `${PRACTICAL_REQUIREMENTS.nextStepsMin}–${PRACTICAL_REQUIREMENTS.nextStepsMax} уважительных next steps`
+      `Дай ${PRACTICAL_REQUIREMENTS.nextStepsMin}–${PRACTICAL_REQUIREMENTS.nextStepsMax} уважительных следующих шага`
     );
   });
 
@@ -30,18 +30,28 @@ describe("practical requirements constants", () => {
     const rendered = renderContentQualityFindings([
       { id: "content:weak_practical_detail", severity: "medium", detail: "detail" }
     ]);
+    expect(rendered[0]).toContain(`${PRACTICAL_REQUIREMENTS.minHooks} profile-specific hooks`);
     expect(rendered[0]).toContain(
-      `at least ${PRACTICAL_REQUIREMENTS.minHooks} evidence-tied hooks`
+      `${PRACTICAL_REQUIREMENTS.nextStepsMin}-${PRACTICAL_REQUIREMENTS.nextStepsMax} respectful actions`
     );
     expect(rendered[0]).toContain(
-      `${PRACTICAL_REQUIREMENTS.nextStepsMin}-${PRACTICAL_REQUIREMENTS.nextStepsMax} respectful next steps`
+      `${PRACTICAL_REQUIREMENTS.minReadyPhrases} neutral message drafts`
     );
+    expect(rendered[0]).toContain("Do not mention target counts");
+    expect(rendered[0]).not.toContain("evidence-tied");
+    expect(rendered[0]).not.toContain(`${PRACTICAL_REQUIREMENTS.minPracticalSectionWords}+ words`);
   });
 
   it("derives the context instruction from the shared minimums", () => {
-    expect(PRACTICAL_CONTEXT_INSTRUCTION_EN).toContain(`${PRACTICAL_REQUIREMENTS.minHooks}+ hooks`);
     expect(PRACTICAL_CONTEXT_INSTRUCTION_EN).toContain(
-      `${PRACTICAL_REQUIREMENTS.minReadyPhrases}+ neutral ready-to-send phrases`
+      `${PRACTICAL_REQUIREMENTS.minHooks} grounded hooks`
+    );
+    expect(PRACTICAL_CONTEXT_INSTRUCTION_EN).toContain(
+      `${PRACTICAL_REQUIREMENTS.minReadyPhrases} neutral message drafts`
+    );
+    expect(PRACTICAL_CONTEXT_INSTRUCTION_EN).toContain("Do not mention numeric targets");
+    expect(PRACTICAL_CONTEXT_INSTRUCTION_EN).not.toContain(
+      `${PRACTICAL_REQUIREMENTS.minPracticalSectionWords}+ words`
     );
   });
 });

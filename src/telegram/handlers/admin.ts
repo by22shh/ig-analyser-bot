@@ -20,8 +20,14 @@ export function registerAdminHandlers(bot: import("grammy").Bot<MyContext>) {
     const telegramId = Number(parts[1]);
     const credits = Number(parts[2] ?? env.ADMIN_DEFAULT_CREDITS ?? 100);
     const messages = t(ctx.user.language);
-    if (!Number.isSafeInteger(telegramId) || !Number.isFinite(credits) || credits <= 0) {
-      await sendHtml(ctx, messages.adminGrantUsage());
+    const maxGrantCredits = env.ADMIN_MAX_GRANT_CREDITS ?? 1000;
+    if (
+      !Number.isSafeInteger(telegramId) ||
+      !Number.isFinite(credits) ||
+      credits <= 0 ||
+      credits > maxGrantCredits
+    ) {
+      await sendHtml(ctx, messages.adminGrantUsage({ maxCredits: maxGrantCredits }));
       return;
     }
     const target = await ctx.services.prisma.user.findUnique({

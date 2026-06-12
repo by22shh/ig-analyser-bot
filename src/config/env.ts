@@ -96,6 +96,7 @@ const schema = z.object({
 
   DEFAULT_LANGUAGE: z.enum(["ru", "en"]).default("ru"),
   ADMIN_DEFAULT_CREDITS: optionalNumber(100),
+  ADMIN_MAX_GRANT_CREDITS: optionalNumber(1000),
   // Free credits granted once to each new user on first contact. 1 credit = one
   // Standard report. Set to 0 to disable the welcome bonus. Each granted report
   // costs real provider money (Apify/OpenRouter), so tune with abuse risk in mind.

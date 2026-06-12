@@ -1,12 +1,21 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { CreditsService } from "../../src/modules/billing/credits.service.js";
-import { MockYooKassaAdapter } from "../../src/modules/payments/adapters/yookassa.adapter.js";
+import {
+  MockYooKassaAdapter,
+  type YooKassaAdapter,
+  type YooKassaPaymentView
+} from "../../src/modules/payments/adapters/yookassa.adapter.js";
 import { encodeInvoicePayload } from "../../src/modules/payments/invoice-payload.js";
 import { PaymentService } from "../../src/modules/payments/payment.service.js";
 import { UserService } from "../../src/modules/users/user.service.js";
 import { dbAvailable, deleteUsers, prisma, seedUser, uniqueBigInt } from "./_db.js";
 
-type WebhookResult = { processed: boolean; creditsUnitsGranted?: number };
+type WebhookResult = {
+  accepted?: boolean;
+  processed: boolean;
+  orderId?: string;
+  creditsUnitsGranted?: number;
+};
 
 const createdUserIds: string[] = [];
 
@@ -59,7 +68,16 @@ describe.skipIf(!dbAvailable)("Payment webhooks (integration)", () => {
         currency: "RUB"
       }
     });
-    return { user: u, providerPaymentId };
+    return { user: u, order, providerPaymentId };
+  }
+
+  function paymentsWithProviderPayment(payment: YooKassaPaymentView) {
+    const adapter: YooKassaAdapter = {
+      createPayment: vi.fn(),
+      getPayment: vi.fn(async () => payment),
+      createRefund: vi.fn()
+    };
+    return new PaymentService(prisma, credits, adapter);
   }
 
   async function paidStarsOrder(input: { balanceUnits: number; creditsUnits: number }) {
@@ -127,6 +145,181 @@ describe.skipIf(!dbAvailable)("Payment webhooks (integration)", () => {
 
     expect(result.processed).toBe(false);
     expect((await credits.snapshot(u.id)).balanceUnits).toBe(0);
+  });
+
+  it("rejects a YooKassa webhook whose fetched payment metadata points to another order", async () => {
+    const { user: u, providerPaymentId } = await yookassaOrder(69000);
+    const otherUser = await user(0);
+    const otherOrder = await prisma.paymentOrder.create({
+      data: {
+        userId: otherUser.id,
+        packageId: startPackageId,
+        status: "pending_payment",
+        amountMinor: 69000,
+        currency: "RUB",
+        creditsUnits: 300,
+        provider: "yookassa",
+        idempotencyKey: `it-${uniqueBigInt()}`
+      }
+    });
+    const service = paymentsWithProviderPayment({
+      id: providerPaymentId,
+      status: "succeeded",
+      paid: true,
+      amountMinor: 69000,
+      currency: "RUB",
+      refundable: true,
+      test: true,
+      metadata: { order_id: otherOrder.id, user_id: otherUser.id, package_code: "start" },
+      raw: { metadata: { order_id: otherOrder.id, user_id: otherUser.id, package_code: "start" } }
+    });
+
+    const result = (await service.handleYooKassaWebhook({
+      event: "payment.succeeded",
+      object: { id: providerPaymentId },
+      raw: { id: providerPaymentId }
+    })) as WebhookResult;
+
+    expect(result.processed).toBe(false);
+    expect((await credits.snapshot(u.id)).balanceUnits).toBe(0);
+    expect((await credits.snapshot(otherUser.id)).balanceUnits).toBe(0);
+    await expect(
+      prisma.paymentEvent.findUniqueOrThrow({
+        where: {
+          provider_eventType_providerObjectId: {
+            provider: "yookassa",
+            eventType: "payment.succeeded",
+            providerObjectId: providerPaymentId
+          }
+        }
+      })
+    ).resolves.toMatchObject({ errorCode: "PAYMENT_METADATA_ORDER_MISMATCH" });
+  });
+
+  it("grants YooKassa credits when providerPaymentId was not saved but metadata carries order_id", async () => {
+    const u = await user(0);
+    const providerPaymentId = `yk_${uniqueBigInt()}`;
+    const order = await prisma.paymentOrder.create({
+      data: {
+        userId: u.id,
+        packageId: startPackageId,
+        status: "pending_payment",
+        amountMinor: 69000,
+        currency: "RUB",
+        creditsUnits: 300,
+        provider: "yookassa",
+        idempotencyKey: `it-${uniqueBigInt()}`
+      }
+    });
+    const service = paymentsWithProviderPayment({
+      id: providerPaymentId,
+      status: "succeeded",
+      paid: true,
+      amountMinor: 69000,
+      currency: "RUB",
+      refundable: true,
+      test: true,
+      metadata: { order_id: order.id },
+      raw: { metadata: { order_id: order.id } }
+    });
+
+    const result = (await service.handleYooKassaWebhook({
+      event: "payment.succeeded",
+      object: { id: providerPaymentId, metadata: { order_id: order.id } },
+      raw: { id: providerPaymentId }
+    })) as WebhookResult;
+
+    expect(result.processed).toBe(true);
+    expect((await credits.snapshot(u.id)).balanceUnits).toBe(300);
+    const paidOrder = await prisma.paymentOrder.findUniqueOrThrow({ where: { id: order.id } });
+    expect(paidOrder.providerPaymentId).toBe(providerPaymentId);
+    await expect(
+      prisma.yooKassaPayment.findUniqueOrThrow({ where: { paymentOrderId: order.id } })
+    ).resolves.toMatchObject({
+      yookassaPaymentId: providerPaymentId,
+      paid: true,
+      status: "succeeded"
+    });
+  });
+
+  it("grants YooKassa credits when the payment order exists but the YooKassa row is missing", async () => {
+    const u = await user(0);
+    const providerPaymentId = `yk_${uniqueBigInt()}`;
+    const order = await prisma.paymentOrder.create({
+      data: {
+        userId: u.id,
+        packageId: startPackageId,
+        status: "pending_payment",
+        amountMinor: 69000,
+        currency: "RUB",
+        creditsUnits: 300,
+        provider: "yookassa",
+        providerPaymentId,
+        idempotencyKey: `it-${uniqueBigInt()}`
+      }
+    });
+    const service = paymentsWithProviderPayment({
+      id: providerPaymentId,
+      status: "succeeded",
+      paid: true,
+      amountMinor: 69000,
+      currency: "RUB",
+      refundable: true,
+      test: true,
+      raw: {}
+    });
+
+    const result = (await service.handleYooKassaWebhook({
+      event: "payment.succeeded",
+      object: { id: providerPaymentId },
+      raw: { id: providerPaymentId }
+    })) as WebhookResult;
+
+    expect(result.processed).toBe(true);
+    expect((await credits.snapshot(u.id)).balanceUnits).toBe(300);
+    await expect(
+      prisma.yooKassaPayment.findUniqueOrThrow({ where: { paymentOrderId: order.id } })
+    ).resolves.toMatchObject({
+      yookassaPaymentId: providerPaymentId,
+      paid: true,
+      status: "succeeded"
+    });
+  });
+
+  it("marks an unknown YooKassa payment event failed instead of throwing", async () => {
+    const providerPaymentId = `yk_${uniqueBigInt()}`;
+    const service = paymentsWithProviderPayment({
+      id: providerPaymentId,
+      status: "succeeded",
+      paid: true,
+      amountMinor: 69000,
+      currency: "RUB",
+      refundable: true,
+      test: true,
+      raw: {}
+    });
+
+    const result = (await service.handleYooKassaWebhook({
+      event: "payment.succeeded",
+      object: { id: providerPaymentId },
+      raw: { id: providerPaymentId }
+    })) as WebhookResult;
+
+    expect(result).toMatchObject({ accepted: true, processed: false });
+    await expect(
+      prisma.paymentEvent.findUniqueOrThrow({
+        where: {
+          provider_eventType_providerObjectId: {
+            provider: "yookassa",
+            eventType: "payment.succeeded",
+            providerObjectId: providerPaymentId
+          }
+        }
+      })
+    ).resolves.toMatchObject({
+      processingStatus: "failed",
+      errorCode: "PAYMENT_ORDER_NOT_FOUND"
+    });
   });
 
   it("grants Telegram Stars credits once and ignores a re-delivered charge", async () => {

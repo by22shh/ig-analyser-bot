@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { evaluateReportContentQuality } from "../../src/modules/analysis/content-quality.js";
+import {
+  contentQualityFindingsNeedRepair,
+  evaluateReportContentQuality
+} from "../../src/modules/analysis/content-quality.js";
 import type { ReportMetrics, ReportSectionView } from "../../src/modules/reports/types.js";
 
 describe("content quality rubric", () => {
@@ -106,6 +109,25 @@ describe("content quality rubric", () => {
     expect(quality.findings.map((finding) => finding.id)).toEqual(
       expect.arrayContaining(["content:key_sections_too_short", "content:weak_practical_detail"])
     );
+  });
+
+  it("penalizes leaked generation instructions in user-facing content", () => {
+    const quality = evaluateReportContentQuality({
+      sections: [
+        section({
+          title: "Готовые фразы для входа в диалог",
+          content:
+            "Confidence: medium. Дайте 3+ фраз и 70+ слов раздела: это служебное требование не должно попадать в отчет. Evidence: public post, metrics, vision, comments."
+        })
+      ],
+      metrics: metrics({ postsCount: 10, analyzedPosts: 10 })
+    });
+
+    expect(quality.findings.map((finding) => finding.id)).toContain(
+      "content:user_facing_instruction_leak"
+    );
+    expect(contentQualityFindingsNeedRepair(quality.findings)).toBe(true);
+    expect(quality.score).toBeLessThan(100);
   });
 });
 

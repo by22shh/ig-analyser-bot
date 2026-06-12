@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { env } from "../../../config/env.js";
 
 export type CreateYooKassaPaymentInput = {
@@ -18,6 +19,7 @@ export type YooKassaPaymentView = {
   confirmationUrl?: string;
   refundable: boolean;
   test: boolean;
+  metadata?: Record<string, string>;
   raw?: unknown;
 };
 
@@ -36,7 +38,8 @@ export class MockYooKassaAdapter implements YooKassaAdapter {
   private readonly payments = new Map<string, YooKassaPaymentView>();
 
   async createPayment(input: CreateYooKassaPaymentInput): Promise<YooKassaPaymentView> {
-    const id = `mock_yk_${input.idempotencyKey}`;
+    const idempotenceKey = yookassaIdempotenceKey(input.idempotencyKey, "yk");
+    const id = `mock_yk_${idempotenceKey}`;
     const payment: YooKassaPaymentView = {
       id,
       status: "pending",
@@ -46,6 +49,7 @@ export class MockYooKassaAdapter implements YooKassaAdapter {
       confirmationUrl: `${env.APP_BASE_URL}/mock/yookassa/pay/${id}`,
       refundable: false,
       test: true,
+      metadata: input.metadata,
       raw: { mock: true }
     };
     this.payments.set(id, payment);
@@ -60,6 +64,7 @@ export class MockYooKassaAdapter implements YooKassaAdapter {
         status: "succeeded",
         paid: true,
         refundable: true,
+        metadata: stored.metadata,
         raw: { mock: true }
       };
     }
@@ -71,6 +76,7 @@ export class MockYooKassaAdapter implements YooKassaAdapter {
       currency: "RUB",
       refundable: true,
       test: true,
+      metadata: {},
       raw: { mock: true }
     };
   }
@@ -79,12 +85,14 @@ export class MockYooKassaAdapter implements YooKassaAdapter {
     paymentId: string;
     idempotencyKey: string;
   }): Promise<{ id: string; status: string; raw?: unknown }> {
-    return { id: `mock_refund_${input.idempotencyKey}`, status: "succeeded", raw: { mock: true } };
+    const idempotenceKey = yookassaIdempotenceKey(input.idempotencyKey, "yr");
+    return { id: `mock_refund_${idempotenceKey}`, status: "succeeded", raw: { mock: true } };
   }
 }
 
 export class RealYooKassaAdapter implements YooKassaAdapter {
   async createPayment(input: CreateYooKassaPaymentInput): Promise<YooKassaPaymentView> {
+    const idempotenceKey = yookassaIdempotenceKey(input.idempotencyKey, "yk");
     const payload: Record<string, unknown> = {
       amount: { value: (input.amountMinor / 100).toFixed(2), currency: "RUB" },
       capture: env.YOOKASSA_CAPTURE,
@@ -115,7 +123,7 @@ export class RealYooKassaAdapter implements YooKassaAdapter {
       headers: {
         Authorization: `Basic ${Buffer.from(`${env.YOOKASSA_SHOP_ID}:${env.YOOKASSA_SECRET_KEY}`).toString("base64")}`,
         "Content-Type": "application/json",
-        "Idempotence-Key": input.idempotencyKey
+        "Idempotence-Key": idempotenceKey
       },
       body: JSON.stringify(payload),
       signal: AbortSignal.timeout(30000)
@@ -141,12 +149,13 @@ export class RealYooKassaAdapter implements YooKassaAdapter {
     idempotencyKey: string;
     reason: string;
   }) {
+    const idempotenceKey = yookassaIdempotenceKey(input.idempotencyKey, "yr");
     const response = await fetch(`${env.YOOKASSA_API_BASE_URL}/refunds`, {
       method: "POST",
       headers: {
         Authorization: `Basic ${Buffer.from(`${env.YOOKASSA_SHOP_ID}:${env.YOOKASSA_SECRET_KEY}`).toString("base64")}`,
         "Content-Type": "application/json",
-        "Idempotence-Key": input.idempotencyKey
+        "Idempotence-Key": idempotenceKey
       },
       body: JSON.stringify({
         payment_id: input.paymentId,
@@ -171,6 +180,23 @@ function mapPayment(raw: any): YooKassaPaymentView {
     confirmationUrl: raw.confirmation?.confirmation_url,
     refundable: Boolean(raw.refundable),
     test: Boolean(raw.test),
+    metadata: normalizeMetadata(raw.metadata),
     raw
   };
+}
+
+function normalizeMetadata(value: unknown): Record<string, string> | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+  const metadata: Record<string, string> = {};
+  for (const [key, raw] of Object.entries(value)) {
+    if (typeof raw === "string") metadata[key] = raw;
+  }
+  return metadata;
+}
+
+export function yookassaIdempotenceKey(raw: string, prefix: "yk" | "yr" = "yk"): string {
+  const key = raw.trim();
+  if (key.length > 0 && key.length <= 64) return key;
+  const digest = createHash("sha256").update(key).digest("hex");
+  return `${prefix}:${digest.slice(0, 64 - prefix.length - 1)}`;
 }

@@ -182,18 +182,109 @@ describe("buildStrategicReport", () => {
         model: "reasoning",
         promptVersion: "report"
       })),
-      repairReport: vi.fn(async () => ({
+      chat: vi.fn()
+    };
+
+    const report = await buildStrategicReport({ mode: "standard", language: "ru", profile, llm });
+
+    expect(report.summary.warnings).toEqual([]);
+  });
+
+  it("removes fabricated source URLs from sections and sourceMap", async () => {
+    const post: InstagramPost = {
+      id: "p1",
+      type: "Image",
+      caption: "public launch",
+      hashtags: [],
+      mentions: [],
+      likesCount: 10,
+      commentsCount: 1,
+      latestComments: [],
+      timestamp: "2026-06-01T00:00:00Z",
+      url: "https://www.instagram.com/p/p1/",
+      isPinned: false,
+      childPosts: [],
+      taggedUsers: []
+    };
+    const profile: InstagramProfile = {
+      username: "alice",
+      followersCount: 100,
+      followsCount: 20,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts: [post]
+    };
+    const raw = fullReportRaw({
+      sourceLine:
+        "- suspicious source: https://evil.example/fake\n- [p1] факт https://www.instagram.com/p/p1/"
+    });
+    const llm: LlmProvider = {
+      analyzeVision: vi.fn(async () => []),
+      generateReport: vi.fn(async () => ({
         rawText: raw,
         model: "reasoning",
-        promptVersion: "report.repair"
+        promptVersion: "report"
       })),
       chat: vi.fn()
     };
 
     const report = await buildStrategicReport({ mode: "standard", language: "ru", profile, llm });
 
-    expect(llm.repairReport).not.toHaveBeenCalled();
-    expect(report.summary.warnings).toEqual([]);
+    expect(report.sourceMap.map((source) => source.url)).not.toContain("https://evil.example/fake");
+    expect(report.sourceMap.map((source) => source.url)).toContain(
+      "https://www.instagram.com/p/p1/"
+    );
+    expect(report.sections.map((section) => section.content).join("\n")).not.toContain(
+      "https://evil.example/fake"
+    );
+    expect(report.rawText).not.toContain("https://evil.example/fake");
+    expect(report.summary.warnings).toContain("Unresolved grounding flags: 17");
+  });
+
+  it("removes fabricated source URLs from summary bullets", async () => {
+    const post: InstagramPost = {
+      id: "p1",
+      type: "Image",
+      caption: "public launch",
+      hashtags: [],
+      mentions: [],
+      likesCount: 10,
+      commentsCount: 1,
+      latestComments: [],
+      timestamp: "2026-06-01T00:00:00Z",
+      url: "https://www.instagram.com/p/p1/",
+      isPinned: false,
+      childPosts: [],
+      taggedUsers: []
+    };
+    const profile: InstagramProfile = {
+      username: "alice",
+      followersCount: 100,
+      followsCount: 20,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts: [post]
+    };
+    const llm: LlmProvider = {
+      analyzeVision: vi.fn(async () => []),
+      generateReport: vi.fn(async () => ({
+        rawText: fullReportRaw(),
+        model: "reasoning",
+        promptVersion: "report",
+        summaryBullets: [
+          "Grounded public post https://www.instagram.com/p/p1/ and fabricated source https://evil.example/fake"
+        ]
+      })),
+      chat: vi.fn()
+    };
+
+    const report = await buildStrategicReport({ mode: "standard", language: "ru", profile, llm });
+
+    expect(report.summary.bullets[0]).toContain("https://www.instagram.com/p/p1/");
+    expect(report.summary.bullets[0]).not.toContain("https://evil.example/fake");
+    expect(report.summary.bullets[0]).toContain("[removed unverified source]");
   });
 
   it("cleans internal schema names from summary bullets", async () => {
@@ -321,6 +412,68 @@ describe("buildStrategicReport", () => {
     expect(report.promptVersion).toBe("report.repair");
   });
 
+  it("repairs reports with a single missing-source section", async () => {
+    const post: InstagramPost = {
+      id: "p1",
+      type: "Image",
+      caption: "public launch",
+      hashtags: [],
+      mentions: [],
+      likesCount: 10,
+      commentsCount: 1,
+      latestComments: [],
+      timestamp: "2026-06-01T00:00:00Z",
+      url: "https://www.instagram.com/p/p1/",
+      isPinned: false,
+      childPosts: [],
+      taggedUsers: []
+    };
+    const profile: InstagramProfile = {
+      username: "alice",
+      followersCount: 100,
+      followsCount: 20,
+      postsCount: 1,
+      isVerified: false,
+      relatedProfiles: [],
+      posts: [post]
+    };
+    const rawWithOneMissingSource = REQUIRED_SECTIONS.standard
+      .map((title) => {
+        const source =
+          title === "Ошибки, слепые зоны, барьеры"
+            ? ""
+            : "\nEvidence:\n- [p1] факт https://www.instagram.com/p/p1/";
+        return `[[SECTION]]\n${title}\n${richPracticalContent(title)}${source}`;
+      })
+      .join("\n\n");
+    const repairedRaw = fullReportRaw();
+    const llm: LlmProvider = {
+      analyzeVision: vi.fn(async () => []),
+      generateReport: vi.fn(async () => ({
+        rawText: rawWithOneMissingSource,
+        model: "reasoning",
+        promptVersion: "report"
+      })),
+      repairReport: vi.fn(async () => ({
+        rawText: repairedRaw,
+        model: "reasoning",
+        promptVersion: "report.repair"
+      })),
+      chat: vi.fn()
+    };
+
+    const report = await buildStrategicReport({ mode: "standard", language: "ru", profile, llm });
+
+    expect(llm.repairReport).toHaveBeenCalledWith(
+      expect.objectContaining({
+        weakSourceSections: ["Ошибки, слепые зоны, барьеры"],
+        qualityFindings: expect.arrayContaining([expect.stringContaining("no extracted source")])
+      })
+    );
+    expect(report.promptVersion).toBe("report.repair");
+    expect(report.sourceMap.length).toBeGreaterThan(0);
+  });
+
   it("exposes the content-quality rubric in the report summary", async () => {
     const post: InstagramPost = {
       id: "p1",
@@ -400,7 +553,7 @@ function richPracticalContent(title: string): string {
     return "Confidence: medium. «Привет! Увидел пост с городским маршрутом: можешь подсказать, где это место?» «Классная деталь с кофейным столом в посте, похоже на спокойный формат выходного. Есть любимые точки в этом районе?» «В комментариях спрашивали про локацию, мне тоже стало интересно: это больше прогулка или конкретное место?» Фразы нейтральные, привязаны к public evidence и не содержат флирта. Caveat: отправлять одну фразу, без серии повторов.";
   }
   if (title === "Общая оценка ценности профиля") {
-    return "Confidence: medium. Вердикт: профиль дает достаточно публичных сигналов для уважительного первого контакта, но недостаточно для сильных выводов о личности или намерениях. Практическая ценность в том, что есть несколько безопасных тем: город, места, визуальные детали и комментарии. Главный лимит: выборка мала и не показывает сторис или личные ответы. Следующий разумный шаг: выбрать одну evidence-tied фразу, задать один вопрос и остановиться, если реакции нет.";
+    return "Confidence: medium. Вердикт: профиль дает достаточно публичных сигналов для уважительного первого контакта, но недостаточно для сильных выводов о личности или намерениях. Практическая ценность в том, что есть несколько безопасных тем: город, места, визуальные детали и комментарии. Главный лимит: выборка мала и не показывает сторис или личные ответы. Следующий разумный шаг: выбрать одну публично подтвержденную фразу, задать один вопрос и остановиться, если реакции нет.";
   }
   return "Confidence: medium. Наблюдение строится на публичном посте, caption, vision, комментариях и metrics: повторяется городской контекст, предметная визуальная деталь и мягкий интерес аудитории к месту. Практический смысл в том, что профиль лучше читать как selected public-post read, а не как полную картину человека. Рекомендация: использовать только подтвержденные темы, прямо признавать ограниченность выборки и не делать выводов о приватной жизни. Caveat: посты, сторис и личные ответы вне выборки не анализировались.";
 }

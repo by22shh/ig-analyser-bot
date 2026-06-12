@@ -1,0 +1,47 @@
+[
+  {
+    "username": "evachkaaaaa",
+    "status": "failed",
+    "error": "ACCESS_DENIED_CREDITS",
+    "followersCount": 1285,
+    "followsCount": 632,
+    "postsCount": 141,
+    "fetchedPosts": 12
+  },
+  {
+    "username": "missstaccyy",
+    "status": "failed",
+    "error": "ACCESS_DENIED_CREDITS",
+    "followersCount": 587,
+    "followsCount": 325,
+    "postsCount": 23,
+    "fetchedPosts": 12
+  },
+  {
+    "username": "_daria.bers_",
+    "status": "failed",
+    "error": "ACCESS_DENIED_CREDITS",
+    "followersCount": 750,
+    "followsCount": 586,
+    "postsCount": 118,
+    "fetchedPosts": 12
+  },
+  {
+    "username": "fakeev",
+    "status": "failed",
+    "error": "ACCESS_DENIED_CREDITS",
+    "followersCount": 57691,
+    "followsCount": 980,
+    "postsCount": 1087,
+    "fetchedPosts": 12
+  },
+  {
+    "username": "mark.tales",
+    "status": "failed",
+    "error": "ACCESS_DENIED_CREDITS",
+    "followersCount": 442,
+    "followsCount": 337,
+    "postsCount": 94,
+    "fetchedPosts": 12
+  }
+]

@@ -137,7 +137,7 @@ export function reportResponseFormat(
                 content: {
                   type: "string",
                   description:
-                    "Section body in the requested language. Mention uncertainty and avoid unsupported claims. For practical sections, include concrete user value: why it matters, evidence-tied hooks, respectful next steps, or ready-to-send neutral phrases as appropriate."
+                    "Section body in the requested language. Mention uncertainty and avoid unsupported claims. For practical/action sections, include concrete user value: why it matters, hooks grounded in named evidence, respectful actions, what to avoid, and neutral message drafts as appropriate. Keep practical sections substantial when evidence allows, but never mention rubric targets, word-count targets, or prompt instructions."
                 },
                 evidence: {
                   type: "array",

@@ -467,8 +467,9 @@ export const ru = {
     analyzingSignals: "Анализ визуальных и текстовых сигналов",
     generatingExports: "Генерация PDF/Markdown/HTML"
   },
-  adminGrantUsage(): string {
-    return "Использование: /admin_grant <telegram_id> <credits>";
+  adminGrantUsage(input?: { maxCredits?: number }): string {
+    const limit = input?.maxCredits ? `, максимум ${input.maxCredits} кредитов за команду` : "";
+    return `Использование: /admin_grant <telegram_id> <credits>${limit}`;
   },
   adminUserNotFound(): string {
     return "Пользователь не найден.";

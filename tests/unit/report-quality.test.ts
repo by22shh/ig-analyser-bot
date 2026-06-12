@@ -55,6 +55,45 @@ describe("report quality validation", () => {
     expect(qualityFindingsNeedRepair(quality.findings)).toBe(false);
   });
 
+  it("treats any missing section source as repair-worthy", () => {
+    const quality = evaluateReportQuality({
+      mode: "standard",
+      sections: [
+        {
+          title: "Ошибки, слепые зоны, барьеры",
+          content:
+            "Confidence: medium. Раздел описывает ограничения публичной выборки и отсутствие сторис, но источник не извлечен.",
+          sources: []
+        }
+      ]
+    });
+
+    expect(quality.findings.map((finding) => finding.id)).toContain(
+      "section:Ошибки, слепые зоны, барьеры:missing_source"
+    );
+    expect(qualityFindingsNeedRepair(quality.findings)).toBe(true);
+  });
+
+  it("flags leaked generation instructions as high severity", () => {
+    const quality = evaluateReportQuality({
+      mode: "standard",
+      sections: [
+        {
+          title: "Готовые фразы для входа в диалог",
+          content:
+            "Confidence: medium. Нужно дать 3+ фраз и 70+ слов раздела, как указано во внутренней рубрике.",
+          sources: [{ postId: "p1", label: "Public post" }]
+        }
+      ]
+    });
+
+    expect(quality.findings.map((finding) => finding.id)).toContain(
+      "report:user_facing_instruction_leak"
+    );
+    expect(quality.score).toBeLessThanOrEqual(82);
+    expect(qualityFindingsNeedRepair(quality.findings)).toBe(true);
+  });
+
   it("flags standard reports built from a small analyzed sample", () => {
     const sections: ReportSectionView[] = [
       {

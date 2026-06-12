@@ -278,7 +278,7 @@ export class OpenRouterLlmProvider implements LlmProvider {
     const contentQualityGuidance =
       input.mode === "standard"
         ? `For content-quality findings, expand practical sections: ${PRACTICAL_SECTIONS_GUIDANCE_EN}`
-        : "For content-quality findings, deepen the flagged sections with concrete, evidence-tied, mode-appropriate practical detail without inventing facts.";
+        : "For content-quality findings, deepen the flagged sections with concrete, evidence-grounded, mode-appropriate practical detail without inventing facts. Do not mention rubric targets, word-count targets, or repair instructions.";
     const system = `${prompt.system}
 
 You are repairing a report that was already generated. Preserve supported content, add missing required sections, and attach evidence URLs/post IDs from the supplied source catalog. Do not invent facts. If repair.groundingFindings are present, fix each one: remove or clearly down-confidence forbidden_inference claims (e.g. relationship/identity/health), rephrase unsupported_claim items as hedged hypotheses or drop them, and delete any fabricated_source citation not in the source catalog. If repair.qualityFindings are present, strengthen thin/generic/under-sourced sections with supplied analysisContext evidence and explicit confidence limits. ${contentQualityGuidance} Return the complete repaired report.`;
@@ -497,6 +497,7 @@ function buildMinimalReportContext(
       PRACTICAL_CONTEXT_INSTRUCTION_EN,
       "Use goal only when it is a user-facing analytical objective; never mention operational test, deploy, pipeline, CI, smoke, or e2e wording in the report.",
       "Do not expose internal schema names (analysisContext, evidenceMap, contentClusters, profileSignals, audienceSignals, riskSignals, opportunitySignals, sourceCatalog, postIds) in user-facing prose; translate them into natural language.",
+      "Do not mention rubric targets, word-count targets, minimum-count targets, prompt instructions, repair hints, or internal quality checks in user-facing prose.",
       "Do not infer protected traits, private life facts, identity, medical, political, religious, or sensitive attributes."
     ],
     profile: {
@@ -580,6 +581,7 @@ function buildReportContext(
       "Prefer specific observable facts over generic personality claims.",
       "Use low/medium/high confidence and say when public data is insufficient.",
       "Use goal only when it is a user-facing analytical objective; never mention operational test, deploy, pipeline, CI, smoke, or e2e wording in the report.",
+      "Do not mention rubric targets, word-count targets, minimum-count targets, prompt instructions, repair hints, or internal quality checks in user-facing prose.",
       "Do not infer protected traits, private life facts, identity, medical, political, religious, or sensitive attributes."
     ],
     profile: {

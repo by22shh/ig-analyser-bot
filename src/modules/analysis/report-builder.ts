@@ -12,6 +12,7 @@ import { computeReportMetrics } from "../reports/metrics.js";
 import { parseReportSections, validateRequiredSections } from "../reports/parser.js";
 import type {
   ReportAnalysisHealth,
+  ReportSource,
   ReportSectionView,
   StrategicReportView,
   VisionAnalysisItemView
@@ -176,8 +177,13 @@ export async function buildStrategicReport(input: {
     }
   }
 
-  const sourceMap = sections.flatMap((section) => section.sources);
-  const bullets = summaryBulletsFor(generated, sections, input.language);
+  const sanitizedSections = sanitizeSectionSources(sections, sourceCatalog);
+  const sanitizedRawText = sanitizeRawText(generated.rawText, sourceCatalog);
+  const sourceMap = sanitizedSections.flatMap((section) => section.sources);
+  const bullets = sanitizeSummaryBullets(
+    summaryBulletsFor(generated, sanitizedSections, input.language),
+    sourceCatalog
+  );
   const qualityWarning = renderQualityWarning(qualitySummary);
   const executiveSummary = buildExecutiveSummary(input.language, analysisHealth, bullets);
 
@@ -185,8 +191,8 @@ export async function buildStrategicReport(input: {
     mode: input.mode,
     username: profile.username,
     language: input.language,
-    rawText: generated.rawText,
-    sections,
+    rawText: sanitizedRawText,
+    sections: sanitizedSections,
     summary: {
       executiveSummary,
       bullets: bullets.length ? bullets : [`Public profile @${profile.username} was analyzed.`],
@@ -212,6 +218,86 @@ export async function buildStrategicReport(input: {
     vision,
     analysisContext
   };
+}
+
+function sanitizeSectionSources(
+  sections: ReportSectionView[],
+  sourceCatalog: SourceCatalogEntry[]
+): ReportSectionView[] {
+  const knownUrls = sourceCatalogUrlMap(sourceCatalog);
+  const knownPosts = sourceCatalogPostMap(sourceCatalog);
+
+  return sections.map((section) => ({
+    ...section,
+    content: removeUnknownSourceUrls(section.content, knownUrls),
+    sources: section.sources
+      .map((source) => sanitizeSource(source, knownUrls, knownPosts))
+      .filter((source): source is ReportSource => source != null)
+  }));
+}
+
+function sanitizeRawText(rawText: string, sourceCatalog: SourceCatalogEntry[]): string {
+  return removeUnknownSourceUrls(rawText, sourceCatalogUrlMap(sourceCatalog));
+}
+
+function sanitizeSummaryBullets(bullets: string[], sourceCatalog: SourceCatalogEntry[]): string[] {
+  const knownUrls = sourceCatalogUrlMap(sourceCatalog);
+  return bullets.map((bullet) => removeUnknownSourceUrls(bullet, knownUrls).trim()).filter(Boolean);
+}
+
+function sourceCatalogUrlMap(sourceCatalog: SourceCatalogEntry[]): Map<string, string> {
+  const knownUrls = new Map<string, string>();
+  for (const entry of sourceCatalog) {
+    const normalized = normalizeUrl(entry.url);
+    if (normalized && entry.url) knownUrls.set(normalized, entry.url);
+  }
+  return knownUrls;
+}
+
+function sourceCatalogPostMap(
+  sourceCatalog: SourceCatalogEntry[]
+): Map<string, SourceCatalogEntry> {
+  const knownPosts = new Map<string, SourceCatalogEntry>();
+  for (const entry of sourceCatalog) {
+    if (entry.postId) knownPosts.set(entry.postId, entry);
+  }
+  return knownPosts;
+}
+
+function sanitizeSource(
+  source: ReportSource,
+  knownUrls: Map<string, string>,
+  knownPosts: Map<string, SourceCatalogEntry>
+): ReportSource | undefined {
+  const knownPost = source.postId ? knownPosts.get(source.postId) : undefined;
+  if (knownPost) {
+    return {
+      ...source,
+      postId: source.postId,
+      url: knownPost.url ?? knownUrl(source.url, knownUrls)
+    };
+  }
+
+  const url = knownUrl(source.url, knownUrls);
+  if (url) return { ...source, url };
+  if (!source.url && !source.postId) return source;
+  return undefined;
+}
+
+function removeUnknownSourceUrls(content: string, knownUrls: Map<string, string>): string {
+  return content.replace(/https?:\/\/[^\s)]+/g, (url) =>
+    knownUrl(url, knownUrls) ? url : "[removed unverified source]"
+  );
+}
+
+function knownUrl(url: string | undefined, knownUrls: Map<string, string>): string | undefined {
+  const normalized = normalizeUrl(url);
+  return normalized ? knownUrls.get(normalized) : undefined;
+}
+
+function normalizeUrl(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+  return url.trim().replace(/\/+$/, "");
 }
 
 function summaryBulletsFor(
@@ -371,7 +457,7 @@ function shouldRepairSources(
   weakSourceSections: string[]
 ): boolean {
   if (!sections.length) return false;
-  return weakSourceSections.length > Math.ceil(sections.length / 2);
+  return weakSourceSections.length > 0;
 }
 
 function reportIssueScore(

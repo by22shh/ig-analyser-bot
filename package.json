@@ -19,12 +19,13 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
+    "audit:prod": "pnpm audit --prod --audit-level moderate",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
     "eval-analysis": "tsx scripts/eval-analysis-quality.ts",
     "audit-economics": "tsx scripts/audit-economics.ts",
     "audit-economics:defaults": "ECON_STANDARD_REPORT_COST_P75_RUB=55 ECON_PHOTO_SEARCH_COST_P75_RUB=20 ECON_CHAT_MESSAGE_COST_P75_RUB=2 ECON_APIFY_PROFILE_COST_RUB=12 ECON_FACECHECK_SEARCH_COST_RUB=15 ECON_SUPPORT_RESERVE_RUB=5 FACECHECK_MAX_COST_RUB=15 pnpm audit-economics",
-    "ci": "pnpm prisma:generate && pnpm lint && pnpm format:check && pnpm typecheck && pnpm build && pnpm test && pnpm audit-economics:defaults"
+    "ci": "pnpm prisma:generate && pnpm audit:prod && pnpm lint && pnpm format:check && pnpm typecheck && pnpm build && pnpm test && pnpm audit-economics:defaults"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.699.0",

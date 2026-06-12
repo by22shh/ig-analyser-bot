@@ -21,7 +21,12 @@ export class RetentionService {
           expiresAt: { lt: now },
           ...(failedIds.size ? { id: { notIn: [...failedIds] } } : {})
         },
-        select: { id: true, userId: true, artifacts: { select: { storageKey: true } } },
+        select: {
+          id: true,
+          userId: true,
+          analysisJobId: true,
+          artifacts: { select: { storageKey: true } }
+        },
         orderBy: { expiresAt: "asc" },
         take: batchSize
       });
@@ -36,12 +41,14 @@ export class RetentionService {
           await this.prisma.$transaction(async (tx) => {
             await tx.reportArtifact.deleteMany({ where: { reportId: report.id } });
             await tx.report.delete({ where: { id: report.id } });
+            await tx.analysisJob.delete({ where: { id: report.analysisJobId } });
             await tx.auditLog.create({
               data: {
                 targetUserId: report.userId,
                 action: "retention_report_deleted",
-                entityType: "report",
-                entityId: report.id
+                entityType: "analysis_job",
+                entityId: report.analysisJobId,
+                metadata: { reportId: report.id }
               }
             });
           });

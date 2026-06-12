@@ -194,6 +194,8 @@ export async function processAnalysisJob(
     );
 
     const cachedVision = await loadReusableVision(input.prisma, row.id, profile.posts);
+    const vision =
+      cachedVision ?? (await analyzeAndPersistVision(input, row.id, profile, postSnapshotIds));
     const strategicReport = await buildStrategicReport({
       mode: row.mode as never,
       language: locale,
@@ -201,10 +203,8 @@ export async function processAnalysisJob(
       llm: input.llm,
       targetPosition: row.targetPosition ?? undefined,
       goal: row.goal ?? undefined,
-      vision: cachedVision
+      vision
     });
-    if (!cachedVision)
-      await persistVision(input.prisma, row.id, strategicReport.vision, postSnapshotIds);
     log.info(
       {
         jobId: row.id,
@@ -446,7 +446,10 @@ async function loadReusableVision(
   const ordered = expectedPosts
     .map((post) => byPostId.get(post.id))
     .filter((item): item is (typeof items)[number] => item != null);
-  if (ordered.length === expectedPosts.length) {
+  if (
+    ordered.length === expectedPosts.length &&
+    ordered.every((item) => reusableVisionStatus(item.status))
+  ) {
     return ordered.map((item) => ({
       postId: item.postId,
       status: visionStatus(item.status),
@@ -459,6 +462,30 @@ async function loadReusableVision(
 
   await prisma.visionAnalysisItem.deleteMany({ where: { analysisJobId } });
   return undefined;
+}
+
+function reusableVisionStatus(status: string): boolean {
+  return status === "completed" || status === "skipped";
+}
+
+async function analyzeAndPersistVision(
+  input: AnalysisProcessorInput,
+  analysisJobId: string,
+  profile: InstagramProfile,
+  postSnapshotIds: Map<string, string>
+): Promise<VisionAnalysisItemView[]> {
+  const posts = selectVisionAnalysisPosts(profile.posts, {
+    postLimit: env.ANALYSIS_POST_LIMIT ?? 30,
+    imageLimit: env.ANALYSIS_MAX_IMAGES_ANALYZED ?? 30
+  });
+  if (!posts.length) return [];
+
+  const vision = await input.llm.analyzeVision({
+    profile: { ...profile, posts },
+    posts
+  });
+  await persistVision(input.prisma, analysisJobId, vision, postSnapshotIds);
+  return vision;
 }
 
 async function persistProfile(

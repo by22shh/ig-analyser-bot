@@ -155,8 +155,12 @@ export function resolveRequestIp(request: Pick<FastifyRequest, "headers" | "ip" 
   const directIp = normalizeIp(request.raw.socket.remoteAddress ?? request.ip);
   if (!shouldTrustForwardedHeaders(directIp)) return directIp;
 
+  const flyClientIp = firstForwardedIp(request.headers["fly-client-ip"]);
+  if (flyClientIp) return normalizeIp(flyClientIp);
+
+  if (!isLocalRuntimeEnv(env.APP_ENV)) return directIp;
+
   const forwardedIp =
-    firstForwardedIp(request.headers["fly-client-ip"]) ??
     firstForwardedIp(request.headers["x-real-ip"]) ??
     firstForwardedIp(request.headers["x-forwarded-for"]);
 

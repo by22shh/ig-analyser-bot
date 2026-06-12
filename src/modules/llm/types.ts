@@ -25,6 +25,9 @@ export type ReportRepairInput = ReportInput & {
   rawText: string;
   missingSections: string[];
   weakSourceSections: string[];
+  repairMode?: "general" | "targeted";
+  targetSectionTitles?: string[];
+  shipGateReasons?: string[];
   // Rendered grounding findings (fabricated sources / forbidden inferences) the
   // repair pass must remove or down-confidence.
   groundingFindings?: string[];

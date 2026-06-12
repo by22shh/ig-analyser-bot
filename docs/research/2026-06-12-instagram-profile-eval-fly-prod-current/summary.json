@@ -1,0 +1,124 @@
+[
+  {
+    "username": "evachkaaaaa",
+    "status": "completed",
+    "followersCount": 1285,
+    "followsCount": 632,
+    "postsCount": 141,
+    "fetchedPosts": 30,
+    "reportSections": 17,
+    "qualityScore": 86,
+    "qualityFindings": 2,
+    "contentQualityScore": 99,
+    "contentQualityFindings": 0,
+    "sourceCoverage": "16/17",
+    "missingSourceSections": ["Профессия и статус"],
+    "warnings": ["Quality flags: score 86/100, 2 medium/high findings"],
+    "engagementRate": 1.556420233463035,
+    "vision": {
+      "completed": 30
+    },
+    "promptVersion": "report.standard.v7.repair",
+    "model": "x-ai/grok-4.3",
+    "deliveryHealth": null
+  },
+  {
+    "username": "missstaccyy",
+    "status": "completed",
+    "followersCount": 587,
+    "followsCount": 325,
+    "postsCount": 23,
+    "fetchedPosts": 22,
+    "reportSections": 17,
+    "qualityScore": 100,
+    "qualityFindings": 0,
+    "contentQualityScore": 97,
+    "contentQualityFindings": 0,
+    "sourceCoverage": "17/17",
+    "missingSourceSections": [],
+    "warnings": [],
+    "engagementRate": 22.696298590676783,
+    "vision": {
+      "completed": 22
+    },
+    "promptVersion": "report.standard.v7.repair",
+    "model": "x-ai/grok-4.3",
+    "deliveryHealth": null
+  },
+  {
+    "username": "_daria.bers_",
+    "status": "completed",
+    "followersCount": 750,
+    "followsCount": 586,
+    "postsCount": 118,
+    "fetchedPosts": 30,
+    "reportSections": 17,
+    "qualityScore": 100,
+    "qualityFindings": 0,
+    "contentQualityScore": 100,
+    "contentQualityFindings": 0,
+    "sourceCoverage": "17/17",
+    "missingSourceSections": [],
+    "warnings": [],
+    "engagementRate": 11.679999999999998,
+    "vision": {
+      "completed": 30
+    },
+    "promptVersion": "report.standard.v7.repair",
+    "model": "x-ai/grok-4.3",
+    "deliveryHealth": null
+  },
+  {
+    "username": "fakeev",
+    "status": "completed",
+    "followersCount": 57690,
+    "followsCount": 980,
+    "postsCount": 1087,
+    "fetchedPosts": 30,
+    "reportSections": 17,
+    "qualityScore": 93,
+    "qualityFindings": 1,
+    "contentQualityScore": 87,
+    "contentQualityFindings": 1,
+    "sourceCoverage": "17/17",
+    "missingSourceSections": [],
+    "warnings": [
+      "Формат отчёта: recent 30-post read; покрытие выборки 2.8% (30/1087). Выводы описывают выбранные публичные посты, а не весь профиль.",
+      "Quality flags: score 93/100, 1 medium/high findings"
+    ],
+    "engagementRate": 0.9066273762061592,
+    "vision": {
+      "completed": 30
+    },
+    "promptVersion": "report.standard.v7.repair",
+    "model": "x-ai/grok-4.3",
+    "deliveryHealth": null
+  },
+  {
+    "username": "mark.tales",
+    "status": "completed",
+    "followersCount": 442,
+    "followsCount": 337,
+    "postsCount": 94,
+    "fetchedPosts": 30,
+    "reportSections": 17,
+    "qualityScore": 93,
+    "qualityFindings": 1,
+    "contentQualityScore": 88,
+    "contentQualityFindings": 1,
+    "sourceCoverage": "17/17",
+    "missingSourceSections": [],
+    "warnings": [
+      "Vision coverage: 29/30 визуальных элементов.",
+      "Quality flags: score 93/100, 1 medium/high findings"
+    ],
+    "engagementRate": 16.59125188536953,
+    "vision": {
+      "completed": 29,
+      "skipped": 1
+    },
+    "promptVersion": "report.standard.v7.repair",
+    "model": "x-ai/grok-4.3",
+    "deliveryHealth": null
+  }
+]

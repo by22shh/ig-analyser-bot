@@ -71,11 +71,23 @@ export type ReportAnalysisHealth = {
   commentTextCount: number;
 };
 
+export type ReportDeliveryHealthStatus = "ready" | "limited" | "needs_repair" | "failed_quality";
+
+export type ReportDeliveryHealth = {
+  status: ReportDeliveryHealthStatus;
+  reasons: string[];
+  qualityScore: number;
+  contentQualityScore: number;
+  sourceCoverage: string;
+  repaired: boolean;
+};
+
 export type ReportSummaryView = {
   executiveSummary?: string;
   bullets: string[];
   warnings: string[];
   analysisHealth?: ReportAnalysisHealth;
+  deliveryHealth?: ReportDeliveryHealth;
   quality?: ReportQualitySummary;
   contentQuality?: ContentQualityRubric;
   evidence?: AnalysisContextDigest;

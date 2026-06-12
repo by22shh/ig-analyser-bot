@@ -279,9 +279,13 @@ export class OpenRouterLlmProvider implements LlmProvider {
       input.mode === "standard"
         ? `For content-quality findings, expand practical sections: ${PRACTICAL_SECTIONS_GUIDANCE_EN}`
         : "For content-quality findings, deepen the flagged sections with concrete, evidence-grounded, mode-appropriate practical detail without inventing facts. Do not mention rubric targets, word-count targets, or repair instructions.";
+    const targetedGuidance =
+      input.repairMode === "targeted"
+        ? "This is a targeted ship-gate repair. Change only the flagged target sections unless a tiny adjacent edit is required for consistency. Preserve all other supported sections verbatim. Return the complete report, not a patch."
+        : "Return the complete repaired report.";
     const system = `${prompt.system}
 
-You are repairing a report that was already generated. Preserve supported content, add missing required sections, and attach evidence URLs/post IDs from the supplied source catalog. Do not invent facts. If repair.groundingFindings are present, fix each one: remove or clearly down-confidence forbidden_inference claims (e.g. relationship/identity/health), rephrase unsupported_claim items as hedged hypotheses or drop them, and delete any fabricated_source citation not in the source catalog. If repair.qualityFindings are present, strengthen thin/generic/under-sourced sections with supplied analysisContext evidence and explicit confidence limits. ${contentQualityGuidance} Return the complete repaired report.`;
+You are repairing a report that was already generated. Preserve supported content, add missing required sections, and attach evidence URLs/post IDs from the supplied source catalog. Do not invent facts. If repair.groundingFindings are present, fix each one: remove or clearly down-confidence forbidden_inference claims (e.g. relationship/identity/health), rephrase unsupported_claim items as hedged hypotheses or drop them, and delete any fabricated_source citation not in the source catalog. If repair.qualityFindings are present, strengthen thin/generic/under-sourced sections with supplied analysisContext evidence and explicit confidence limits. ${contentQualityGuidance} ${targetedGuidance}`;
     if (env.LLM_STRUCTURED_OUTPUTS) {
       try {
         const content = await this.chatCompletion({
@@ -414,6 +418,9 @@ export function buildReportRepairUserMessage(input: ReportRepairInput): string {
     rawText: input.rawText,
     missingSections: input.missingSections,
     weakSourceSections: input.weakSourceSections,
+    repairMode: input.repairMode,
+    targetSectionTitles: input.targetSectionTitles,
+    shipGateReasons: input.shipGateReasons,
     groundingFindings: input.groundingFindings,
     qualityFindings: input.qualityFindings
   });
@@ -428,6 +435,9 @@ function buildBudgetedReportContext(
     weakSourceSections?: string[];
     groundingFindings?: string[];
     qualityFindings?: string[];
+    repairMode?: ReportRepairInput["repairMode"];
+    targetSectionTitles?: string[];
+    shipGateReasons?: string[];
   }
 ): string {
   const budget = env.LLM_FINAL_INPUT_TOKEN_BUDGET ?? 24000;
@@ -476,6 +486,9 @@ function buildMinimalReportContext(
     weakSourceSections?: string[];
     groundingFindings?: string[];
     qualityFindings?: string[];
+    repairMode?: ReportRepairInput["repairMode"];
+    targetSectionTitles?: string[];
+    shipGateReasons?: string[];
   }
 ) {
   const prompt = reportPromptForMode(input.mode);
@@ -518,6 +531,9 @@ function buildMinimalReportContext(
       ? {
           missingSections: repair.missingSections,
           weakSourceSections: repair.weakSourceSections,
+          repairMode: repair.repairMode,
+          targetSectionTitles: repair.targetSectionTitles,
+          shipGateReasons: repair.shipGateReasons,
           groundingFindings: repair.groundingFindings,
           qualityFindings: repair.qualityFindings,
           previousReport: truncate(repair.rawText, 1200)
@@ -535,6 +551,9 @@ function buildReportContext(
     weakSourceSections?: string[];
     groundingFindings?: string[];
     qualityFindings?: string[];
+    repairMode?: ReportRepairInput["repairMode"];
+    targetSectionTitles?: string[];
+    shipGateReasons?: string[];
   },
   limits: { captionChars: number; commentCount: number; commentChars: number; visionChars: number }
 ) {
@@ -614,6 +633,9 @@ function buildReportContext(
       ? {
           missingSections: repair.missingSections,
           weakSourceSections: repair.weakSourceSections,
+          repairMode: repair.repairMode,
+          targetSectionTitles: repair.targetSectionTitles,
+          shipGateReasons: repair.shipGateReasons,
           groundingFindings: repair.groundingFindings,
           qualityFindings: repair.qualityFindings,
           previousReport: truncate(repair.rawText, 8000)

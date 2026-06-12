@@ -351,6 +351,7 @@ function summarizeResult(item: EvalProfileResult) {
     qualityScore: report.summary.quality?.score,
     qualityFindings: report.summary.quality?.findings.length,
     contentQuality: reportContentQuality(report),
+    deliveryHealth: report.summary.deliveryHealth,
     sourceCoverage: `${report.sections.filter((section) => section.sources.length).length}/${report.sections.length}`,
     warnings: report.summary.warnings,
     metrics: report.metrics,
@@ -383,6 +384,7 @@ function visionStatus(vision: Array<{ status: string }>): string {
 
 function renderFindings(results: EvalProfileResult[]): string {
   const completed = results.filter((item) => item.status === "completed");
+  const runDate = process.env.EVAL_RUN_DATE ?? new Date().toISOString().slice(0, 10);
   const rows = completed.map((item) => {
     const profile = item.profile!;
     const report = item.report!;
@@ -399,13 +401,14 @@ function renderFindings(results: EvalProfileResult[]): string {
       `${sourced}/${report.sections.length}`,
       report.summary.quality?.score ?? "n/a",
       contentQuality.score,
+      report.summary.deliveryHealth?.status ?? "n/a",
       report.summary.warnings.join(" | ") || "none"
     ];
   });
 
   return `# Instagram Profile Eval
 
-Date: 2026-06-08
+Date: ${runDate}
 
 Provider path used: ${
     PROFILE_PROVIDER === "apify"
@@ -419,8 +422,8 @@ Important limitation: ${
       : "APIFY_TOKEN is not present locally. In local non-production service mode this would select MockInstagramProfileProvider; production mode should fail configuration validation instead of silently using mock credentials. This eval isolates the analysis/report algorithm from that missing production ingestion credential."
   }
 
-| Profile | Followers | IG posts | Fetched posts | Engagement % | Vision | Sections | Source coverage | Quality | Content quality | Warnings |
-|---|---:|---:|---:|---:|---|---:|---:|---:|---:|---|
+| Profile | Followers | IG posts | Fetched posts | Engagement % | Vision | Sections | Source coverage | Quality | Content quality | Delivery | Warnings |
+|---|---:|---:|---:|---:|---|---:|---:|---:|---:|---|---|
 ${rows.map((row) => `| ${row.join(" | ")} |`).join("\n")}
 
 Failed profiles:

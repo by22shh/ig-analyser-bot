@@ -12,6 +12,7 @@ import { computeReportMetrics } from "../reports/metrics.js";
 import { parseReportSections, validateRequiredSections } from "../reports/parser.js";
 import type {
   ReportAnalysisHealth,
+  ReportDeliveryHealth,
   ReportSource,
   ReportSectionView,
   StrategicReportView,
@@ -31,6 +32,30 @@ import {
   renderQualityWarning,
   type SectionQualityFinding
 } from "./report-quality.js";
+
+const DELIVERY_MIN_QUALITY_SCORE = 80;
+const DELIVERY_MIN_CONTENT_QUALITY_SCORE = 85;
+
+type FinalReportCandidate = {
+  rawText: string;
+  sections: ReportSectionView[];
+  sourceMap: ReportSource[];
+  bullets: string[];
+  executiveSummary: string;
+  quality: ReturnType<typeof evaluateReportQuality>;
+  contentQuality: ContentQualityRubric;
+  missing: string[];
+  groundingFindings: GroundingFinding[];
+  deliveryGate: DeliveryGate;
+};
+
+type DeliveryGate = {
+  passed: boolean;
+  hardBlockers: boolean;
+  reasons: string[];
+  targetSectionTitles: string[];
+  sourceCoverage: string;
+};
 
 export async function buildStrategicReport(input: {
   mode: AnalysisMode;
@@ -177,40 +202,110 @@ export async function buildStrategicReport(input: {
     }
   }
 
-  const sanitizedSections = sanitizeSectionSources(sections, sourceCatalog);
-  const sanitizedRawText = sanitizeRawText(generated.rawText, sourceCatalog);
-  const sourceMap = sanitizedSections.flatMap((section) => section.sources);
-  const bullets = sanitizeSummaryBullets(
-    summaryBulletsFor(generated, sanitizedSections, input.language),
-    sourceCatalog
+  let finalCandidate = finalizeReportCandidate({
+    generated,
+    sections,
+    mode: input.mode,
+    language: input.language,
+    username: profile.username,
+    sourceCatalog,
+    analysisHealth,
+    healthWarnings,
+    metrics,
+    analysisContext
+  });
+
+  let targetedRepairAttempted = false;
+  if (!finalCandidate.deliveryGate.passed && input.llm.repairReport) {
+    targetedRepairAttempted = true;
+    const targeted = await input.llm
+      .repairReport({
+        mode: input.mode,
+        language: input.language,
+        profile,
+        posts,
+        vision,
+        metrics,
+        analysisContext,
+        targetPosition: input.targetPosition,
+        goal: input.goal,
+        rawText: finalCandidate.rawText,
+        missingSections: finalCandidate.missing,
+        weakSourceSections: weakSourceSectionTitles(finalCandidate.sections),
+        repairMode: "targeted",
+        targetSectionTitles: finalCandidate.deliveryGate.targetSectionTitles,
+        shipGateReasons: finalCandidate.deliveryGate.reasons,
+        groundingFindings: renderGroundingFindings(finalCandidate.groundingFindings),
+        qualityFindings: [
+          ...renderQualityFindings(finalCandidate.quality.findings),
+          ...renderContentQualityFindings(finalCandidate.contentQuality.findings),
+          ...renderDeliveryGateFindings(finalCandidate.deliveryGate, input.language)
+        ]
+      })
+      .catch(() => undefined);
+    if (targeted) {
+      const targetedSections = parseReportSections(targeted.rawText, input.mode);
+      const targetedCandidate = finalizeReportCandidate({
+        generated: targeted,
+        sections: targetedSections,
+        mode: input.mode,
+        language: input.language,
+        username: profile.username,
+        sourceCatalog,
+        analysisHealth,
+        healthWarnings,
+        metrics,
+        analysisContext
+      });
+      if (deliveryIssueScore(targetedCandidate) < deliveryIssueScore(finalCandidate)) {
+        generated = targeted;
+        finalCandidate = targetedCandidate;
+      }
+    }
+  }
+
+  const qualityWarning = renderQualityWarning(finalCandidate.quality);
+  const contentQualityWarning = renderContentQualityWarning(finalCandidate.contentQuality);
+  const deliveryHealth = buildDeliveryHealth(
+    finalCandidate.deliveryGate,
+    finalCandidate.quality,
+    finalCandidate.contentQuality,
+    targetedRepairAttempted,
+    Boolean(input.llm.repairReport)
   );
-  const qualityWarning = renderQualityWarning(qualitySummary);
-  const executiveSummary = buildExecutiveSummary(input.language, analysisHealth, bullets);
+  const deliveryWarning = renderDeliveryHealthWarning(deliveryHealth, input.language);
 
   return {
     mode: input.mode,
     username: profile.username,
     language: input.language,
-    rawText: sanitizedRawText,
-    sections: sanitizedSections,
+    rawText: finalCandidate.rawText,
+    sections: finalCandidate.sections,
     summary: {
-      executiveSummary,
-      bullets: bullets.length ? bullets : [`Public profile @${profile.username} was analyzed.`],
+      executiveSummary: finalCandidate.executiveSummary,
+      bullets: finalCandidate.bullets.length
+        ? finalCandidate.bullets
+        : [`Public profile @${profile.username} was analyzed.`],
       warnings: [
         ...healthWarnings,
-        ...(missing.length ? [`Missing/weak sections: ${missing.join(", ")}`] : []),
-        ...(groundingFindings.length
-          ? [`Unresolved grounding flags: ${groundingFindings.length}`]
+        ...(finalCandidate.missing.length
+          ? [`Missing/weak sections: ${finalCandidate.missing.join(", ")}`]
           : []),
-        ...(qualityWarning ? [qualityWarning] : [])
+        ...(finalCandidate.groundingFindings.length
+          ? [`Unresolved grounding flags: ${finalCandidate.groundingFindings.length}`]
+          : []),
+        ...(qualityWarning ? [qualityWarning] : []),
+        ...(contentQualityWarning ? [contentQualityWarning] : []),
+        ...(deliveryWarning ? [deliveryWarning] : [])
       ],
       analysisHealth,
-      quality: qualitySummary,
-      contentQuality: contentQualitySummary,
+      deliveryHealth,
+      quality: finalCandidate.quality,
+      contentQuality: finalCandidate.contentQuality,
       evidence: analysisContextDigest(analysisContext)
     },
     metrics,
-    sourceMap,
+    sourceMap: finalCandidate.sourceMap,
     model: generated.model,
     promptVersion: generated.promptVersion,
     profile,
@@ -218,6 +313,346 @@ export async function buildStrategicReport(input: {
     vision,
     analysisContext
   };
+}
+
+function finalizeReportCandidate(input: {
+  generated: { rawText: string; summaryBullets?: string[] };
+  sections: ReportSectionView[];
+  mode: AnalysisMode;
+  language: Locale;
+  username: string;
+  sourceCatalog: SourceCatalogEntry[];
+  analysisHealth: ReportAnalysisHealth;
+  healthWarnings: string[];
+  metrics: Parameters<typeof evaluateReportQuality>[0]["metrics"];
+  analysisContext: Parameters<typeof evaluateReportQuality>[0]["analysisContext"];
+}): FinalReportCandidate {
+  const sanitizedSections = sanitizeSectionSources(input.sections, input.sourceCatalog);
+  const finalSectionsResult = finalizeUserFacingSections({
+    sections: sanitizedSections,
+    sourceCatalog: input.sourceCatalog,
+    username: input.username,
+    language: input.language,
+    analysisHealth: input.analysisHealth
+  });
+  const sections = finalSectionsResult.sections;
+  const sanitizedRawText = sanitizeUserFacingText(
+    sanitizeRawText(input.generated.rawText, input.sourceCatalog),
+    input.language
+  );
+  const rawText = finalSectionsResult.changed ? renderSectionsRawText(sections) : sanitizedRawText;
+  const sourceMap = sections.flatMap((section) => section.sources);
+  const bullets = sanitizeSummaryBullets(
+    summaryBulletsFor(input.generated, sections, input.language),
+    input.sourceCatalog
+  );
+  const executiveSummary = buildExecutiveSummary(input.language, input.analysisHealth, bullets);
+  const quality = evaluateReportQuality({
+    mode: input.mode,
+    sections,
+    metrics: input.metrics,
+    analysisContext: input.analysisContext
+  });
+  const contentQuality = evaluateReportContentQuality({
+    sections,
+    executiveSummary,
+    warnings: input.healthWarnings,
+    metrics: input.metrics
+  });
+  const missing = validateRequiredSections(input.mode, sections);
+  const groundingFindings = runDeterministicGrounding(sections, input.sourceCatalog).findings;
+  const deliveryGate = evaluateDeliveryGate({
+    sections,
+    missing,
+    groundingFindings,
+    quality,
+    contentQuality
+  });
+  return {
+    rawText,
+    sections,
+    sourceMap,
+    bullets,
+    executiveSummary,
+    quality,
+    contentQuality,
+    missing,
+    groundingFindings,
+    deliveryGate
+  };
+}
+
+function evaluateDeliveryGate(input: {
+  sections: ReportSectionView[];
+  missing: string[];
+  groundingFindings: GroundingFinding[];
+  quality: ReturnType<typeof evaluateReportQuality>;
+  contentQuality: ContentQualityRubric;
+}): DeliveryGate {
+  const reasons: string[] = [];
+  const targetSectionTitles = new Set<string>();
+  const sourcedCount = input.sections.filter((section) => section.sources.length).length;
+  const sourceCoverage = `${sourcedCount}/${input.sections.length}`;
+  const sourceCoverageIncomplete = sourcedCount < input.sections.length;
+  const highFindings = [
+    ...input.quality.findings.filter((finding) => finding.severity === "high"),
+    ...input.contentQuality.findings.filter((finding) => finding.severity === "high")
+  ];
+
+  for (const title of input.missing) targetSectionTitles.add(title);
+  for (const title of weakSourceSectionTitles(input.sections)) targetSectionTitles.add(title);
+  for (const finding of input.quality.findings) {
+    if (finding.title) targetSectionTitles.add(finding.title);
+  }
+  for (const title of contentQualityTargetSections(input.contentQuality, input.sections)) {
+    targetSectionTitles.add(title);
+  }
+
+  if (input.missing.length) reasons.push(`missing_sections:${input.missing.join(", ")}`);
+  if (sourceCoverageIncomplete) reasons.push(`source_coverage:${sourceCoverage}`);
+  if (input.groundingFindings.length) reasons.push(`grounding:${input.groundingFindings.length}`);
+  if (input.quality.score < DELIVERY_MIN_QUALITY_SCORE) {
+    reasons.push(`quality_score:${input.quality.score}<${DELIVERY_MIN_QUALITY_SCORE}`);
+  }
+  if (input.contentQuality.score < DELIVERY_MIN_CONTENT_QUALITY_SCORE) {
+    reasons.push(
+      `content_quality_score:${input.contentQuality.score}<${DELIVERY_MIN_CONTENT_QUALITY_SCORE}`
+    );
+  }
+  if (highFindings.length) reasons.push(`high_findings:${highFindings.length}`);
+
+  const hardBlockers =
+    input.missing.length > 0 ||
+    sourceCoverageIncomplete ||
+    input.groundingFindings.length > 0 ||
+    highFindings.length > 0 ||
+    input.quality.score < DELIVERY_MIN_QUALITY_SCORE;
+
+  return {
+    passed: reasons.length === 0,
+    hardBlockers,
+    reasons,
+    targetSectionTitles: [...targetSectionTitles],
+    sourceCoverage
+  };
+}
+
+function buildDeliveryHealth(
+  gate: DeliveryGate,
+  quality: ReturnType<typeof evaluateReportQuality>,
+  contentQuality: ContentQualityRubric,
+  targetedRepairAttempted: boolean,
+  repairAvailable: boolean
+): ReportDeliveryHealth {
+  let status: ReportDeliveryHealth["status"];
+  if (gate.passed) {
+    status = "ready";
+  } else if (!targetedRepairAttempted && repairAvailable) {
+    status = "needs_repair";
+  } else if (gate.hardBlockers) {
+    status = "failed_quality";
+  } else {
+    status = "limited";
+  }
+  return {
+    status,
+    reasons: gate.reasons,
+    qualityScore: quality.score,
+    contentQualityScore: contentQuality.score,
+    sourceCoverage: gate.sourceCoverage,
+    repaired: targetedRepairAttempted
+  };
+}
+
+function renderDeliveryHealthWarning(
+  health: ReportDeliveryHealth,
+  language: Locale
+): string | undefined {
+  if (health.status === "ready") return undefined;
+  const label =
+    language === "ru"
+      ? `Статус качества отчёта: ${health.status}`
+      : `Report delivery health: ${health.status}`;
+  return `${label}; quality=${health.qualityScore}, content=${health.contentQualityScore}, sources=${health.sourceCoverage}`;
+}
+
+function renderDeliveryGateFindings(gate: DeliveryGate, language: Locale): string[] {
+  if (!gate.reasons.length) return [];
+  const target =
+    gate.targetSectionTitles.length > 0
+      ? gate.targetSectionTitles.join(", ")
+      : language === "ru"
+        ? "только проблемные секции"
+        : "only flagged sections";
+  const practicalInstruction =
+    language === "ru"
+      ? "Для практических секций добавь 2-3 сценария, конкретный первый шаг, что написать, что не писать, почему зацепка безопасна, и как понять, что контакт не стоит продолжать."
+      : "For practical sections add 2-3 scenarios, a concrete first step, what to write, what not to write, why the hook is safe, and how to know not to continue contact.";
+  return [
+    `SHIP_GATE failed: ${gate.reasons.join("; ")}`,
+    `TARGETED_REPAIR_ONLY_SECTIONS: ${target}`,
+    practicalInstruction
+  ];
+}
+
+function deliveryIssueScore(candidate: FinalReportCandidate): number {
+  const gatePenalty = candidate.deliveryGate.reasons.length * 12;
+  const hardPenalty = candidate.deliveryGate.hardBlockers ? 50 : 0;
+  const groundingPenalty = candidate.groundingFindings.length * 8;
+  const missingPenalty = candidate.missing.length * 20;
+  const sourcePenalty = candidate.sections.filter((section) => !section.sources.length).length * 20;
+  return (
+    gatePenalty +
+    hardPenalty +
+    groundingPenalty +
+    missingPenalty +
+    sourcePenalty +
+    Math.max(0, DELIVERY_MIN_QUALITY_SCORE - candidate.quality.score) +
+    Math.max(0, DELIVERY_MIN_CONTENT_QUALITY_SCORE - candidate.contentQuality.score)
+  );
+}
+
+function contentQualityTargetSections(
+  contentQuality: ContentQualityRubric,
+  sections: ReportSectionView[]
+): string[] {
+  const targets = new Set<string>();
+  const practicalTitles = sections.filter((section) => practicalSectionTitle(section.title));
+  for (const finding of contentQuality.findings) {
+    for (const section of sections) {
+      if (finding.detail.includes(section.title)) targets.add(section.title);
+    }
+    if (
+      finding.id === "content:weak_practical_detail" ||
+      finding.id === "content:low_practical_value"
+    ) {
+      for (const section of practicalTitles) targets.add(section.title);
+    }
+  }
+  return [...targets];
+}
+
+function practicalSectionTitle(title: string): boolean {
+  return /потенциальная польза|триггеры|зацепки|коммуникационные рекомендации|готовые фразы|общая оценка|potential value|triggers|hooks|communication recommendations|ready phrases|overall profile value/i.test(
+    title
+  );
+}
+
+function finalizeUserFacingSections(input: {
+  sections: ReportSectionView[];
+  sourceCatalog: SourceCatalogEntry[];
+  username: string;
+  language: Locale;
+  analysisHealth: ReportAnalysisHealth;
+}): { sections: ReportSectionView[]; changed: boolean } {
+  const profileSource = input.sourceCatalog.find((entry) =>
+    normalizeUrl(entry.url)?.endsWith(`instagram.com/${input.username}`)
+  );
+  let changed = false;
+  const sections = input.sections.map((section) => {
+    const cleanedContent = sanitizeUserFacingText(section.content, input.language);
+    const cleanedSources = section.sources.map((source) => ({
+      ...source,
+      label: sanitizeUserFacingText(source.label, input.language)
+    }));
+    let content = applyLowEvidenceTemplate(section.title, cleanedContent, input);
+    let sources = cleanedSources;
+    if (!sources.length && profileSource?.url) {
+      sources = [
+        {
+          url: profileSource.url,
+          label:
+            input.language === "ru"
+              ? "Публичный профиль и выбранная публичная выборка"
+              : "Public profile and selected public sample"
+        }
+      ];
+      content = appendProfileEvidence(content, profileSource.url, input.language);
+    }
+    if (
+      content !== section.content ||
+      sources.length !== section.sources.length ||
+      sources.some((source, index) => source.label !== section.sources[index]?.label)
+    ) {
+      changed = true;
+    }
+    return {
+      ...section,
+      content,
+      sources
+    };
+  });
+  return { sections, changed };
+}
+
+function appendProfileEvidence(content: string, profileUrl: string, language: Locale): string {
+  if (content.includes(profileUrl)) return content;
+  const evidenceLabel =
+    language === "ru"
+      ? "Публичный профиль и выбранная публичная выборка"
+      : "Public profile and selected public sample";
+  return `${content.trim()}\n\nEvidence:\n- ${evidenceLabel}: ${profileUrl}`.trim();
+}
+
+function applyLowEvidenceTemplate(
+  title: string,
+  content: string,
+  input: {
+    language: Locale;
+    analysisHealth: ReportAnalysisHealth;
+  }
+): string {
+  if (input.language !== "ru") return content;
+  const normalizedTitle = title.toLowerCase();
+  const lowEvidence =
+    /нет|не обнаруж|недостаточ|не видно|не позволяет|insufficient|no direct|no profession/iu.test(
+      content
+    );
+  if (/профессия и статус/.test(normalizedTitle) && lowEvidence) {
+    return [
+      "По публичному профилю и выбранной выборке прямых признаков профессии, должности или рабочего статуса не видно.",
+      "Это не доказывает их отсутствие; это только ограничивает вывод по открытым данным.",
+      "Практический вывод: не строить обращение вокруг работы, дохода или статуса, пока нет отдельного публичного подтверждения.",
+      "Безопасный следующий шаг: использовать нейтральную тему из конкретного поста, а не предполагать профессию.",
+      `Ограничение: проанализировано ${input.analysisHealth.analyzedPosts}/${input.analysisHealth.postsCount} публичных постов, сторис и личные ответы не видны.`,
+      "Confidence: low"
+    ].join(" ");
+  }
+  if (/ошибки|слепые зоны|барьеры/.test(normalizedTitle)) {
+    const mentionsLimits = /сторис|директ|direct|личн|нет данных|огранич|выборк|готовност/iu.test(
+      content
+    );
+    if (mentionsLimits && (content.length < 360 || !/\nEvidence\s*:/iu.test(content))) {
+      return [
+        "Главные ограничения анализа: сторис, архив, личные ответы и реакции в Direct недоступны, поэтому отчет описывает только выбранные публичные посты.",
+        `Покрытие выборки: ${input.analysisHealth.analyzedPosts}/${input.analysisHealth.postsCount} постов (${input.analysisHealth.sampleCoveragePercent ?? 0}%).`,
+        "Это не доказывает отсутствие интересов, контактов или готовности к диалогу; это только снижает уверенность выводов.",
+        "Практический барьер: если в био нет публичных контактов или явного CTA, контакт лучше начинать с одного нейтрального комментария по посту и не продолжать без ответа.",
+        "Что не делать: не делать выводы о личной жизни, статусе, доходе или намерениях по косвенным визуальным деталям.",
+        "Confidence: medium"
+      ].join(" ");
+    }
+  }
+  return content;
+}
+
+function renderSectionsRawText(sections: ReportSectionView[]): string {
+  return sections
+    .map((section) => {
+      const content = section.content.trim();
+      const evidence =
+        section.sources.length && !/\nEvidence\s*:/iu.test(content)
+          ? `\n\nEvidence:\n${section.sources.map(renderSourceLine).join("\n")}`
+          : "";
+      return `[[SECTION]]\n${section.title}\n${content}${evidence}`;
+    })
+    .join("\n\n");
+}
+
+function renderSourceLine(source: ReportSource): string {
+  const ref = source.postId ? `[${source.postId}] ` : "";
+  const url = source.url ? ` ${source.url}` : "";
+  return `- ${ref}${source.label}${url}`.trimEnd();
 }
 
 function sanitizeSectionSources(
@@ -413,16 +848,40 @@ function buildExecutiveSummary(
     .join(" ");
 }
 
-function cleanSummaryBullet(bullet: string, language: Locale): string {
+function renderContentQualityWarning(summary: ContentQualityRubric): string | undefined {
+  const important = summary.findings.filter((finding) => finding.severity !== "low");
+  if (!important.length && summary.score >= 85) return undefined;
+  return `Content quality flags: score ${summary.score}/100, ${important.length} medium/high findings`;
+}
+
+function sanitizeUserFacingText(
+  value: string,
+  language: Locale,
+  options: { compact?: boolean } = {}
+): string {
   const replacements =
     language === "ru" ? INTERNAL_SUMMARY_REPLACEMENTS_RU : INTERNAL_SUMMARY_REPLACEMENTS_EN;
-  return replacements
-    .reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), bullet)
-    .replace(/\s+/g, " ")
+  const cleaned = replacements.reduce(
+    (text, [pattern, replacement]) => text.replace(pattern, replacement),
+    value
+  );
+  if (options.compact) return cleaned.replace(/\s+/g, " ").trim();
+  return cleaned
+    .replace(/[ \t]+/g, " ")
+    .replace(/[ \t]*\n[ \t]*/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
 
+function cleanSummaryBullet(bullet: string, language: Locale): string {
+  return sanitizeUserFacingText(bullet, language, { compact: true });
+}
+
 const INTERNAL_SUMMARY_REPLACEMENTS_RU: Array<[RegExp, string]> = [
+  [
+    /No profession hints in profileSignals or selected posts/giu,
+    "В публичных данных профиля и выбранных постах нет прямых указаний на профессию"
+  ],
   [/\banalysisContext\b/g, "сводка анализа"],
   [/\bevidenceMap\b/g, "сводка источников"],
   [/\bcontentClusters\b/g, "тематические кластеры"],
@@ -437,6 +896,10 @@ const INTERNAL_SUMMARY_REPLACEMENTS_RU: Array<[RegExp, string]> = [
 ];
 
 const INTERNAL_SUMMARY_REPLACEMENTS_EN: Array<[RegExp, string]> = [
+  [
+    /No profession hints in profileSignals or selected posts/giu,
+    "No direct profession hints in the public profile data or selected posts"
+  ],
   [/\banalysisContext\b/g, "analysis summary"],
   [/\bevidenceMap\b/g, "evidence summary"],
   [/\bcontentClusters\b/g, "content clusters"],

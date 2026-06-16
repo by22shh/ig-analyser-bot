@@ -126,6 +126,13 @@ describe("analysis context", () => {
     });
 
     expect(context.audienceSignals.frequentCommenters).toEqual([{ username: "friend", count: 2 }]);
+    expect(context.audienceSignals.authorReplyCount).toBe(1);
+    expect(context.audienceSignals.authorReplyPostIds).toEqual(["p1"]);
+    expect(context.audienceSignals.authorReplies[0]).toMatchObject({
+      postId: "p1",
+      text: "thanks for reading"
+    });
+    expect(context.evidenceMap.some((item) => item.id === "audience:author_replies")).toBe(true);
     expect(context.audienceSignals.repeatedCommentTerms.map((item) => item.term)).not.toContain(
       "thanks"
     );

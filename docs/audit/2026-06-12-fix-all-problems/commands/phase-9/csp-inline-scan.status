@@ -1,0 +1,2 @@
+exit=0
+summary=no unsafe-inline or inline style attributes in public/mini-app or src/mini-app

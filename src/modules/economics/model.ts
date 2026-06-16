@@ -10,8 +10,10 @@ export type EconomicsSettings = {
   starsUsdPerStarPayoutFloor: number;
   starsPayoutReserve: number;
   targetRevenueMultiple: number;
+  supportReserveRub: number;
   providerCosts: Record<PublicMode, number | undefined>;
   caps: {
+    metadataPostLimit: number;
     postLimit: number;
     visionBatchSize: number;
     maxImagesAnalyzed: number;
@@ -31,6 +33,7 @@ export type EconomicsSettings = {
 // gpt-5.5 swap: measured per-report cost stays ≈38–50 ₽, under the 55 ₽ P75
 // (the reasoning step is a single call). Keep these in sync with env defaults.
 export const MODELED_CAPS = {
+  metadataPostLimit: 120,
   postLimit: 30,
   visionBatchSize: 5,
   maxImagesAnalyzed: 30,
@@ -43,28 +46,38 @@ export const MODELED_CAPS = {
   pdfRenderTimeoutSeconds: 60
 };
 
+function scaledCost(costRub: number | undefined, multiplier: number): number | undefined {
+  return costRub == null ? undefined : costRub * multiplier;
+}
+
 export function economicsSettingsFromEnv(): EconomicsSettings {
+  const supportReserveRub = env.ECON_SUPPORT_RESERVE_RUB ?? 0;
+  const standardReportCostRub =
+    env.ECON_STANDARD_REPORT_COST_P75_RUB == null
+      ? undefined
+      : env.ECON_STANDARD_REPORT_COST_P75_RUB + supportReserveRub;
+  const photoSearchCostRub =
+    env.ECON_PHOTO_SEARCH_COST_P75_RUB == null
+      ? undefined
+      : env.ECON_PHOTO_SEARCH_COST_P75_RUB + supportReserveRub;
+
   return {
     usdToRubBuffer: env.ECON_USD_TO_RUB_BUFFER ?? 90,
     paymentFeeReserve: env.ECON_PAYMENT_FEE_RESERVE ?? 0.2,
     starsUsdPerStarPayoutFloor: env.ECON_STARS_USD_PER_STAR_PAYOUT_FLOOR ?? 0.01,
     starsPayoutReserve: env.ECON_STARS_PAYOUT_RESERVE ?? 0.2,
     targetRevenueMultiple: env.ECON_TARGET_REVENUE_MULTIPLE ?? 3,
+    supportReserveRub,
     providerCosts: {
-      standard: env.ECON_STANDARD_REPORT_COST_P75_RUB,
-      influencer: env.ECON_STANDARD_REPORT_COST_P75_RUB
-        ? env.ECON_STANDARD_REPORT_COST_P75_RUB * 1.15
-        : undefined,
-      hr: env.ECON_STANDARD_REPORT_COST_P75_RUB
-        ? env.ECON_STANDARD_REPORT_COST_P75_RUB * 1.15
-        : undefined,
-      osint_compliance: env.ECON_STANDARD_REPORT_COST_P75_RUB
-        ? env.ECON_STANDARD_REPORT_COST_P75_RUB * 1.35
-        : undefined,
-      photo_search: env.ECON_PHOTO_SEARCH_COST_P75_RUB,
+      standard: standardReportCostRub,
+      influencer: scaledCost(standardReportCostRub, 1.15),
+      hr: scaledCost(standardReportCostRub, 1.15),
+      osint_compliance: scaledCost(standardReportCostRub, 1.35),
+      photo_search: photoSearchCostRub,
       chat_message: env.ECON_CHAT_MESSAGE_COST_P75_RUB
     },
     caps: {
+      metadataPostLimit: env.ANALYSIS_METADATA_POST_LIMIT ?? 120,
       postLimit: env.ANALYSIS_POST_LIMIT ?? 30,
       visionBatchSize: env.VISION_BATCH_SIZE ?? 5,
       maxImagesAnalyzed: env.ANALYSIS_MAX_IMAGES_ANALYZED ?? 30,

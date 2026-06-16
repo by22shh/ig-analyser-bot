@@ -1,0 +1,5 @@
+command	exit_code	log
+validate-alerts	0	validate-alerts.log
+typecheck	0	typecheck.log
+lint	0	lint.log
+package-script	0	package-script.log

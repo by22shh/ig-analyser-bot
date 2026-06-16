@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import { env, isLocalRuntimeEnv } from "../config/env.js";
 import { InsufficientCreditsError } from "../modules/billing/credits.service.js";
 import { ChatRequestInProgressError } from "../modules/chat/report-chat.service.js";
+import { paymentFailureInfo } from "../modules/payments/failure-taxonomy.js";
 import {
   CREDIT_UNIT,
   MODE_COST_UNITS,
@@ -16,6 +17,10 @@ import {
   packageCredits
 } from "../modules/billing/packages.js";
 import { normalizeInstagramUsername } from "../modules/instagram/normalize.js";
+import {
+  stripSectionMarkers,
+  stripSectionMarkersFromJson
+} from "../modules/reports/user-facing-text.js";
 import type { Services } from "../modules/container.js";
 import type { MyContext } from "../telegram/context.js";
 import { ANALYSIS_MODES, type AnalysisMode } from "../telegram/constants.js";
@@ -147,7 +152,10 @@ export function registerMiniAppRoutes(app: FastifyInstance, input: MiniAppInput)
         language: session.user.language === "en" ? "en" : "ru",
         targetPosition,
         goal,
-        idempotencyKey: `miniapp:analysis:${session.user.id}:${requestId}`
+        idempotencyKey: `miniapp:analysis:${session.user.id}:${requestId}`,
+        source: "mini_app",
+        requestId,
+        lawfulBasisAccepted: mode === "osint_compliance" ? true : undefined
       });
       return {
         ok: true,
@@ -307,13 +315,25 @@ export function registerMiniAppRoutes(app: FastifyInstance, input: MiniAppInput)
       user = await input.services.users.updateEmail(session.user.id, email);
     }
     await input.services.payments.ensureCatalog();
-    const order = await input.services.payments.createYooKassaOrder({
-      userId: user.id,
-      chatId: session.chatId,
-      packageCode,
-      userEmail: email,
-      idempotencyKey: `miniapp:yk:${user.id}:${packageCode}:${requestId}`
-    });
+    let order: Awaited<ReturnType<Services["payments"]["createYooKassaOrder"]>>;
+    try {
+      order = await input.services.payments.createYooKassaOrder({
+        userId: user.id,
+        chatId: session.chatId,
+        packageCode,
+        userEmail: email,
+        idempotencyKey: `miniapp:yk:${user.id}:${packageCode}:${requestId}`
+      });
+    } catch (error) {
+      const code = miniAppPaymentErrorCode(error);
+      const status =
+        code === "PAYMENT_PACKAGE_UNAVAILABLE"
+          ? 404
+          : code === "PAYMENT_REQUEST_CONFLICT"
+            ? 409
+            : 502;
+      return apiError(reply, status, code);
+    }
     return { ok: true, order, user: userDto(user) };
   });
 }
@@ -338,7 +358,7 @@ async function serveMiniAppFile(relativePath: string, reply: FastifyReply) {
     reply.header("Cache-Control", "no-store");
     reply.header(
       "Content-Security-Policy",
-      "default-src 'self'; script-src 'self' https://telegram.org; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self'; frame-ancestors https://web.telegram.org https://*.telegram.org"
+      "default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' https://telegram.org; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors https://web.telegram.org https://telegram.org https://*.telegram.org"
     );
   } else {
     reply.header("Cache-Control", "public, max-age=3600");
@@ -677,7 +697,7 @@ function reportListItemDto(
     username: report.analysisJob.targetUsername,
     mode: report.mode,
     language: report.language,
-    summary: report.summary,
+    summary: stripSectionMarkersFromJson(report.summary),
     metrics: report.metrics,
     artifactTypes: report.artifacts.map((item) => item.type),
     createdAt: report.createdAt.toISOString(),
@@ -694,12 +714,12 @@ function reportDetailDto(
     ...reportListItemDto(report),
     model: report.model,
     promptVersion: report.promptVersion,
-    rawText: report.rawText,
+    rawText: stripSectionMarkers(report.rawText),
     sections: report.sections.map((section) => ({
       id: section.id,
       position: section.position,
-      title: section.title,
-      content: section.content,
+      title: stripSectionMarkers(section.title),
+      content: stripSectionMarkers(section.content),
       kind: section.kind,
       sources: section.sources
     })),
@@ -747,7 +767,18 @@ function apiError(
   code: string,
   details?: Record<string, unknown>
 ) {
-  return reply.code(statusCode).send({ ok: false, error: { code, ...details } });
+  const paymentFailure = paymentFailureInfo(code);
+  return reply.code(statusCode).send({
+    ok: false,
+    error: { code, ...details, ...(paymentFailure ? { paymentFailure } : {}) }
+  });
+}
+
+function miniAppPaymentErrorCode(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  if (message === "PACKAGE_NOT_FOUND") return "PAYMENT_PACKAGE_UNAVAILABLE";
+  if (message === "IDEMPOTENCY_KEY_CONFLICT") return "PAYMENT_REQUEST_CONFLICT";
+  return "PAYMENT_PROVIDER_UNAVAILABLE";
 }
 
 function contentTypeForArtifact(type: string): string {

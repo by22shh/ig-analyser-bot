@@ -1,0 +1,6 @@
+command	exit_code	log
+vitest-finance-economics	0	vitest-finance-economics.log
+export-help	0	export-help.log
+typecheck	0	typecheck.log
+lint	0	lint.log
+export-sample	0	export-sample.tsv

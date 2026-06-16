@@ -139,7 +139,11 @@ export function registerAnalyzeHandlers(bot: import("grammy").Bot<MyContext>) {
         language: ctx.user.language === "en" ? "en" : "ru",
         targetPosition: state.payload.targetPosition,
         goal: state.payload.goal,
-        idempotencyKey: `analysis:${ctx.user.id}:${state.payload.requestId}`
+        idempotencyKey: `analysis:${ctx.user.id}:${state.payload.requestId}`,
+        source: "telegram",
+        requestId: state.payload.requestId,
+        lawfulBasisAccepted:
+          state.payload.mode === "osint_compliance" ? state.payload.lawfulBasisAccepted : undefined
       });
       await ctx.services.wizard.clear(ctx.user.id);
       await ctx.answerCallbackQuery();

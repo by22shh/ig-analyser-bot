@@ -2,7 +2,7 @@ import { CB } from "../constants.js";
 import { InsufficientCreditsError } from "../../modules/billing/credits.service.js";
 import type { MyContext } from "../context.js";
 import { paymentMethodsKeyboard } from "../keyboards/payments.js";
-import { reportChatKeyboard } from "../keyboards/reports.js";
+import { reportChatAnswerKeyboard, reportChatKeyboard } from "../keyboards/reports.js";
 import { t, type LocaleMessages } from "../locales/index.js";
 import { mdLiteToHtml } from "../formatters/html.js";
 import { editOrSendHtml, sendHtml } from "./helpers.js";
@@ -61,7 +61,7 @@ async function ask(ctx: MyContext, reportId: string, question: string) {
       // and re-calling the (paid) LLM.
       requestId: String(ctx.update.update_id)
     });
-    await sendHtml(ctx, mdLiteToHtml(answer.text), reportChatKeyboard(messages, reportId));
+    await sendHtml(ctx, mdLiteToHtml(answer.text), reportChatAnswerKeyboard(messages, reportId));
   } catch (error) {
     if (error instanceof InsufficientCreditsError) {
       await sendHtml(ctx, messages.insufficientCredits(error), paymentMethodsKeyboard(messages));

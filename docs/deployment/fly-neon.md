@@ -138,7 +138,7 @@ Before public paid usage, set measured cost assumptions:
 
 ```bash
 fly secrets set \
-  ECON_STANDARD_REPORT_COST_P75_RUB="55" \
+  ECON_STANDARD_REPORT_COST_P75_RUB="50" \
   ECON_PHOTO_SEARCH_COST_P75_RUB="20" \
   ECON_CHAT_MESSAGE_COST_P75_RUB="2" \
   ECON_APIFY_PROFILE_COST_RUB="12" \
@@ -148,8 +148,11 @@ fly secrets set \
 ```
 
 Keep `FEATURE_PHOTO_SEARCH=false` until FaceCheck and its cost cap are ready.
+`ECON_STANDARD_REPORT_COST_P75_RUB` is the provider/report p75 cost before support reserve; `audit-economics` adds `ECON_SUPPORT_RESERVE_RUB` separately.
 
 ## 7. Deploy
+
+Production deploys from GitHub Actions are attached to the `production` environment. Configure required reviewers and branch restrictions in GitHub before allowing automatic production deploys; see [production-approval.md](production-approval.md).
 
 Run:
 

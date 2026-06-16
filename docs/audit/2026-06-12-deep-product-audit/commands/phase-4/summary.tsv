@@ -1,0 +1,4 @@
+0	0s	pnpm eval-golden	docs/audit/2026-06-12-deep-product-audit/commands/phase-4/01.log
+0	2s	pnpm exec vitest run tests/unit/report-builder.test.ts tests/unit/report-quality.test.ts tests/unit/content-quality.test.ts tests/unit/analysis-context.test.ts tests/unit/structured-output.test.ts tests/unit/grounding.test.ts tests/unit/openrouter-empty.test.ts tests/unit/practical-requirements.test.ts	docs/audit/2026-06-12-deep-product-audit/commands/phase-4/02.log
+0	4s	pnpm typecheck	docs/audit/2026-06-12-deep-product-audit/commands/phase-4/03.log
+0	3s	pnpm lint	docs/audit/2026-06-12-deep-product-audit/commands/phase-4/04.log

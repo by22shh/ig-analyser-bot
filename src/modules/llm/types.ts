@@ -1,5 +1,6 @@
 import type { AnalysisMode, Locale } from "../../telegram/constants.js";
 import type { AnalysisContext } from "../analysis/context.js";
+import type { EvidencePack } from "../analysis/evidence-pack.js";
 import type { InstagramPost, InstagramProfile } from "../instagram/types.js";
 import type { ReportMetrics, ReportSectionView, VisionAnalysisItemView } from "../reports/types.js";
 import type { GroundingResult, SourceCatalogEntry } from "./grounding.js";
@@ -17,6 +18,7 @@ export type ReportInput = {
   vision: VisionAnalysisItemView[];
   metrics?: ReportMetrics;
   analysisContext?: AnalysisContext;
+  evidencePack?: EvidencePack;
   targetPosition?: string;
   goal?: string;
 };

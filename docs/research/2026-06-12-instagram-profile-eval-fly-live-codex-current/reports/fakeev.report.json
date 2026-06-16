@@ -1,0 +1,3153 @@
+{
+  "mode": "standard",
+  "username": "fakeev",
+  "language": "ru",
+  "model": "x-ai/grok-4.3",
+  "promptVersion": "report.standard.v7.repair",
+  "sections": [
+    {
+      "title": "Основные темы и приоритеты",
+      "content": "В выборке доминирует тема инвестиций в криптовалюту и личного опыта на крупных конференциях. Посты регулярно показывают выступления, стратегии шортов и консервативные подходы к доходности. Второстепенно присутствуют путешествия и lifestyle-элементы (теннис, гольф, автомобили). Био прямо указывает на инвестиции как главную тему.\n\nEvidence:\n\n- [3622298533331354216] Выступление на конференции: Выступление перед 15 000 человек на блокчейн-конференции (high) https://www.instagram.com/p/DJE_VMFokJo/\n\n- [3877167059469876922] Доклад Blockchain Life: Тема доклада — эффективная ставка на падение крипторынка (high) https://www.instagram.com/p/DXOduYCjD66/\n\n- [3891158459865688897] Стратегия шорт крипты: Карусель объясняет, почему шорт — лучшая стратегия 2026 года (high) https://www.instagram.com/p/DYALADFDOtB/\n\nConfidence: medium\n\nCaveats:\n\n- Выборка 30 постов из 1087 (2,8 %)\n\n- Только публичный контент без сторис",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "postId": "3622298533331354216",
+          "label": "[3622298533331354216] Выступление на конференции: Выступление перед 15 000 человек на блокчейн-конференции (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DXOduYCjD66/",
+          "postId": "3877167059469876922",
+          "label": "[3877167059469876922] Доклад Blockchain Life: Тема доклада — эффективная ставка на падение крипторынка (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYALADFDOtB/",
+          "postId": "3891158459865688897",
+          "label": "[3891158459865688897] Стратегия шорт крипты: Карусель объясняет, почему шорт — лучшая стратегия 2026 года (high)"
+        }
+      ]
+    },
+    {
+      "title": "Повторяющиеся визуальные и текстовые паттерны",
+      "content": "Многочисленные посты используют формат карусели или sidecar с акцентом на эстетику: человек в кадре рядом с автомобилями, на сцене или на фоне природы. Подписи часто короткие, с эмодзи и прямым обращением к опыту. Палитра преимущественно тёплая и спокойная.\n\nEvidence:\n\n- [3825836720978630051] Прогулка у океана: Человек в белой рубашке у скалы над водой (high) https://www.instagram.com/p/DUYGjpCk5Wj/\n\n- [3653273883800372929] Красная спортивная машина: Крупный план красного авто в гараже (high) https://www.instagram.com/p/DKzCT3PIgbB/\n\nConfidence: medium\n\nCaveats:\n\n- Паттерны заметны в 8–10 постах выборки",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "postId": "3825836720978630051",
+          "label": "[3825836720978630051] Прогулка у океана: Человек в белой рубашке у скалы над водой (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DKzCT3PIgbB/",
+          "postId": "3653273883800372929",
+          "label": "[3653273883800372929] Красная спортивная машина: Крупный план красного авто в гараже (high)"
+        }
+      ]
+    },
+    {
+      "title": "Поведение и вовлеченность",
+      "content": "Средний ER около 0,9 % при 57k подписчиках. Выделяются отдельные посты с аномально высокой вовлечённостью (2952 лайка и 153 комментария). Частота публикаций примерно раз в месяц по медианным показателям. Комментарии получаются преимущественно от нишевых аккаунтов инвестиционной тематики.\n\nEvidence:\n\n- [3297322861502466793] Пост с максимальными лайками: 2952 лайка и 153 комментария (high) https://www.instagram.com/p/C3CcawtoQrp/\n\nConfidence: low\n\nCaveats:\n\n- Выборка 2,8 % от общего количества постов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C3CcawtoQrp/",
+          "postId": "3297322861502466793",
+          "label": "[3297322861502466793] Пост с максимальными лайками: 2952 лайка и 153 комментария (high)"
+        }
+      ]
+    },
+    {
+      "title": "Аудитория и комментарии",
+      "content": "Частые комментаторы (danila.invest — 5 комментариев, bagdagulov.alexander и s.gralnik — по 3) оставляют короткие позитивные реплики и вопросы по инвестициям, часто упоминая «олег» или делясь собственным опытом. Высококомментируемые посты — пост о дне рождения с 153 комментариями и выступления на конференциях. Тон комментариев нейтрально-уважительный, без агрессии. Это указывает на аудиторию, которая активно обсуждает конкретные инвестиционные подходы и следит за публичными выступлениями. Плотность комментариев средняя, основные реакции приходят в первые дни после публикации. Практическое значение: такие комментарии позволяют понять, какие темы вызывают живой отклик у нишевой инвестиционной аудитории.\n\nEvidence:\n\n- [3297322861502466793] Высокая активность: 153 комментария, повторяющиеся упоминания «олег» (medium) https://www.instagram.com/p/C3CcawtoQrp/\n\n- [3639563876877562687] Комментарии по автоматизации: 34 комментария, обсуждение автоматизации трейдинга (medium) https://www.instagram.com/p/DKCVBASoXM_/\n\nConfidence: medium\n\nCaveats:\n\n- Только 29 постов с текстом комментариев\n\n- Выборка 2,8 % от всех постов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C3CcawtoQrp/",
+          "postId": "3297322861502466793",
+          "label": "[3297322861502466793] Высокая активность: 153 комментария, повторяющиеся упоминания «олег» (medium)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DKCVBASoXM_/",
+          "postId": "3639563876877562687",
+          "label": "[3639563876877562687] Комментарии по автоматизации: 34 комментария, обсуждение автоматизации трейдинга (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Стиль общения",
+      "content": "Подписи лаконичные, содержат личный опыт и иногда призыв сохранить пост. Эмодзи используются умеренно. Стиль в личных сообщениях неизвестен и не может быть экстраполирован из публичных текстов.\n\nEvidence:\n\n- [3440183454524882330] Призыв сохранить: Текст содержит «Сохраняй, чтобы не потерять» (high) https://www.instagram.com/p/C-9_KABIb2a/\n\nConfidence: medium\n\nCaveats:\n\n- Стиль личной переписки не анализировался",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C-9_KABIb2a/",
+          "postId": "3440183454524882330",
+          "label": "[3440183454524882330] Призыв сохранить: Текст содержит «Сохраняй, чтобы не потерять» (high)"
+        }
+      ]
+    },
+    {
+      "title": "Профессия и статус",
+      "content": "По публичному профилю и выбранной выборке прямых признаков профессии, должности или рабочего статуса не видно. Это не доказывает их отсутствие; это только ограничивает вывод по открытым данным. Практический вывод: не строить обращение вокруг работы, дохода или статуса, пока нет отдельного публичного подтверждения. Безопасный следующий шаг: использовать нейтральную тему из конкретного поста, а не предполагать профессию. Ограничение: проанализировано 30/1087 публичных постов, сторис и личные ответы не видны. Confidence: low",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://t.me/kitinvest",
+          "label": "Публичный контакт: Ссылка в био ведёт на Telegram-канал kitinvest (high)"
+        }
+      ]
+    },
+    {
+      "title": "Отличие от типичных аккаунтов",
+      "content": "В отличие от большинства крипто-блогеров, аккаунт сочетает деловые выступления с визуально отшлифованным lifestyle-контентом. Редко встречаются прямые продажи или агрессивные CTA, что отличает его от типичных каналов.\n\nEvidence:\n\n- [3622298533331354216] Выступление: Публичное выступление на крупной конференции (high) https://www.instagram.com/p/DJE_VMFokJo/\n\nConfidence: low\n\nCaveats:\n\n- База сравнения ограничена выборкой",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "postId": "3622298533331354216",
+          "label": "[3622298533331354216] Выступление: Публичное выступление на крупной конференции (high)"
+        }
+      ]
+    },
+    {
+      "title": "Отсутствия как сигнал",
+      "content": "В выборке почти отсутствуют теги брендов, коммерческие партнёрства и прямые призывы к действию кроме сохранения поста. Не видно частых упоминаний семьи или личных отношений.\n\nEvidence:\n\n- [3668515366899920460] Один пост с рекламным оттенком: Единственный пост, помеченный как commercial (medium) https://www.instagram.com/p/DLpL0ohIa5M/\n\nConfidence: medium\n\nCaveats:\n\n- Выборка не охватывает все посты",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DLpL0ohIa5M/",
+          "postId": "3668515366899920460",
+          "label": "[3668515366899920460] Один пост с рекламным оттенком: Единственный пост, помеченный как commercial (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Потенциальная польза от контакта",
+      "content": "Контакт полезен для обсуждения крипто-стратегий, шорт-позиций и опыта публичных выступлений на конференциях. Telegram-канал даёт структурированный способ получить инструкции и обновления по рынку. Это важно, потому что позволяет получить конкретные наблюдения от человека, регулярно выступающего на крупных мероприятиях, без необходимости строить личные предположения. Реалистичный следующий шаг — подписаться на канал и изучить последние посты, а затем отправить один нейтральный вопрос по теме конференции. Сценарий 1: интерес к шорт-стратегии — безопасно задать вопрос после прочтения карусели. Сценарий 2: интерес к недвижимости — можно уточнить подход к флиппингу. Сценарий 3: интерес к конференциям — комментировать выступления. Первый шаг: открыть Telegram-канал и прочитать 2–3 последних материала. Что писать: ссылаться только на публичный пост. Что не писать: личные вопросы, упоминания внешности, давления на ответ. Почему зацепка безопасна: опирается исключительно на открытые посты и ссылку в био. Как понять, что контакт не стоит продолжать: отсутствие реакции в течение нескольких недель или отсутствие тематического отклика.\n\nEvidence:\n\n- Публичный канал: Канал указан в био и описан как способ получить инструкции (high) https://t.me/kitinvest\n\n- [3622298533331354216] Выступление: Выступление на конференции Blockchain Life (high) https://www.instagram.com/p/DJE_VMFokJo/\n\nConfidence: medium\n\nCaveats:\n\n- Нет гарантии ответа\n\n- Выборка 2,8 %",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://t.me/kitinvest",
+          "label": "Публичный канал: Канал указан в био и описан как способ получить инструкции (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "postId": "3622298533331354216",
+          "label": "[3622298533331354216] Выступление: Выступление на конференции Blockchain Life (high)"
+        }
+      ]
+    },
+    {
+      "title": "Триггеры и зацепки",
+      "content": "1. Пост про выступление на Blockchain Life 2026 (тема доклада «Как сделать эффективную ставку на падение крипторынка») — можно упомянуть тему доклада и спросить об обновлениях по стратегии. 2. Пост с каруселью про шорт-стратегию 2026 года — уместно спросить про текущие наблюдения за рынком и риски. 3. Пост про недвижимость и флиппинг — можно уточнить, какие регионы или подходы к объектам рассматриваются чаще всего. Каждая зацепка привязана к конкретному публичному посту и безопасна, поскольку не касается личной жизни.\n\nEvidence:\n\n- [3877167059469876922] Конференция: Тема доклада указана явно (high) https://www.instagram.com/p/DXOduYCjD66/\n\n- [3891158459865688897] Шорт-стратегия: Карусель объясняет стратегию (high) https://www.instagram.com/p/DYALADFDOtB/\n\n- [3420003922845366475] Флиппинг: Описание покупки объекта под ремонт и продажу (high) https://www.instagram.com/p/C92S3Kno_jL/\n\nConfidence: medium\n\nCaveats:\n\n- Зацепки основаны только на публичных постах\n\n- Выборка 2,8 %",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DXOduYCjD66/",
+          "postId": "3877167059469876922",
+          "label": "[3877167059469876922] Конференция: Тема доклада указана явно (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYALADFDOtB/",
+          "postId": "3891158459865688897",
+          "label": "[3891158459865688897] Шорт-стратегия: Карусель объясняет стратегию (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C92S3Kno_jL/",
+          "postId": "3420003922845366475",
+          "label": "[3420003922845366475] Флиппинг: Описание покупки объекта под ремонт и продажу (high)"
+        }
+      ]
+    },
+    {
+      "title": "Коммуникационные рекомендации",
+      "content": "1. Оставить короткий комментарий под постом о конференции или шорт-стратегии, ссылаясь только на содержание поста. 2. Написать в Telegram-канал с конкретным вопросом по теме одного из публичных постов. 3. После ответа продолжить тему инвестиций, не переходя на личные вопросы. Избегать упоминаний внешности, личной жизни, давления на ответ, оценок статуса и любых непроверенных предположений. Если ответа нет в течение 3–4 недель — не повторять сообщение и не искать другие каналы контакта. Первый шаг: выбрать один из трёх постов с зацепками и составить комментарий на его основе. Зацепки безопасны, поскольку используют только открытые данные и не требуют личного контекста.\n\nEvidence:\n\n- [3622298533331354216] Пост для комментария: Публичное выступление с высокой видимостью (high) https://www.instagram.com/p/DJE_VMFokJo/\n\nConfidence: medium\n\nCaveats:\n\n- Рекомендации ограничены публичными данными\n\n- Выборка 2,8 %",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "postId": "3622298533331354216",
+          "label": "[3622298533331354216] Пост для комментария: Публичное выступление с высокой видимостью (high)"
+        }
+      ]
+    },
+    {
+      "title": "Готовые фразы для входа в диалог",
+      "content": "1. «Интересно было прочитать про вашу ставку на падение рынка в посте про Blockchain Life — есть ли обновления по этой теме?» 2. «В карусели про шорт-стратегию 2026 года упомянута консервативная доходность — можно ли подробнее про риски?» 3. «В посте про флиппинг объекта показан быстрый ремонт — какой регион вы рассматриваете чаще всего?» Фразы нейтральны, опираются исключительно на публичные факты и не содержат личных предположений. Их можно отправить почти без правок через комментарий или Telegram.\n\nEvidence:\n\n- [3877167059469876922] Фраза 1: Основана на теме доклада (high) https://www.instagram.com/p/DXOduYCjD66/\n\n- [3891158459865688897] Фраза 2: Основана на карусели про шорты (high) https://www.instagram.com/p/DYALADFDOtB/\n\n- [3420003922845366475] Фраза 3: Основана на посте про ремонт (high) https://www.instagram.com/p/C92S3Kno_jL/\n\nConfidence: medium\n\nCaveats:\n\n- Фразы адаптированы под публичный контент",
+      "kind": "phrases",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DXOduYCjD66/",
+          "postId": "3877167059469876922",
+          "label": "[3877167059469876922] Фраза 1: Основана на теме доклада (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DYALADFDOtB/",
+          "postId": "3891158459865688897",
+          "label": "[3891158459865688897] Фраза 2: Основана на карусели про шорты (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C92S3Kno_jL/",
+          "postId": "3420003922845366475",
+          "label": "[3420003922845366475] Фраза 3: Основана на посте про ремонт (high)"
+        }
+      ]
+    },
+    {
+      "title": "Неочевидные наблюдения",
+      "content": "Несколько постов показывают человека на фоне дорогих автомобилей и путешествий, при этом подписи фокусируются на процессе, а не на результате. Это может указывать на намеренное смещение акцента с демонстрации статуса на процесс принятия решений.\n\nEvidence:\n\n- [3653273883800372929] Автомобили: Красная спортивная машина и G-Wagen в кадре (high) https://www.instagram.com/p/DKzCT3PIgbB/\n\nConfidence: low\n\nCaveats:\n\n- Наблюдение гипотетическое\n\n- Выборка 2,8 %",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DKzCT3PIgbB/",
+          "postId": "3653273883800372929",
+          "label": "[3653273883800372929] Автомобили: Красная спортивная машина и G-Wagen в кадре (high)"
+        }
+      ]
+    },
+    {
+      "title": "Общая оценка ценности профиля",
+      "content": "Профиль представляет практический интерес для тех, кто изучает крипто-стратегии, шорт-позиции и публичные выступления. Главный лимит — очень маленькая выборка (2,8 % от всех постов), поэтому выводы ограничены недавним публичным контентом. Реалистичный следующий шаг — подписаться на Telegram-канал kitinvest, изучить 2–3 последних материала и отправить одну нейтральную фразу по теме конференции или стратегии. Если ответа нет — не продолжать контакт. Профиль полезен как источник тематических зацепок, а не как источник личных данных.\n\nEvidence:\n\n- Контакт: Telegram-канал указан в био (high) https://t.me/kitinvest\n\nConfidence: medium\n\nCaveats:\n\n- Выборка 2,8 %\n\n- Нет доступа к сторис и ответам",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://t.me/kitinvest",
+          "label": "Контакт: Telegram-канал указан в био (high)"
+        }
+      ]
+    },
+    {
+      "title": "Поведенческие сигналы",
+      "content": "Публикации происходят примерно раз в месяц, часто в формате карусели или sidecar. Пиннед-посты посвящены конференциям и личным вехам. Регулярно появляются посты с упоминанием крипто-стратегий.\n\nEvidence:\n\n- [3622298533331354216] Пиннед-пост: Выступление на конференции (high) https://www.instagram.com/p/DJE_VMFokJo/\n\nConfidence: low\n\nCaveats:\n\n- Выборка 2,8 %",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "postId": "3622298533331354216",
+          "label": "[3622298533331354216] Пиннед-пост: Выступление на конференции (high)"
+        }
+      ]
+    },
+    {
+      "title": "Ошибки, слепые зоны, барьеры",
+      "content": "Главные барьеры: очень малая выборка (всего 2,8 % постов), отсутствие доступа к сторис и личным ответам, неизвестность стиля общения в личных сообщениях. Риск — отсутствие реакции на сообщение. Не рекомендуется повторять сообщения или искать альтернативные способы контакта. Анализ не даёт оснований для выводов о личности, статусе или готовности к диалогу. Следующий шаг возможен только через публичный канал и только при наличии явной тематической зацепки.\n\nEvidence:\n\n- Ограничение выборки: Проанализировано 30 из 1087 постов (high) profile metadata\n\nConfidence: medium\n\nCaveats:\n\n- Выборка 2,8 %\n\n- Нет доступа к сторис",
+      "kind": "section",
+      "sources": [
+        {
+          "label": "Ограничение выборки: Проанализировано 30 из 1087 постов (high) profile metadata"
+        }
+      ]
+    },
+    {
+      "title": "Образ как у бренда",
+      "content": "Профиль выглядит как личный экспертный аккаунт с фокусом на инвестиционных стратегиях и публичных выступлениях. Формула: сочетание визуально чистого lifestyle и конкретных кейсов по крипте. Аудитория — нишевые инвесторы. Практический смысл: источник тем для обсуждения крипто-стратегий. Не является коммерческим брендом в строгом смысле — почти нет тегов партнёров и прямой рекламы.\n\nEvidence:\n\n- [3877167059469876922] Экспертный контент: Выступление на конференции (high) https://www.instagram.com/p/DXOduYCjD66/\n\nConfidence: medium\n\nCaveats:\n\n- Выборка 2,8 %",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DXOduYCjD66/",
+          "postId": "3877167059469876922",
+          "label": "[3877167059469876922] Экспертный контент: Выступление на конференции (high)"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "executiveSummary": "Что это значит: это recent 30-post read по публичным данным Instagram. Покрытие: 30/1087 постов (2.8%), vision 30/30, покрытие комментариев 29/30 (96.7%), текстовых комментариев: 173. Главный сигнал: Профиль ориентирован на инвестиции в криптовалюту с акцентом на шорт-стратегии и публичные выступления на крупных конференциях.",
+    "bullets": [
+      "Профиль ориентирован на инвестиции в криптовалюту с акцентом на шорт-стратегии и публичные выступления на крупных конференциях.",
+      "Публичный Telegram-канал kitinvest служит основным каналом для детальных инструкций и обсуждений.",
+      "Аудитория в комментариях в основном нишевая, инвестиционная; высокововлеченные посты относятся к конференциям и личным вехам.",
+      "Выборка из 30 постов (2,8 % от 1087) даёт ограниченный взгляд на недавний публичный контент.",
+      "Безопасный вход в диалог возможен через комментарии к постам о конференциях или через Telegram."
+    ],
+    "warnings": [
+      "Формат отчёта: recent 30-post read; покрытие выборки 2.8% (30/1087). Выводы описывают выбранные публичные посты, а не весь профиль.",
+      "Quality flags: score 93/100, 1 medium/high findings"
+    ],
+    "analysisHealth": {
+      "formatLabel": "recent 30-post read",
+      "analyzedPosts": 30,
+      "postsCount": 1087,
+      "sampleCoveragePercent": 2.8,
+      "sampleCoverageLevel": "very_low",
+      "visionCompleted": 30,
+      "visionTotal": 30,
+      "visionCompletionPercent": 100,
+      "postsWithCommentText": 29,
+      "commentCoveragePercent": 96.7,
+      "commentTextCount": 173
+    },
+    "deliveryHealth": {
+      "status": "ready",
+      "reasons": [],
+      "qualityScore": 93,
+      "contentQualityScore": 100,
+      "sourceCoverage": "17/17",
+      "repaired": true
+    },
+    "quality": {
+      "score": 93,
+      "findings": [
+        {
+          "id": "report:very_low_sample_coverage",
+          "severity": "medium",
+          "detail": "30/1087 posts analyzed (2.8%). Whole-profile conclusions should be low-confidence."
+        }
+      ]
+    },
+    "contentQuality": {
+      "score": 100,
+      "findings": [],
+      "dimensions": {
+        "specificity": 100,
+        "practicalValue": 100,
+        "practicalDetail": 100,
+        "confidenceCalibration": 100,
+        "depth": 100,
+        "keySectionDepth": 100,
+        "healthTransparency": 100
+      }
+    },
+    "evidence": {
+      "selectedPostIds": [
+        "3825836720978630051",
+        "3789007229152945044",
+        "3622298533331354216",
+        "3297322861502466793",
+        "3900672109022341105",
+        "3877167059469876922",
+        "3881727680567837792",
+        "3829320551060222818",
+        "3639563876877562687",
+        "3535786818658211375",
+        "3269857960643658468",
+        "3447602223576672268",
+        "3440183454524882330",
+        "3891158459865688897",
+        "3772716907758397483",
+        "3420003922845366475",
+        "3443820324911801176",
+        "3653273883800372929",
+        "3294413841414487651",
+        "3746074560824084529",
+        "3436530066148335345",
+        "3401075824185124655",
+        "3443821011116540023",
+        "3750967731777487011",
+        "3377944961191434594",
+        "3719273968151877867",
+        "3668517904478945930",
+        "3426707640693362658",
+        "3733879615291962419",
+        "3668515366899920460"
+      ],
+      "postSelection": [
+        {
+          "postId": "3825836720978630051",
+          "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "timestamp": "2026-02-05T12:41:39.000Z",
+          "score": 68,
+          "reasons": [
+            "recent",
+            "pinned",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3789007229152945044",
+          "url": "https://www.instagram.com/p/DSVQf_5DGOU/",
+          "timestamp": "2025-12-16T17:08:01.000Z",
+          "score": 67,
+          "reasons": [
+            "recent",
+            "pinned",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3622298533331354216",
+          "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+          "timestamp": "2025-04-30T16:47:36.000Z",
+          "score": 65,
+          "reasons": [
+            "pinned",
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3297322861502466793",
+          "url": "https://www.instagram.com/p/C3CcawtoQrp/",
+          "timestamp": "2024-02-07T07:38:57.000Z",
+          "score": 65,
+          "reasons": [
+            "high_likes",
+            "high_comments",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3900672109022341105",
+          "url": "https://www.instagram.com/p/DYh-J3TjOfx/",
+          "timestamp": "2026-05-19T18:46:12.000Z",
+          "score": 53,
+          "reasons": [
+            "recent",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3877167059469876922",
+          "url": "https://www.instagram.com/p/DXOduYCjD66/",
+          "timestamp": "2026-04-17T08:25:52.000Z",
+          "score": 40,
+          "reasons": [
+            "recent",
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3881727680567837792",
+          "url": "https://www.instagram.com/p/DXeqsJbDARg/",
+          "timestamp": "2026-04-23T15:27:00.000Z",
+          "score": 38,
+          "reasons": [
+            "recent",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3829320551060222818",
+          "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+          "timestamp": "2026-02-10T08:03:24.000Z",
+          "score": 36,
+          "reasons": [
+            "recent",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3639563876877562687",
+          "url": "https://www.instagram.com/p/DKCVBASoXM_/",
+          "timestamp": "2025-05-24T12:33:46.000Z",
+          "score": 36,
+          "reasons": [
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3535786818658211375",
+          "url": "https://www.instagram.com/p/DERo2DPoZYv/",
+          "timestamp": "2025-01-01T08:04:16.000Z",
+          "score": 36,
+          "reasons": [
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3269857960643658468",
+          "url": "https://www.instagram.com/p/C1g3n2iJgLk/",
+          "timestamp": "2023-12-31T10:11:06.000Z",
+          "score": 35,
+          "reasons": [
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3447602223576672268",
+          "url": "https://www.instagram.com/p/C_YV_THImgM/",
+          "timestamp": "2024-09-01T15:58:21.000Z",
+          "score": 33,
+          "reasons": [
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3440183454524882330",
+          "url": "https://www.instagram.com/p/C-9_KABIb2a/",
+          "timestamp": "2024-08-22T10:19:04.000Z",
+          "score": 33,
+          "reasons": [
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3891158459865688897",
+          "url": "https://www.instagram.com/p/DYALADFDOtB/",
+          "timestamp": "2026-05-06T15:44:17.000Z",
+          "score": 32,
+          "reasons": [
+            "recent",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3772716907758397483",
+          "url": "https://www.instagram.com/p/DRbYgn1DKgr/",
+          "timestamp": "2025-11-24T05:42:33.000Z",
+          "score": 32,
+          "reasons": [
+            "recent",
+            "format_diversity",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3420003922845366475",
+          "url": "https://www.instagram.com/p/C92S3Kno_jL/",
+          "timestamp": "2024-07-25T14:11:13.000Z",
+          "score": 31,
+          "reasons": [
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        }
+      ],
+      "profileSignals": {
+        "publicContacts": [],
+        "publicLinks": [
+          "https://t.me/kitinvest"
+        ],
+        "platformHandles": [
+          "@serkhitrov",
+          "@fakeev"
+        ],
+        "professionHints": [
+          "эксперт"
+        ],
+        "locationHints": [],
+        "bioKeywords": [
+          "инвестировать",
+          "олег",
+          "просто",
+          "умею",
+          "факеев",
+          "хорошо"
+        ]
+      },
+      "contentClusters": [
+        {
+          "label": "visual_identity",
+          "count": 29,
+          "postIds": [
+            "3825836720978630051",
+            "3789007229152945044",
+            "3622298533331354216",
+            "3297322861502466793",
+            "3900672109022341105",
+            "3877167059469876922",
+            "3881727680567837792",
+            "3829320551060222818"
+          ],
+          "keywords": [
+            "style",
+            "design",
+            "aesthetic",
+            "стиль",
+            "дизайн"
+          ]
+        },
+        {
+          "label": "work_and_expertise",
+          "count": 6,
+          "postIds": [
+            "3622298533331354216",
+            "3535786818658211375",
+            "3269857960643658468",
+            "3891158459865688897",
+            "3420003922845366475",
+            "3668515366899920460"
+          ],
+          "keywords": [
+            "founder",
+            "startup",
+            "business",
+            "work",
+            "career",
+            "expert",
+            "эксперт",
+            "бизнес"
+          ]
+        },
+        {
+          "label": "lifestyle_and_travel",
+          "count": 5,
+          "postIds": [
+            "3900672109022341105",
+            "3829320551060222818",
+            "3535786818658211375",
+            "3443820324911801176",
+            "3294413841414487651"
+          ],
+          "keywords": [
+            "travel",
+            "city",
+            "hotel",
+            "trip",
+            "путешествие",
+            "город"
+          ]
+        },
+        {
+          "label": "community_and_events",
+          "count": 3,
+          "postIds": [
+            "3622298533331354216",
+            "3877167059469876922",
+            "3269857960643658468"
+          ],
+          "keywords": [
+            "event",
+            "team",
+            "meetup",
+            "community",
+            "команда",
+            "мероприятие"
+          ]
+        },
+        {
+          "label": "education_and_guidance",
+          "count": 2,
+          "postIds": [
+            "3535786818658211375",
+            "3426707640693362658"
+          ],
+          "keywords": [
+            "tips",
+            "guide",
+            "howto",
+            "курс",
+            "обучение",
+            "совет"
+          ]
+        },
+        {
+          "label": "commercial_or_ads",
+          "count": 1,
+          "postIds": [
+            "3668515366899920460"
+          ],
+          "keywords": [
+            "ad",
+            "promo",
+            "brand",
+            "sale",
+            "реклама",
+            "скидка",
+            "партнер"
+          ]
+        }
+      ],
+      "audienceSignals": {
+        "frequentCommenters": [
+          {
+            "username": "danila.invest",
+            "count": 5
+          },
+          {
+            "username": "bagdagulov.alexander",
+            "count": 3
+          },
+          {
+            "username": "s.gralnik",
+            "count": 3
+          },
+          {
+            "username": "aleksei_consulting",
+            "count": 3
+          },
+          {
+            "username": "mr_stanislavsky",
+            "count": 3
+          },
+          {
+            "username": "max_fisher_x",
+            "count": 2
+          },
+          {
+            "username": "aanasttasia.pr",
+            "count": 2
+          },
+          {
+            "username": "superman_la",
+            "count": 2
+          },
+          {
+            "username": "chingiz4444",
+            "count": 2
+          },
+          {
+            "username": "lucky_777teddy",
+            "count": 2
+          }
+        ],
+        "repeatedCommentTerms": [
+          {
+            "term": "все",
+            "count": 7
+          },
+          {
+            "term": "олег",
+            "count": 6
+          },
+          {
+            "term": "bought",
+            "count": 5
+          },
+          {
+            "term": "buysocialmediagrowth",
+            "count": 5
+          },
+          {
+            "term": "com",
+            "count": 5
+          },
+          {
+            "term": "followers",
+            "count": 5
+          },
+          {
+            "term": "круто",
+            "count": 4
+          },
+          {
+            "term": "когда",
+            "count": 4
+          },
+          {
+            "term": "пожалуйста",
+            "count": 4
+          },
+          {
+            "term": "мне",
+            "count": 4
+          },
+          {
+            "term": "еще",
+            "count": 3
+          },
+          {
+            "term": "есть",
+            "count": 3
+          }
+        ],
+        "commentDensity": "medium",
+        "highCommentPostIds": [
+          "3297322861502466793",
+          "3639563876877562687",
+          "3653273883800372929",
+          "3440183454524882330",
+          "3443820324911801176"
+        ]
+      },
+      "riskSignals": [],
+      "opportunitySignals": [
+        {
+          "id": "opportunity:published_contact",
+          "type": "opportunity",
+          "label": "Published contact/channel",
+          "detail": "The profile exposes explicit public contact or link surfaces; use only respectful/public outreach.",
+          "confidence": "high",
+          "urls": [
+            "https://t.me/kitinvest"
+          ]
+        },
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3297322861502466793",
+            "3639563876877562687",
+            "3653273883800372929"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C3CcawtoQrp/",
+            "https://www.instagram.com/p/DKCVBASoXM_/",
+            "https://www.instagram.com/p/DKzCT3PIgbB/"
+          ]
+        },
+        {
+          "id": "opportunity:positioning",
+          "type": "opportunity",
+          "label": "Clear positioning surface",
+          "detail": "Verified or pinned content gives stronger first-read context than a purely chronological feed.",
+          "confidence": "medium",
+          "postIds": [
+            "3825836720978630051",
+            "3789007229152945044",
+            "3622298533331354216"
+          ]
+        }
+      ],
+      "modeGuidance": {
+        "mode": "standard",
+        "evidencePriorities": [
+          "recurring themes across selected posts",
+          "audience and comment evidence",
+          "visual/textual patterns",
+          "practical but safe communication recommendations"
+        ],
+        "scoringFocus": [
+          "specificity",
+          "source-backed hypotheses",
+          "actionability",
+          "confidence calibration"
+        ],
+        "cautionRules": [
+          "Avoid personality certainty",
+          "No harassment, doxing, pressure or privacy bypass"
+        ]
+      },
+      "evidenceMap": [
+        {
+          "id": "profile:profession_hints",
+          "type": "profile",
+          "label": "Profession/status hints",
+          "detail": "эксперт",
+          "confidence": "medium"
+        },
+        {
+          "id": "profile:published_contacts",
+          "type": "profile",
+          "label": "Published contacts/links",
+          "detail": "https://t.me/kitinvest",
+          "confidence": "high",
+          "urls": [
+            "https://t.me/kitinvest"
+          ]
+        },
+        {
+          "id": "post:3825836720978630051",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, pinned, audience_signal, visual_signal; score 68.",
+          "confidence": "high",
+          "postIds": [
+            "3825836720978630051"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DUYGjpCk5Wj/"
+          ]
+        },
+        {
+          "id": "post:3789007229152945044",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, pinned, format_diversity, audience_signal, visual_signal; score 67.",
+          "confidence": "high",
+          "postIds": [
+            "3789007229152945044"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DSVQf_5DGOU/"
+          ]
+        },
+        {
+          "id": "post:3622298533331354216",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for pinned, profile_signal, audience_signal, visual_signal; score 65.",
+          "confidence": "high",
+          "postIds": [
+            "3622298533331354216"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DJE_VMFokJo/"
+          ]
+        },
+        {
+          "id": "post:3297322861502466793",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, high_comments, audience_signal, visual_signal; score 65.",
+          "confidence": "high",
+          "postIds": [
+            "3297322861502466793"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C3CcawtoQrp/"
+          ]
+        },
+        {
+          "id": "post:3900672109022341105",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, format_diversity, audience_signal, visual_signal; score 53.",
+          "confidence": "high",
+          "postIds": [
+            "3900672109022341105"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DYh-J3TjOfx/"
+          ]
+        },
+        {
+          "id": "post:3877167059469876922",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, profile_signal, audience_signal, visual_signal; score 40.",
+          "confidence": "high",
+          "postIds": [
+            "3877167059469876922"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DXOduYCjD66/"
+          ]
+        },
+        {
+          "id": "post:3881727680567837792",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, audience_signal, visual_signal; score 38.",
+          "confidence": "high",
+          "postIds": [
+            "3881727680567837792"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DXeqsJbDARg/"
+          ]
+        },
+        {
+          "id": "post:3829320551060222818",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, audience_signal, visual_signal; score 36.",
+          "confidence": "high",
+          "postIds": [
+            "3829320551060222818"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DUkesCpDDNi/"
+          ]
+        },
+        {
+          "id": "post:3639563876877562687",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for profile_signal, audience_signal, visual_signal; score 36.",
+          "confidence": "high",
+          "postIds": [
+            "3639563876877562687"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DKCVBASoXM_/"
+          ]
+        },
+        {
+          "id": "post:3535786818658211375",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for profile_signal, audience_signal, visual_signal; score 36.",
+          "confidence": "high",
+          "postIds": [
+            "3535786818658211375"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DERo2DPoZYv/"
+          ]
+        },
+        {
+          "id": "post:3269857960643658468",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for profile_signal, audience_signal, visual_signal; score 35.",
+          "confidence": "high",
+          "postIds": [
+            "3269857960643658468"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C1g3n2iJgLk/"
+          ]
+        },
+        {
+          "id": "post:3447602223576672268",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for profile_signal, audience_signal, visual_signal; score 33.",
+          "confidence": "high",
+          "postIds": [
+            "3447602223576672268"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C_YV_THImgM/"
+          ]
+        },
+        {
+          "id": "cluster:visual_identity",
+          "type": "content_cluster",
+          "label": "visual_identity",
+          "detail": "29 selected posts match keywords: style, design, aesthetic, стиль, дизайн",
+          "confidence": "high",
+          "postIds": [
+            "3825836720978630051",
+            "3789007229152945044",
+            "3622298533331354216",
+            "3297322861502466793",
+            "3900672109022341105",
+            "3877167059469876922",
+            "3881727680567837792",
+            "3829320551060222818"
+          ]
+        },
+        {
+          "id": "cluster:work_and_expertise",
+          "type": "content_cluster",
+          "label": "work_and_expertise",
+          "detail": "6 selected posts match keywords: founder, startup, business, work, career, expert",
+          "confidence": "high",
+          "postIds": [
+            "3622298533331354216",
+            "3535786818658211375",
+            "3269857960643658468",
+            "3891158459865688897",
+            "3420003922845366475",
+            "3668515366899920460"
+          ]
+        },
+        {
+          "id": "cluster:lifestyle_and_travel",
+          "type": "content_cluster",
+          "label": "lifestyle_and_travel",
+          "detail": "5 selected posts match keywords: travel, city, hotel, trip, путешествие, город",
+          "confidence": "high",
+          "postIds": [
+            "3900672109022341105",
+            "3829320551060222818",
+            "3535786818658211375",
+            "3443820324911801176",
+            "3294413841414487651"
+          ]
+        },
+        {
+          "id": "cluster:community_and_events",
+          "type": "content_cluster",
+          "label": "community_and_events",
+          "detail": "3 selected posts match keywords: event, team, meetup, community, команда, мероприятие",
+          "confidence": "high",
+          "postIds": [
+            "3622298533331354216",
+            "3877167059469876922",
+            "3269857960643658468"
+          ]
+        },
+        {
+          "id": "cluster:education_and_guidance",
+          "type": "content_cluster",
+          "label": "education_and_guidance",
+          "detail": "2 selected posts match keywords: tips, guide, howto, курс, обучение, совет",
+          "confidence": "medium",
+          "postIds": [
+            "3535786818658211375",
+            "3426707640693362658"
+          ]
+        },
+        {
+          "id": "cluster:commercial_or_ads",
+          "type": "content_cluster",
+          "label": "commercial_or_ads",
+          "detail": "1 selected posts match keywords: ad, promo, brand, sale, реклама, скидка",
+          "confidence": "medium",
+          "postIds": [
+            "3668515366899920460"
+          ]
+        },
+        {
+          "id": "audience:frequent_commenters",
+          "type": "audience",
+          "label": "Recurring commenters",
+          "detail": "danila.invest (5), bagdagulov.alexander (3), s.gralnik (3), aleksei_consulting (3), mr_stanislavsky (3), max_fisher_x (2), aanasttasia.pr (2), superman_la (2), chingiz4444 (2), lucky_777teddy (2)",
+          "confidence": "medium"
+        },
+        {
+          "id": "audience:high_comment_posts",
+          "type": "audience",
+          "label": "High-comment posts",
+          "detail": "medium comment density across selected posts.",
+          "confidence": "medium",
+          "postIds": [
+            "3297322861502466793",
+            "3639563876877562687",
+            "3653273883800372929",
+            "3440183454524882330",
+            "3443820324911801176"
+          ]
+        },
+        {
+          "id": "opportunity:published_contact",
+          "type": "opportunity",
+          "label": "Published contact/channel",
+          "detail": "The profile exposes explicit public contact or link surfaces; use only respectful/public outreach.",
+          "confidence": "high",
+          "urls": [
+            "https://t.me/kitinvest"
+          ]
+        },
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3297322861502466793",
+            "3639563876877562687",
+            "3653273883800372929"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C3CcawtoQrp/",
+            "https://www.instagram.com/p/DKCVBASoXM_/",
+            "https://www.instagram.com/p/DKzCT3PIgbB/"
+          ]
+        }
+      ]
+    }
+  },
+  "metrics": {
+    "followersCount": 57690,
+    "followsCount": 980,
+    "postsCount": 1087,
+    "analyzedPosts": 30,
+    "avgLikes": 508.3333333333333,
+    "avgComments": 14.7,
+    "medianLikes": 350,
+    "medianComments": 8.5,
+    "engagementRate": 0.9066273762061592,
+    "frequencyDays": 30.012334770114943,
+    "pinnedPostsCount": 3,
+    "uniqueLocations": [],
+    "uniqueMusic": [],
+    "relatedProfiles": [
+      "maria_mishina17",
+      "nazarow_ivan",
+      "fedanov",
+      "srebniy",
+      "amanzhol_rysmendiyev.kz",
+      "n.yudaev",
+      "alex_mlv",
+      "igor_kripta",
+      "unicornlab.in",
+      "raspopin_ol",
+      "aleksundeer13",
+      "yura.pokalchuk",
+      "tigr3883",
+      "_anjelika_fokina_",
+      "vova_goroh",
+      "vladimir_krainev",
+      "den_donald",
+      "vlad.bermuda",
+      "rimashev13",
+      "ignatbond",
+      "kirill__rusin",
+      "krasnobaaev",
+      "eshmuratov_r",
+      "fyodor_novikoff",
+      "maers_one",
+      "stepan_invest",
+      "abc_alfavit",
+      "denis_grichanov"
+    ],
+    "topPostsByLikes": [
+      {
+        "postId": "3297322861502466793",
+        "url": "https://www.instagram.com/p/C3CcawtoQrp/",
+        "likesCount": 2952
+      },
+      {
+        "postId": "3294413841414487651",
+        "url": "https://www.instagram.com/p/C24G-8oo_5j/",
+        "likesCount": 1104
+      },
+      {
+        "postId": "3443820324911801176",
+        "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+        "likesCount": 1005
+      }
+    ],
+    "topPostsByComments": [
+      {
+        "postId": "3297322861502466793",
+        "url": "https://www.instagram.com/p/C3CcawtoQrp/",
+        "commentsCount": 153
+      },
+      {
+        "postId": "3639563876877562687",
+        "url": "https://www.instagram.com/p/DKCVBASoXM_/",
+        "commentsCount": 34
+      },
+      {
+        "postId": "3653273883800372929",
+        "url": "https://www.instagram.com/p/DKzCT3PIgbB/",
+        "commentsCount": 24
+      }
+    ],
+    "postTypeDistribution": {
+      "Sidecar": 9,
+      "Image": 14,
+      "Video": 7
+    },
+    "hashtagFrequency": {
+      "blockchainlife.": 1
+    },
+    "mentionFrequency": {
+      "serkhitrov": 1,
+      "fakeev": 4
+    },
+    "digitalCircle": [
+      {
+        "username": "danila.invest",
+        "type": "commenter",
+        "score": 11.7,
+        "lastInteractionDate": "2026-02-05T13:35:31.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "commented: https://www.instagram.com/p/DSVQf_5DGOU/",
+          "commented: https://www.instagram.com/p/C24G-8oo_5j/",
+          "commented: https://www.instagram.com/p/DQOHUdQjMCj/"
+        ]
+      },
+      {
+        "username": "aleksei_consulting",
+        "type": "commenter",
+        "score": 8.6,
+        "lastInteractionDate": "2025-02-12T14:00:09.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DERo2DPoZYv/",
+          "commented: https://www.instagram.com/p/C-xAeM8uJ7x/",
+          "commented: https://www.instagram.com/p/C8zDHFCuScv/"
+        ]
+      },
+      {
+        "username": "s.gralnik",
+        "type": "commenter",
+        "score": 8.5,
+        "lastInteractionDate": "2026-02-05T15:05:16.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "commented: https://www.instagram.com/p/DJE_VMFokJo/",
+          "commented: https://www.instagram.com/p/C1g3n2iJgLk/"
+        ]
+      },
+      {
+        "username": "bagdagulov.alexander",
+        "type": "commenter",
+        "score": 6.8,
+        "lastInteractionDate": "2026-02-07T11:21:00.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DUYGjpCk5Wj/",
+          "commented: https://www.instagram.com/p/DJE_VMFokJo/",
+          "commented: https://www.instagram.com/p/C-xAeM8uJ7x/"
+        ]
+      },
+      {
+        "username": "aanasttasia.pr",
+        "type": "commenter",
+        "score": 6,
+        "lastInteractionDate": "2025-10-07T15:12:34.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DJE_VMFokJo/",
+          "commented: https://www.instagram.com/p/DLpMZj0oMKK/"
+        ]
+      },
+      {
+        "username": "saveursoul_1488",
+        "type": "commenter",
+        "score": 6,
+        "lastInteractionDate": "2025-02-18T20:16:32.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DERo2DPoZYv/",
+          "commented: https://www.instagram.com/p/DERo2DPoZYv/"
+        ]
+      },
+      {
+        "username": "massel.alexius",
+        "type": "commenter",
+        "score": 6,
+        "lastInteractionDate": "2024-08-29T05:41:12.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "commented: https://www.instagram.com/p/C-xAeM8uJ7x/"
+        ]
+      },
+      {
+        "username": "artyom69super",
+        "type": "commenter",
+        "score": 6,
+        "lastInteractionDate": "2024-09-18T18:49:34.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/C8zDHFCuScv/",
+          "commented: https://www.instagram.com/p/C7g3wuKotli/"
+        ]
+      }
+    ]
+  },
+  "contentQuality": {
+    "score": 100,
+    "findings": [],
+    "dimensions": {
+      "specificity": 100,
+      "practicalValue": 100,
+      "practicalDetail": 100,
+      "confidenceCalibration": 100,
+      "depth": 100,
+      "keySectionDepth": 100,
+      "healthTransparency": 100
+    }
+  },
+  "sourceMap": [
+    {
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "postId": "3622298533331354216",
+      "label": "[3622298533331354216] Выступление на конференции: Выступление перед 15 000 человек на блокчейн-конференции (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXOduYCjD66/",
+      "postId": "3877167059469876922",
+      "label": "[3877167059469876922] Доклад Blockchain Life: Тема доклада — эффективная ставка на падение крипторынка (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYALADFDOtB/",
+      "postId": "3891158459865688897",
+      "label": "[3891158459865688897] Стратегия шорт крипты: Карусель объясняет, почему шорт — лучшая стратегия 2026 года (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+      "postId": "3825836720978630051",
+      "label": "[3825836720978630051] Прогулка у океана: Человек в белой рубашке у скалы над водой (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DKzCT3PIgbB/",
+      "postId": "3653273883800372929",
+      "label": "[3653273883800372929] Красная спортивная машина: Крупный план красного авто в гараже (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C3CcawtoQrp/",
+      "postId": "3297322861502466793",
+      "label": "[3297322861502466793] Пост с максимальными лайками: 2952 лайка и 153 комментария (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C3CcawtoQrp/",
+      "postId": "3297322861502466793",
+      "label": "[3297322861502466793] Высокая активность: 153 комментария, повторяющиеся упоминания «олег» (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DKCVBASoXM_/",
+      "postId": "3639563876877562687",
+      "label": "[3639563876877562687] Комментарии по автоматизации: 34 комментария, обсуждение автоматизации трейдинга (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C-9_KABIb2a/",
+      "postId": "3440183454524882330",
+      "label": "[3440183454524882330] Призыв сохранить: Текст содержит «Сохраняй, чтобы не потерять» (high)"
+    },
+    {
+      "url": "https://t.me/kitinvest",
+      "label": "Публичный контакт: Ссылка в био ведёт на Telegram-канал kitinvest (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "postId": "3622298533331354216",
+      "label": "[3622298533331354216] Выступление: Публичное выступление на крупной конференции (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DLpL0ohIa5M/",
+      "postId": "3668515366899920460",
+      "label": "[3668515366899920460] Один пост с рекламным оттенком: Единственный пост, помеченный как commercial (medium)"
+    },
+    {
+      "url": "https://t.me/kitinvest",
+      "label": "Публичный канал: Канал указан в био и описан как способ получить инструкции (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "postId": "3622298533331354216",
+      "label": "[3622298533331354216] Выступление: Выступление на конференции Blockchain Life (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXOduYCjD66/",
+      "postId": "3877167059469876922",
+      "label": "[3877167059469876922] Конференция: Тема доклада указана явно (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYALADFDOtB/",
+      "postId": "3891158459865688897",
+      "label": "[3891158459865688897] Шорт-стратегия: Карусель объясняет стратегию (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C92S3Kno_jL/",
+      "postId": "3420003922845366475",
+      "label": "[3420003922845366475] Флиппинг: Описание покупки объекта под ремонт и продажу (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "postId": "3622298533331354216",
+      "label": "[3622298533331354216] Пост для комментария: Публичное выступление с высокой видимостью (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXOduYCjD66/",
+      "postId": "3877167059469876922",
+      "label": "[3877167059469876922] Фраза 1: Основана на теме доклада (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DYALADFDOtB/",
+      "postId": "3891158459865688897",
+      "label": "[3891158459865688897] Фраза 2: Основана на карусели про шорты (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C92S3Kno_jL/",
+      "postId": "3420003922845366475",
+      "label": "[3420003922845366475] Фраза 3: Основана на посте про ремонт (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DKzCT3PIgbB/",
+      "postId": "3653273883800372929",
+      "label": "[3653273883800372929] Автомобили: Красная спортивная машина и G-Wagen в кадре (high)"
+    },
+    {
+      "url": "https://t.me/kitinvest",
+      "label": "Контакт: Telegram-канал указан в био (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "postId": "3622298533331354216",
+      "label": "[3622298533331354216] Пиннед-пост: Выступление на конференции (high)"
+    },
+    {
+      "label": "Ограничение выборки: Проанализировано 30 из 1087 постов (high) profile metadata"
+    },
+    {
+      "url": "https://www.instagram.com/p/DXOduYCjD66/",
+      "postId": "3877167059469876922",
+      "label": "[3877167059469876922] Экспертный контент: Выступление на конференции (high)"
+    }
+  ],
+  "posts": [
+    {
+      "id": "3825836720978630051",
+      "type": "Sidecar",
+      "timestamp": "2026-02-05T12:41:39.000Z",
+      "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+      "likesCount": 371,
+      "commentsCount": 14,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": true,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/627159234_18554988100051431_5174420543123112206_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-iad3-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gEKZ1MHiVvvSfPAHJg3U1yS7AHLBRZzUUkkrnWBwJmzKF7dXYIq4OgykOYvipE0ptw&_nc_ohc=8nmgEWt6BnwQ7kNvwEhyw4B&_nc_gid=tJ-3Du3dQiGrnTJHEi68hw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-TFNlinvXtEnky20g3v9m_vIutSPYRpQ2BcpKWCHOGIA&oe=6A3186DD&_nc_sid=10d13b",
+        "https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/627039193_18554988109051431_8014731691734570773_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-iad3-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gEKZ1MHiVvvSfPAHJg3U1yS7AHLBRZzUUkkrnWBwJmzKF7dXYIq4OgykOYvipE0ptw&_nc_ohc=1nf9t-5AFzQQ7kNvwFa8MJr&_nc_gid=tJ-3Du3dQiGrnTJHEi68hw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_FB5QnsRdTZlpzy2G6J3sJ2zp75vQHuGvomuVNMsbo7w&oe=6A31AEC8&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3789007229152945044",
+      "type": "Image",
+      "timestamp": "2025-12-16T17:08:01.000Z",
+      "url": "https://www.instagram.com/p/DSVQf_5DGOU/",
+      "likesCount": 225,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": true,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-ord5-2.cdninstagram.com/v/t51.82787-15/601479921_18544448047051431_3135471442754806279_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gHIibzbVsUC4s031z6fjWC2GKAqxBt-BlvT-6RpbMhp5XpZRoweRJHpYFIubq-1QvA&_nc_ohc=u7NEeYWM3DkQ7kNvwHHNRrG&_nc_gid=vt5MTBaI37i30f-8f7aqgg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8DdYDVZuTt9cAC7JN1hSuDKQAzUStBpNlsqrLRdSlKvQ&oe=6A3179D5&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3622298533331354216",
+      "type": "Sidecar",
+      "timestamp": "2025-04-30T16:47:36.000Z",
+      "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+      "caption": "Выступил на самой большой конференции по блокчейн-технологиям.\n\nДля меня, конечно, было важно выступить перед 15.000 человек. На мой взгляд, для эксперта это некое признание — попасть на большую сцену #BlockchainLife. Очень рад)\n\nЯ постарался дать максимально актуальную информацию — то, что мы сами делаем прямо сейчас и на чём смогли показать результат. Кто был, видел, как я показал статистику по приросту депозита на своих кошельках. Это мало кто делает в мире инвестиций, а я показал прямо со сцены.\n\nКстати, мне нравится выступать. Раньше я делал это чаще, но в определённый момент перестал ходить на интервью, подкасты и выступать — занимался другим. Сейчас наоборот - хочется делится нашими стратегиями, мышлениям и подходом перед всей Россией🇷🇺\n\nЕщё для меня было важно, что после моего выступления меня ещё на 30 минут окружили люди и засыпали вопросами. Круто пообщались! Спасибо всем тем кто подошел 😎👌🏻\n\nЗафиксирую эти фото с выступления тут. Организатору @serkhitrov спасибо! Двигаемся дальше🚀",
+      "likesCount": 357,
+      "commentsCount": 8,
+      "hashtags": [
+        "BlockchainLife."
+      ],
+      "mentions": [
+        "serkhitrov"
+      ],
+      "isPinned": true,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-ord5-2.cdninstagram.com/v/t51.2885-15/491450545_18499282798051431_5801621225726979502_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGi0D-ngDehanwsqXt1wkhdVgWWrXT5kUi6AbkkGTBY0KU5rd6C0OwrQNQZMvpF47A&_nc_ohc=XMDNkLIFaEQQ7kNvwGRZFW1&_nc_gid=xG6ThMXny6xkdaeUfx4I-A&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9qG_Ifqq8EyeuypfsZQD3qCDdUfV1HtYjIBEpzEkFnJg&oe=6A3199EE&_nc_sid=10d13b",
+        "https://scontent-ord5-2.cdninstagram.com/v/t51.2885-15/491447515_18499282810051431_3304651925350716327_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGi0D-ngDehanwsqXt1wkhdVgWWrXT5kUi6AbkkGTBY0KU5rd6C0OwrQNQZMvpF47A&_nc_ohc=19KMkjThz5IQ7kNvwF1-sHG&_nc_gid=xG6ThMXny6xkdaeUfx4I-A&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8M92B6rp5-uh7-q8_Aj8o1kKq_M8JoZi-OgK9_nrUAgA&oe=6A318752&_nc_sid=10d13b",
+        "https://scontent-ord5-2.cdninstagram.com/v/t51.2885-15/491452347_18499282819051431_8500281940110156832_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGi0D-ngDehanwsqXt1wkhdVgWWrXT5kUi6AbkkGTBY0KU5rd6C0OwrQNQZMvpF47A&_nc_ohc=PtU1aTha6bsQ7kNvwHWD9aF&_nc_gid=xG6ThMXny6xkdaeUfx4I-A&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9lfR46ZFvHGbZ8A6_7gMvO35QCZ8CFKMuky8T4phpgFw&oe=6A318A2D&_nc_sid=10d13b",
+        "https://scontent-ord5-2.cdninstagram.com/v/t51.2885-15/491448989_18499282831051431_2129554478978030333_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGi0D-ngDehanwsqXt1wkhdVgWWrXT5kUi6AbkkGTBY0KU5rd6C0OwrQNQZMvpF47A&_nc_ohc=B3Rc68nEhJsQ7kNvwHiaXxG&_nc_gid=xG6ThMXny6xkdaeUfx4I-A&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af80YoMcNFWVeBZ6zXeD6a7tlGPIUglHljgzjKi-NtrH8g&oe=6A31AA85&_nc_sid=10d13b",
+        "https://scontent-ord5-2.cdninstagram.com/v/t51.2885-15/491450418_18499282840051431_3863685467838203854_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGi0D-ngDehanwsqXt1wkhdVgWWrXT5kUi6AbkkGTBY0KU5rd6C0OwrQNQZMvpF47A&_nc_ohc=F7YdLfhuVq0Q7kNvwH7mmHh&_nc_gid=xG6ThMXny6xkdaeUfx4I-A&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_AWbvHE6UfyFzDecUMyfHB7ndotYVxaU__1WaHjnF80Q&oe=6A317BCA&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3297322861502466793",
+      "type": "Image",
+      "timestamp": "2024-02-07T07:38:57.000Z",
+      "url": "https://www.instagram.com/p/C3CcawtoQrp/",
+      "caption": "Сегодня мне 30 лет🥳 какой возраст такие и подарки 🎁 + 1 в гараж AMG g63🚀",
+      "likesCount": 2952,
+      "commentsCount": 153,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-lga3-1.cdninstagram.com/v/t51.82787-15/625042098_18106443307788838_1779630795712686884_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-lga3-1.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2gEsbaP5oloQRpBcc-vjf0nnORr3vqvNaHRSsTprVbHgTCyiKbzY-T3yb4elUP9lz9Q&_nc_ohc=dIP2iFSad94Q7kNvwEIGNKd&_nc_gid=HoIyPO3JoeSg6Is1SYTyhw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8-g9co29Lf2HvFtNIjkeo86HuXqyZJE9E3Tbgsnd8w0Q&oe=6A317C17&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3900672109022341105",
+      "type": "Sidecar",
+      "timestamp": "2026-05-19T18:46:12.000Z",
+      "url": "https://www.instagram.com/p/DYh-J3TjOfx/",
+      "likesCount": 363,
+      "commentsCount": 7,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-dfw6-1.cdninstagram.com/v/t51.82787-15/702703245_18585480679051431_2998533674643105467_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw6-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gEKX54z4cti4f6KQqJhqsa1qdxxmo2t_uLZS27zIKS0rKo74-mJXwUFCdGtJ1VY8Cw&_nc_ohc=CNHO0RaaA-YQ7kNvwEknH2p&_nc_gid=OkB5JNr2SnR5FYrIIekQvw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9MCGsPFwKCPj2W890K1ysZlueA0DUdMQxcCcMnWG2unA&oe=6A318508&_nc_sid=10d13b",
+        "https://scontent-dfw6-1.cdninstagram.com/v/t51.82787-15/702625463_18585480688051431_7079666699994423726_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw6-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gEKX54z4cti4f6KQqJhqsa1qdxxmo2t_uLZS27zIKS0rKo74-mJXwUFCdGtJ1VY8Cw&_nc_ohc=NoWqgKpo-AgQ7kNvwGjTq0H&_nc_gid=OkB5JNr2SnR5FYrIIekQvw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_enFEdcQxfezu7avfnSBToECK6MFBiTqs59gws6LGZcw&oe=6A319EF1&_nc_sid=10d13b",
+        "https://scontent-dfw6-1.cdninstagram.com/v/t51.82787-15/703394734_18585480697051431_6866392445394261557_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw6-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gEKX54z4cti4f6KQqJhqsa1qdxxmo2t_uLZS27zIKS0rKo74-mJXwUFCdGtJ1VY8Cw&_nc_ohc=zhMmXbD-8bIQ7kNvwFzqYAK&_nc_gid=OkB5JNr2SnR5FYrIIekQvw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9TDrAXvJ4QeAKSJl1BmBvsDTbvM9EMUY-nZRz1yHN6Mg&oe=6A3184BC&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3877167059469876922",
+      "type": "Sidecar",
+      "timestamp": "2026-04-17T08:25:52.000Z",
+      "url": "https://www.instagram.com/p/DXOduYCjD66/",
+      "caption": "Выступил на Blockchain Life 2026. Конференцию посетило 16 000 человек.\nТема доклада — «Как сделать эффективную ставку на падение крипторынка».",
+      "likesCount": 119,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/669833162_18576883258051431_999925659149485080_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-iad3-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gE9RuW1R1Rw0MgNsKiiLUfMKS-mvc083k7Y5zg4_iWPrvhS4p5-jucEaksAEilR2SQ&_nc_ohc=jIu0y7KCEzYQ7kNvwFScQRG&_nc_gid=GxZImfGmT15dckbXiSFnfg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_0JouDEi2RP_Eb-uvN7quKq_UtmgOLInUZoIAMG8euxg&oe=6A317851&_nc_sid=10d13b",
+        "https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/671239926_18576883267051431_7953054529622629798_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-iad3-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gE9RuW1R1Rw0MgNsKiiLUfMKS-mvc083k7Y5zg4_iWPrvhS4p5-jucEaksAEilR2SQ&_nc_ohc=L2IPeEl5QUEQ7kNvwGG_MYA&_nc_gid=GxZImfGmT15dckbXiSFnfg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8JwOa6Tjs2ExUh0cuN7SeMEaOQT2L9S4YSl8atG-yw-g&oe=6A31A859&_nc_sid=10d13b",
+        "https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/670916676_18576883276051431_8649049403095443426_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-iad3-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gE9RuW1R1Rw0MgNsKiiLUfMKS-mvc083k7Y5zg4_iWPrvhS4p5-jucEaksAEilR2SQ&_nc_ohc=0tGokPcRgHgQ7kNvwF5nsN1&_nc_gid=GxZImfGmT15dckbXiSFnfg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_b7la-YvaR16puj6FRGoGANU3LOJlKQEgSp-GT04t-Dw&oe=6A319EA4&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3881727680567837792",
+      "type": "Sidecar",
+      "timestamp": "2026-04-23T15:27:00.000Z",
+      "url": "https://www.instagram.com/p/DXeqsJbDARg/",
+      "caption": ".",
+      "likesCount": 283,
+      "commentsCount": 7,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-atl3-1.cdninstagram.com/v/t51.82787-15/671269162_18578374546051431_6716521755009195580_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gH3XMhqcPKM4goC7ClB3medmGy5PLV2G8YP-SfoxOMNfgwqEF4GXWrvlZrYoomsax4&_nc_ohc=wz3f9GLP6FIQ7kNvwEb7J-E&_nc_gid=haxAQ9QPa4IkLZXbcuyN8Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9gwKo7Ho7xAV0VYvgPobA8NZWxlztjzz-4xC_ZispFXw&oe=6A31A389&_nc_sid=10d13b",
+        "https://scontent-atl3-1.cdninstagram.com/v/t51.82787-15/674373142_18578374528051431_1473978538225576577_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gH3XMhqcPKM4goC7ClB3medmGy5PLV2G8YP-SfoxOMNfgwqEF4GXWrvlZrYoomsax4&_nc_ohc=tDC_MGp9GAoQ7kNvwEc3xFn&_nc_gid=haxAQ9QPa4IkLZXbcuyN8Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af__Y_U8yjcFfiLSOfrCHOZLiOPLR4NoPhYxx7r9gysaYw&oe=6A3195F8&_nc_sid=10d13b",
+        "https://scontent-atl3-1.cdninstagram.com/v/t51.82787-15/671885352_18578374537051431_2732811697944947980_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gH3XMhqcPKM4goC7ClB3medmGy5PLV2G8YP-SfoxOMNfgwqEF4GXWrvlZrYoomsax4&_nc_ohc=JiVj7D7C37MQ7kNvwELMgJQ&_nc_gid=haxAQ9QPa4IkLZXbcuyN8Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_hOVIOmHl6KOUDPaHiMO5UsIcZnfQeW8dang9VW_OUZg&oe=6A31A04F&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3829320551060222818",
+      "type": "Sidecar",
+      "timestamp": "2026-02-10T08:03:24.000Z",
+      "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+      "likesCount": 270,
+      "commentsCount": 18,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-lga3-1.cdninstagram.com/v/t51.82787-15/631744593_18556983736051431_5905491533868975801_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-lga3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gEwemlTK076Heaot_ZlY44Wu--Y72741BF7k_M6G4_mroH5-4ZiWqAHJMSGuYDCOB4&_nc_ohc=yi8guXDqcS0Q7kNvwF6NDWr&_nc_gid=Jc_tLXREsYU6cOAQ68y6jg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9mnWiMnzPL4_M4ZxvZsNcnR-LrBOhxQpADpz0Dik0XuQ&oe=6A317B9C&_nc_sid=10d13b",
+        "https://scontent-lga3-1.cdninstagram.com/v/t51.82787-15/631757705_18556983745051431_1659317351083126905_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-lga3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gEwemlTK076Heaot_ZlY44Wu--Y72741BF7k_M6G4_mroH5-4ZiWqAHJMSGuYDCOB4&_nc_ohc=LOfDP7G8pyYQ7kNvwFH0ySZ&_nc_gid=Jc_tLXREsYU6cOAQ68y6jg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9z5IrmrGaZlq9ofJ0F3x9fRVewHv88Ddv3pfvRXRslKQ&oe=6A31797C&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3639563876877562687",
+      "type": "Video",
+      "timestamp": "2025-05-24T12:33:46.000Z",
+      "url": "https://www.instagram.com/p/DKCVBASoXM_/",
+      "caption": "ChatGPT инвестирует за меня @fakeev",
+      "likesCount": 387,
+      "commentsCount": 34,
+      "hashtags": [],
+      "mentions": [
+        "fakeev"
+      ],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-phl2-1.cdninstagram.com/v/t51.71878-15/500763470_2207418906384063_136987008594628165_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-phl2-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gFfp8Nozd2C3hoZi7YxaaAdP6v2bJUkSHLK7BdhHzR-_-JH1F1eL-3oPe4zU8hecNo&_nc_ohc=IoN90reyKEUQ7kNvwHcWqaH&_nc_gid=3izf_xEB-oOpPrcE36GNPA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_7QA0_kxUZ-nRoC6O1MyU_p99o6LqKUy_R862ZIdtCQQ&oe=6A31AC03&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3535786818658211375",
+      "type": "Image",
+      "timestamp": "2025-01-01T08:04:16.000Z",
+      "url": "https://www.instagram.com/p/DERo2DPoZYv/",
+      "caption": "1/4 двадцать первого века позади. Я уже много лет не особо отмечаю НГ. Вчера вот вообще не пил и через час уже спал дома 😇 я жду 1 января так как именно в этот день я начинаю работать над своими целями и задачами.\n\nЧто я беру с собой в этот год:\n\n1. Мужское слово. Делать, то что говорю. Приходить вовремя, выполнять обязательства. Окружать себя людьми кто гарантированно выполнит своё мужское слово.\n\n2. Масштаб. В приоритет брать масштабные проекты, а не сиюминутную выгоду. Время пришло.\n\n3. Обучение. Вписываюсь в новое для себя, учусь у новых людей, получаю новые знания. Давно не был в роли ученика.\n\n4. Новые путешествия. Долгое время повторно посещал страны. Пора открывать новые места и миры. Ещё важно именно жить как местный в новых местах.\n\n5. По инвестициям - разделяю депозит на две части. Первое - самые консервативные инструменты. Второе - самые рискованные и доходные инструменты. Никаких больше средних результатов. Скучно быть среднячком…)\n\nВпереди 12 месяцев за которые нужно сделать прорыв в жизни, а это куча принятый решений и действий. Стартуем 💪🏻💪🏻",
+      "likesCount": 814,
+      "commentsCount": 14,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://instagram.fsac1-1.fna.fbcdn.net/v/t51.82787-15/624281493_18037756880735051_24194892725752602_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=instagram.fsac1-1.fna.fbcdn.net&_nc_cat=111&_nc_oc=Q6cZ2gG2ajU-KQIHzK_Lm7szVrUK8DcBaI-t7DJno4rYz980cEihpUxYY7hNYq5ekqqbMl8&_nc_ohc=a9GzpK9YWZ4Q7kNvwG01iXt&_nc_gid=TTS41n6a9G-8FPpBiZavFA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_e9zWIWbPVv1xXmaIrEtMBDzVQko2IFU4Fk1S7NjsL-Q&oe=6A31922E&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3269857960643658468",
+      "type": "Image",
+      "timestamp": "2023-12-31T10:11:06.000Z",
+      "url": "https://www.instagram.com/p/C1g3n2iJgLk/",
+      "caption": "Когда меня спрашивают какой год был лучший во взрослом возрасте , то я отвечаю 2017. Теперь я смело могу сказать, что это 2023г. Во всех сферах жизни произошел рост. \n\n-минимальный вес за много лет\n-рекорд по месячной прибыли\n-рекорд по общему капиталу\n-3 новых бизнес проекта\n-успешный старт ИТ проекта\n-новые страны\n-впервые доволен своей командой \n\nвообщем много всего…) я доволен 😊\n\nДавайте соберемся и получим максимум от 2024г. С Новым Годом🥳🥳🥳",
+      "likesCount": 860,
+      "commentsCount": 8,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-lga3-2.cdninstagram.com/v/t51.82787-15/620496430_17959370204900929_8656493432354664541_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gH_xqgEdukneHoi10tZm8iesKZ8qoPzCrs3ooyG7pX0DRrBmzQV-e4gs5MA2PadWsU&_nc_ohc=WOURL5GOYG0Q7kNvwFWUQVp&_nc_gid=HjY6swH_ybe-kyREUEZjHQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_tTjvs4RpTjQXvqGdT1pOxjVeiD03OnjGbt4d-u6h6Vg&oe=6A318D4A&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3447602223576672268",
+      "type": "Video",
+      "timestamp": "2024-09-01T15:58:21.000Z",
+      "url": "https://www.instagram.com/p/C_YV_THImgM/",
+      "caption": "Идеальное 1 сентября 😎 @fakeev",
+      "likesCount": 520,
+      "commentsCount": 10,
+      "hashtags": [],
+      "mentions": [
+        "fakeev"
+      ],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.71878-15/498285552_1348391976387941_4502144172833326620_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=105&_nc_oc=Q6cZ2gGMsoEdj_7oZy52cCCXRH0gbFUhcXum_q672BiAwBQVu2m6GA1ScFS0l1EcMPdcrBY&_nc_ohc=FOEqF080HxwQ7kNvwEjzNwU&_nc_gid=xBoM8IL39Sj46HdNPon0WQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-aZOnhMx6pHFJ1aEfm4L8v7rCsfk_LAZidn0lI001iRw&oe=6A31A2B5&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3440183454524882330",
+      "type": "Video",
+      "timestamp": "2024-08-22T10:19:04.000Z",
+      "url": "https://www.instagram.com/p/C-9_KABIb2a/",
+      "caption": "Консервативный и безопасный способ, как получать 42% годовых в крипте 💲@fakeev\n\nСохраняй, чтобы не потерять ✔️ Полная инструкция в тг-канале (ссылка в шапке профиля) @fakeev",
+      "likesCount": 301,
+      "commentsCount": 22,
+      "hashtags": [],
+      "mentions": [
+        "fakeev"
+      ],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://instagram.fric1-1.fna.fbcdn.net/v/t51.71878-15/503617728_1439432187398659_5839616166124244406_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.fric1-1.fna.fbcdn.net&_nc_cat=107&_nc_oc=Q6cZ2gEIduOEyDJHbf3-di4q567mLL_y2T-Sfm2xCttqmw4LDq93cTra2isnBAKcByQVkiQ&_nc_ohc=qU0Dq4moZhoQ7kNvwHVBqUP&_nc_gid=8hw1HXBaXqb1Mf6o-RkckA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8rixt2PXgUUAjrmFaEalZUDjRQBTuVZLHDSI8AhoOJ6Q&oe=6A31A7BD&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3891158459865688897",
+      "type": "Sidecar",
+      "timestamp": "2026-05-06T15:44:17.000Z",
+      "url": "https://www.instagram.com/p/DYALADFDOtB/",
+      "caption": "ШОРТ КРИПТЫ - почему это лучшая инвест-стратегия 2026 года (листай карусель) ➡️",
+      "likesCount": 86,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://instagram.ftol2-1.fna.fbcdn.net/v/t51.82787-15/683810907_18581914684051431_2543224731429812640_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=instagram.ftol2-1.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2gFwnC2ngQTot0fHGTN8ddugay0ASUvdYxu3DHeDuL4JIKYl1i8AAwvGKZ5u6daA1yg&_nc_ohc=w_PqAw7LfVMQ7kNvwEWP-lC&_nc_gid=-ledfyAqPK5DInP_AZcLPA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9mRaCmj_2tHOUQ4ZoM0z5gpEgp_wtF9AYXrE_IV52t9A&oe=6A31968B&_nc_sid=10d13b",
+        "https://instagram.ftol2-1.fna.fbcdn.net/v/t51.82787-15/689063920_18581914612051431_8287697342694666554_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=instagram.ftol2-1.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2gFwnC2ngQTot0fHGTN8ddugay0ASUvdYxu3DHeDuL4JIKYl1i8AAwvGKZ5u6daA1yg&_nc_ohc=zf_r8MM2HVoQ7kNvwEAQSks&_nc_gid=-ledfyAqPK5DInP_AZcLPA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-vvyvaDF9NxnQ1dZsKk71mHYKSVlMllL83s7iQaKqToQ&oe=6A31999D&_nc_sid=10d13b",
+        "https://instagram.ftol2-1.fna.fbcdn.net/v/t51.82787-15/688299154_18581914621051431_4604130518129950931_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=instagram.ftol2-1.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2gFwnC2ngQTot0fHGTN8ddugay0ASUvdYxu3DHeDuL4JIKYl1i8AAwvGKZ5u6daA1yg&_nc_ohc=0z6adKc-qFsQ7kNvwH802wc&_nc_gid=-ledfyAqPK5DInP_AZcLPA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af98vzL6pW9Al7UpeSVCjlD-ZR-BMt0_ZusthUGY-Zvj1Q&oe=6A317A4A&_nc_sid=10d13b",
+        "https://instagram.ftol2-1.fna.fbcdn.net/v/t51.82787-15/689729004_18581914630051431_3963115765126861175_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=instagram.ftol2-1.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2gFwnC2ngQTot0fHGTN8ddugay0ASUvdYxu3DHeDuL4JIKYl1i8AAwvGKZ5u6daA1yg&_nc_ohc=xQYAKvifzt4Q7kNvwHALsdB&_nc_gid=-ledfyAqPK5DInP_AZcLPA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_hmwF3pWKNGVHP2mRPSEsJlDKZBnoRzxSKz2UCk80Oew&oe=6A31A791&_nc_sid=10d13b",
+        "https://instagram.ftol2-1.fna.fbcdn.net/v/t51.82787-15/685383748_18581914639051431_1091537231564816396_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=instagram.ftol2-1.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2gFwnC2ngQTot0fHGTN8ddugay0ASUvdYxu3DHeDuL4JIKYl1i8AAwvGKZ5u6daA1yg&_nc_ohc=fpoAemKgmrsQ7kNvwHUO4I4&_nc_gid=-ledfyAqPK5DInP_AZcLPA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-UMi74yV39r5QQl0aQVYEantlqcX-3RBpgwnnc5aDdOA&oe=6A31A86C&_nc_sid=10d13b",
+        "https://instagram.ftol2-1.fna.fbcdn.net/v/t51.82787-15/685655554_18581914708051431_4972075060806032719_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=instagram.ftol2-1.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2gFwnC2ngQTot0fHGTN8ddugay0ASUvdYxu3DHeDuL4JIKYl1i8AAwvGKZ5u6daA1yg&_nc_ohc=Q2L_NDtWDXIQ7kNvwGbf-bM&_nc_gid=-ledfyAqPK5DInP_AZcLPA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-cfNFKdjZ81ts_bUe2PRmZCY1WHtr7B4uS62xBa2PeUg&oe=6A3182BD&_nc_sid=10d13b",
+        "https://instagram.ftol2-1.fna.fbcdn.net/v/t51.82787-15/684664524_18581914651051431_5868133962547848693_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=instagram.ftol2-1.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2gFwnC2ngQTot0fHGTN8ddugay0ASUvdYxu3DHeDuL4JIKYl1i8AAwvGKZ5u6daA1yg&_nc_ohc=DSQeXltJpqsQ7kNvwHVKDMw&_nc_gid=-ledfyAqPK5DInP_AZcLPA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_qiH2Ubll5u_OMZJLK8emEbf5tKoBkNv0j0LL5-dns-g&oe=6A319B4B&_nc_sid=10d13b",
+        "https://instagram.ftol2-1.fna.fbcdn.net/v/t51.82787-15/685084267_18581914660051431_7791707363986052559_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=instagram.ftol2-1.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2gFwnC2ngQTot0fHGTN8ddugay0ASUvdYxu3DHeDuL4JIKYl1i8AAwvGKZ5u6daA1yg&_nc_ohc=4e5sIdrkbvoQ7kNvwE7lDDf&_nc_gid=-ledfyAqPK5DInP_AZcLPA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8-acV53AD-OATPJDs7plDIuN0PZ53Rg2sOTaxGfT3aRw&oe=6A318ED4&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3772716907758397483",
+      "type": "Video",
+      "timestamp": "2025-11-24T05:42:33.000Z",
+      "url": "https://www.instagram.com/p/DRbYgn1DKgr/",
+      "caption": "Мой отдых",
+      "likesCount": 95,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-lga3-1.cdninstagram.com/v/t51.71878-15/588050390_1795245244463295_981304319451191525_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-lga3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gHRnGQ1yIEiCv37yAmzLvOxhGJlmGHFUS-kn0oSTDcbzVCLw1hiX5WPuQaEtkdnsAU&_nc_ohc=mfEEBGjVYTkQ7kNvwEn2n6c&_nc_gid=fOFh69rJGrO-NYJTRvEJzw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-mr-hxtQdYyKs92oJ50lFmZnq1DTkBPcddqW--ezzAzw&oe=6A3184BE&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3420003922845366475",
+      "type": "Video",
+      "timestamp": "2024-07-25T14:11:13.000Z",
+      "url": "https://www.instagram.com/p/C92S3Kno_jL/",
+      "caption": "Приехал на объект который я купил под флипинг (делают ремонт и продаю). Все стены поставили через 3 дня после получения ключей.\n\nРаботаем быстро 😎👌🏻 Как думаете получится на этом заработать? \n\nДА🔥\n\nНЕТ ❤️",
+      "likesCount": 202,
+      "commentsCount": 16,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-iad6-1.cdninstagram.com/v/t51.71878-15/503504329_1021047003545478_9219068384339390511_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-iad6-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2gHlvy2oZKju2RUaM59xQuR8SonSboxwnpWTEXPhUHHj0AyTn6QqTeHise9uEh85FBI&_nc_ohc=xVn2M9zzT1YQ7kNvwFCwLGp&_nc_gid=qYvODsBviwBfA0qvUwc7HQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9wiBr4vdZu4cYomOTEqGn8nowA5InDLtm-VNVc77mMrA&oe=6A317BFD&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3443820324911801176",
+      "type": "Sidecar",
+      "timestamp": "2024-08-27T10:43:16.000Z",
+      "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+      "likesCount": 1005,
+      "commentsCount": 21,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [
+        "mark.tales"
+      ],
+      "mediaUrls": [
+        "https://instagram.flas1-2.fna.fbcdn.net/v/t51.82787-15/653517508_18110453056819315_2223592600611045578_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.flas1-2.fna.fbcdn.net&_nc_cat=107&_nc_oc=Q6cZ2gF7fbVMCUiP-klZUcbpPfreuIc13WT7-Xy5B1kGi_SEX-yYpCia3WC43_CjNzxNKso&_nc_ohc=805_WLSAt-oQ7kNvwHU3N83&_nc_gid=392t3LkuYQib8kRyliOP4Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_cpExCVisSRMAHQYLDURm5qc70ydzGMUGCSEBLU8FO3Q&oe=6A319205&_nc_sid=10d13b",
+        "https://instagram.flas1-2.fna.fbcdn.net/v/t51.82787-15/657156711_18142685557436670_6317401009036557211_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.flas1-2.fna.fbcdn.net&_nc_cat=106&_nc_oc=Q6cZ2gF7fbVMCUiP-klZUcbpPfreuIc13WT7-Xy5B1kGi_SEX-yYpCia3WC43_CjNzxNKso&_nc_ohc=bXBB6xt7UU0Q7kNvwEWPGh3&_nc_gid=392t3LkuYQib8kRyliOP4Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8eYH15w9W6jzg3iUhaAUPZ8cKiBiCBM-PvOOs4-UJ9Ag&oe=6A31888D&_nc_sid=10d13b",
+        "https://instagram.flas1-2.fna.fbcdn.net/v/t51.82787-15/669486245_18098841722476110_3132371935584620867_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.flas1-2.fna.fbcdn.net&_nc_cat=106&_nc_oc=Q6cZ2gF7fbVMCUiP-klZUcbpPfreuIc13WT7-Xy5B1kGi_SEX-yYpCia3WC43_CjNzxNKso&_nc_ohc=85o0p0qYo4AQ7kNvwGa06Gy&_nc_gid=392t3LkuYQib8kRyliOP4Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_utT4-jCzQvvDrZXP7ofxxhpIygHn8ZhnCCLjHmVsU3Q&oe=6A318FB0&_nc_sid=10d13b",
+        "https://instagram.flas1-1.fna.fbcdn.net/v/t51.82787-15/656559640_18104159974718428_3146618620545566635_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.flas1-1.fna.fbcdn.net&_nc_cat=104&_nc_oc=Q6cZ2gF7fbVMCUiP-klZUcbpPfreuIc13WT7-Xy5B1kGi_SEX-yYpCia3WC43_CjNzxNKso&_nc_ohc=uo-H7V6y_kYQ7kNvwG7v3nw&_nc_gid=392t3LkuYQib8kRyliOP4Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9CkvXFaPwkiIFcZPoYWfdtNGZj8CmNhYY3V-zIEULKZw&oe=6A318280&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3653273883800372929",
+      "type": "Image",
+      "timestamp": "2025-06-12T10:30:05.000Z",
+      "url": "https://www.instagram.com/p/DKzCT3PIgbB/",
+      "caption": "Идеальный набор как по мне 👌🏻",
+      "likesCount": 884,
+      "commentsCount": 24,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-atl3-1.cdninstagram.com/v/t51.2885-15/504308032_18507439639051431_5600068527696558516_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGLgatz7wlR57MQTXe8WN7PjcM0B_nZW6jxbmM5etYhZxdHadYYyGbDoVcbZ_ewk9A&_nc_ohc=g5EsSAI5DKwQ7kNvwETCXx1&_nc_gid=OS_gSPII4_4xQ9wXA8wneA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-V3ZtVYxOcKKmxpbjnwC2pRc7KSah1d4pTQIWgzd-q4w&oe=6A3193CF&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3294413841414487651",
+      "type": "Image",
+      "timestamp": "2024-02-03T07:19:15.000Z",
+      "url": "https://www.instagram.com/p/C24G-8oo_5j/",
+      "likesCount": 1104,
+      "commentsCount": 14,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-atl3-2.cdninstagram.com/v/t51.82787-15/624909899_18170234413376030_3117339870213218589_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-2.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gElrczY6knr93zvnv8liry1B07THWriMvhnVyVWugkzmbYJK9V5NTe8o7Yhkux2Xs0&_nc_ohc=msiBJRGx8scQ7kNvwF83VO3&_nc_gid=UtRhwiGYHw0k-qbbaqS3zw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_piJE-BUfxTp_8vAGfW0sfywDaW6-oZWprxAivpXwPGQ&oe=6A318FB5&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3746074560824084529",
+      "type": "Video",
+      "timestamp": "2025-10-18T11:29:44.000Z",
+      "url": "https://www.instagram.com/p/DP8uvcsDAgx/",
+      "caption": "За грибами🍄‍🟫 @fakeev",
+      "likesCount": 256,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [
+        "fakeev"
+      ],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-dfw5-1.cdninstagram.com/v/t51.71878-15/565656181_730587663387761_6859541529213005692_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=105&_nc_oc=Q6cZ2gHJ3TZjQNQ5YVFZh6GYW6G5yGSi2A_W-zg-Q_piuclwIKI3rk8xhiQXs5AQXpmgT78&_nc_ohc=YSoyEMXD3lUQ7kNvwFua43o&_nc_gid=3wWf6AwSCF_l5MhYozXCVQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-PNOJ4T58tD3GcDjqBdWwbp2p9BLbbzIsxKcoKo4hxzg&oe=6A31AE08&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3436530066148335345",
+      "type": "Image",
+      "timestamp": "2024-08-17T09:18:49.000Z",
+      "url": "https://www.instagram.com/p/C-xAeM8uJ7x/",
+      "caption": "На мой взгляд не существует сложнее пути, чем путь без цели. Это как движение в темноте.",
+      "likesCount": 757,
+      "commentsCount": 6,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-lga3-2.cdninstagram.com/v/t51.82787-15/660404365_18086515439210304_1551716049068289386_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2gGPt__OW2oiBCpJNuIJpryPMSWQZExo7WyIgLkmueRsbhTzyLlWQag9-7zxFgsJ0U8&_nc_ohc=6MlDBr1NQjMQ7kNvwGdYTQq&_nc_gid=tjHsYSMQx4LZivXhCUQaHg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8O1xIZ48xCNF-XiKcJfsiqDPprW829s1K-SwnQjfmWiw&oe=6A318005&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3401075824185124655",
+      "type": "Image",
+      "timestamp": "2024-06-29T11:17:34.000Z",
+      "url": "https://www.instagram.com/p/C8zDHFCuScv/",
+      "likesCount": 626,
+      "commentsCount": 9,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://instagram.ffcm1-1.fna.fbcdn.net/v/t51.82787-15/626829556_18080599058587769_6381788699478985672_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.ffcm1-1.fna.fbcdn.net&_nc_cat=105&_nc_oc=Q6cZ2gHw0XMT3o88rsVSJ3-el_GO2082tbI_SkOFQphuf3KgJAVNyBNA-sVkdGLZTI_jUxs&_nc_ohc=IIsEz7Lxx0AQ7kNvwHxaKbO&_nc_gid=8hpfpWVqgdmjeWZB0z0PgA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8GMm9Y3MAK_HFcBEO8qLVxptYDUp0odOz8WOQtXirEyA&oe=6A3188FE&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3443821011116540023",
+      "type": "Video",
+      "timestamp": "2024-08-27T10:45:18.000Z",
+      "url": "https://www.instagram.com/p/C_K6PaloMB3/",
+      "caption": "Один день из жизни друзей 😎",
+      "likesCount": 541,
+      "commentsCount": 12,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-dfw5-1.cdninstagram.com/v/t51.71878-15/502204675_1054592139970883_8953494364149686265_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGXjSC__d2oPF7aN3uyr7Z1xGQ6s55va86RrXiEKIQzcba7ao08NB412tEkevV-GMU&_nc_ohc=_DICFnQn3HEQ7kNvwGIEJb9&_nc_gid=XKT1tvdHyLvlEJm8knzBqQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-PjUc4Zik9l_TYT9M_qGouLFx-DpBfYj0VQM0Xgd86iw&oe=6A3178CD&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3750967731777487011",
+      "type": "Image",
+      "timestamp": "2025-10-25T05:30:20.000Z",
+      "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+      "caption": "Если на ваш караван никто не лает, возможно, он никуда не двигается👌🏻",
+      "likesCount": 204,
+      "commentsCount": 13,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/571765679_18534120073051431_392446011917586597_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-iad3-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gG51UimXSaExkEj3fCnlgeoZQVZ9cFvi1XJS_dPnZapgsxEu8xs9XP33jCU7DKTuZo&_nc_ohc=arbQER8iTt0Q7kNvwGSQgEJ&_nc_gid=J1o2ew06WPNL4Ig5J_yMXQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8BE3CJXFtuZUS85HB2jjf4cYG70yvGOB5VjvirVLFQ7g&oe=6A319402&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3377944961191434594",
+      "type": "Sidecar",
+      "timestamp": "2024-05-28T13:20:40.000Z",
+      "url": "https://www.instagram.com/p/C7g3wuKotli/",
+      "caption": "Первый пост о недвижимости \n\nПоследнее время плотно изучаю рынок недвижимости для инвестиций. Нашел связку как тут делают +30-100% годовых.\n\nПланирую плотно сюда заходить. Катаюсь смотрю объекты. Уже встретился с топ компаниями кто именно ИНВЕСТИРУЕТ , а не строит или перепродает.\n\nВообщем новая тема. Позже расскажу подробнее👌🏻\n\np.s на некоторых фото вам может показаться , что это Дубай. Но нет…это Москва …)",
+      "likesCount": 343,
+      "commentsCount": 9,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-lax3-2.cdninstagram.com/v/t51.82787-15/654029543_18030334607610456_3188993523426370916_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax3-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2gGoIXu2KKNfZyRZ7zrg09T-ablcC9XFnCQ5XpNOI1jJjywf_dfsOIbe-9iO_VmxfnI&_nc_ohc=AG_Jtn-Q_7IQ7kNvwHqxhlJ&_nc_gid=jklHn1C6LcXFQxqc9Lt3Ug&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_VMyDkjTceHxfg9xWSSnc9ht_pBpOR79BolEv-zOJZ3g&oe=6A3197C6&_nc_sid=10d13b",
+        "https://scontent-lax3-1.cdninstagram.com/v/t51.82787-15/656017232_18096258467005060_6780615835563808295_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax3-1.cdninstagram.com&_nc_cat=104&_nc_oc=Q6cZ2gGoIXu2KKNfZyRZ7zrg09T-ablcC9XFnCQ5XpNOI1jJjywf_dfsOIbe-9iO_VmxfnI&_nc_ohc=VRz2SHyBAwkQ7kNvwFTXmK0&_nc_gid=jklHn1C6LcXFQxqc9Lt3Ug&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8RQyCTBDsNNiq62L-IVHVYuNPm-_uUsGVbIW6m0i22Gw&oe=6A31A676&_nc_sid=10d13b",
+        "https://scontent-lax3-1.cdninstagram.com/v/t51.82787-15/654177989_18125872039564070_1676669786829620957_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax3-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGoIXu2KKNfZyRZ7zrg09T-ablcC9XFnCQ5XpNOI1jJjywf_dfsOIbe-9iO_VmxfnI&_nc_ohc=QCB7zxSnqgsQ7kNvwFHBjUY&_nc_gid=jklHn1C6LcXFQxqc9Lt3Ug&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_QZlt1H2WYRqkNm8P5wq2OWAE466nsk-Z0CVqdezoxDg&oe=6A31A00A&_nc_sid=10d13b",
+        "https://scontent-lax3-2.cdninstagram.com/v/t51.82787-15/656464441_18195252505355227_3407536870803045008_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax3-2.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2gGoIXu2KKNfZyRZ7zrg09T-ablcC9XFnCQ5XpNOI1jJjywf_dfsOIbe-9iO_VmxfnI&_nc_ohc=-kIS1A6_q4oQ7kNvwFO9k1c&_nc_gid=jklHn1C6LcXFQxqc9Lt3Ug&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_DBEEW1Z0mhBpNdjv_UKaqloes7PMOQzTRI66Q3jxenA&oe=6A31A236&_nc_sid=10d13b",
+        "https://scontent-lax3-2.cdninstagram.com/v/t51.82787-15/670023662_18122264575621392_7414115995842555838_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax3-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2gGoIXu2KKNfZyRZ7zrg09T-ablcC9XFnCQ5XpNOI1jJjywf_dfsOIbe-9iO_VmxfnI&_nc_ohc=2L64DmF_qx4Q7kNvwG7cM2k&_nc_gid=jklHn1C6LcXFQxqc9Lt3Ug&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9mkyaMm6tAVzih3bvvEU-BI_4rQjrfl27MjP5aavZ_2w&oe=6A31A98A&_nc_sid=10d13b",
+        "https://scontent-lax3-1.cdninstagram.com/v/t51.82787-15/670154034_18313736170260278_957666376396324452_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax3-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGoIXu2KKNfZyRZ7zrg09T-ablcC9XFnCQ5XpNOI1jJjywf_dfsOIbe-9iO_VmxfnI&_nc_ohc=Smn4Kykzev0Q7kNvwErcqxV&_nc_gid=jklHn1C6LcXFQxqc9Lt3Ug&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_DBQN_qLrBOQ0MxALJxhBk2BUh9yqSEnFkpd3ZDNl4Og&oe=6A31A430&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3719273968151877867",
+      "type": "Image",
+      "timestamp": "2025-09-11T12:00:29.000Z",
+      "url": "https://www.instagram.com/p/DOdg_fuDNjr/",
+      "caption": "Привет",
+      "likesCount": 232,
+      "commentsCount": 6,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-lga3-1.cdninstagram.com/v/t51.82787-15/546520479_18524350201051431_8986697903710433231_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lga3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gF28Q-tM5WAED9caWVMUbSRPjr-s523HnjCzwmPCHONANabullvoReiggieXzBa8RMyZQCOrcEt5T3Fyr0TmO8y&_nc_ohc=07YwQvLN1U4Q7kNvwHSwpue&_nc_gid=1s5mjtVGtS0sYKxW26ZoXw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_-4mIEV4CndP7skzvMYbwp9QJM00CvzLa-932qxN3Xlg&oe=6A319C6D&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3668517904478945930",
+      "type": "Image",
+      "timestamp": "2025-07-03T11:17:14.000Z",
+      "url": "https://www.instagram.com/p/DLpMZj0oMKK/",
+      "likesCount": 381,
+      "commentsCount": 3,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/515106253_18511279045051431_8868885644504975188_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-iad3-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGCdSpO9_nH1VPKUI2QuJuoP2OpZvcVrAiBeSFl7uj6oSJk-teAdM_qHNfTyz6fU9w&_nc_ohc=WlLxh6mPltYQ7kNvwFLjCO8&_nc_gid=YEIfs2sXJ961e1SR2xCmog&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af89eJAUTEqw773Yd4HasBIl3U3kemfmj2lnY082RVwCGw&oe=6A31961D&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3426707640693362658",
+      "type": "Image",
+      "timestamp": "2024-08-03T20:03:25.000Z",
+      "url": "https://www.instagram.com/p/C-OHHGYpQ_i/",
+      "caption": "⛳️гольф",
+      "likesCount": 295,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-lga3-2.cdninstagram.com/v/t51.82787-15/658961156_18321220075283328_8454041354032293075_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2gGIzUy7GF1Hi5AcRLTnUHhnEZ0WLu3dCW0ZBb6t1w1RHRvi6_nbf9UqIGAmvqGdPtw&_nc_ohc=4_vXYpeuo6gQ7kNvwHvvHmR&_nc_gid=fdVu2H1mlmIu3gHTCLbyhg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-04ZnaDc6EcGa7p9Zo6A29EGrWN3HNo6mbXvL6b4BoVA&oe=6A318E9E&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3733879615291962419",
+      "type": "Image",
+      "timestamp": "2025-10-01T15:39:17.000Z",
+      "url": "https://www.instagram.com/p/DPRZ7onjLQz/",
+      "likesCount": 183,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-ord5-2.cdninstagram.com/v/t51.82787-15/557413814_18528732427051431_1158514544470005032_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGsYovVw1HXXMTXWV5RXD8xwujKkiMPralxyhVC_kW84Jof7W88jDeurllfTFwZjP8&_nc_ohc=6ARg1bfvF_wQ7kNvwGs-Bcz&_nc_gid=HDAeBlAG6IVGgSV50l3BPg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9hQMMhYGIKhlWHI-2sxQ-kX06C19SweI2-faUOIW0isQ&oe=6A31AF28&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3668515366899920460",
+      "type": "Image",
+      "timestamp": "2025-07-03T11:12:12.000Z",
+      "url": "https://www.instagram.com/p/DLpL0ohIa5M/",
+      "likesCount": 234,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-lga3-1.cdninstagram.com/v/t51.82787-15/515147124_18511278658051431_4897929413609526619_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-lga3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gG53yKJ_Vc_hqegstFNPQ8aoOjvKBg0CDPKAGyUn58Nbhl3uRWDUUQJwJeN0-DO0Mg&_nc_ohc=Wi7APBduM98Q7kNvwF1zeYR&_nc_gid=6q9phs_LfClAcv4ZjikxCg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_PEGez7K362lbj0m27Kp2HLEq7GapTVdD32GEU7gyc_g&oe=6A319C21&_nc_sid=10d13b"
+      ]
+    }
+  ],
+  "vision": [
+    {
+      "postId": "3825836720978630051",
+      "status": "completed",
+      "description": "[Image ID: 3825836720978630051]\n- Visible fact: A person is walking on a path next to a cliff overlooking the ocean.\n- Visible fact: The person is wearing a white long-sleeved shirt, dark shorts, and a black baseball cap.\n- Visible fact: The shirt appears wet and somewhat translucent.\n- Visible fact: The path has a wooden railing on one side.\n- Visible fact: In the background, there is a large, green, rocky outcrop in the ocean.\n- Visible fact: The sky is bright, suggesting either sunrise or sunset.\n- Visible fact: The second image shows the same person smiling at the camera in the same location.\n- Setting: Coastal cliffside path overlooking the ocean\n- Objects/signals: person, white shirt, dark shorts, black baseball cap, wooden railing, rocky outcrop, ocean, green foliage, sky\n- Visual style: Outdoor photography, Natural lighting, Landscape orientation\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3789007229152945044",
+      "status": "completed",
+      "description": "[Image ID: 3789007229152945044]\n- Visible fact: A person is taking a mirror selfie.\n- Visible fact: The person is wearing a black short-sleeved t-shirt and dark grey pleated trousers.\n- Visible fact: A silver-toned watch is visible on the person's left wrist.\n- Visible fact: The person is holding a silver-colored smartphone with multiple camera lenses to take the photo.\n- Visible fact: The background consists of dark grey tiled walls on the left and a light-colored door with a black handle on the right.\n- Setting: indoor\n- Objects/signals: person, mirror, smartphone, t-shirt, trousers, watch, door, door handle, tiled wall\n- Visual style: mirror selfie, natural lighting, monochromatic color palette",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3622298533331354216",
+      "status": "completed",
+      "description": "[Image ID: 3622298533331354216]\n- Visible fact: A man is speaking on a stage at a conference.\n- Visible fact: The stage has large screens displaying text and graphics.\n- Visible fact: A large audience is seated in front of the stage, watching the presentation.\n- Visible fact: The man is wearing a white polo shirt and a conference badge.\n- Visible fact: The lighting in the venue is dark, with spotlights on the stage and screens.\n- Setting: conference stage\n- Objects/signals: man, microphone, conference badge, large screens, audience, chairs, stage lighting\n- Text in image: ЛЮДЕЙ | ЫВАЕТ | ВА? | Рустехмаш | Blockchain Forum 2025 | ДАВАЙТЕ ПОИЩЕМ\n- Text (verbatim): ЛЮДЕЙ | ЫВАЕТ | ВА? | Спикер | Рустехмаш | Blockchain Forum 2025 | ДАВАЙТЕ ПОИЩЕМ | #BlockchainLife2025\n- Visual style: dynamic lighting, conference photography, wide shots, close-up shots\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3297322861502466793",
+      "status": "completed",
+      "description": "[Image ID: 3297322861502466793]\n- Visible fact: A person is standing next to a black Mercedes-Benz G-Class SUV, which has a large red bow on its hood.\n- Visible fact: The SUV's headlights are on and glowing brightly.\n- Visible fact: The person is wearing a white t-shirt under a dark jacket.\n- Visible fact: The scene appears to be outdoors, possibly a car dealership or parking lot, with snow on the ground and other cars visible in the background.\n- Visible fact: There is a white BMW SUV partially visible to the right of the Mercedes-Benz.\n- Visible fact: A parking sign with the letter 'P' is visible in the background on the left.\n- Setting: Outdoor car dealership or parking lot in winter\n- Objects/signals: Mercedes-Benz G-Class SUV, Red bow, BMW SUV, Parking sign, Snow, Buildings\n- Text in image: P | ПРОВЕРЕНО | РОЛЬФ | АТЛАНТ | (495) 785-19-49 | ROLF-PROBEG.RU\n- Text (verbatim): P | посетители | для клиентов | ПРОВЕРЕНО | РОЛЬФ | АТЛАНТ | (495) 785-19-49 | ROLF-PROBEG.RU\n- Visual style: Outdoor photography, Natural lighting, Focus on the car and person",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3900672109022341105",
+      "status": "completed",
+      "description": "[Image ID: 3900672109022341105]\n- Visible fact: The first image shows a person sitting on a white plastic chair on a red tennis court, facing away from the camera towards a tennis net.\n- Visible fact: Two white plastic chairs are on the court, with a water bottle and two tennis rackets on the ground.\n- Visible fact: The background of the first image features a lush green mountain covered in trees, with utility poles visible.\n- Visible fact: The second image presents an aerial view of a coastal area with a blue sea, a rocky mountain, and several buildings with red roofs and thatched roofs near the beach.\n- Visible fact: Palm trees are scattered along the coastline in the second image.\n- Visible fact: The third image depicts a person standing on a balcony, looking out at the sea and a sunset horizon.\n- Visible fact: The person in the third image is wearing a dark short-sleeved shirt and dark shorts, with white sneakers.\n- Visible fact: The sea in the third image has visible waves, and a distant landmass is silhouetted against the sunset.\n- Setting: Coastal resort area with tennis courts and a beach\n- Objects/signals: tennis court, tennis net, white plastic chairs, water bottle, tennis rackets, mountain, trees, utility poles, sea, beach buildings with red roofs and thatched roofs\n- Visual style: Outdoor photography, Natural lighting, Vibrant colors\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3877167059469876922",
+      "status": "completed",
+      "description": "[Image ID: 3877167059469876922]\n- Visible fact: A man is presenting on a stage with a large screen behind him.\n- Visible fact: The screen displays text in Russian and a logo.\n- Visible fact: The man is holding a microphone in all images.\n- Visible fact: In the first image, the man is walking across the stage.\n- Visible fact: In the second image, the man is shown from the chest up, looking to his right.\n- Visible fact: In the third image, the man is standing centrally, looking towards the audience.\n- Visible fact: The man is wearing a light-colored, possibly beige or off-white, jacket over a lighter-colored shirt and matching trousers.\n- Visible fact: The stage is dark with bright lights illuminating the presenter and the screen.\n- Setting: conference stage\n- Objects/signals: man, microphone, large screen, stage lights, promminer logo, remote clicker\n- Text in image: Как сделать ставку на падение крипторынка | Олег Факеев | promminer | Blockchain Forum 2026 | ем | астет, то, что\n- Text (verbatim): Как сделать ставку на падение крипторынка | Олег Факеев | promminer | Blockchain Forum 2026 | дение | ем | астет, | то, что\n- Visual style: professional photography, well-lit stage, dark background, clear focus on the presenter and screen\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3881727680567837792",
+      "status": "completed",
+      "description": "[Image ID: 3881727680567837792]\n- Visible fact: A person is wearing a white t-shirt, a beige baseball cap, and sunglasses.\n- Visible fact: The t-shirt has a graphic design with text.\n- Visible fact: There are two large pyramids in the background.\n- Visible fact: Several camels are visible in the desert landscape.\n- Visible fact: The sky is clear and blue.\n- Visible fact: The Sphinx is visible in one of the images.\n- Setting: Desert landscape with ancient Egyptian monuments\n- Objects/signals: person, white t-shirt, beige baseball cap, sunglasses, pyramids, camels, desert, rocks, Sphinx\n- Text in image: EAT WITHOUT THINKING ABOUT IT | accept yourself as you are | Bread & Butter | TAKE THE TIME SO YOU DON'T GO CRAZY\n- Text (verbatim): EAT WITHOUT THINKING ABOUT IT | accept yourself as you are | Bread & Butter | TAKE THE TIME SO YOU DON'T GO CRAZY | NY\n- Visual style: Outdoor photography, Bright lighting, Clear sky\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3829320551060222818",
+      "status": "completed",
+      "description": "[Image ID: 3829320551060222818]\n- Visible fact: A man is seated at a wooden table in what appears to be a cafe or restaurant.\n- Visible fact: He is wearing a light-colored New York Yankees baseball cap, a white t-shirt, and a light beige zippered jacket.\n- Visible fact: In the first image, he is looking down at a smartphone he is holding with both hands.\n- Visible fact: In the second image, he is smiling and looking directly at the camera.\n- Visible fact: A white ceramic cup with a beverage and a white vase with a single orange flower are on the table in the second image.\n- Visible fact: A smartphone is also on the table next to the cup in the second image.\n- Visible fact: The background shows other patrons, tables, and a counter area with food displays, suggesting a bustling indoor environment.\n- Visible fact: An escalator is visible in the background of both images.\n- Setting: Indoor cafe or restaurant\n- Objects/signals: Man, Wooden table, Smartphone, New York Yankees baseball cap, White t-shirt, Beige zippered jacket, Ceramic cup, Orange flower, White vase, Escalator\n- Visual style: Casual portrait photography, Bright indoor lighting, Shallow depth of field in the first image, slightly wider in the second\n[Images analyzed: 2/2]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3639563876877562687",
+      "status": "completed",
+      "description": "[Image ID: 3639563876877562687]\n- Visible fact: A man is shown from the waist up, holding a smartphone in his left hand.\n- Visible fact: He is wearing a light grey short-sleeved sweatshirt with white text on the chest.\n- Visible fact: He has a watch on his right wrist.\n- Visible fact: The background includes a light-colored wall, a colorful abstract painting, and a dark, textured object.\n- Visible fact: A white text overlay is present at the bottom of the image.\n- Setting: Indoors, possibly a modern living space or office.\n- Objects/signals: man, smartphone, watch, sweatshirt, abstract painting, dark textured object, light-colored wall\n- Text in image: 似て | профессиональный\n- Text (verbatim): 似て | профессиональный\n- Visual style: Well-lit, Clear focus on the man, Vertical video format",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3535786818658211375",
+      "status": "completed",
+      "description": "[Image ID: 3535786818658211375]\n- Visible fact: A man is standing on a helipad next to a black helicopter.\n- Visible fact: The man is wearing a white t-shirt, black shorts with a white drawstring, and dark sneakers.\n- Visible fact: He is also wearing sunglasses.\n- Visible fact: The helipad is marked with green and yellow sections, and a white 'H' symbol.\n- Visible fact: The helicopter has the registration 'PK-HBY' on its tail boom.\n- Visible fact: In the background, there are green trees and a building with a modern architectural style.\n- Setting: Outdoor helipad with a building and trees in the background\n- Objects/signals: man, helicopter, helipad, t-shirt, shorts, sneakers, sunglasses, trees, building\n- Text in image: PK-HBY\n- Text (verbatim): PK-HBY\n- Visual style: Outdoor photography, Daylight, Full body shot",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3269857960643658468",
+      "status": "completed",
+      "description": "[Image ID: 3269857960643658468]\n- Visible fact: A person is standing on a grassy lawn, looking down.\n- Visible fact: The person is wearing a beige t-shirt, light-colored shorts, white sneakers, and a beige baseball cap.\n- Visible fact: The baseball cap has a logo on the front.\n- Visible fact: There are palm trees and other lush greenery in the background.\n- Visible fact: Buildings with tiled roofs and white facades are visible behind the trees.\n- Visible fact: A swimming pool area with lounge chairs is partially visible in the background.\n- Visible fact: The lighting suggests either sunrise or sunset, with warm light hitting the scene.\n- Visible fact: A large, gnarled tree trunk is prominent on the right side of the frame.\n- Setting: Outdoor resort or tropical garden\n- Objects/signals: person, grassy lawn, palm trees, buildings, swimming pool, lounge chairs, tree trunk, baseball cap, t-shirt, shorts\n- Text (verbatim): CAPRI\n- Visual style: Outdoor photography, Natural lighting, Warm color palette, Full body shot",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3447602223576672268",
+      "status": "completed",
+      "description": "[Image ID: 3447602223576672268]\n- Visible fact: A person is riding an eFoil board on blue water.\n- Visible fact: The person is wearing a black life vest and light-colored shorts.\n- Visible fact: Two large white yachts are visible in the background, anchored near a tree-lined shore.\n- Visible fact: The sky is clear and blue.\n- Visible fact: The water has ripples and small waves.\n- Setting: Open water near a forested coastline with yachts\n- Objects/signals: person, eFoil board, life vest, shorts, yacht, trees, water, sky\n- Visual style: Outdoor photography, Bright lighting, Clear focus on the eFoil rider",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3440183454524882330",
+      "status": "completed",
+      "description": "[Image ID: 3440183454524882330]\n- Visible fact: A person's hand is visible, pointing at a laptop screen.\n- Visible fact: The laptop screen displays a cryptocurrency interface with financial data.\n- Visible fact: Text overlays highlight specific information on the screen, including a percentage and a monetary value.\n- Visible fact: The laptop keyboard is visible in the foreground.\n- Setting: Indoor, likely a desk or workspace\n- Objects/signals: laptop, hand, laptop screen, laptop keyboard, webcam cover\n- Text in image: КОНСЕРВАТИВНЫЕ ИНВЕСТИЦИИ В КРИПТУ | 42% ГОДОВЫХ | 95,88 $\n- Text (verbatim): X | + | Яндекс.Почта | Google Диск | YouTube | Крипта | Яндекс | Почта\n- Visual style: Close-up shot, Focus on screen content and hand gesture, Informative overlay text",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3891158459865688897",
+      "status": "completed",
+      "description": "[Image ID: 3891158459865688897] This Instagram post contains three images.\n\nThe first image shows a man speaking into a microphone on a stage, with a large screen behind him displaying text. The man is wearing a light-colored, possibly beige or off-white, ribbed long-sleeved top and matching pants. He has short, dark hair and is looking towards his right, with his left arm extended. The screen behind him has white text on a black background. The readable text includes: \"Blockchain Forum 2026\", \"на падение\", and \"рынк\". Part of his reflection is visible on the screen.\n\nThe second image is a white background with black text. The text reads:\n\"Одна из самых интересных инвестиционных\nидей на ближайшие два года - это научиться\nшортить крипторынок.\n\nЯ уже говорил о том, что будет с криптой\nеще летом 2025 года. Кратко: топ-10 токенов\nсольются с фондовым рынком и станут просто\nкомпаниями, такими же, как и те, которые\nторгуются на фондовом рынке. А все остальное\nбудет падать, скамиться, и все это нужно\nшортить.\n\nНе удивительно, что буквально недавно Чанпэн\nЧжао, основатель Binance, в своих комментариях\nтакже говорил о том, что большинство крипто-\nпроектов не имеют фундаментальной ценности,\nи инвесторам нужно быть осторожнее.\"\n\nThe third image is also a white background with black text. The text reads:\n\"И вот три причины, по которым шортить рынок -\nэто отличная идея:\n\n№1\n\nУ рынка уже нет той силы, которая была раньше.\nСила заключалась в надежде и ожиданиях инве-\nсторов на быстрый заработок. Но после того,\nкак уже несколько циклов подряд большинство\nлюдей обожглись на инвестициях в разные\nкриптопроекты, ждать нового взлета уже не\nстоит. И данная ситуация еще сильнее давит\nна существующие криптопроекты.\"\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3772716907758397483",
+      "status": "completed",
+      "description": "[Image ID: 3772716907758397483]\n- Visible fact: A person wearing motocross gear is standing in a desert landscape.\n- Visible fact: The person is holding a white bottle.\n- Visible fact: A blue dirt bike is visible to the right of the person.\n- Visible fact: The sky shows clouds and colors of a sunset or sunrise.\n- Visible fact: The person is wearing a blue, white, and black helmet with goggles.\n- Visible fact: The person's outfit includes a blue and white long-sleeved jersey and matching pants.\n- Visible fact: The jersey has text on the sleeves.\n- Visible fact: The person is wearing motocross boots.\n- Setting: desert\n- Objects/signals: person, motocross helmet, goggles, white bottle, motocross jersey, motocross pants, motocross boots, dirt bike, sand dunes, sky with clouds\n- Text in image: TROY LEE DESIGNS\n- Text (verbatim): TROY LEE DESIGNS | TROY | LEE | DESIGNS\n- Visual style: outdoor photography, action sports aesthetic, natural lighting",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3420003922845366475",
+      "status": "completed",
+      "description": "[Image ID: 3420003922845366475]\n- Visible fact: A man is taking a selfie in what appears to be a construction site or a room under renovation.\n- Visible fact: He is wearing a white t-shirt, a beige baseball cap, and sunglasses are hanging from his t-shirt collar.\n- Visible fact: The walls behind him are made of concrete blocks and unfinished concrete.\n- Visible fact: There is a text overlay in Russian on the bottom left of the image.\n- Setting: construction site or room under renovation\n- Objects/signals: man, white t-shirt, beige baseball cap, sunglasses, concrete blocks, unfinished concrete walls\n- Text in image: ПОЛНОСТЬЮ стены\n- Text (verbatim): ПОЛНОСТЬЮ стены\n- Visual style: selfie perspective, casual snapshot, bright lighting",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3443820324911801176",
+      "status": "completed",
+      "description": "[Image ID: 3443820324911801176]\n- Visible fact: Two men are seen with a vintage military-style motorcycle with a sidecar.\n- Visible fact: In the first image, the motorcycle is on a city street, with a black Mercedes-Benz G-Class SUV behind it.\n- Visible fact: The second image shows the men on the motorcycle on a street with trees and a fence in the background.\n- Visible fact: The third image is in black and white, showing the two men standing next to the parked motorcycle on a street, with a building facade behind them.\n- Visible fact: Both men are wearing sunglasses in all images.\n- Visible fact: The motorcycle is olive green.\n- Setting: City street\n- Objects/signals: Motorcycle with sidecar, Mercedes-Benz G-Class SUV, Sunglasses, Buildings, Trees, Fence, Street, Coffee cups\n- Text in image: HAPPY END\n- Text (verbatim): HAPPY END\n- Visual style: Outdoor photography, Candid shots, One image in black and white, Focus on subjects and vehicles\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3653273883800372929",
+      "status": "completed",
+      "description": "[Image ID: 3653273883800372929]\n- Visible fact: A red sports car with a black and grey stripe is parked in an underground garage.\n- Visible fact: The sports car has bright yellow brake calipers visible through its black and silver wheels.\n- Visible fact: The headlights of the red sports car are illuminated.\n- Visible fact: A light grey Mercedes-Benz G-Wagen is parked behind the red sports car, with its headlights also illuminated.\n- Visible fact: The garage features concrete pillars, exposed ductwork, and fluorescent lighting on the ceiling.\n- Visible fact: There are yellow and black striped barriers in the background of the garage.\n- Setting: Underground parking garage\n- Objects/signals: Red sports car, Mercedes-Benz G-Wagen, Concrete pillars, Ductwork, Fluorescent lights, Yellow and black striped barriers\n- Visual style: Low-light photography, Focus on luxury vehicles, Industrial background",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3294413841414487651",
+      "status": "completed",
+      "description": "[Image ID: 3294413841414487651]\n- Visible fact: A person is seated at a table in what appears to be a restaurant or cafe.\n- Visible fact: The person is wearing a dark olive green long-sleeved shirt over a light grey t-shirt and light grey trousers.\n- Visible fact: A silver-toned watch with a metal bracelet is visible on the person's left wrist.\n- Visible fact: On the table in front of the person, there is a white plate with food, including what looks like two soft-boiled eggs and a pastry.\n- Visible fact: A pink cup with a saucer and a spoon is also on the table.\n- Visible fact: A black smartphone is placed face down on the table.\n- Visible fact: In the background, there is a bar area with bottles, glasses, and staff members.\n- Visible fact: The lighting suggests an indoor evening or night setting.\n- Setting: restaurant or cafe\n- Objects/signals: person, table, chair/bench, plate, food (eggs, pastry), cup, saucer, spoon, smartphone, watch\n- Visual style: indoor photography, natural lighting, candid pose",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3746074560824084529",
+      "status": "completed",
+      "description": "[Image ID: 3746074560824084529]\n- Visible fact: A red sports car is driving on a wet, winding road through a forest.\n- Visible fact: The trees lining the road have green and yellow foliage, suggesting autumn.\n- Visible fact: The sky is visible between the trees, showing patches of blue and white clouds.\n- Visible fact: The road appears to be asphalt and is wet, possibly from rain.\n- Visible fact: The sports car has a sleek design with a white stripe down the center of its rear.\n- Setting: A forest road during autumn\n- Objects/signals: red sports car, road, trees, foliage, sky, clouds\n- Visual style: Dynamic composition with the car moving away from the viewer, Natural lighting, Vibrant colors of autumn foliage",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3436530066148335345",
+      "status": "completed",
+      "description": "[Image ID: 3436530066148335345]\n- Visible fact: A person is seated in a brown armchair, holding a cup to their mouth.\n- Visible fact: They are wearing a light green polo shirt, dark blue trousers, and beige loafers.\n- Visible fact: A small round table with a green marble-like top is next to the armchair, holding a decorative lidded jar and a white disposable cup.\n- Visible fact: An orange shopping bag with grey handles is visible in the foreground, placed on a wooden surface.\n- Visible fact: The background shows an interior space with wooden paneling, track lighting, and display shelves with various items.\n- Visible fact: Another person is partially visible in the background, standing near a counter.\n- Visible fact: A sign with the text \"BORK\" is visible in the background.\n- Setting: Indoor retail or lounge area\n- Objects/signals: armchair, cup, polo shirt, trousers, loafers, side table, decorative jar, disposable cup, shopping bag, display shelves\n- Text in image: BORK\n- Text (verbatim): BORK\n- Visual style: Warm lighting, Modern interior design, Focus on the seated person and immediate surroundings",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3401075824185124655",
+      "status": "completed",
+      "description": "[Image ID: 3401075824185124655]\n- Visible fact: A person is walking next to a white sports car.\n- Visible fact: The person is wearing a white t-shirt, grey shorts, a white cap, and a white wristband.\n- Visible fact: The cap and wristband both have a black Nike swoosh logo.\n- Visible fact: The person is holding a black smartphone and black sunglasses.\n- Visible fact: In the background, there are two people playing tennis on a red clay court.\n- Visible fact: Trees and a building with a reflective, patterned facade are also visible in the background.\n- Setting: Outdoor tennis court area with a modern building and parked sports car.\n- Objects/signals: person, white sports car, white cap, white t-shirt, grey shorts, white wristband, black smartphone, black sunglasses, tennis court, trees\n- Text (verbatim): Nike\n- Visual style: Outdoor photography, Daylight, Clear sky with some clouds",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3443821011116540023",
+      "status": "completed",
+      "description": "[Image ID: 3443821011116540023]\n- Visible fact: Two men are on a vintage military green motorcycle with a sidecar.\n- Visible fact: One man is driving the motorcycle, wearing a light-colored long-sleeved shirt and dark pants, with sunglasses tucked into his shirt pocket.\n- Visible fact: The other man is in the sidecar, wearing a white t-shirt and sunglasses, giving a thumbs-up gesture.\n- Visible fact: The motorcycle has a large round headlight and visible engine components.\n- Visible fact: The background shows a residential area with a white building, a black metal fence, and green trees and grass.\n- Visible fact: The lighting suggests it is daytime.\n- Setting: Outdoor residential street\n- Objects/signals: motorcycle, sidecar, men, sunglasses, trees, fence, building, grass\n- Visual style: Outdoor photography, Daylight, Candid shot",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3750967731777487011",
+      "status": "completed",
+      "description": "[Image ID: 3750967731777487011]\n- Visible fact: A man is speaking into a microphone on a stage.\n- Visible fact: He is wearing a black t-shirt, light-colored pants, and a light-colored sweater draped over his shoulders.\n- Visible fact: He has a silver-toned watch on his left wrist.\n- Visible fact: A red wristband is visible on his right wrist.\n- Visible fact: He is holding a dark-colored smartphone in his left hand, shielding his eyes with it.\n- Setting: stage\n- Objects/signals: man, microphone, t-shirt, pants, sweater, watch, wristband, smartphone\n- Visual style: dark background, spotlighting on the subject",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3377944961191434594",
+      "status": "completed",
+      "description": "[Image ID: 3377944961191434594]\n- Visible fact: The first image shows a modern, curved building with horizontal white louvers and glass windows, viewed from a moving vehicle.\n- Visible fact: The second image depicts an urban landscape with multiple buildings under construction, including a tall skyscraper in the background, and a paved walkway with planters and trees in the foreground.\n- Visible fact: The third image is a close-up of the tall skyscraper from the second image, showing its glass facade and the construction cranes around its pointed top.\n- Visible fact: All images are taken outdoors under a clear blue sky.\n- Visible fact: The images feature contemporary architectural styles, with a focus on large-scale buildings and urban development.\n- Setting: Urban environment with ongoing construction\n- Objects/signals: Modern curved building, Glass windows, Horizontal louvers, Guardrail, Construction sites, Skyscraper, Construction cranes, Paved walkway, Planters, Trees\n- Visual style: Outdoor photography, Clear sky lighting, Architectural focus, Urban landscape photography\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3719273968151877867",
+      "status": "completed",
+      "description": "[Image ID: 3719273968151877867]\n- Visible fact: A person is standing outdoors, partially obscured by foliage.\n- Visible fact: The person is wearing a white long-sleeved shirt and dark shorts.\n- Visible fact: They are wearing sunglasses and have one hand on their head.\n- Visible fact: The background features palm trees, lush green plants, and what appears to be a building under construction.\n- Visible fact: The ground is a dark, textured surface.\n- Visible fact: The scene is brightly lit by sunlight, casting shadows.\n- Setting: outdoor tropical environment\n- Objects/signals: person, white shirt, dark shorts, sunglasses, palm trees, green plants, building, textured ground\n- Visual style: daylight photography, natural lighting, outdoor shot, casual attire",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3668517904478945930",
+      "status": "completed",
+      "description": "[Image ID: 3668517904478945930]\n- Visible fact: A person is standing on a wooden deck of a boat, facing forward with arms crossed.\n- Visible fact: The person is wearing a light brown short-sleeved t-shirt and black shorts.\n- Visible fact: The person is barefoot.\n- Visible fact: In the background, there is a large body of blue water and a mountainous coastline.\n- Visible fact: The sky is clear blue with some faint contrails.\n- Visible fact: To the left of the person, there is a rack of dumbbells with chrome weights.\n- Setting: on a boat at sea, near a mountainous coast\n- Objects/signals: person, boat deck, water, mountains, sky, dumbbells, railing\n- Visual style: outdoor photography, daylight, clear weather",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3426707640693362658",
+      "status": "completed",
+      "description": "[Image ID: 3426707640693362658]\n- Visible fact: Two men are walking on a golf course under a clear sky with some clouds.\n- Visible fact: Both men are wearing white polo shirts, white caps, and dark shorts.\n- Visible fact: The man in the foreground is wearing white sneakers.\n- Visible fact: The man in the background is carrying two green buckets filled with golf balls and golf clubs.\n- Visible fact: There is a golf hole visible in the foreground on the right side of the image.\n- Visible fact: Trees and buildings are visible in the background.\n- Setting: golf course\n- Objects/signals: men, golf course, polo shirts, caps, shorts, sneakers, buckets, golf balls, golf clubs, golf hole\n- Visual style: daylight photography, outdoor shot, natural lighting",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3733879615291962419",
+      "status": "completed",
+      "description": "[Image ID: 3733879615291962419]\n- Visible fact: A person is wearing a white and black helmet with a clear visor.\n- Visible fact: The helmet is dirty with mud or dust.\n- Visible fact: The person's right eye is visible, looking directly at the camera.\n- Visible fact: A black jacket with a zipper is visible.\n- Visible fact: Part of a vehicle's roll cage or frame is visible.\n- Visible fact: Green trees and a blue sky are in the background.\n- Setting: Outdoors, possibly a natural or recreational area with trees.\n- Objects/signals: helmet, visor, eye, jacket, zipper, vehicle frame, trees, sky, dirt/mud\n- Visual style: Close-up shot, Natural lighting, Outdoor photography\n- Uncertainty: The exact type of vehicle is not fully visible.; The full face of the person is not visible.",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3668515366899920460",
+      "status": "completed",
+      "description": "[Image ID: 3668515366899920460]\n- Visible fact: A person is walking on a paved outdoor area.\n- Visible fact: The person is wearing a white polo shirt, black shorts, a white baseball cap, sunglasses, and white athletic shoes.\n- Visible fact: There are large green plants in planters along the walkway.\n- Visible fact: In the background, there are modern buildings with large glass windows.\n- Visible fact: One building has a sign with the letter 'V' inside a circle.\n- Visible fact: Another building has part of a brand name visible, 'UBL'.\n- Setting: Outdoor shopping area or plaza\n- Objects/signals: person, white polo shirt, black shorts, white baseball cap, sunglasses, white athletic shoes, paved walkway, green plants, modern buildings, glass windows\n- Text in image: VALENTINO | V | UBL\n- Text (verbatim): VALENTINO | V | UBL\n- Visual style: Daylight photography, Clear, bright lighting, Shadows cast on the ground from overhead structures",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    }
+  ],
+  "analysisContext": {
+    "selectedPostIds": [
+      "3825836720978630051",
+      "3789007229152945044",
+      "3622298533331354216",
+      "3297322861502466793",
+      "3900672109022341105",
+      "3877167059469876922",
+      "3881727680567837792",
+      "3829320551060222818",
+      "3639563876877562687",
+      "3535786818658211375",
+      "3269857960643658468",
+      "3447602223576672268",
+      "3440183454524882330",
+      "3891158459865688897",
+      "3772716907758397483",
+      "3420003922845366475",
+      "3443820324911801176",
+      "3653273883800372929",
+      "3294413841414487651",
+      "3746074560824084529",
+      "3436530066148335345",
+      "3401075824185124655",
+      "3443821011116540023",
+      "3750967731777487011",
+      "3377944961191434594",
+      "3719273968151877867",
+      "3668517904478945930",
+      "3426707640693362658",
+      "3733879615291962419",
+      "3668515366899920460"
+    ],
+    "postSelection": [
+      {
+        "postId": "3825836720978630051",
+        "url": "https://www.instagram.com/p/DUYGjpCk5Wj/",
+        "timestamp": "2026-02-05T12:41:39.000Z",
+        "score": 68,
+        "reasons": [
+          "recent",
+          "pinned",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3789007229152945044",
+        "url": "https://www.instagram.com/p/DSVQf_5DGOU/",
+        "timestamp": "2025-12-16T17:08:01.000Z",
+        "score": 67,
+        "reasons": [
+          "recent",
+          "pinned",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3622298533331354216",
+        "url": "https://www.instagram.com/p/DJE_VMFokJo/",
+        "timestamp": "2025-04-30T16:47:36.000Z",
+        "score": 65,
+        "reasons": [
+          "pinned",
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3297322861502466793",
+        "url": "https://www.instagram.com/p/C3CcawtoQrp/",
+        "timestamp": "2024-02-07T07:38:57.000Z",
+        "score": 65,
+        "reasons": [
+          "high_likes",
+          "high_comments",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3900672109022341105",
+        "url": "https://www.instagram.com/p/DYh-J3TjOfx/",
+        "timestamp": "2026-05-19T18:46:12.000Z",
+        "score": 53,
+        "reasons": [
+          "recent",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3877167059469876922",
+        "url": "https://www.instagram.com/p/DXOduYCjD66/",
+        "timestamp": "2026-04-17T08:25:52.000Z",
+        "score": 40,
+        "reasons": [
+          "recent",
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3881727680567837792",
+        "url": "https://www.instagram.com/p/DXeqsJbDARg/",
+        "timestamp": "2026-04-23T15:27:00.000Z",
+        "score": 38,
+        "reasons": [
+          "recent",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3829320551060222818",
+        "url": "https://www.instagram.com/p/DUkesCpDDNi/",
+        "timestamp": "2026-02-10T08:03:24.000Z",
+        "score": 36,
+        "reasons": [
+          "recent",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3639563876877562687",
+        "url": "https://www.instagram.com/p/DKCVBASoXM_/",
+        "timestamp": "2025-05-24T12:33:46.000Z",
+        "score": 36,
+        "reasons": [
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3535786818658211375",
+        "url": "https://www.instagram.com/p/DERo2DPoZYv/",
+        "timestamp": "2025-01-01T08:04:16.000Z",
+        "score": 36,
+        "reasons": [
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3269857960643658468",
+        "url": "https://www.instagram.com/p/C1g3n2iJgLk/",
+        "timestamp": "2023-12-31T10:11:06.000Z",
+        "score": 35,
+        "reasons": [
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3447602223576672268",
+        "url": "https://www.instagram.com/p/C_YV_THImgM/",
+        "timestamp": "2024-09-01T15:58:21.000Z",
+        "score": 33,
+        "reasons": [
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3440183454524882330",
+        "url": "https://www.instagram.com/p/C-9_KABIb2a/",
+        "timestamp": "2024-08-22T10:19:04.000Z",
+        "score": 33,
+        "reasons": [
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3891158459865688897",
+        "url": "https://www.instagram.com/p/DYALADFDOtB/",
+        "timestamp": "2026-05-06T15:44:17.000Z",
+        "score": 32,
+        "reasons": [
+          "recent",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3772716907758397483",
+        "url": "https://www.instagram.com/p/DRbYgn1DKgr/",
+        "timestamp": "2025-11-24T05:42:33.000Z",
+        "score": 32,
+        "reasons": [
+          "recent",
+          "format_diversity",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3420003922845366475",
+        "url": "https://www.instagram.com/p/C92S3Kno_jL/",
+        "timestamp": "2024-07-25T14:11:13.000Z",
+        "score": 31,
+        "reasons": [
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3443820324911801176",
+        "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+        "timestamp": "2024-08-27T10:43:16.000Z",
+        "score": 27,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3653273883800372929",
+        "url": "https://www.instagram.com/p/DKzCT3PIgbB/",
+        "timestamp": "2025-06-12T10:30:05.000Z",
+        "score": 26,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3294413841414487651",
+        "url": "https://www.instagram.com/p/C24G-8oo_5j/",
+        "timestamp": "2024-02-03T07:19:15.000Z",
+        "score": 26,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3746074560824084529",
+        "url": "https://www.instagram.com/p/DP8uvcsDAgx/",
+        "timestamp": "2025-10-18T11:29:44.000Z",
+        "score": 24,
+        "reasons": [
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3436530066148335345",
+        "url": "https://www.instagram.com/p/C-xAeM8uJ7x/",
+        "timestamp": "2024-08-17T09:18:49.000Z",
+        "score": 22,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3401075824185124655",
+        "url": "https://www.instagram.com/p/C8zDHFCuScv/",
+        "timestamp": "2024-06-29T11:17:34.000Z",
+        "score": 22,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3443821011116540023",
+        "url": "https://www.instagram.com/p/C_K6PaloMB3/",
+        "timestamp": "2024-08-27T10:45:18.000Z",
+        "score": 21,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3750967731777487011",
+        "url": "https://www.instagram.com/p/DQOHUdQjMCj/",
+        "timestamp": "2025-10-25T05:30:20.000Z",
+        "score": 19,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3377944961191434594",
+        "url": "https://www.instagram.com/p/C7g3wuKotli/",
+        "timestamp": "2024-05-28T13:20:40.000Z",
+        "score": 19,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3719273968151877867",
+        "url": "https://www.instagram.com/p/DOdg_fuDNjr/",
+        "timestamp": "2025-09-11T12:00:29.000Z",
+        "score": 18,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3668517904478945930",
+        "url": "https://www.instagram.com/p/DLpMZj0oMKK/",
+        "timestamp": "2025-07-03T11:17:14.000Z",
+        "score": 15,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3426707640693362658",
+        "url": "https://www.instagram.com/p/C-OHHGYpQ_i/",
+        "timestamp": "2024-08-03T20:03:25.000Z",
+        "score": 10,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3733879615291962419",
+        "url": "https://www.instagram.com/p/DPRZ7onjLQz/",
+        "timestamp": "2025-10-01T15:39:17.000Z",
+        "score": 9,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3668515366899920460",
+        "url": "https://www.instagram.com/p/DLpL0ohIa5M/",
+        "timestamp": "2025-07-03T11:12:12.000Z",
+        "score": 7,
+        "reasons": [
+          "visual_signal"
+        ]
+      }
+    ],
+    "profileSignals": {
+      "publicContacts": [],
+      "publicLinks": [
+        "https://t.me/kitinvest"
+      ],
+      "platformHandles": [
+        "@serkhitrov",
+        "@fakeev"
+      ],
+      "professionHints": [
+        "эксперт"
+      ],
+      "locationHints": [],
+      "bioKeywords": [
+        "инвестировать",
+        "олег",
+        "просто",
+        "умею",
+        "факеев",
+        "хорошо"
+      ]
+    },
+    "contentClusters": [
+      {
+        "label": "visual_identity",
+        "count": 29,
+        "postIds": [
+          "3825836720978630051",
+          "3789007229152945044",
+          "3622298533331354216",
+          "3297322861502466793",
+          "3900672109022341105",
+          "3877167059469876922",
+          "3881727680567837792",
+          "3829320551060222818"
+        ],
+        "keywords": [
+          "style",
+          "design",
+          "aesthetic",
+          "стиль",
+          "дизайн"
+        ]
+      },
+      {
+        "label": "work_and_expertise",
+        "count": 6,
+        "postIds": [
+          "3622298533331354216",
+          "3535786818658211375",
+          "3269857960643658468",
+          "3891158459865688897",
+          "3420003922845366475",
+          "3668515366899920460"
+        ],
+        "keywords": [
+          "founder",
+          "startup",
+          "business",
+          "work",
+          "career",
+          "expert",
+          "эксперт",
+          "бизнес"
+        ]
+      },
+      {
+        "label": "lifestyle_and_travel",
+        "count": 5,
+        "postIds": [
+          "3900672109022341105",
+          "3829320551060222818",
+          "3535786818658211375",
+          "3443820324911801176",
+          "3294413841414487651"
+        ],
+        "keywords": [
+          "travel",
+          "city",
+          "hotel",
+          "trip",
+          "путешествие",
+          "город"
+        ]
+      },
+      {
+        "label": "community_and_events",
+        "count": 3,
+        "postIds": [
+          "3622298533331354216",
+          "3877167059469876922",
+          "3269857960643658468"
+        ],
+        "keywords": [
+          "event",
+          "team",
+          "meetup",
+          "community",
+          "команда",
+          "мероприятие"
+        ]
+      },
+      {
+        "label": "education_and_guidance",
+        "count": 2,
+        "postIds": [
+          "3535786818658211375",
+          "3426707640693362658"
+        ],
+        "keywords": [
+          "tips",
+          "guide",
+          "howto",
+          "курс",
+          "обучение",
+          "совет"
+        ]
+      },
+      {
+        "label": "commercial_or_ads",
+        "count": 1,
+        "postIds": [
+          "3668515366899920460"
+        ],
+        "keywords": [
+          "ad",
+          "promo",
+          "brand",
+          "sale",
+          "реклама",
+          "скидка",
+          "партнер"
+        ]
+      }
+    ],
+    "audienceSignals": {
+      "frequentCommenters": [
+        {
+          "username": "danila.invest",
+          "count": 5
+        },
+        {
+          "username": "bagdagulov.alexander",
+          "count": 3
+        },
+        {
+          "username": "s.gralnik",
+          "count": 3
+        },
+        {
+          "username": "aleksei_consulting",
+          "count": 3
+        },
+        {
+          "username": "mr_stanislavsky",
+          "count": 3
+        },
+        {
+          "username": "max_fisher_x",
+          "count": 2
+        },
+        {
+          "username": "aanasttasia.pr",
+          "count": 2
+        },
+        {
+          "username": "superman_la",
+          "count": 2
+        },
+        {
+          "username": "chingiz4444",
+          "count": 2
+        },
+        {
+          "username": "lucky_777teddy",
+          "count": 2
+        }
+      ],
+      "repeatedCommentTerms": [
+        {
+          "term": "все",
+          "count": 7
+        },
+        {
+          "term": "олег",
+          "count": 6
+        },
+        {
+          "term": "bought",
+          "count": 5
+        },
+        {
+          "term": "buysocialmediagrowth",
+          "count": 5
+        },
+        {
+          "term": "com",
+          "count": 5
+        },
+        {
+          "term": "followers",
+          "count": 5
+        },
+        {
+          "term": "круто",
+          "count": 4
+        },
+        {
+          "term": "когда",
+          "count": 4
+        },
+        {
+          "term": "пожалуйста",
+          "count": 4
+        },
+        {
+          "term": "мне",
+          "count": 4
+        },
+        {
+          "term": "еще",
+          "count": 3
+        },
+        {
+          "term": "есть",
+          "count": 3
+        }
+      ],
+      "commentDensity": "medium",
+      "highCommentPostIds": [
+        "3297322861502466793",
+        "3639563876877562687",
+        "3653273883800372929",
+        "3440183454524882330",
+        "3443820324911801176"
+      ]
+    },
+    "riskSignals": [],
+    "opportunitySignals": [
+      {
+        "id": "opportunity:published_contact",
+        "type": "opportunity",
+        "label": "Published contact/channel",
+        "detail": "The profile exposes explicit public contact or link surfaces; use only respectful/public outreach.",
+        "confidence": "high",
+        "urls": [
+          "https://t.me/kitinvest"
+        ]
+      },
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3297322861502466793",
+          "3639563876877562687",
+          "3653273883800372929"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C3CcawtoQrp/",
+          "https://www.instagram.com/p/DKCVBASoXM_/",
+          "https://www.instagram.com/p/DKzCT3PIgbB/"
+        ]
+      },
+      {
+        "id": "opportunity:positioning",
+        "type": "opportunity",
+        "label": "Clear positioning surface",
+        "detail": "Verified or pinned content gives stronger first-read context than a purely chronological feed.",
+        "confidence": "medium",
+        "postIds": [
+          "3825836720978630051",
+          "3789007229152945044",
+          "3622298533331354216"
+        ]
+      }
+    ],
+    "modeGuidance": {
+      "mode": "standard",
+      "evidencePriorities": [
+        "recurring themes across selected posts",
+        "audience and comment evidence",
+        "visual/textual patterns",
+        "practical but safe communication recommendations"
+      ],
+      "scoringFocus": [
+        "specificity",
+        "source-backed hypotheses",
+        "actionability",
+        "confidence calibration"
+      ],
+      "cautionRules": [
+        "Avoid personality certainty",
+        "No harassment, doxing, pressure or privacy bypass"
+      ]
+    },
+    "evidenceMap": [
+      {
+        "id": "profile:profession_hints",
+        "type": "profile",
+        "label": "Profession/status hints",
+        "detail": "эксперт",
+        "confidence": "medium"
+      },
+      {
+        "id": "profile:published_contacts",
+        "type": "profile",
+        "label": "Published contacts/links",
+        "detail": "https://t.me/kitinvest",
+        "confidence": "high",
+        "urls": [
+          "https://t.me/kitinvest"
+        ]
+      },
+      {
+        "id": "post:3825836720978630051",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, pinned, audience_signal, visual_signal; score 68.",
+        "confidence": "high",
+        "postIds": [
+          "3825836720978630051"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DUYGjpCk5Wj/"
+        ]
+      },
+      {
+        "id": "post:3789007229152945044",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, pinned, format_diversity, audience_signal, visual_signal; score 67.",
+        "confidence": "high",
+        "postIds": [
+          "3789007229152945044"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DSVQf_5DGOU/"
+        ]
+      },
+      {
+        "id": "post:3622298533331354216",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for pinned, profile_signal, audience_signal, visual_signal; score 65.",
+        "confidence": "high",
+        "postIds": [
+          "3622298533331354216"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DJE_VMFokJo/"
+        ]
+      },
+      {
+        "id": "post:3297322861502466793",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, high_comments, audience_signal, visual_signal; score 65.",
+        "confidence": "high",
+        "postIds": [
+          "3297322861502466793"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C3CcawtoQrp/"
+        ]
+      },
+      {
+        "id": "post:3900672109022341105",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, format_diversity, audience_signal, visual_signal; score 53.",
+        "confidence": "high",
+        "postIds": [
+          "3900672109022341105"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DYh-J3TjOfx/"
+        ]
+      },
+      {
+        "id": "post:3877167059469876922",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, profile_signal, audience_signal, visual_signal; score 40.",
+        "confidence": "high",
+        "postIds": [
+          "3877167059469876922"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DXOduYCjD66/"
+        ]
+      },
+      {
+        "id": "post:3881727680567837792",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, audience_signal, visual_signal; score 38.",
+        "confidence": "high",
+        "postIds": [
+          "3881727680567837792"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DXeqsJbDARg/"
+        ]
+      },
+      {
+        "id": "post:3829320551060222818",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, audience_signal, visual_signal; score 36.",
+        "confidence": "high",
+        "postIds": [
+          "3829320551060222818"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DUkesCpDDNi/"
+        ]
+      },
+      {
+        "id": "post:3639563876877562687",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for profile_signal, audience_signal, visual_signal; score 36.",
+        "confidence": "high",
+        "postIds": [
+          "3639563876877562687"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DKCVBASoXM_/"
+        ]
+      },
+      {
+        "id": "post:3535786818658211375",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for profile_signal, audience_signal, visual_signal; score 36.",
+        "confidence": "high",
+        "postIds": [
+          "3535786818658211375"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DERo2DPoZYv/"
+        ]
+      },
+      {
+        "id": "post:3269857960643658468",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for profile_signal, audience_signal, visual_signal; score 35.",
+        "confidence": "high",
+        "postIds": [
+          "3269857960643658468"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C1g3n2iJgLk/"
+        ]
+      },
+      {
+        "id": "post:3447602223576672268",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for profile_signal, audience_signal, visual_signal; score 33.",
+        "confidence": "high",
+        "postIds": [
+          "3447602223576672268"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C_YV_THImgM/"
+        ]
+      },
+      {
+        "id": "cluster:visual_identity",
+        "type": "content_cluster",
+        "label": "visual_identity",
+        "detail": "29 selected posts match keywords: style, design, aesthetic, стиль, дизайн",
+        "confidence": "high",
+        "postIds": [
+          "3825836720978630051",
+          "3789007229152945044",
+          "3622298533331354216",
+          "3297322861502466793",
+          "3900672109022341105",
+          "3877167059469876922",
+          "3881727680567837792",
+          "3829320551060222818"
+        ]
+      },
+      {
+        "id": "cluster:work_and_expertise",
+        "type": "content_cluster",
+        "label": "work_and_expertise",
+        "detail": "6 selected posts match keywords: founder, startup, business, work, career, expert",
+        "confidence": "high",
+        "postIds": [
+          "3622298533331354216",
+          "3535786818658211375",
+          "3269857960643658468",
+          "3891158459865688897",
+          "3420003922845366475",
+          "3668515366899920460"
+        ]
+      },
+      {
+        "id": "cluster:lifestyle_and_travel",
+        "type": "content_cluster",
+        "label": "lifestyle_and_travel",
+        "detail": "5 selected posts match keywords: travel, city, hotel, trip, путешествие, город",
+        "confidence": "high",
+        "postIds": [
+          "3900672109022341105",
+          "3829320551060222818",
+          "3535786818658211375",
+          "3443820324911801176",
+          "3294413841414487651"
+        ]
+      },
+      {
+        "id": "cluster:community_and_events",
+        "type": "content_cluster",
+        "label": "community_and_events",
+        "detail": "3 selected posts match keywords: event, team, meetup, community, команда, мероприятие",
+        "confidence": "high",
+        "postIds": [
+          "3622298533331354216",
+          "3877167059469876922",
+          "3269857960643658468"
+        ]
+      },
+      {
+        "id": "cluster:education_and_guidance",
+        "type": "content_cluster",
+        "label": "education_and_guidance",
+        "detail": "2 selected posts match keywords: tips, guide, howto, курс, обучение, совет",
+        "confidence": "medium",
+        "postIds": [
+          "3535786818658211375",
+          "3426707640693362658"
+        ]
+      },
+      {
+        "id": "cluster:commercial_or_ads",
+        "type": "content_cluster",
+        "label": "commercial_or_ads",
+        "detail": "1 selected posts match keywords: ad, promo, brand, sale, реклама, скидка",
+        "confidence": "medium",
+        "postIds": [
+          "3668515366899920460"
+        ]
+      },
+      {
+        "id": "audience:frequent_commenters",
+        "type": "audience",
+        "label": "Recurring commenters",
+        "detail": "danila.invest (5), bagdagulov.alexander (3), s.gralnik (3), aleksei_consulting (3), mr_stanislavsky (3), max_fisher_x (2), aanasttasia.pr (2), superman_la (2), chingiz4444 (2), lucky_777teddy (2)",
+        "confidence": "medium"
+      },
+      {
+        "id": "audience:high_comment_posts",
+        "type": "audience",
+        "label": "High-comment posts",
+        "detail": "medium comment density across selected posts.",
+        "confidence": "medium",
+        "postIds": [
+          "3297322861502466793",
+          "3639563876877562687",
+          "3653273883800372929",
+          "3440183454524882330",
+          "3443820324911801176"
+        ]
+      },
+      {
+        "id": "opportunity:published_contact",
+        "type": "opportunity",
+        "label": "Published contact/channel",
+        "detail": "The profile exposes explicit public contact or link surfaces; use only respectful/public outreach.",
+        "confidence": "high",
+        "urls": [
+          "https://t.me/kitinvest"
+        ]
+      },
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3297322861502466793",
+          "3639563876877562687",
+          "3653273883800372929"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C3CcawtoQrp/",
+          "https://www.instagram.com/p/DKCVBASoXM_/",
+          "https://www.instagram.com/p/DKzCT3PIgbB/"
+        ]
+      },
+      {
+        "id": "opportunity:positioning",
+        "type": "opportunity",
+        "label": "Clear positioning surface",
+        "detail": "Verified or pinned content gives stronger first-read context than a purely chronological feed.",
+        "confidence": "medium",
+        "postIds": [
+          "3825836720978630051",
+          "3789007229152945044",
+          "3622298533331354216"
+        ]
+      },
+      {
+        "id": "mode:standard",
+        "type": "mode",
+        "label": "standard priorities",
+        "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+        "confidence": "high"
+      }
+    ]
+  }
+}

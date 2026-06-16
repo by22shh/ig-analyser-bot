@@ -502,8 +502,10 @@ function buildMinimalReportContext(
     sectionGuides: sectionGuidesForMode(input.mode),
     analysisHealth: analysisHealthFor(input),
     analysisContext: compactAnalysisContext(input.analysisContext),
+    evidencePack: input.evidencePack,
     qualityRules: [
       "Use only the compact profile, metrics, and analysisContext evidence in this payload.",
+      "Treat evidencePack as the authoritative compact synthesis of metadata, comments, author replies, vision, safe hooks, no-go rules, and confidence rules.",
       "Treat analysisContext.evidenceMap as prioritized deterministic signals, not as extra private data.",
       "Use analysisHealth to calibrate confidence: low sample coverage, missing vision, or missing comment text must lower certainty.",
       "Explicitly say when post-level evidence was compressed out of the context.",
@@ -590,8 +592,11 @@ function buildReportContext(
     sectionGuides: sectionGuidesForMode(input.mode),
     analysisHealth: analysisHealthFor(input),
     analysisContext: compactAnalysisContext(input.analysisContext),
+    evidencePack: input.evidencePack,
     qualityRules: [
       "Every non-obvious claim needs evidence from sourceCatalog, post metadata, comments, metrics, or vision.",
+      "Use evidencePack first for cross-post conclusions: it may summarize 100+ metadata posts even when the post table below is budget-compressed.",
+      "Use evidencePack.safeHooks and evidencePack.noGo to keep communication advice specific and safe.",
       "Use analysisContext.evidenceMap, profileSignals, contentClusters, audienceSignals, riskSignals, opportunitySignals, and modeGuidance to prioritize the strongest deterministic signals.",
       "Do not expose internal schema names (analysisContext, evidenceMap, contentClusters, profileSignals, audienceSignals, riskSignals, opportunitySignals, sourceCatalog, postIds) in user-facing prose; translate them into natural language.",
       "Use analysisHealth to calibrate confidence: if sampleCoveragePercent is below 10, frame findings as selected-post/recent-public-content signals, not whole-profile conclusions.",
@@ -667,11 +672,23 @@ function analysisHealthFor(input: ReportInput) {
   const postsWithCommentText = input.posts.filter((post) =>
     post.latestComments.some((comment) => comment.text.trim())
   ).length;
+  const authorReplyCount = input.posts.reduce(
+    (sum, post) => sum + post.latestComments.filter((comment) => comment.isAuthor).length,
+    0
+  );
+  const postsWithAuthorReplies = input.posts.filter((post) =>
+    post.latestComments.some((comment) => comment.isAuthor)
+  ).length;
 
   return {
     analyzedPosts,
+    metadataPosts: input.evidencePack?.profile.metadataPosts ?? analyzedPosts,
+    visualPosts: input.evidencePack?.profile.visualPosts ?? visionTotal,
     postsCount,
     sampleCoveragePercent,
+    metadataCoveragePercent:
+      input.evidencePack?.profile.metadataCoveragePercent ?? sampleCoveragePercent,
+    visualCoveragePercent: input.evidencePack?.profile.visualCoveragePercent,
     profilePostCoveragePercent,
     sampleCoverageLevel: sampleCoverageLevel(sampleCoveragePercent),
     visionCompleted,
@@ -683,7 +700,10 @@ function analysisHealthFor(input: ReportInput) {
     commentCoveragePercent: analyzedPosts
       ? Math.round((postsWithCommentText / analyzedPosts) * 1000) / 10
       : undefined,
-    commentTextCount
+    commentTextCount,
+    authorReplyCount: input.evidencePack?.profile.authorReplyCount ?? authorReplyCount,
+    postsWithAuthorReplies:
+      input.evidencePack?.profile.postsWithAuthorReplies ?? postsWithAuthorReplies
   };
 }
 
@@ -701,12 +721,16 @@ function sampleCoverageLevel(
 function publicReportGoal(goal: string | undefined): string | undefined {
   const trimmed = goal?.trim();
   if (!trimmed) return undefined;
-  if (INTERNAL_OPERATIONAL_GOAL_RE.test(trimmed)) return undefined;
+  if (INTERNAL_OPERATIONAL_GOAL_RE.test(trimmed) || INTERNAL_OPERATIONAL_CI_RE.test(trimmed)) {
+    return undefined;
+  }
   return trimmed;
 }
 
 const INTERNAL_OPERATIONAL_GOAL_RE =
-  /\b(?:e2e|ci|smoke|deploy(?:ment)?|pipeline|end-to-end\s+(?:eval(?:uation)?|test|smoke)|production\s+(?:eval(?:uation)?|test|smoke)|prod(?:uction)?[-\s]?e2e)\b|(?:пайплайн|депло[йя]|прод(?:овый|е)?\s+тест|e2e|сквозн(?:ой|ого)\s+тест)/iu;
+  /\b(?:e2e|smoke|deploy(?:ment)?|pipeline|end-to-end\s+(?:eval(?:uation)?|test|smoke)|production\s+(?:eval(?:uation)?|test|smoke)|prod(?:uction)?[-\s]?e2e)\b|(?:пайплайн|депло[йя]|прод(?:овый|е)?\s+тест|e2e|сквозн(?:ой|ого)\s+тест)/iu;
+
+const INTERNAL_OPERATIONAL_CI_RE = /\bCI\b/u;
 
 function structuredProvider(): ProviderPreferences | undefined {
   if (!env.LLM_STRUCTURED_OUTPUTS) return undefined;

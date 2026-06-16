@@ -2,6 +2,7 @@ export type InstagramComment = {
   ownerUsername?: string;
   text: string;
   timestamp?: string;
+  isAuthor?: boolean;
 };
 
 export type InstagramPost = {

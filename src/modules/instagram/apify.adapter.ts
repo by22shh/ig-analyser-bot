@@ -222,11 +222,17 @@ export function mapApifyItems(
     .map((item, index): InstagramPost => {
       const displayUrl = str(item.displayUrl ?? item.imageUrl);
       const comments = Array.isArray(item.latestComments)
-        ? (item.latestComments as Array<Record<string, unknown>>).slice(0, 10).map((comment) => ({
-            ownerUsername: str(comment.ownerUsername ?? comment.owner),
-            text: str(comment.text) ?? "",
-            timestamp: str(comment.timestamp)
-          }))
+        ? (item.latestComments as Array<Record<string, unknown>>).slice(0, 20).map((comment) => {
+            const ownerUsername = str(comment.ownerUsername ?? comment.owner);
+            return {
+              ownerUsername,
+              text: str(comment.text) ?? "",
+              timestamp: str(comment.timestamp),
+              isAuthor:
+                normalizeUsername(ownerUsername) === normalizeUsername(owner ?? username) ||
+                Boolean(comment.isAuthor ?? comment.isOwner)
+            };
+          })
         : [];
       return {
         id: str(item.id ?? item.shortCode) ?? `post_${index}`,
@@ -278,4 +284,8 @@ export function mapApifyItems(
     posts,
     providerDatasetId: datasetId
   };
+}
+
+function normalizeUsername(value: string | undefined): string {
+  return (value ?? "").replace(/^@/, "").trim().toLowerCase();
 }

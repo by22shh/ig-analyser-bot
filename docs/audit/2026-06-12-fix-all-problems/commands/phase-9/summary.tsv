@@ -1,0 +1,6 @@
+command	exit	log	notes
+pnpm exec vitest run tests/unit/admin.test.ts tests/unit/consent-gate.test.ts tests/unit/mini-app-auth.test.ts tests/integration/users.service.test.ts tests/unit/usage-safe.test.ts	0	security-tests.log	4 files passed; integration users.service skipped locally without DB and is enforced in CI by test:integration:db
+pnpm build	0	build.log	tsc build passed
+pnpm typecheck	0	typecheck.log	tsc --noEmit passed
+pnpm lint	0	lint.log	eslint passed
+rg -n "unsafe-inline|style=\"" public/mini-app src/mini-app -S	0	csp-inline-scan.log	no matches

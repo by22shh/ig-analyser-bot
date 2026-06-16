@@ -56,6 +56,10 @@ export type AnalysisContext = {
   audienceSignals: {
     frequentCommenters: Array<{ username: string; count: number }>;
     repeatedCommentTerms: Array<{ term: string; count: number }>;
+    authorReplies: Array<{ postId: string; url?: string; text: string; timestamp?: string }>;
+    authorReplyCount: number;
+    authorReplyPostIds: string[];
+    questionCommentPostIds: string[];
     commentDensity: "none" | "low" | "medium" | "high";
     highCommentPostIds: string[];
   };
@@ -452,17 +456,39 @@ function buildAudienceSignals(
 ): AnalysisContext["audienceSignals"] {
   const commenters = new Map<string, number>();
   const commentTerms: string[] = [];
+  const authorReplies: AnalysisContext["audienceSignals"]["authorReplies"] = [];
+  const questionCommentPostIds = new Set<string>();
   const owner = normalizeUsername(ownerUsername);
   for (const post of posts) {
     for (const comment of post.latestComments) {
-      if (comment.ownerUsername && normalizeUsername(comment.ownerUsername) !== owner)
+      const commentOwner = normalizeUsername(comment.ownerUsername ?? "");
+      const isAuthor = comment.isAuthor || (commentOwner.length > 0 && commentOwner === owner);
+      if (isAuthor) {
+        if (comment.text.trim()) {
+          authorReplies.push({
+            postId: post.id,
+            url: post.url,
+            text: comment.text.trim(),
+            timestamp: comment.timestamp
+          });
+        }
+        continue;
+      }
+      if (comment.ownerUsername && commentOwner !== owner)
         commenters.set(comment.ownerUsername, (commenters.get(comment.ownerUsername) ?? 0) + 1);
-      if (comment.ownerUsername && normalizeUsername(comment.ownerUsername) === owner) continue;
       commentTerms.push(...topTerms(comment.text, 8));
+      if (
+        /[?？]|\b(?:where|what|how|when|why|где|что|как|когда|почему|какой|какая|какие)\b/iu.test(
+          comment.text
+        )
+      ) {
+        questionCommentPostIds.add(post.id);
+      }
     }
   }
   const totalComments = posts.reduce((sum, post) => sum + post.commentsCount, 0);
   const avgComments = posts.length ? totalComments / posts.length : 0;
+  const authorReplyPostIds = unique(authorReplies.map((reply) => reply.postId));
   return {
     frequentCommenters: [...commenters.entries()]
       .sort((a, b) => b[1] - a[1])
@@ -472,6 +498,10 @@ function buildAudienceSignals(
       .sort((a, b) => b[1] - a[1])
       .slice(0, 12)
       .map(([term, count]) => ({ term, count })),
+    authorReplies: authorReplies.slice(0, 16),
+    authorReplyCount: authorReplies.length,
+    authorReplyPostIds: authorReplyPostIds.slice(0, 12),
+    questionCommentPostIds: [...questionCommentPostIds].slice(0, 12),
     commentDensity:
       avgComments === 0 ? "none" : avgComments < 3 ? "low" : avgComments < 20 ? "medium" : "high",
     highCommentPostIds: [...posts]
@@ -670,6 +700,27 @@ function audienceEvidence(signals: AnalysisContext["audienceSignals"]): Analysis
       detail: `${signals.commentDensity} comment density across selected posts.`,
       confidence: "medium",
       postIds: signals.highCommentPostIds
+    });
+  }
+  if (signals.authorReplyCount) {
+    evidence.push({
+      id: "audience:author_replies",
+      type: "audience",
+      label: "Author replies in comments",
+      detail: `${signals.authorReplyCount} visible author replies across ${signals.authorReplyPostIds.length} selected posts.`,
+      confidence: "high",
+      postIds: signals.authorReplyPostIds
+    });
+  }
+  if (signals.questionCommentPostIds.length) {
+    evidence.push({
+      id: "audience:comment_questions",
+      type: "audience",
+      label: "Question comments",
+      detail:
+        "Some visible comments ask questions; these are useful for safe, topic-specific hooks.",
+      confidence: "medium",
+      postIds: signals.questionCommentPostIds
     });
   }
   return evidence;

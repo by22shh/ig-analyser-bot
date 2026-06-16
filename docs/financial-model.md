@@ -286,6 +286,11 @@ C_photo_search = C_facecheck + C_storage + C_support
 C_chat_message = C_chat
 ```
 
+Implementation note: `ECON_STANDARD_REPORT_COST_P75_RUB` stores the provider/report p75
+cost before support reserve. `audit-economics` must add `ECON_SUPPORT_RESERVE_RUB`
+to Standard and any mode derived from Standard. This keeps support as an explicit
+line item instead of hiding it inside the measured provider cost.
+
 Required cost caps:
 
 | Cost dimension             |                       MVP cap | Why it matters                                                        |
@@ -514,7 +519,7 @@ Checks:
 - Applies `ECON_PAYMENT_FEE_RESERVE`, not only the exact YooKassa fee.
 - Applies `ECON_STARS_PAYOUT_RESERVE`, not optimistic Stars proceeds.
 - Uses `ECON_USD_TO_RUB_BUFFER` for USD-denominated provider costs.
-- Loads modeled prices for Apify, OpenRouter/LLM, FaceCheck, storage/PDF and support reserve.
+- Loads modeled prices for Apify, OpenRouter/LLM, FaceCheck, storage/PDF and adds support reserve separately.
 - Verifies that runtime caps do not exceed modeled caps.
 - Verifies that every public mode's configured `credit_units` covers p75/worst-case provider cost by `ECON_TARGET_REVENUE_MULTIPLE`.
 - Fails if a newly enabled package makes the revenue floor too low.

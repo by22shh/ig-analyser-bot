@@ -1,0 +1,5 @@
+01	targeted-security	0	docs/audit/2026-06-12-deep-product-audit/commands/phase-6/01.log
+02	audit-prod	0	docs/audit/2026-06-12-deep-product-audit/commands/phase-6/02.log
+03	typecheck	0	docs/audit/2026-06-12-deep-product-audit/commands/phase-6/03.log
+04	lint	0	docs/audit/2026-06-12-deep-product-audit/commands/phase-6/04.log
+05	secret-scan	0	docs/audit/2026-06-12-deep-product-audit/commands/phase-6/05-secret-scan.log

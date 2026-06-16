@@ -1,0 +1,41 @@
+{
+  "version": "golden-instagram-standard.v1",
+  "description": "Golden public-profile eval contract for Standard communication-oriented Instagram reports.",
+  "defaults": {
+    "requiredSections": 17,
+    "minSourceCoveragePercent": 100,
+    "minVisionCompletionPercent": 95,
+    "maxPromptLeakMatches": 0,
+    "allowRawVisionJson": false,
+    "minQualityScore": 90,
+    "minContentQualityScore": 85
+  },
+  "profiles": [
+    {
+      "username": "evachkaaaaa",
+      "minFetchedPosts": 100,
+      "mustMentionAny": ["публичн", "выборк", "комментар", "зацеп"]
+    },
+    {
+      "username": "missstaccyy",
+      "minFetchedPosts": 20,
+      "mustMentionAny": ["публичн", "визуал", "комментар", "зацеп"]
+    },
+    {
+      "username": "_daria.bers_",
+      "minFetchedPosts": 100,
+      "mustMentionAny": ["публичн", "путеше", "локац", "зацеп"]
+    },
+    {
+      "username": "fakeev",
+      "minFetchedPosts": 100,
+      "mustMentionAny": ["публичн", "выборк", "инвест", "telegram"],
+      "mustWarnForCoverage": true
+    },
+    {
+      "username": "mark.tales",
+      "minFetchedPosts": 70,
+      "mustMentionAny": ["публичн", "город", "мото", "зацеп"]
+    }
+  ]
+}

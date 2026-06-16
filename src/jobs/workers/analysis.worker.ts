@@ -15,6 +15,7 @@ import type {
 import type { LlmProvider } from "../../modules/llm/types.js";
 import { selectVisionAnalysisPosts } from "../../modules/analysis/context.js";
 import { buildStrategicReport } from "../../modules/analysis/report-builder.js";
+import { reportQualityUsageEvents } from "../../modules/analysis/quality-telemetry.js";
 import { ReportService } from "../../modules/reports/report.service.js";
 import type { VisionAnalysisItemView } from "../../modules/reports/types.js";
 import { recordUsage, recordUsageSafe } from "../../modules/observability/usage.js";
@@ -153,7 +154,7 @@ export async function processAnalysisJob(
 
       profile = await input.instagram.fetchProfile({
         username: row.targetUsername,
-        postLimit: env.ANALYSIS_POST_LIMIT ?? 30,
+        postLimit: env.ANALYSIS_METADATA_POST_LIMIT ?? 120,
         includeParentData: true
       });
       // Best-effort usage logging: a transient failure here must not throw out
@@ -211,7 +212,10 @@ export async function processAnalysisJob(
         promptVersion: strategicReport.promptVersion,
         qualityScore: strategicReport.summary.quality?.score,
         contentQualityScore: strategicReport.summary.contentQuality?.score,
-        contentQualityFindings: strategicReport.summary.contentQuality?.findings.length
+        contentQualityFindings: strategicReport.summary.contentQuality?.findings.length,
+        analysisHealth: strategicReport.summary.analysisHealth,
+        deliveryHealth: strategicReport.summary.deliveryHealth,
+        repairTelemetry: strategicReport.summary.repairTelemetry
       },
       "analysis_report_quality"
     );
@@ -229,6 +233,19 @@ export async function processAnalysisJob(
       },
       (error) => log.warn({ error, jobId: row.id }, "analysis_usage_record_failed")
     );
+    for (const event of reportQualityUsageEvents({
+      userId: row.userId,
+      analysisJobId: row.id,
+      model: strategicReport.model,
+      telemetry: strategicReport.summary.qualityTelemetry
+    })) {
+      await recordUsageSafe(input.prisma, event, (error) =>
+        log.warn(
+          { error, jobId: row.id, operation: event.operation },
+          "analysis_usage_record_failed"
+        )
+      );
+    }
 
     await updateRunningAnalysisJob(
       input.prisma,
@@ -577,7 +594,8 @@ function commentsArray(value: unknown): InstagramComment[] {
       return {
         ownerUsername: typeof record.ownerUsername === "string" ? record.ownerUsername : undefined,
         text,
-        timestamp: typeof record.timestamp === "string" ? record.timestamp : undefined
+        timestamp: typeof record.timestamp === "string" ? record.timestamp : undefined,
+        isAuthor: typeof record.isAuthor === "boolean" ? record.isAuthor : undefined
       };
     })
     .filter((item): item is InstagramComment => item != null);

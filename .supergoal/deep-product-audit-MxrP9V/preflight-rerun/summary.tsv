@@ -1,0 +1,17 @@
+0	3s	pnpm prisma:generate	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/01.log
+0	10s	pnpm audit:prod	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/02.log
+0	4s	pnpm lint	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/03.log
+0	3s	pnpm format:check	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/04.log
+0	5s	pnpm typecheck	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/05.log
+0	5s	pnpm build	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/06.log
+0	5s	pnpm test	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/07.log
+0	1s	pnpm audit-economics:defaults	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/08.log
+0	2s	DATABASE_URL=postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot DIRECT_URL=postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot pnpm exec prisma validate	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/09.log
+0	3s	pnpm exec vitest run tests/unit/retry.test.ts tests/unit/postgres-workers.test.ts tests/unit/worker-lease-guard.test.ts tests/unit/credits-release.test.ts tests/unit/user-service-race.test.ts tests/integration/credits.service.test.ts	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/10.log
+0	2s	pnpm exec vitest run tests/unit/telegram-webhook.test.ts tests/unit/analysis-start.test.ts tests/unit/analysis-keyboard.test.ts tests/unit/payments-keyboard.test.ts tests/unit/mini-app-api.test.ts tests/unit/mini-app-auth.test.ts tests/snapshots/messages.test.ts	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/11.log
+0	1s	pnpm eval-golden	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/12.log
+0	3s	pnpm exec vitest run tests/unit/report-builder.test.ts tests/unit/report-quality.test.ts tests/unit/content-quality.test.ts tests/unit/analysis-context.test.ts tests/unit/structured-output.test.ts tests/unit/grounding.test.ts tests/unit/openrouter-empty.test.ts tests/unit/practical-requirements.test.ts	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/13.log
+0	2s	pnpm exec vitest run tests/unit/apify-map.test.ts tests/unit/yookassa-adapter.test.ts tests/unit/invoice-payload.test.ts tests/unit/payment-package-visibility.test.ts tests/unit/photo-search-idempotency.test.ts tests/unit/facecheck.test.ts tests/unit/llm-request.test.ts tests/unit/openrouter-empty.test.ts tests/unit/telegram-rate-limit.test.ts	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/14.log
+0	2s	pnpm exec vitest run tests/unit/consent-gate.test.ts tests/unit/subscription-gate.test.ts tests/unit/app-ip.test.ts tests/unit/update-dedup.test.ts tests/unit/telegram-rate-limit.test.ts tests/unit/mini-app-auth.test.ts tests/unit/grounding.test.ts tests/unit/usage-safe.test.ts	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/15.log
+0	2s	pnpm exec vitest run tests/unit/economics.test.ts tests/unit/payment-package-visibility.test.ts tests/unit/background-leader.test.ts tests/unit/job-recovery.test.ts tests/unit/retention.service.test.ts	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/16.log
+0	28s	pnpm run ci	.supergoal/deep-product-audit-MxrP9V/preflight-rerun/17.log

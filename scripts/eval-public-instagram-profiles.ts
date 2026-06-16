@@ -98,7 +98,9 @@ for (const username of handles) {
       PROFILE_PROVIDER === "apify"
         ? await apify!.fetchProfile({
             username,
-            postLimit: Number(process.env.EVAL_POST_LIMIT ?? 30),
+            postLimit: Number(
+              process.env.EVAL_POST_LIMIT ?? process.env.ANALYSIS_METADATA_POST_LIMIT ?? 120
+            ),
             includeParentData: true
           })
         : await fetchPublicProfile(username, jar, csrfToken!);
@@ -315,6 +317,7 @@ function compactReport(report: Awaited<ReturnType<typeof buildStrategicReport>>)
       taggedUsers: post.taggedUsers
     })),
     vision: report.vision,
+    evidencePack: report.evidencePack,
     analysisContext: report.analysisContext
   };
 }
@@ -352,6 +355,9 @@ function summarizeResult(item: EvalProfileResult) {
     qualityFindings: report.summary.quality?.findings.length,
     contentQuality: reportContentQuality(report),
     deliveryHealth: report.summary.deliveryHealth,
+    repairTelemetry: report.summary.repairTelemetry,
+    qualityTelemetry: report.summary.qualityTelemetry,
+    evidencePackProfile: report.evidencePack?.profile,
     sourceCoverage: `${report.sections.filter((section) => section.sources.length).length}/${report.sections.length}`,
     warnings: report.summary.warnings,
     metrics: report.metrics,

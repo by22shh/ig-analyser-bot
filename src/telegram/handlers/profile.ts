@@ -85,7 +85,7 @@ export function registerProfileHandlers(bot: import("grammy").Bot<MyContext>) {
     await showSettings(ctx);
   });
 
-  bot.callbackQuery("help", async (ctx) => {
+  bot.callbackQuery(CB.HELP, async (ctx) => {
     await ctx.answerCallbackQuery();
     await showHelp(ctx);
   });

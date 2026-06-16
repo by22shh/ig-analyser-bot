@@ -1,0 +1,8 @@
+0	2s	pnpm prisma:generate	docs/audit/2026-06-12-deep-product-audit/commands/phase-1/01.log
+0	10s	pnpm audit:prod	docs/audit/2026-06-12-deep-product-audit/commands/phase-1/02.log
+0	3s	pnpm lint	docs/audit/2026-06-12-deep-product-audit/commands/phase-1/03.log
+0	3s	pnpm format:check	docs/audit/2026-06-12-deep-product-audit/commands/phase-1/04.log
+0	5s	pnpm typecheck	docs/audit/2026-06-12-deep-product-audit/commands/phase-1/05.log
+0	4s	pnpm build	docs/audit/2026-06-12-deep-product-audit/commands/phase-1/06.log
+0	4s	pnpm test	docs/audit/2026-06-12-deep-product-audit/commands/phase-1/07.log
+0	0s	pnpm audit-economics:defaults	docs/audit/2026-06-12-deep-product-audit/commands/phase-1/08.log

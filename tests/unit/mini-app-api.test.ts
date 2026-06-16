@@ -11,6 +11,7 @@ const originalEnv = {
   FEATURE_MINI_APP: env.FEATURE_MINI_APP,
   FEATURE_TELEGRAM_STARS: env.FEATURE_TELEGRAM_STARS,
   FEATURE_YOOKASSA_PAYMENTS: env.FEATURE_YOOKASSA_PAYMENTS,
+  FEATURE_OSINT_COMPLIANCE_MODE: env.FEATURE_OSINT_COMPLIANCE_MODE,
   FEATURE_REQUIRE_CHANNEL_SUB: env.FEATURE_REQUIRE_CHANNEL_SUB,
   REQUIRED_CHANNEL_ID: env.REQUIRED_CHANNEL_ID,
   TELEGRAM_BOT_TOKEN: env.TELEGRAM_BOT_TOKEN,
@@ -105,6 +106,20 @@ describe("Mini App API", () => {
 
     expect(apiRes.statusCode).toBe(404);
     expect(pageRes.statusCode).toBe(404);
+    await app.close();
+  });
+
+  it("serves Mini App HTML with a strict CSP", async () => {
+    const app = createApp({ services: makeServices() as never, bot: makeBot() as never });
+
+    const res = await app.inject({ method: "GET", url: "/mini-app" });
+
+    expect(res.statusCode).toBe(200);
+    const csp = res.headers["content-security-policy"];
+    expect(csp).toContain("style-src 'self'");
+    expect(csp).not.toContain("unsafe-inline");
+    expect(csp).toContain("img-src 'self' data:");
+    expect(csp).not.toContain("img-src 'self' data: https:");
     await app.close();
   });
 
@@ -252,6 +267,81 @@ describe("Mini App API", () => {
     await app.close();
   });
 
+  it("passes OSINT lawful-basis metadata to the analysis service", async () => {
+    env.FEATURE_OSINT_COMPLIANCE_MODE = true;
+    const services = makeServices(makeUser({ role: "compliance" }));
+    const app = createApp({ services: services as never, bot: makeBot() as never });
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/mini-app/analysis",
+      headers: {
+        "content-type": "application/json",
+        "x-mini-app-dev-user": "900000001"
+      },
+      payload: JSON.stringify({
+        username: "alice",
+        mode: "osint_compliance",
+        requestId: "osint-request-1",
+        lawfulBasisAccepted: true
+      })
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(services.analysis.startAnalysis).toHaveBeenCalledWith(
+      expect.objectContaining({
+        mode: "osint_compliance",
+        source: "mini_app",
+        requestId: "osint-request-1",
+        lawfulBasisAccepted: true,
+        idempotencyKey: "miniapp:analysis:user-id:osint-request-1"
+      })
+    );
+    await app.close();
+  });
+
+  it("strips raw section markers from Mini App report details", async () => {
+    const services = makeServices();
+    services.reports.getReportWithSections.mockResolvedValue({
+      id: "report-1",
+      mode: "standard",
+      language: "ru",
+      summary: { bullets: ["[[SECTION]] Bullet"] },
+      metrics: {},
+      artifacts: [],
+      createdAt: new Date("2026-01-01T00:00:00.000Z"),
+      expiresAt: null,
+      model: "model",
+      promptVersion: "prompt",
+      rawText: "[[SECTION]]\nОсновные темы\nConfidence: medium.",
+      analysisJob: { targetUsername: "alice" },
+      sections: [
+        {
+          id: "section-1",
+          position: 1,
+          title: "[[SECTION]] Основные темы",
+          content: "[[SECTION]] Confidence: medium.",
+          kind: null,
+          sources: []
+        }
+      ]
+    } as never);
+    const app = createApp({ services: services as never, bot: makeBot() as never });
+
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/mini-app/reports/report-1",
+      headers: { "x-mini-app-dev-user": "900000001" }
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(JSON.stringify(res.json())).not.toContain("[[SECTION]]");
+    expect(res.json().report.rawText).toContain("Основные темы");
+    expect(res.json().report.sections[0].title).toBe("Основные темы");
+    expect(res.json().report.summary.bullets).toEqual(["Bullet"]);
+    await app.close();
+  });
+
   it("treats a restricted chat member as subscribed only when is_member is true", async () => {
     env.FEATURE_REQUIRE_CHANNEL_SUB = true;
     env.REQUIRED_CHANNEL_ID = "@required";
@@ -366,6 +456,11 @@ describe("Mini App API", () => {
     expect(bootstrap.json().packages.stars).toEqual([]);
     expect(invoice.statusCode).toBe(403);
     expect(invoice.json().error.code).toBe("PAYMENT_METHOD_UNAVAILABLE");
+    expect(invoice.json().error.paymentFailure).toMatchObject({
+      category: "configuration",
+      retryable: false,
+      userAction: "choose_other_method"
+    });
     expect(services.payments.createTelegramStarsInvoiceLink).not.toHaveBeenCalled();
     await app.close();
   });

@@ -1,0 +1,303 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-13",
+  "routes": {
+    "engineering-oncall": {
+      "owner": "engineering",
+      "primary": "Sentry + OTEL alert channel",
+      "backup": "Telegram admin chat"
+    },
+    "payments-oncall": {
+      "owner": "finance",
+      "primary": "payments incident channel",
+      "backup": "engineering-oncall"
+    },
+    "ops-oncall": {
+      "owner": "operations",
+      "primary": "operations incident channel",
+      "backup": "engineering-oncall"
+    }
+  },
+  "alerts": [
+    {
+      "id": "provider.openrouter.error_rate",
+      "name": "OpenRouter error rate",
+      "description": "Reasoning, repair or chat calls fail above normal retry noise.",
+      "severity": "critical",
+      "owner": "engineering",
+      "route": "engineering-oncall",
+      "source": {
+        "type": "usage_events",
+        "query": "api_usage_events where provider='openrouter' and status='failed'"
+      },
+      "threshold": {
+        "operator": ">=",
+        "value": 5,
+        "unit": "percent",
+        "window": "15m"
+      },
+      "runbook": "docs/operations/alerts-routing.md#provider-errors",
+      "smoke": "In staging, force a mock failed usage event and verify the dashboard query crosses the 15m threshold."
+    },
+    {
+      "id": "provider.apify.error_rate",
+      "name": "Apify profile fetch error rate",
+      "description": "Instagram profile fetch provider failures exceed the accepted launch threshold.",
+      "severity": "critical",
+      "owner": "engineering",
+      "route": "engineering-oncall",
+      "source": {
+        "type": "usage_events",
+        "query": "api_usage_events where provider='apify' and status='failed'"
+      },
+      "threshold": {
+        "operator": ">=",
+        "value": 5,
+        "unit": "percent",
+        "window": "15m"
+      },
+      "runbook": "docs/operations/alerts-routing.md#provider-errors",
+      "smoke": "In staging, run an analysis against a fixture provider error and confirm Sentry/usage event visibility."
+    },
+    {
+      "id": "provider.facecheck.error_rate",
+      "name": "FaceCheck photo search error rate",
+      "description": "Photo search provider failures exceed the accepted threshold when the feature is enabled.",
+      "severity": "warning",
+      "owner": "engineering",
+      "route": "engineering-oncall",
+      "source": {
+        "type": "usage_events",
+        "query": "api_usage_events where provider='facecheck' and status='failed'"
+      },
+      "threshold": {
+        "operator": ">=",
+        "value": 5,
+        "unit": "percent",
+        "window": "15m"
+      },
+      "runbook": "docs/operations/alerts-routing.md#provider-errors",
+      "smoke": "With FEATURE_PHOTO_SEARCH enabled in staging, run one mock failed search and verify the alert query."
+    },
+    {
+      "id": "payment.failed_events",
+      "name": "Failed payment events",
+      "description": "Webhook processing failures require immediate payment ledger triage.",
+      "severity": "critical",
+      "owner": "finance",
+      "route": "payments-oncall",
+      "source": {
+        "type": "sql",
+        "query": "payment_events where processingStatus='failed'"
+      },
+      "threshold": {
+        "operator": ">",
+        "value": 0,
+        "unit": "events",
+        "window": "5m"
+      },
+      "runbook": "docs/operations/alerts-routing.md#payment-failures",
+      "smoke": "In staging, replay a malformed YooKassa fixture and verify payment_events.processingStatus='failed'."
+    },
+    {
+      "id": "payment.pending_orders_age",
+      "name": "Aged pending payment orders",
+      "description": "Pending orders are older than the expected webhook/expiration window.",
+      "severity": "warning",
+      "owner": "finance",
+      "route": "payments-oncall",
+      "source": {
+        "type": "sql",
+        "query": "payment_orders where status='pending_payment' and createdAt older than threshold"
+      },
+      "threshold": {
+        "operator": ">",
+        "value": 30,
+        "unit": "minutes",
+        "window": "10m"
+      },
+      "runbook": "docs/operations/alerts-routing.md#payment-failures",
+      "smoke": "Create a staging pending order, backdate it in a test database, and confirm the query result is non-zero."
+    },
+    {
+      "id": "queue.analysis_backlog",
+      "name": "Analysis queue backlog",
+      "description": "Queued/retrying analysis jobs exceed expected worker capacity.",
+      "severity": "warning",
+      "owner": "operations",
+      "route": "ops-oncall",
+      "source": {
+        "type": "sql",
+        "query": "analysis_jobs where status in queued/retrying and queueNextRunAt <= now"
+      },
+      "threshold": {
+        "operator": ">=",
+        "value": 20,
+        "unit": "jobs",
+        "window": "10m"
+      },
+      "runbook": "docs/operations/alerts-routing.md#queue-backlog",
+      "smoke": "Pause the staging worker, enqueue synthetic analysis jobs, and verify backlog query growth."
+    },
+    {
+      "id": "queue.photo_search_backlog",
+      "name": "Photo search queue backlog",
+      "description": "Photo search jobs are waiting beyond expected worker capacity.",
+      "severity": "warning",
+      "owner": "operations",
+      "route": "ops-oncall",
+      "source": {
+        "type": "sql",
+        "query": "photo_search_jobs where status in queued/retrying and queueNextRunAt <= now"
+      },
+      "threshold": {
+        "operator": ">=",
+        "value": 10,
+        "unit": "jobs",
+        "window": "10m"
+      },
+      "runbook": "docs/operations/alerts-routing.md#queue-backlog",
+      "smoke": "Pause the staging worker, enqueue synthetic photo search jobs, and verify backlog query growth."
+    },
+    {
+      "id": "queue.stale_leases",
+      "name": "Stale queue leases",
+      "description": "Analysis or photo-search jobs are locked past queueLockedUntil.",
+      "severity": "critical",
+      "owner": "operations",
+      "route": "ops-oncall",
+      "source": {
+        "type": "sql",
+        "query": "analysis_jobs/photo_search_jobs where queueLockedUntil < now and active status"
+      },
+      "threshold": {
+        "operator": ">",
+        "value": 0,
+        "unit": "jobs",
+        "window": "5m"
+      },
+      "runbook": "docs/operations/alerts-routing.md#queue-backlog",
+      "smoke": "In staging, create one expired locked job and confirm the stale lease query returns it."
+    },
+    {
+      "id": "report.failure_rate",
+      "name": "Report generation failure rate",
+      "description": "Final analysis jobs fail or reports are not produced after paid work.",
+      "severity": "critical",
+      "owner": "engineering",
+      "route": "engineering-oncall",
+      "source": {
+        "type": "sql",
+        "query": "analysis_jobs where status='failed' or reports missing for finished jobs"
+      },
+      "threshold": {
+        "operator": ">=",
+        "value": 3,
+        "unit": "failures",
+        "window": "30m"
+      },
+      "runbook": "docs/operations/alerts-routing.md#report-failures",
+      "smoke": "Run a staging analysis with a forced report builder failure and verify job/report state is queryable."
+    },
+    {
+      "id": "retention.failures",
+      "name": "Retention worker failures",
+      "description": "Retention cleanup loop fails and could leave expired report/payment artifacts behind.",
+      "severity": "warning",
+      "owner": "operations",
+      "route": "ops-oncall",
+      "source": {
+        "type": "logs",
+        "query": "module=retention and level=error"
+      },
+      "threshold": {
+        "operator": ">",
+        "value": 0,
+        "unit": "errors",
+        "window": "1h"
+      },
+      "runbook": "docs/operations/alerts-routing.md#retention-failures",
+      "smoke": "Run staging retention with a blocked storage delete and verify a structured error log is emitted."
+    },
+    {
+      "id": "storage.s3_upload_failures",
+      "name": "S3 artifact upload failures",
+      "description": "Report artifacts cannot be uploaded or presigned for users.",
+      "severity": "critical",
+      "owner": "engineering",
+      "route": "engineering-oncall",
+      "source": {
+        "type": "sentry",
+        "query": "S3 upload or presign exceptions from report artifact code"
+      },
+      "threshold": {
+        "operator": ">",
+        "value": 0,
+        "unit": "errors",
+        "window": "15m"
+      },
+      "runbook": "docs/operations/alerts-routing.md#storage-and-pdf",
+      "smoke": "Use staging storage credentials with a denied write policy and verify Sentry captures the upload failure."
+    },
+    {
+      "id": "pdf.render_failures",
+      "name": "PDF render failures",
+      "description": "PDF export fails or exceeds the configured render timeout.",
+      "severity": "warning",
+      "owner": "engineering",
+      "route": "engineering-oncall",
+      "source": {
+        "type": "logs",
+        "query": "pdf render failure or PDF_RENDER_TIMEOUT_SECONDS exceeded"
+      },
+      "threshold": {
+        "operator": ">=",
+        "value": 3,
+        "unit": "failures",
+        "window": "30m"
+      },
+      "runbook": "docs/operations/alerts-routing.md#storage-and-pdf",
+      "smoke": "Render a staging oversized report fixture and verify timeout/failure telemetry is visible."
+    },
+    {
+      "id": "analysis.repair_rate_high",
+      "name": "Analysis repair rate high",
+      "description": "Grounding or report-quality repair is triggered too often, indicating prompt/provider drift.",
+      "severity": "warning",
+      "owner": "engineering",
+      "route": "engineering-oncall",
+      "source": {
+        "type": "logs",
+        "query": "report_quality repair telemetry where repairTriggered=true"
+      },
+      "threshold": {
+        "operator": ">=",
+        "value": 20,
+        "unit": "percent",
+        "window": "1h"
+      },
+      "runbook": "docs/operations/alerts-routing.md#repair-rate-and-quality",
+      "smoke": "Run the golden eval in staging and confirm repair telemetry is visible in logs/eval output."
+    },
+    {
+      "id": "finance.cost_anomaly",
+      "name": "Finance cost anomaly",
+      "description": "Actual provider costs exceed modeled economics thresholds in finance reconciliation.",
+      "severity": "critical",
+      "owner": "finance",
+      "route": "payments-oncall",
+      "source": {
+        "type": "finance_reconciliation",
+        "query": "finance:reconciliation anomalies where code in provider_cost_ratio_high or actual_cost_over_model"
+      },
+      "threshold": {
+        "operator": ">",
+        "value": 0,
+        "unit": "anomalies",
+        "window": "24h"
+      },
+      "runbook": "docs/operations/alerts-routing.md#cost-anomalies",
+      "smoke": "Run finance:reconciliation against a staging fixture with high api_usage_events cost and verify anomaly count."
+    }
+  ]
+}

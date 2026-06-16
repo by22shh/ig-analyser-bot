@@ -1,0 +1,3 @@
+.env.example
+.env.production.local
+docs/audit/2026-06-12-deep-product-audit/commands/phase-6/05-secret-scan.log

@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { createApp } from "../../src/app.js";
+import { setupTelegramWebhook, TELEGRAM_ALLOWED_UPDATES } from "../../src/telegram/webhook.js";
 
 function buildApp(rowStatus: string | null) {
   const findUnique = vi.fn(async () => (rowStatus === null ? null : { status: rowStatus }));
@@ -57,5 +58,22 @@ describe("POST /telegram/webhook", () => {
     expect(res.statusCode).toBe(200);
     expect(findUnique).not.toHaveBeenCalled();
     await app.close();
+  });
+});
+
+describe("setupTelegramWebhook", () => {
+  it("sets an explicit allowed_updates allowlist", async () => {
+    const bot = {
+      init: vi.fn(async () => undefined),
+      api: { setWebhook: vi.fn(async () => undefined) }
+    };
+
+    await setupTelegramWebhook(bot as never, "https://bot.example/webhook", "secret-token");
+
+    expect(bot.init).toHaveBeenCalledOnce();
+    expect(bot.api.setWebhook).toHaveBeenCalledWith("https://bot.example/webhook", {
+      allowed_updates: [...TELEGRAM_ALLOWED_UPDATES],
+      secret_token: "secret-token"
+    });
   });
 });

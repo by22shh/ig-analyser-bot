@@ -86,7 +86,7 @@ export function registerStartHandlers(bot: import("grammy").Bot<MyContext>) {
     await renderMainMenu(ctx);
   });
 
-  bot.callbackQuery("cap", async (ctx) => {
+  bot.callbackQuery(CB.CAPABILITIES, async (ctx) => {
     const messages = t(ctx.user?.language);
     await ctx.answerCallbackQuery();
     await editOrSendHtml(ctx, messages.capabilities(), backMenuKeyboard(messages));

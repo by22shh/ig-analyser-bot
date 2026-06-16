@@ -2,13 +2,17 @@
 
 const tg = window.Telegram?.WebApp;
 
-if (tg) {
+if (telegramMethod("ready")) {
   tg.ready();
+}
+if (telegramMethod("expand", "6.0")) {
   tg.expand();
-  tg.setHeaderColor?.("secondary_bg_color");
-  tg.setBackgroundColor?.(
-    getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()
-  );
+}
+if (telegramMethod("setHeaderColor", "6.1")) {
+  tg.setHeaderColor("secondary_bg_color");
+}
+if (telegramMethod("setBackgroundColor", "6.1")) {
+  tg.setBackgroundColor(getComputedStyle(document.documentElement).getPropertyValue("--bg").trim());
 }
 
 const view = document.getElementById("view");
@@ -24,6 +28,8 @@ const state = {
   selectedSection: 0,
   chat: [],
   busy: false,
+  paymentBusy: false,
+  paymentState: null,
   error: null
 };
 
@@ -42,22 +48,34 @@ const copy = {
     openChannel: "Открыть канал",
     analyzeTitle: "Разбор Instagram-профиля",
     analyzeLead: "Профиль, сигналы, метрики, PDF и чат по готовому отчету.",
+    pdfExport: "PDF",
+    aiChat: "AI-чат",
+    signalMap: "Карта сигналов",
     username: "Username или ссылка",
     goal: "Цель анализа",
     goalPlaceholder: "Например: оценить партнёрство, кандидата, личный бренд",
     mode: "Режим",
     targetPosition: "Позиция кандидата",
+    targetPositionPlaceholder: "Например: тимлид backend",
     lawful: "Подтверждаю законное основание и безопасное использование OSINT-режима.",
     start: "Запустить анализ",
     activeJobs: "Активные задачи",
     recentJobs: "Последние задачи",
     noJobs: "Задач пока нет",
+    noJobsHint: "Запустите первый анализ, и прогресс появится здесь.",
     reports: "История отчетов",
     noReports: "История пока пустая",
+    noReportsHint: "Готовые отчеты появятся после завершения анализа.",
     sections: "Секции",
     metrics: "Метрики",
+    followers: "Подписчики",
+    posts: "Посты",
+    engagement: "Вовлечение",
+    engagementShort: "Вовлечение",
     exports: "Экспорт",
     sources: "Источники",
+    sourcesEmpty: "Источников пока нет",
+    sourceFallback: "Источник",
     chat: "Чат по отчету",
     ask: "Задать вопрос",
     question: "Вопрос по отчету",
@@ -66,8 +84,23 @@ const copy = {
     stars: "Telegram Stars",
     yookassa: "Карта / СБП",
     noPaymentMethods: "Доступных способов оплаты пока нет",
+    noPaymentMethodsHint: "Попробуйте позже или выберите оплату в Telegram-боте.",
     buy: "Купить",
     email: "Email для чека",
+    paymentStatus: "Статус оплаты",
+    paymentOpeningTitle: "Готовим оплату",
+    paymentOpening: "Создаем защищенную ссылку. Это займет пару секунд.",
+    paymentInvoiceOpened: "Счет открыт. Баланс обновится после подтверждения Telegram.",
+    paymentInvoiceFallback: "Счет открыт во внешнем окне. Вернитесь сюда после оплаты.",
+    paymentLinkOpened: "Ссылка на оплату открыта. Кредиты начислятся после подтверждения платежа.",
+    paymentPending: "Платеж ожидает подтверждения. Баланс обновится автоматически.",
+    paymentFailed: "Платеж не завершен. Попробуйте еще раз или выберите другой способ.",
+    paymentCancelled: "Платеж отменен.",
+    paymentPaid: "Оплата подтверждена. Обновляем баланс.",
+    paymentEmailRequired: "Укажите email для фискального чека перед оплатой картой или СБП.",
+    paymentUnavailable: "Этот способ оплаты сейчас недоступен.",
+    paymentRetryable: "Платежный сервис временно недоступен. Попробуйте еще раз через минуту.",
+    paymentConflict: "Платеж уже создается. Подождите несколько секунд и обновите экран.",
     settings: "Настройки",
     save: "Сохранить",
     language: "Язык",
@@ -88,8 +121,32 @@ const copy = {
     invalidUsername: "Проверьте Instagram username",
     sessionExpiredTitle: "Сессия истекла",
     sessionExpiredText: "Закройте и откройте Mini App заново.",
+    unauthorized: "Сессия Telegram не подтверждена. Откройте Mini App из Telegram заново.",
+    forbidden: "Действие сейчас недоступно для этого профиля.",
+    retryableApi: "Сервис временно недоступен. Повторите попытку через минуту.",
+    rateLimited: "Слишком много запросов. Подождите немного и повторите.",
+    requestInProgress: "Запрос уже выполняется. Дождитесь ответа.",
+    questionInvalid: "Напишите вопрос чуть подробнее.",
+    reportNotFound: "Отчет не найден или уже удален.",
+    artifactNotFound: "Файл экспорта пока недоступен.",
+    lawfulBasisRequired: "Для OSINT-режима нужно подтвердить законное основание.",
+    modeUnavailable: "Этот режим сейчас недоступен.",
+    subscriptionRequired: "Нужна подписка на канал. Подпишитесь и обновите Mini App.",
+    accountDeleted: "Профиль удален. Создайте новый профиль через Telegram-бота.",
+    consentRequired: "Сначала примите правила безопасного использования.",
     error: "Что-то пошло не так",
-    loading: "Загрузка"
+    loading: "Загрузка",
+    jobStatuses: {
+      queued: "В очереди",
+      fetching_profile: "Сбор профиля",
+      analyzing_images: "Анализ фото",
+      generating_report: "Готовим отчет",
+      generating_exports: "Готовим экспорт",
+      retrying: "Повторяем",
+      completed: "Готово",
+      failed: "Ошибка",
+      cancelled: "Отменено"
+    }
   },
   en: {
     tabs: { analyze: "Analyze", reports: "Reports", credits: "Credits", settings: "Profile" },
@@ -105,22 +162,34 @@ const copy = {
     openChannel: "Open channel",
     analyzeTitle: "Instagram Profile Analysis",
     analyzeLead: "Profile signals, metrics, PDF export, and report chat.",
+    pdfExport: "PDF",
+    aiChat: "AI chat",
+    signalMap: "Signal map",
     username: "Username or link",
     goal: "Analysis goal",
     goalPlaceholder: "For example: evaluate a partnership, candidate, or personal brand",
     mode: "Mode",
     targetPosition: "Candidate position",
+    targetPositionPlaceholder: "For example: senior backend engineer",
     lawful: "I confirm lawful basis and safe use of OSINT mode.",
     start: "Start analysis",
     activeJobs: "Active jobs",
     recentJobs: "Recent jobs",
     noJobs: "No jobs yet",
+    noJobsHint: "Start an analysis and progress will appear here.",
     reports: "Report history",
     noReports: "History is empty",
+    noReportsHint: "Completed reports will appear after analysis finishes.",
     sections: "Sections",
     metrics: "Metrics",
+    followers: "Followers",
+    posts: "Posts",
+    engagement: "Engagement",
+    engagementShort: "Engagement",
     exports: "Exports",
     sources: "Sources",
+    sourcesEmpty: "No sources yet",
+    sourceFallback: "Source",
     chat: "Report chat",
     ask: "Ask",
     question: "Question about the report",
@@ -129,8 +198,23 @@ const copy = {
     stars: "Telegram Stars",
     yookassa: "Card / SBP",
     noPaymentMethods: "No payment methods are available yet",
+    noPaymentMethodsHint: "Try again later or use payment in the Telegram bot.",
     buy: "Buy",
     email: "Receipt email",
+    paymentStatus: "Payment status",
+    paymentOpeningTitle: "Preparing payment",
+    paymentOpening: "Creating a secure payment link. This takes a few seconds.",
+    paymentInvoiceOpened: "Invoice opened. Balance will update after Telegram confirms payment.",
+    paymentInvoiceFallback: "Invoice opened externally. Return here after payment.",
+    paymentLinkOpened: "Payment link opened. Credits will be granted after confirmation.",
+    paymentPending: "Payment is waiting for confirmation. Balance will update automatically.",
+    paymentFailed: "Payment was not completed. Try again or choose another method.",
+    paymentCancelled: "Payment cancelled.",
+    paymentPaid: "Payment confirmed. Refreshing balance.",
+    paymentEmailRequired: "Enter a receipt email before paying by card or SBP.",
+    paymentUnavailable: "This payment method is unavailable right now.",
+    paymentRetryable: "The payment provider is temporarily unavailable. Try again in a minute.",
+    paymentConflict: "Payment is already being created. Wait a few seconds and refresh.",
     settings: "Settings",
     save: "Save",
     language: "Language",
@@ -151,8 +235,32 @@ const copy = {
     invalidUsername: "Check Instagram username",
     sessionExpiredTitle: "Session expired",
     sessionExpiredText: "Close and reopen the Mini App.",
+    unauthorized: "Telegram session is not verified. Reopen the Mini App from Telegram.",
+    forbidden: "This action is unavailable for this profile right now.",
+    retryableApi: "The service is temporarily unavailable. Try again in a minute.",
+    rateLimited: "Too many requests. Wait a bit and try again.",
+    requestInProgress: "A request is already in progress. Wait for the answer.",
+    questionInvalid: "Write a slightly more detailed question.",
+    reportNotFound: "Report was not found or has already been deleted.",
+    artifactNotFound: "Export file is not available yet.",
+    lawfulBasisRequired: "OSINT mode requires lawful basis confirmation.",
+    modeUnavailable: "This mode is unavailable right now.",
+    subscriptionRequired: "Channel subscription is required. Subscribe and refresh the Mini App.",
+    accountDeleted: "Profile is deleted. Create a new profile via the Telegram bot.",
+    consentRequired: "Accept the safe-use rules first.",
     error: "Something went wrong",
-    loading: "Loading"
+    loading: "Loading",
+    jobStatuses: {
+      queued: "Queued",
+      fetching_profile: "Fetching profile",
+      analyzing_images: "Analyzing media",
+      generating_report: "Building report",
+      generating_exports: "Preparing exports",
+      retrying: "Retrying",
+      completed: "Completed",
+      failed: "Failed",
+      cancelled: "Cancelled"
+    }
   }
 };
 
@@ -358,12 +466,18 @@ function renderSubscription() {
 function renderAnalyze() {
   const boot = state.boot;
   const activeJobs = boot.jobs.filter((job) => job.active);
+  const standardCost = Number(formatCredits(boot.costs.standard));
+  const heroMeta = [
+    `${formatCredits(boot.costs.standard)} ${creditWord(standardCost)}`,
+    t("pdfExport"),
+    t("aiChat")
+  ].join(" · ");
   view.innerHTML = `
     <div class="stack">
       <section class="hero-panel">
         <div class="hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow">${formatCredits(boot.costs.standard)} credit · PDF · AI chat</p>
+            <p class="eyebrow">${heroMeta}</p>
             <h1>${t("analyzeTitle")}</h1>
             <p>${t("analyzeLead")}</p>
           </div>
@@ -374,8 +488,8 @@ function renderAnalyze() {
               <span class="ghost-row"></span>
             </div>
             <div class="signal-card">
-              <strong>Signal map</strong>
-              <div class="signal-bars"><i style="width: 86%"></i><i></i><i></i></div>
+              <strong>${t("signalMap")}</strong>
+              <div class="signal-bars"><i class="w-86"></i><i></i><i></i></div>
             </div>
           </div>
         </div>
@@ -399,7 +513,7 @@ function renderAnalyze() {
           </div>
           <label class="field ${state.selectedMode === "hr" ? "" : "hidden"}">
             <span class="label">${t("targetPosition")}</span>
-            <input class="input" name="targetPosition" placeholder="Senior backend engineer" />
+            <input class="input" name="targetPosition" placeholder="${t("targetPositionPlaceholder")}" />
           </label>
           <label class="checkbox-row ${state.selectedMode === "osint_compliance" ? "" : "hidden"}">
             <input type="checkbox" name="lawfulBasisAccepted" />
@@ -417,7 +531,7 @@ function renderAnalyze() {
           <h2>${activeJobs.length ? t("activeJobs") : t("recentJobs")}</h2>
           <span class="badge">${boot.jobs.length}</span>
         </div>
-        ${boot.jobs.length ? `<div class="list">${boot.jobs.slice(0, 5).map(jobItem).join("")}</div>` : empty(t("noJobs"))}
+        ${boot.jobs.length ? `<div class="list">${boot.jobs.slice(0, 5).map(jobItem).join("")}</div>` : empty(t("noJobs"), t("noJobsHint"))}
       </section>
     </div>
   `;
@@ -433,7 +547,7 @@ function renderReports() {
           <h1>${t("reports")}</h1>
           <button class="button secondary" type="button" data-action="refresh">↻</button>
         </div>
-        ${reports.length ? `<div class="list">${reports.map(reportItem).join("")}</div>` : empty(t("noReports"))}
+        ${reports.length ? `<div class="list">${reports.map(reportItem).join("")}</div>` : empty(t("noReports"), t("noReportsHint"))}
       </section>
     </div>
   `;
@@ -458,9 +572,9 @@ function renderReportDetail() {
       <section class="panel">
         <h2>${t("metrics")}</h2>
         <div class="grid-3">
-          ${metric("Followers", number(metrics.followersCount))}
-          ${metric("ER", percent(metrics.engagementRate))}
-          ${metric("Posts", number(metrics.analyzedPosts))}
+          ${metric(t("followers"), number(metrics.followersCount))}
+          ${metric(t("engagement"), percent(metrics.engagementRate))}
+          ${metric(t("posts"), number(metrics.analyzedPosts))}
         </div>
       </section>
 
@@ -556,7 +670,8 @@ function renderCredits() {
         </div>
       </section>
 
-      ${paymentSections || `<section class="panel">${empty(t("noPaymentMethods"))}</section>`}
+      ${paymentStatusBlock()}
+      ${paymentSections || `<section class="panel">${empty(t("noPaymentMethods"), t("noPaymentMethodsHint"))}</section>`}
     </div>
   `;
 }
@@ -679,17 +794,29 @@ async function saveSettings(form) {
 }
 
 async function buyStars(packageCode) {
-  const result = await api("/api/mini-app/payments/stars", {
-    method: "POST",
-    body: JSON.stringify({ packageCode, requestId: requestId() })
-  });
-  if (tg?.openInvoice) {
-    tg.openInvoice(result.invoice.invoiceUrl, () => {
-      toastMessage(t("paid"));
-      setTimeout(() => void loadBootstrapAndRender().catch(handleError), 1200);
+  if (!packageCode) {
+    setPaymentState("error", t("paymentStatus"), t("paymentUnavailable"));
+    return;
+  }
+  state.paymentBusy = true;
+  setPaymentState("pending", t("paymentOpeningTitle"), t("paymentOpening"), { toast: false });
+  try {
+    const result = await api("/api/mini-app/payments/stars", {
+      method: "POST",
+      body: JSON.stringify({ packageCode, requestId: requestId() })
     });
-  } else {
-    openExternal(result.invoice.invoiceUrl);
+    const invoiceUrl = result.invoice?.invoiceUrl;
+    if (!invoiceUrl) throw apiLikeError("PAYMENT_PROVIDER_UNAVAILABLE", 502);
+    if (telegramMethod("openInvoice", "6.1")) {
+      tg.openInvoice(invoiceUrl, (status) => handleInvoiceStatus(status));
+      setPaymentState("pending", t("paymentStatus"), t("paymentInvoiceOpened"));
+    } else {
+      openExternal(invoiceUrl);
+      setPaymentState("pending", t("paymentStatus"), t("paymentInvoiceFallback"));
+    }
+  } finally {
+    state.paymentBusy = false;
+    render();
   }
 }
 
@@ -699,13 +826,33 @@ async function buyYooKassa(form, submitter) {
     button?.dataset.package ||
     form.dataset.submitterPackage ||
     state.boot.packages.yookassa[0]?.code;
-  const email = String(new FormData(form).get("email") || "");
-  const result = await api("/api/mini-app/payments/yookassa", {
-    method: "POST",
-    body: JSON.stringify({ packageCode, email, requestId: requestId() })
-  });
-  state.boot.user = result.user || state.boot.user;
-  openExternal(result.order.confirmationUrl);
+  if (!packageCode) {
+    setPaymentState("error", t("paymentStatus"), t("paymentUnavailable"));
+    return;
+  }
+  const email = String(new FormData(form).get("email") || "").trim();
+  if (state.boot.features.yookassaReceipts && !email) {
+    setPaymentState("error", t("paymentStatus"), t("paymentEmailRequired"));
+    document.querySelector("#yookassaForm input[name='email']")?.focus();
+    haptic("error");
+    return;
+  }
+  state.paymentBusy = true;
+  setPaymentState("pending", t("paymentOpeningTitle"), t("paymentOpening"), { toast: false });
+  try {
+    const result = await api("/api/mini-app/payments/yookassa", {
+      method: "POST",
+      body: JSON.stringify({ packageCode, email, requestId: requestId() })
+    });
+    state.boot.user = result.user || state.boot.user;
+    const confirmationUrl = result.order?.confirmationUrl;
+    if (!confirmationUrl) throw apiLikeError("PAYMENT_PROVIDER_UNAVAILABLE", 502);
+    openExternal(confirmationUrl);
+    setPaymentState("pending", t("paymentStatus"), t("paymentLinkOpened"));
+  } finally {
+    state.paymentBusy = false;
+    render();
+  }
 }
 
 async function downloadArtifact(path, type) {
@@ -752,10 +899,17 @@ async function loadBootstrapAndRender() {
 async function api(path, options = {}) {
   const response = await fetchAuth(path, options);
   const text = await response.text();
-  const json = text ? JSON.parse(text) : {};
+  let json = {};
+  try {
+    json = text ? JSON.parse(text) : {};
+  } catch {
+    json = {};
+  }
   if (!response.ok || json.ok === false) {
-    const error = new Error(json.error?.code || "API_ERROR");
-    error.details = json.error;
+    const error = new Error(json.error?.code || httpErrorCode(response.status));
+    error.status = response.status;
+    error.details = json.error || {};
+    error.retryable = Boolean(json.error?.paymentFailure?.retryable) || response.status >= 500;
     throw error;
   }
   return json;
@@ -801,8 +955,8 @@ function modeButtons() {
 function jobItem(job) {
   const progress = Math.max(0, Math.min(100, Number(job.progressPercent || 0)));
   const badge = job.active
-    ? `<span class="badge warning">${esc(job.stage || job.status)}</span>`
-    : `<span class="badge success">${esc(job.status)}</span>`;
+    ? `<span class="badge warning">${esc(jobStatusText(job.stage || job.status))}</span>`
+    : `<span class="badge success">${esc(jobStatusText(job.status))}</span>`;
   return `
     <button class="item" type="button" ${job.reportId ? `data-action="open-report" data-id="${job.reportId}"` : ""}>
       <div class="item-head">
@@ -810,7 +964,7 @@ function jobItem(job) {
         ${badge}
       </div>
       <span class="item-meta">${modeTitle(job.mode)} · ${dateShort(job.createdAt)}</span>
-      <div class="progress"><span style="width:${progress}%"></span></div>
+      <div class="progress"><span class="${progressWidthClass(progress)}"></span></div>
     </button>
   `;
 }
@@ -824,10 +978,15 @@ function reportItem(report) {
         <span class="item-title">@${esc(report.username)}</span>
         <span class="badge">${modeTitle(report.mode)}</span>
       </div>
-      <span class="item-meta">${dateShort(report.createdAt)} · ER ${percent(metrics.engagementRate)}</span>
+      <span class="item-meta">${dateShort(report.createdAt)} · ${t("engagementShort")} ${percent(metrics.engagementRate)}</span>
       ${bullets.length ? `<span class="item-meta">${bullets.map(esc).join(" · ")}</span>` : ""}
     </button>
   `;
+}
+
+function progressWidthClass(value) {
+  const bucket = Math.max(0, Math.min(100, Math.round(Number(value || 0) / 5) * 5));
+  return `w-${bucket}`;
 }
 
 function packageCard(pkg, provider, submit = false) {
@@ -838,7 +997,7 @@ function packageCard(pkg, provider, submit = false) {
       : `data-package="${pkg.code}"`;
   const type = submit ? "submit" : "button";
   return `
-    <button class="item" type="${type}" ${action}>
+    <button class="item" type="${type}" ${action} ${state.paymentBusy ? "disabled" : ""}>
       <div class="item-head">
         <span class="item-title">${esc(pkg.title)}</span>
         <span class="badge">${amount}</span>
@@ -858,7 +1017,7 @@ function artifactButton(artifact) {
 
 function sourcesBlock(report) {
   const sources = collectSources(report).slice(0, 20);
-  if (!sources.length) return empty("No sources");
+  if (!sources.length) return empty(t("sourcesEmpty"));
   return `<div class="list">${sources
     .map((source) =>
       source.url
@@ -874,7 +1033,7 @@ function collectSources(report) {
     if (!Array.isArray(section.sources)) continue;
     for (const source of section.sources) {
       if (!source || typeof source !== "object") continue;
-      const label = source.label || source.postId || "Source";
+      const label = source.label || source.postId || t("sourceFallback");
       const url = source.url || "";
       const key = `${label}:${url}`;
       if (!sources.some((item) => item.key === key)) sources.push({ key, label, url });
@@ -891,8 +1050,52 @@ function metric(label, value) {
   return `<div class="metric"><span>${esc(label)}</span><strong>${esc(String(value ?? "—"))}</strong></div>`;
 }
 
-function empty(text) {
-  return `<div class="empty-state"><p>${esc(text)}</p></div>`;
+function empty(text, detail = "") {
+  return `<div class="empty-state"><strong>${esc(text)}</strong>${detail ? `<p>${esc(detail)}</p>` : ""}</div>`;
+}
+
+function paymentStatusBlock() {
+  if (!state.paymentState) return "";
+  return `
+    <section class="panel notice ${state.paymentState.tone}">
+      <span class="label">${t("paymentStatus")}</span>
+      <strong>${esc(state.paymentState.title)}</strong>
+      <p>${esc(state.paymentState.message)}</p>
+    </section>
+  `;
+}
+
+function setPaymentState(tone, title, message, options = {}) {
+  state.paymentState = { tone, title, message };
+  if (state.tab === "credits") render();
+  if (options.toast !== false) toastMessage(message);
+}
+
+function handleInvoiceStatus(status) {
+  if (status === "paid") {
+    setPaymentState("success", t("paymentStatus"), t("paymentPaid"));
+    haptic("success");
+    setTimeout(() => void loadBootstrapAndRender().catch(handleError), 1200);
+    return;
+  }
+  if (status === "cancelled") {
+    setPaymentState("warning", t("paymentStatus"), t("paymentCancelled"));
+    return;
+  }
+  if (status === "failed") {
+    setPaymentState("error", t("paymentStatus"), t("paymentFailed"));
+    haptic("error");
+    return;
+  }
+  setPaymentState("pending", t("paymentStatus"), t("paymentPending"));
+}
+
+function apiLikeError(code, status) {
+  const error = new Error(code);
+  error.status = status;
+  error.details = { code };
+  error.retryable = status >= 500;
+  return error;
 }
 
 function modeTitle(mode) {
@@ -902,6 +1105,10 @@ function modeTitle(mode) {
 
 function t(key) {
   return copy[lang()][key] || copy.ru[key] || key;
+}
+
+function jobStatusText(value) {
+  return copy[lang()].jobStatuses[value] || copy.ru.jobStatuses[value] || value;
 }
 
 function lang() {
@@ -972,9 +1179,12 @@ function handleError(error) {
     return;
   }
   const code = error?.message || "";
-  if (code === "INSUFFICIENT_CREDITS") toastMessage(t("insufficient"));
-  else if (code === "USERNAME_INVALID") toastMessage(t("invalidUsername"));
-  else toastMessage(t("error"));
+  const message = userMessageForError(error);
+  if (isPaymentErrorCode(code)) {
+    setPaymentState(error?.retryable ? "warning" : "error", t("paymentStatus"), message);
+  } else {
+    toastMessage(message);
+  }
   haptic("error");
 }
 
@@ -983,7 +1193,7 @@ function showFatal(error) {
     handleSessionExpired();
     return;
   }
-  view.innerHTML = `<section class="gate panel"><h1>${t("error")}</h1><p>${esc(error?.message || "BOOT_FAILED")}</p><button class="button" type="button" data-action="refresh">↻</button></section>`;
+  view.innerHTML = `<section class="gate panel"><h1>${t("error")}</h1><p>${esc(userMessageForError(error))}</p><button class="button" type="button" data-action="refresh">↻</button></section>`;
 }
 
 function isSessionExpiredError(error) {
@@ -1001,7 +1211,7 @@ function handleSessionExpired() {
 function openExternal(url) {
   const safeUrl = safeExternalUrl(url);
   if (!safeUrl) return;
-  if (tg?.openLink) tg.openLink(safeUrl);
+  if (telegramMethod("openLink", "6.1")) tg.openLink(safeUrl);
   else window.open(safeUrl, "_blank", "noopener,noreferrer");
 }
 
@@ -1015,6 +1225,7 @@ function safeExternalUrl(value) {
 }
 
 function haptic(type) {
+  if (!telegramSupports("6.1")) return;
   if (type === "success") tg?.HapticFeedback?.notificationOccurred?.("success");
   if (type === "error") tg?.HapticFeedback?.notificationOccurred?.("error");
 }
@@ -1022,4 +1233,66 @@ function haptic(type) {
 function requestId() {
   if (crypto.randomUUID) return crypto.randomUUID();
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function userMessageForError(error) {
+  const code = error?.message || "";
+  if (code === "INSUFFICIENT_CREDITS") return t("insufficient");
+  if (code === "USERNAME_INVALID") return t("invalidUsername");
+  if (code === "EMAIL_REQUIRED") return t("paymentEmailRequired");
+  if (code === "PAYMENT_METHOD_UNAVAILABLE") return t("paymentUnavailable");
+  if (code === "PAYMENT_PACKAGE_UNAVAILABLE") return t("paymentUnavailable");
+  if (code === "PAYMENT_PROVIDER_UNAVAILABLE") return t("paymentRetryable");
+  if (code === "PAYMENT_REQUEST_CONFLICT") return t("paymentConflict");
+  if (code === "REQUEST_IN_PROGRESS") return t("requestInProgress");
+  if (code === "QUESTION_INVALID") return t("questionInvalid");
+  if (code === "REPORT_NOT_FOUND") return t("reportNotFound");
+  if (code === "ARTIFACT_NOT_FOUND") return t("artifactNotFound");
+  if (code === "ARTIFACT_INVALID") return t("artifactNotFound");
+  if (code === "LAWFUL_BASIS_REQUIRED") return t("lawfulBasisRequired");
+  if (code === "MODE_UNAVAILABLE") return t("modeUnavailable");
+  if (code === "MODE_INVALID") return t("modeUnavailable");
+  if (code === "SUBSCRIPTION_REQUIRED") return t("subscriptionRequired");
+  if (code === "ACCOUNT_DELETED") return t("accountDeleted");
+  if (code === "CONSENT_REQUIRED") return t("consentRequired");
+  if (error?.status === 401) return t("unauthorized");
+  if (error?.status === 403) return t("forbidden");
+  if (error?.status === 429) return t("rateLimited");
+  if (error?.retryable || error?.status >= 500) return t("retryableApi");
+  return t("error");
+}
+
+function isPaymentErrorCode(code) {
+  return (
+    code === "EMAIL_REQUIRED" ||
+    code === "PAYMENT_METHOD_UNAVAILABLE" ||
+    code === "PAYMENT_PACKAGE_UNAVAILABLE" ||
+    code === "PAYMENT_PROVIDER_UNAVAILABLE" ||
+    code === "PAYMENT_REQUEST_CONFLICT"
+  );
+}
+
+function httpErrorCode(status) {
+  if (status === 401) return "UNAUTHORIZED";
+  if (status === 403) return "FORBIDDEN";
+  if (status === 404) return "NOT_FOUND";
+  if (status === 429) return "RATE_LIMITED";
+  if (status >= 500) return "SERVICE_UNAVAILABLE";
+  return "API_ERROR";
+}
+
+function telegramMethod(name, minVersion = "0") {
+  return Boolean(tg && typeof tg[name] === "function" && telegramSupports(minVersion));
+}
+
+function telegramSupports(minVersion) {
+  const current = versionParts(tg?.version || "0");
+  const required = versionParts(minVersion);
+  if (current.major !== required.major) return current.major > required.major;
+  return current.minor >= required.minor;
+}
+
+function versionParts(value) {
+  const [major = "0", minor = "0"] = String(value).split(".");
+  return { major: Number(major) || 0, minor: Number(minor) || 0 };
 }

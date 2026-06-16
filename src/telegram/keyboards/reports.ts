@@ -7,12 +7,12 @@ export function reportActionsKeyboard(messages: LocaleMessages, reportId: string
     .text(messages.buttons.sections, `${CB.REPORT_SECTIONS}:${reportId}`)
     .text(messages.buttons.pdf, `${CB.REPORT_PDF}:${reportId}`)
     .row()
-    .text(messages.buttons.markdown, `${CB.REPORT_MARKDOWN}:${reportId}`)
     .text(messages.buttons.chat, `${CB.REPORT_CHAT}:${reportId}`)
+    .text(messages.buttons.repeat, `${CB.REPORT_OPEN}:${reportId}:repeat`)
     .row()
     .text(messages.buttons.sources, `${CB.REPORT_SOURCES}:${reportId}`)
+    .text(messages.buttons.markdown, `${CB.REPORT_MARKDOWN}:${reportId}`)
     .row()
-    .text(messages.buttons.repeat, `${CB.REPORT_OPEN}:${reportId}:repeat`)
     .text(messages.buttons.menu, CB.BACK_MAIN);
 }
 
@@ -30,6 +30,9 @@ export function sectionListKeyboard(
   }
   return kb
     .text(messages.buttons.pdf, `${CB.REPORT_PDF}:${reportId}`)
+    .text(messages.buttons.chat, `${CB.REPORT_CHAT}:${reportId}`)
+    .row()
+    .text(messages.buttons.sources, `${CB.REPORT_SOURCES}:${reportId}`)
     .text(messages.buttons.menu, CB.BACK_MAIN);
 }
 
@@ -59,5 +62,20 @@ export function reportChatKeyboard(messages: LocaleMessages, reportId: string): 
     .text(messages.chatQuick.portraitLabel, `${CB.CHAT_QUICK}:${reportId}:portrait`)
     .row()
     .text(messages.buttons.pdf, `${CB.REPORT_PDF}:${reportId}`)
+    .text(messages.buttons.toReport, `${CB.REPORT_SECTIONS}:${reportId}`)
+    .row()
+    .text(messages.buttons.menu, CB.BACK_MAIN);
+}
+
+export function reportChatAnswerKeyboard(
+  messages: LocaleMessages,
+  reportId: string
+): InlineKeyboard {
+  return new InlineKeyboard()
+    .text(messages.buttons.moreQuestion, `${CB.REPORT_CHAT}:${reportId}`)
+    .row()
+    .text(messages.buttons.pdf, `${CB.REPORT_PDF}:${reportId}`)
+    .text(messages.buttons.toReport, `${CB.REPORT_SECTIONS}:${reportId}`)
+    .row()
     .text(messages.buttons.menu, CB.BACK_MAIN);
 }

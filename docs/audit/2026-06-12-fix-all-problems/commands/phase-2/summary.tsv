@@ -1,0 +1,5 @@
+01	tests	0	docs/audit/2026-06-12-fix-all-problems/commands/phase-2/01-tests.log
+02	audit-economics-defaults	0	docs/audit/2026-06-12-fix-all-problems/commands/phase-2/02-audit-economics-defaults.log
+03	typecheck	0	docs/audit/2026-06-12-fix-all-problems/commands/phase-2/03-typecheck.log
+04	lint	0	docs/audit/2026-06-12-fix-all-problems/commands/phase-2/04-lint.log
+05	old-underpriced-scenario	1-expected	docs/audit/2026-06-12-fix-all-problems/commands/phase-2/05-old-underpriced-scenario.log

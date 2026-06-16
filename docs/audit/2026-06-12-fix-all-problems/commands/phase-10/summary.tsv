@@ -1,0 +1,6 @@
+command	exit	log	notes
+pnpm exec vitest run tests/unit/report-builder.test.ts tests/unit/report-quality.test.ts tests/unit/content-quality.test.ts tests/unit/analysis-context.test.ts tests/unit/grounding.test.ts	0	quality-tests.log	52 tests passed
+pnpm eval-golden	0	eval-golden.log	Golden eval passed for 5 profiles in docs/research/2026-06-12-instagram-profile-eval-current-code-live
+pnpm typecheck	0	typecheck.log	tsc --noEmit passed
+pnpm lint	0	lint.log	eslint passed
+pnpm eval:fly-checklist -- ig-analyser-bot	0	fly-live-eval-checklist.log	checklist printed deploy plus Fly live eval requirement

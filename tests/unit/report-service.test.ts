@@ -62,12 +62,18 @@ describe("ReportService", () => {
 
   it("renders report warnings and post-ID-only sources into downloadable artifacts", () => {
     const report = minimalReport();
-    report.summary.warnings = ["Quality flags: score 72/100, 4 medium/high findings"];
+    report.summary.executiveSummary = "[[SECTION]] Executive Summary";
+    report.summary.bullets = ["[[SECTION]] Summary"];
+    report.summary.warnings = ["[[SECTION]] Quality flags: score 72/100, 4 medium/high findings"];
+    report.sections[0]!.title = "[[SECTION]] Section";
+    report.sections[0]!.content = "[[SECTION]] Content";
     report.sections[0]!.sources = [{ postId: "p1", label: "post-only evidence" }];
 
     const markdown = renderReportMarkdown(report);
     const html = renderReportHtml(report);
 
+    expect(markdown).not.toContain("[[SECTION]]");
+    expect(html).not.toContain("[[SECTION]]");
     expect(markdown).toContain("## Quality Warnings");
     expect(markdown).toContain("## Analysis Health");
     expect(markdown).toContain("Comment coverage: 1/1 posts (100%)");
@@ -95,15 +101,21 @@ function minimalReport(): StrategicReportView {
       analysisHealth: {
         formatLabel: "near-full public-post read",
         analyzedPosts: 1,
+        metadataPosts: 1,
+        visualPosts: 1,
         postsCount: 1,
         sampleCoveragePercent: 100,
+        metadataCoveragePercent: 100,
+        visualCoveragePercent: 100,
         sampleCoverageLevel: "near_full",
         visionCompleted: 1,
         visionTotal: 1,
         visionCompletionPercent: 100,
         postsWithCommentText: 1,
         commentCoveragePercent: 100,
-        commentTextCount: 1
+        commentTextCount: 1,
+        postsWithAuthorReplies: 0,
+        authorReplyCount: 0
       }
     },
     metrics: {

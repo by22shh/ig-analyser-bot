@@ -75,6 +75,9 @@ export async function renderMainMenu(ctx: MyContext) {
       grantedUnits: snapshot.grantedUnits,
       language: ctx.user.language,
       photoSearchEnabled: env.FEATURE_PHOTO_SEARCH,
+      influencerEnabled: env.FEATURE_INFLUENCER_MODE,
+      hrEnabled: env.FEATURE_HR_MODE,
+      osintEnabled: env.FEATURE_OSINT_COMPLIANCE_MODE,
       welcomeBonusCredits: showBonus ? bonusCredits : undefined
     }),
     mainMenuKeyboard(messages, ctx.services.users.isAdmin(ctx.user))

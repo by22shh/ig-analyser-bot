@@ -2,3 +2,7 @@
 # from the 2026-06-05 model bake-off. These are data, not maintained source, and
 # prettier reflows the wide comparison tables non-idempotently.
 docs/research/
+
+# Local Supergoal planning/execution state. These files are generated run
+# artifacts and should not affect source formatting checks.
+.supergoal/

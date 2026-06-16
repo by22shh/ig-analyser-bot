@@ -235,6 +235,48 @@ describe("report quality validation", () => {
     expect(qualityFindingsNeedRepair(quality.findings)).toBe(true);
   });
 
+  it("does not treat Instagram shortcodes or public caption words as CI leaks", () => {
+    const quality = evaluateReportQuality({
+      mode: "standard",
+      sections: [
+        {
+          title: "Аудитория и стиль общения",
+          content:
+            "Confidence: medium. Комментарии и подписи показывают публичную городскую тему; автор писал, что протестировал гипотезы. Evidence: https://www.instagram.com/p/Ci-sbtyKxXN/",
+          sources: [
+            {
+              postId: "Ci-sbtyKxXN",
+              url: "https://www.instagram.com/p/Ci-sbtyKxXN/",
+              label: "Public post"
+            }
+          ]
+        }
+      ]
+    });
+
+    expect(quality.findings.map((finding) => finding.id)).not.toContain(
+      "report:internal_operational_goal_leak"
+    );
+    expect(quality.score).toBe(100);
+  });
+
+  it("still flags uppercase CI as internal operational wording", () => {
+    const quality = evaluateReportQuality({
+      mode: "standard",
+      sections: [
+        {
+          title: "Общая оценка ценности профиля",
+          content: "Confidence: medium. Профиль полезен для CI проверки качества отчета.",
+          sources: [{ postId: "p1", label: "Public post" }]
+        }
+      ]
+    });
+
+    expect(quality.findings.map((finding) => finding.id)).toContain(
+      "report:internal_operational_goal_leak"
+    );
+  });
+
   it("flags internal schema terms leaked into a report", () => {
     const quality = evaluateReportQuality({
       mode: "standard",

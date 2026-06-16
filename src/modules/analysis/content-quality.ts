@@ -167,9 +167,10 @@ export function evaluateReportContentQuality(input: {
       dimensions.keySectionDepth * 0.08 +
       dimensions.healthTransparency * 0.08
   );
+  const rawScore = Math.max(0, weightedScore - severityPenalty(findings));
 
   return {
-    score: Math.max(0, weightedScore - severityPenalty(findings)),
+    score: applyCoverageScoreCap(rawScore, input.metrics),
     findings,
     dimensions
   };
@@ -221,6 +222,17 @@ function severityPenalty(findings: ContentQualityFinding[]): number {
     if (finding.severity === "medium") return sum + 6;
     return sum + 2;
   }, 0);
+}
+
+function applyCoverageScoreCap(score: number, metrics?: ReportMetrics): number {
+  if (!metrics?.postsCount || !metrics.analyzedPosts) return score;
+  if (metrics.analyzedPosts >= metrics.postsCount) return score;
+  const coverage = metrics.analyzedPosts / metrics.postsCount;
+  if (coverage < 0.05) return Math.min(score, 88);
+  if (coverage < 0.1) return Math.min(score, 92);
+  if (coverage < 0.35) return Math.min(score, 96);
+  if (coverage < 0.8) return Math.min(score, 98);
+  return score;
 }
 
 function countMatches(text: string, pattern: RegExp): number {

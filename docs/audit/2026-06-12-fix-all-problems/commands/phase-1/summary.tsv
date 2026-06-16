@@ -1,0 +1,4 @@
+01	ci	0	docs/audit/2026-06-12-fix-all-problems/commands/phase-1/01-ci.log
+02	eval-golden	0	docs/audit/2026-06-12-fix-all-problems/commands/phase-1/02-eval-golden.log
+03	prisma-validate-plain	1	docs/audit/2026-06-12-fix-all-problems/commands/phase-1/03-prisma-validate.log	classified environment-only: DIRECT_URL missing
+04	prisma-validate-with-env	0	docs/audit/2026-06-12-fix-all-problems/commands/phase-1/04-prisma-validate-with-env.log

@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { isIP } from "node:net";
 import { z } from "zod";
 
 const boolFromString = z.union([z.boolean(), z.string(), z.undefined()]).transform((value) => {
@@ -104,6 +105,11 @@ const schema = z.object({
   REPORT_RETENTION_DAYS: optionalNumber(30),
   ANALYSIS_ESTIMATED_DURATION_SEC: optionalNumber(),
   PHOTO_UPLOAD_MAX_MB: optionalNumber(10),
+  // Number of public posts fetched/stored and used for metadata/caption/comment
+  // analysis. Vision remains separately capped by ANALYSIS_POST_LIMIT and
+  // ANALYSIS_MAX_IMAGES_ANALYZED so richer profile context does not explode LLM
+  // image cost.
+  ANALYSIS_METADATA_POST_LIMIT: optionalNumber(120),
   ANALYSIS_POST_LIMIT: optionalNumber(30),
   VISION_BATCH_SIZE: optionalNumber(5),
   ANALYSIS_MAX_IMAGES_ANALYZED: optionalNumber(30),
@@ -326,6 +332,14 @@ function assertProductionConfiguration(data: ParsedEnv) {
     requireString("YOOKASSA_SHOP_ID");
     requireString("YOOKASSA_SECRET_KEY");
     requireString("YOOKASSA_WEBHOOK_ALLOWED_IPS");
+    if (
+      data.YOOKASSA_WEBHOOK_ALLOWED_IPS.trim() &&
+      !isValidIpAllowlist(data.YOOKASSA_WEBHOOK_ALLOWED_IPS)
+    ) {
+      errors.push(
+        "YOOKASSA_WEBHOOK_ALLOWED_IPS must contain valid IPv4/IPv6 addresses or CIDR ranges"
+      );
+    }
     if (data.YOOKASSA_TEST_MODE) {
       errors.push("YOOKASSA_TEST_MODE must be false when YooKassa is enabled in production");
     }
@@ -408,6 +422,23 @@ function isPublicRuntimeUrl(value: string): boolean {
   } catch {
     return false;
   }
+}
+
+function isValidIpAllowlist(value: string): boolean {
+  const entries = value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+  if (!entries.length) return false;
+  return entries.every((entry) => {
+    const [address, prefixRaw] = entry.split("/");
+    const version = isIP(address ?? "");
+    if (version !== 4 && version !== 6) return false;
+    if (prefixRaw == null) return true;
+    const prefix = Number(prefixRaw);
+    const maxPrefix = version === 4 ? 32 : 128;
+    return Number.isInteger(prefix) && prefix >= 0 && prefix <= maxPrefix;
+  });
 }
 
 function productionCredentialKeys(data: ParsedEnv): string[] {

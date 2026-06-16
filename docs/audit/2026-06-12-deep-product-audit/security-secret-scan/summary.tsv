@@ -1,0 +1,9 @@
+metric	value
+env_like_files	3
+variable_name_candidate_rows	120
+variable_name_candidate_files	32
+sensitive_pattern_files	1
+ignored_env_file	.env.production.local
+tracked_env_example_modified	.env.example
+sensitive_pattern_path	tests/unit/env.test.ts
+sensitive_pattern_classification	shape-like test fixtures, no real secret values printed

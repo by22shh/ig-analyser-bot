@@ -5,7 +5,9 @@ exports[`message snapshots > renders paywall and insufficient credits 1`] = `
 
 💎 <b>Пополнение кредитов</b>
 
-Выберите способ оплаты. Основной способ в Telegram — Stars."
+Кредитами оплачиваются анализы, поиск по фото и вопросы по готовому отчёту. Основной способ в Telegram — <b>Stars</b>.
+
+Выберите способ оплаты:"
 `;
 
 exports[`message snapshots > renders paywall and insufficient credits 2`] = `
@@ -19,7 +21,7 @@ exports[`message snapshots > renders paywall and insufficient credits 2`] = `
   [
     {
       "callback_data": "m:main",
-      "text": "🏠 В меню",
+      "text": "← В меню",
     },
   ],
 ]
@@ -48,7 +50,7 @@ exports[`message snapshots > renders paywall and insufficient credits 3`] = `
   [
     {
       "callback_data": "m:main",
-      "text": "⬅️ Назад",
+      "text": "← Назад",
     },
   ],
 ]
@@ -64,16 +66,19 @@ exports[`message snapshots > renders paywall and insufficient credits 4`] = `
 `;
 
 exports[`message snapshots > renders profile 1`] = `
-"👤 <b>Профиль:</b> Nikita
-🆔 Telegram ID: <code>123</code>
-🌐 Язык: <b>ru</b>
+"👤 <b>Профиль</b>
+<b>Nikita</b> · ID <code>123</code>
 
-💎 <b>Кредиты: 1</b>
-• куплено: 0
-• выдано/промо: 1
+<blockquote>🌐 <b>ru</b>
+Язык интерфейса и отчётов</blockquote>
 
-📚 Отчётов: <b>2</b>
-⏳ Активных задач: <b>1</b>
+<blockquote>💎 Кредиты: <b>1</b>
+🛒 Куплено: <b>0</b>
+🎁 Выдано/промо: <b>1</b></blockquote>
+
+<blockquote>📚 <b>Отчёты</b>
+Готовых: <b>2</b> · активных задач: <b>1</b></blockquote>
+
 🧹 Хранение отчётов: <b>30 дн.</b>"
 `;
 
@@ -91,12 +96,12 @@ exports[`message snapshots > renders report actions 1`] = `
   ],
   [
     {
-      "callback_data": "r:md:report-id",
-      "text": "📝 Markdown",
-    },
-    {
       "callback_data": "r:chat:report-id",
       "text": "💬 Задать вопрос",
+    },
+    {
+      "callback_data": "r:open:report-id:repeat",
+      "text": "🔄 Повторить анализ",
     },
   ],
   [
@@ -104,22 +109,22 @@ exports[`message snapshots > renders report actions 1`] = `
       "callback_data": "r:src:report-id",
       "text": "🔗 Источники",
     },
+    {
+      "callback_data": "r:md:report-id",
+      "text": "📝 Markdown",
+    },
   ],
   [
     {
-      "callback_data": "r:open:report-id:repeat",
-      "text": "🔁 Повторить анализ",
-    },
-    {
       "callback_data": "m:main",
-      "text": "🏠 В меню",
+      "text": "← В меню",
     },
   ],
 ]
 `;
 
 exports[`message snapshots > renders start payload 1`] = `
-"👁 <b>Разбор публичного Instagram-профиля</b>
+"👁 <b>SocialAnalyserBot</b> — разбор публичного Instagram-профиля.
 
 🤝 Готовитесь к встрече, партнёрству или деловому контакту?
 🕵️ Нужно аккуратно проверить публичный контекст профиля?
@@ -133,7 +138,10 @@ exports[`message snapshots > renders start payload 1`] = `
 • практические выводы для HR, блогинга или личной стратегии
 • PDF/Markdown и чат по готовому отчёту
 
-💎 Баланс: <b>3</b> · тарифы: стандарт 1 · блогер/HR 2
+💎 Кредиты: <b>3</b>
+🛒 Куплено: <b>3</b>
+🧭 Режимы: <b>стандарт</b>
+💳 Тарифы: стандарт 1
 🌐 Язык отчёта: <b>ru</b>
 
 Начните с кнопки «Анализ профиля»."
@@ -143,7 +151,7 @@ exports[`message snapshots > renders start payload 2`] = `
 [
   [
     {
-      "text": "🚀 Открыть Mini App",
+      "text": "🚀 Открыть приложение",
       "web_app": {
         "url": "http://localhost:3000/mini-app",
       },
@@ -180,15 +188,19 @@ exports[`message snapshots > renders start payload 2`] = `
       "callback_data": "cap",
       "text": "✨ Что я умею",
     },
+    {
+      "callback_data": "help",
+      "text": "ℹ️ Как пользоваться",
+    },
   ],
   [
     {
-      "text": "📢 Группа",
+      "text": "📢 Наш канал",
       "url": "https://t.me/homie_tech",
     },
     {
-      "callback_data": "help",
       "text": "🛟 Поддержка",
+      "url": "https://t.me/homie_tech",
     },
   ],
   [

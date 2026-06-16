@@ -1,0 +1,3071 @@
+{
+  "mode": "standard",
+  "username": "mark.tales",
+  "language": "ru",
+  "model": "x-ai/grok-4.3",
+  "promptVersion": "report.standard.v7.repair",
+  "sections": [
+    {
+      "title": "Основные темы и приоритеты",
+      "content": "В публикуемом контенте центральное место занимают поездки и наблюдения за атмосферой городов: Сеул сравнивается с Парижем по стилю и ухоженности, Бангкок отмечается с растущей симпатией, Рим описывается через детали уличной жизни. Мотоциклы и outdoor-активности появляются регулярно. Био коротко указывает на хобби, связанное с мотоциклами.\n\nEvidence:\n\n- [3857587305813880062] caption: Сравнение Сеула с Парижем по стилю, людям и атмосфере (high) https://www.instagram.com/p/DWI5zddF6z-/\n\n- [3820510902366639665] caption: Положительная динамика отношения к Бангкоку при повторных визитах (high) https://www.instagram.com/p/DUFLmx8EhYx/\n\n- [3443820324911801176] vision: Винтажный мотоцикл с коляской как центральный объект серии (high) https://www.instagram.com/p/C_K6Fbgo2NY/\n\nConfidence: medium\n\nCaveats:\n\n- Анализ на 30 из 94 постов, частота тем может отличаться\n\n- Био не содержит детальных ориентиров",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] caption: Сравнение Сеула с Парижем по стилю, людям и атмосфере (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DUFLmx8EhYx/",
+          "postId": "3820510902366639665",
+          "label": "[3820510902366639665] caption: Положительная динамика отношения к Бангкоку при повторных визитах (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "postId": "3443820324911801176",
+          "label": "[3443820324911801176] vision: Винтажный мотоцикл с коляской как центральный объект серии (high)"
+        }
+      ]
+    },
+    {
+      "title": "Повторяющиеся визуальные и текстовые паттерны",
+      "content": "Кадры часто фокусируются на архитектуре, уличных деталях и природных пейзажах (горы, закаты, туман). Подписи используют сравнения городов и короткие наблюдения с умеренным количеством эмодзи. Групповые и одиночные портреты на фоне достопримечательностей повторяются.\n\nEvidence:\n\n- [3857587305813880062] caption: Сравнительный текст о стиле и атмосфере города (high) https://www.instagram.com/p/DWI5zddF6z-/\n\n- [3505006736152200199] caption: Развёрнутое сравнение Рима с другими городами (high) https://www.instagram.com/p/DCkSQ5jtAQH/\n\n- [3771990325985436661] caption: Описание первого впечатления от Китая через «чистый, технологичный, красивый» (high) https://www.instagram.com/p/DRYzTd0kmP1/\n\nConfidence: medium\n\nCaveats:\n\n- Визуальные описания из 30 постов, палитра может варьироваться",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] caption: Сравнительный текст о стиле и атмосфере города (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DCkSQ5jtAQH/",
+          "postId": "3505006736152200199",
+          "label": "[3505006736152200199] caption: Развёрнутое сравнение Рима с другими городами (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DRYzTd0kmP1/",
+          "postId": "3771990325985436661",
+          "label": "[3771990325985436661] caption: Описание первого впечатления от Китая через «чистый, технологичный, красивый» (high)"
+        }
+      ]
+    },
+    {
+      "title": "Поведение и вовлеченность",
+      "content": "Среднее количество лайков 71 при медиане 36 показывает неравномерное распределение: один пост набрал более 1000 лайков, остальные значительно меньше. Комментарии редкие (медиана 1), плотность низкая. Посты публикуются нерегулярно (в среднем раз в 31 день).\n\nEvidence:\n\n- [3443820324911801176] metrics: 1005 лайков и 21 комментарий — максимальные показатели (high) https://www.instagram.com/p/C_K6Fbgo2NY/\n\n- [3857587305813880062] metrics: 24 лайка и 0 комментариев у недавнего поста (high) https://www.instagram.com/p/DWI5zddF6z-/\n\nConfidence: medium\n\nCaveats:\n\n- Метрики по 30 постам из 94; ER может отличаться при полной выборке",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "postId": "3443820324911801176",
+          "label": "[3443820324911801176] metrics: 1005 лайков и 21 комментарий — максимальные показатели (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] metrics: 24 лайка и 0 комментариев у недавнего поста (high)"
+        }
+      ]
+    },
+    {
+      "title": "Аудитория и комментарии",
+      "content": "Комментарии преимущественно короткие (эмодзи, «🔥», «100%»). Наиболее активные комментаторы — julivorobyeva и fakeev. Темы редко выходят за рамки одобрения визуала. Высококомментируемые посты связаны с мотоциклом и фитнесом.\n\nEvidence:\n\n- [3443820324911801176] comments: Комментарии: 🔥🔥🔥, 💣 и короткие реплики (high) https://www.instagram.com/p/C_K6Fbgo2NY/\n\n- [3445973705173574952] comments: Комментарии: «17», «👏👏👏», «20💪🏼» (high) https://www.instagram.com/p/C_SjtPKNSUo/\n\nConfidence: medium\n\nCaveats:\n\n- Данные по комментариям доступны только для 16 из 30 постов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "postId": "3443820324911801176",
+          "label": "[3443820324911801176] comments: Комментарии: 🔥🔥🔥, 💣 и короткие реплики (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C_SjtPKNSUo/",
+          "postId": "3445973705173574952",
+          "label": "[3445973705173574952] comments: Комментарии: «17», «👏👏👏», «20💪🏼» (high)"
+        }
+      ]
+    },
+    {
+      "title": "Стиль общения",
+      "content": "Подписи короткие или средние, используют сравнения и личные наблюдения без излишней эмоциональности. Эмодзи встречаются умеренно. Тон нейтрально-положительный с элементами рефлексии о городах. Стиль в личных сообщениях неизвестен.\n\nEvidence:\n\n- [3857587305813880062] caption: Подробное, но сдержанное сравнение Сеула и Парижа (high) https://www.instagram.com/p/DWI5zddF6z-/\n\n- [3505006736152200199] caption: Текст о Риме с перечислением конкретных качеств (high) https://www.instagram.com/p/DCkSQ5jtAQH/\n\nConfidence: medium\n\nCaveats:\n\n- Анализ только публичных подписей",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] caption: Подробное, но сдержанное сравнение Сеула и Парижа (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DCkSQ5jtAQH/",
+          "postId": "3505006736152200199",
+          "label": "[3505006736152200199] caption: Текст о Риме с перечислением конкретных качеств (high)"
+        }
+      ]
+    },
+    {
+      "title": "Профессия и статус",
+      "content": "По публичному профилю и выбранной выборке прямых признаков профессии, должности или рабочего статуса не видно. Это не доказывает их отсутствие; это только ограничивает вывод по открытым данным. Практический вывод: не строить обращение вокруг работы, дохода или статуса, пока нет отдельного публичного подтверждения. Безопасный следующий шаг: использовать нейтральную тему из конкретного поста, а не предполагать профессию. Ограничение: проанализировано 30/94 публичных постов, сторис и личные ответы не видны. Confidence: low",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DEPlJqZtCMT/",
+          "postId": "3535207624233722643",
+          "label": "[3535207624233722643] caption: Упоминание тестирования гипотез и запуска бизнес-проектов (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Отличие от типичных аккаунтов",
+      "content": "В отличие от стандартных тревел-аккаунтов, здесь меньше типичных «красивых» кадров и больше текстовых сравнений городов по стилю жизни. Мотоциклетная тема интегрирована без доминирования коммерческого контента.\n\nEvidence:\n\n- [3857587305813880062] caption: Сравнение поведения людей в Сеуле и Париже как основная идея (high) https://www.instagram.com/p/DWI5zddF6z-/\n\nConfidence: low\n\nCaveats:\n\n- Сравнение ограничено выборкой и отсутствием прямой базы типичных аккаунтов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] caption: Сравнение поведения людей в Сеуле и Париже как основная идея (high)"
+        }
+      ]
+    },
+    {
+      "title": "Отсутствия как сигнал",
+      "content": "Редко встречаются теги брендов, явные CTA или коммерческие предложения. Лица других людей появляются ограниченно. Отсутствуют регулярные посты о повседневной жизни в Москве.\n\nEvidence:\n\n- [3380799624677988952] caption: Единственный пост с упоминанием бренда (NAUTIQUE, QUIKSILVER) (medium) https://www.instagram.com/p/C7rA1ittJpY/\n\nConfidence: medium\n\nCaveats:\n\n- Отсутствие может быть связано с небольшим размером выборки",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C7rA1ittJpY/",
+          "postId": "3380799624677988952",
+          "label": "[3380799624677988952] caption: Единственный пост с упоминанием бренда (NAUTIQUE, QUIKSILVER) (medium)"
+        }
+      ]
+    },
+    {
+      "title": "Потенциальная польза от контакта",
+      "content": "Профиль может быть интересен для обсуждения конкретных локаций (Сеул, Бангкок, Китай) и визуальных наблюдений о городах. Это даёт возможность нейтрального диалога на основе общих впечатлений от поездок. Почему это важно: позволяет начать с общей темы без давления на личное. Реалистичный следующий шаг — комментарий под постом о знакомом читателю городе. Ограничение: нет признаков готовности к активному общению, поэтому не стоит продолжать при отсутствии ответа. Стоп-условие: если нет реакции на первый комментарий, не стоит писать повторно.\n\nEvidence:\n\n- [3857587305813880062] caption: Подробное описание впечатлений от Сеула (high) https://www.instagram.com/p/DWI5zddF6z-/\n\n- [3820510902366639665] caption: Положительная динамика отношения к Бангкоку (high) https://www.instagram.com/p/DUFLmx8EhYx/\n\nConfidence: medium\n\nCaveats:\n\n- Нет признаков готовности к активному общению",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] caption: Подробное описание впечатлений от Сеула (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DUFLmx8EhYx/",
+          "postId": "3820510902366639665",
+          "label": "[3820510902366639665] caption: Положительная динамика отношения к Бангкоку (high)"
+        }
+      ]
+    },
+    {
+      "title": "Триггеры и зацепки",
+      "content": "1. Пост о Сеуле (3857587305813880062): можно спросить, какие ещё азиатские города показались похожими по атмосфере — опирается на прямое сравнение стиля людей, ухоженности и дистанции в общении. 2. Пост о Бангкоке (3820510902366639665): уместно уточнить, что именно изменилось в восприятии города при повторных визитах — основано на тексте «с каждым разом все больше нравится». 3. Пост с мотоциклом (3443820324911801176): нейтрально поинтересоваться, где именно был сделан снимок с винтажной техникой — визуально яркий объект с высокой вовлечённостью. Все зацепки безопасны, привязаны к публичным фактам и не касаются личной жизни.\n\nEvidence:\n\n- [3857587305813880062] caption: Сравнение Сеула с Парижем по стилю и поведению людей (high) https://www.instagram.com/p/DWI5zddF6z-/\n\n- [3820510902366639665] caption: Текст «С каждым разом все больше нравится #bangkok» (high) https://www.instagram.com/p/DUFLmx8EhYx/\n\n- [3443820324911801176] vision: Винтажный мотоцикл с коляской на улице (high) https://www.instagram.com/p/C_K6Fbgo2NY/\n\nConfidence: medium\n\nCaveats:\n\n- Зацепки основаны только на публичных постах и не гарантируют отклика",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] caption: Сравнение Сеула с Парижем по стилю и поведению людей (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DUFLmx8EhYx/",
+          "postId": "3820510902366639665",
+          "label": "[3820510902366639665] caption: Текст «С каждым разом все больше нравится #bangkok» (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "postId": "3443820324911801176",
+          "label": "[3443820324911801176] vision: Винтажный мотоцикл с коляской на улице (high)"
+        }
+      ]
+    },
+    {
+      "title": "Коммуникационные рекомендации",
+      "content": "1. Комментировать под конкретным постом о городе, повторяя один факт из подписи (например, сравнение Сеула). 2. Задать вопрос о локации или детали съёмки, не переходя на личное. 3. При отсутствии ответа в течение 7–10 дней не писать повторно. Избегать: любых оценок внешности, предположений о статусе, давления на ответ, упоминания других людей с фото. Почему это важно: сохраняет уважительный тон и снижает риск игнора. Конкретный первый шаг: оставить комментарий под постом 3857587305813880062 с повторением одного наблюдения и вопросом.\n\nEvidence:\n\n- [3857587305813880062] caption: Текст о стиле и атмосфере Сеула (high) https://www.instagram.com/p/DWI5zddF6z-/\n\nConfidence: medium\n\nCaveats:\n\n- Рекомендации ограничены публичными данными",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] caption: Текст о стиле и атмосфере Сеула (high)"
+        }
+      ]
+    },
+    {
+      "title": "Готовые фразы для входа в диалог",
+      "content": "1. «Интересно, что Вы написали про сходство Сеула и Парижа — а какие ещё города так же сильно удивили по атмосфере?» (привязана к посту 3857587305813880062). 2. «В посте про Бангкок заметно, что впечатление меняется с каждым визитом. Что особенно запомнилось в последний раз?» (привязана к посту 3820510902366639665). 3. «Кадры с мотоциклом вышли очень атмосферно — это где-то в конкретном месте или подборка?» (привязана к посту 3443820324911801176). Все фразы нейтральны, без флирта и непроверенных утверждений.\n\nEvidence:\n\n- [3857587305813880062] caption: Сравнение Сеула с Парижем (high) https://www.instagram.com/p/DWI5zddF6z-/\n\n- [3820510902366639665] caption: Динамика впечатлений от Бангкока (high) https://www.instagram.com/p/DUFLmx8EhYx/\n\n- [3443820324911801176] vision: Винтажный мотоцикл с коляской (high) https://www.instagram.com/p/C_K6Fbgo2NY/\n\nConfidence: medium\n\nCaveats:\n\n- Фразы основаны на публичных фактах",
+      "kind": "phrases",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] caption: Сравнение Сеула с Парижем (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DUFLmx8EhYx/",
+          "postId": "3820510902366639665",
+          "label": "[3820510902366639665] caption: Динамика впечатлений от Бангкока (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "postId": "3443820324911801176",
+          "label": "[3443820324911801176] vision: Винтажный мотоцикл с коляской (high)"
+        }
+      ]
+    },
+    {
+      "title": "Неочевидные наблюдения",
+      "content": "Посты с мотоциклами и фитнесом получают заметно больше комментариев, чем чисто тревел-контент, хотя последние публикуются чаще. Это может указывать на более высокую вовлечённость аудитории вокруг хобби-тем.\n\nEvidence:\n\n- [3443820324911801176] metrics: Максимальное количество комментариев в выборке (high) https://www.instagram.com/p/C_K6Fbgo2NY/\n\n- [3379612527283849412] metrics: 4 комментария при теме мотоцикла (high) https://www.instagram.com/p/C7my7AHNsjE/\n\nConfidence: low\n\nCaveats:\n\n- Наблюдение ограничено 30 постами",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "postId": "3443820324911801176",
+          "label": "[3443820324911801176] metrics: Максимальное количество комментариев в выборке (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C7my7AHNsjE/",
+          "postId": "3379612527283849412",
+          "label": "[3379612527283849412] metrics: 4 комментария при теме мотоцикла (high)"
+        }
+      ]
+    },
+    {
+      "title": "Общая оценка ценности профиля",
+      "content": "Профиль практически полезен для обсуждения городов и мотоциклетных хобби через конкретные зацепки в трёх постах. Главный лимит — низкая плотность комментариев и неполная выборка (30 из 94 постов), поэтому выводы относятся к недавнему публичному контенту, а не ко всему профилю. Следующий разумный шаг: оставить один из готовых комментариев под постом о Сеуле. При отсутствии ответа в течение недели контакт лучше не продолжать.\n\nEvidence:\n\n- [3857587305813880062] caption: Детальное сравнение городов (high) https://www.instagram.com/p/DWI5zddF6z-/\n\n- [3443820324911801176] metrics: Высокая вовлечённость вокруг мото-темы (high) https://www.instagram.com/p/C_K6Fbgo2NY/\n\nConfidence: medium\n\nCaveats:\n\n- Выводы относятся к выборке из 30 постов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] caption: Детальное сравнение городов (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "postId": "3443820324911801176",
+          "label": "[3443820324911801176] metrics: Высокая вовлечённость вокруг мото-темы (high)"
+        }
+      ]
+    },
+    {
+      "title": "Поведенческие сигналы",
+      "content": "Публикации нерегулярны (средний интервал около 31 дня). Наблюдается чередование форматов: sidecar, видео и одиночные фото. Активность выше вокруг визуально ярких объектов (мотоциклы, пейзажи).\n\nEvidence:\n\n- [3857587305813880062] timestamp: Пост от марта 2026, sidecar (high) https://www.instagram.com/p/DWI5zddF6z-/\n\n- [3443820324911801176] type: Sidecar с высокой вовлечённостью (high) https://www.instagram.com/p/C_K6Fbgo2NY/\n\nConfidence: medium\n\nCaveats:\n\n- Частота рассчитана по выборке",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] timestamp: Пост от марта 2026, sidecar (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "postId": "3443820324911801176",
+          "label": "[3443820324911801176] type: Sidecar с высокой вовлечённостью (high)"
+        }
+      ]
+    },
+    {
+      "title": "Ошибки, слепые зоны, барьеры",
+      "content": "Главный барьер — низкая плотность комментариев и отсутствие сторис/ответов. Ограничения анализа: только 30 из 94 постов, данные по комментариям для 16 постов. Нет публичных контактов или ссылок для прямого перехода в личку.\n\nEvidence:\n\n- [3857587305813880062] comments: 0 комментариев у недавнего поста (high) https://www.instagram.com/p/DWI5zddF6z-/\n\nConfidence: medium\n\nCaveats:\n\n- Анализ публичного контента без сторис",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] comments: 0 комментариев у недавнего поста (high)"
+        }
+      ]
+    },
+    {
+      "title": "Образ как у бренда",
+      "content": "Профиль выглядит как личный mood-аккаунт с акцентом на путешествия и хобби (мотоциклы). Формула: визуальные путешествия + короткие текстовые наблюдения. Аудитория реагирует на визуал и редкие комментарии. Не является рекламным или экспертным брендом.\n\nEvidence:\n\n- [3857587305813880062] caption: Личное наблюдение о городе без коммерческого акцента (high) https://www.instagram.com/p/DWI5zddF6z-/\n\n- [3616394679634213518] caption: Открытие сезона мото без брендовых тегов (high) https://www.instagram.com/p/DIwA8z3NbqO/\n\nConfidence: medium\n\nCaveats:\n\n- Оценка по выборке из 30 постов",
+      "kind": "section",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "postId": "3857587305813880062",
+          "label": "[3857587305813880062] caption: Личное наблюдение о городе без коммерческого акцента (high)"
+        },
+        {
+          "url": "https://www.instagram.com/p/DIwA8z3NbqO/",
+          "postId": "3616394679634213518",
+          "label": "[3616394679634213518] caption: Открытие сезона мото без брендовых тегов (high)"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "executiveSummary": "Что это значит: это recent 30-post read по публичным данным Instagram. Покрытие: 30/94 постов (31.9%), vision 30/30, покрытие комментариев 16/30 (53.3%), текстовых комментариев: 44. Главный сигнал: Путешествия и сравнения городов (Сеул-Париж, Бангкок, Рим) — устойчивая тема в постах 3857587305813880062, 3820510902366639665, 3505006736152200199; зацепка для нейтрального диалога о впечатлениях от поездок.",
+    "bullets": [
+      "Путешествия и сравнения городов (Сеул-Париж, Бангкок, Рим) — устойчивая тема в постах 3857587305813880062, 3820510902366639665, 3505006736152200199; зацепка для нейтрального диалога о впечатлениях от поездок.",
+      "Мотоциклы и outdoor-активности (винтажный мотоцикл, Triumph, snowbike) выделяются в высоколайковых постах 3443820324911801176, 3616394679634213518, 3379612527283849412; дают конкретные визуальные поводы для вопросов.",
+      "Низкая плотность комментариев (медиана 1) и неравномерные лайки (один пост 1005, остальные ~30) указывают на ограниченную вовлеченность; безопаснее комментировать под постами с аудиторным откликом.",
+      "Био указывает только на хобби (@markfrommoscow), без профессиональных ссылок; данные о статусе минимальны и не позволяют выводов.",
+      "Высококомментируемые посты (3443820324911801176, 3445973705173574952, 3841697283960721329) — лучшие точки входа для контекстных комментариев."
+    ],
+    "warnings": [],
+    "analysisHealth": {
+      "formatLabel": "recent 30-post read",
+      "analyzedPosts": 30,
+      "postsCount": 94,
+      "sampleCoveragePercent": 31.9,
+      "sampleCoverageLevel": "partial",
+      "visionCompleted": 30,
+      "visionTotal": 30,
+      "visionCompletionPercent": 100,
+      "postsWithCommentText": 16,
+      "commentCoveragePercent": 53.3,
+      "commentTextCount": 44
+    },
+    "deliveryHealth": {
+      "status": "ready",
+      "reasons": [],
+      "qualityScore": 100,
+      "contentQualityScore": 100,
+      "sourceCoverage": "17/17",
+      "repaired": false
+    },
+    "quality": {
+      "score": 100,
+      "findings": []
+    },
+    "contentQuality": {
+      "score": 100,
+      "findings": [],
+      "dimensions": {
+        "specificity": 100,
+        "practicalValue": 100,
+        "practicalDetail": 100,
+        "confidenceCalibration": 100,
+        "depth": 100,
+        "keySectionDepth": 100,
+        "healthTransparency": 100
+      }
+    },
+    "evidence": {
+      "selectedPostIds": [
+        "3443820324911801176",
+        "3857587305813880062",
+        "3855923679859348271",
+        "3841697283960721329",
+        "3854589785466135995",
+        "3445973705173574952",
+        "3854599590121462450",
+        "3820510902366639665",
+        "3718687361199797951",
+        "3505006736152200199",
+        "3535207624233722643",
+        "3306405742276602836",
+        "3834577256057065335",
+        "3379612527283849412",
+        "3771990325985436661",
+        "3766571453878406448",
+        "3297428190149298259",
+        "3291134523298272915",
+        "3592516392860499656",
+        "3451883240610487721",
+        "3616394679634213518",
+        "3515074956779368893",
+        "3548092857757193176",
+        "3514709494144992460",
+        "3489489191420924679",
+        "3487302336000686867",
+        "3447062884368277805",
+        "3380799624677988952",
+        "3196209357997452686",
+        "3582206709616354530"
+      ],
+      "postSelection": [
+        {
+          "postId": "3443820324911801176",
+          "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "timestamp": "2024-08-27T10:43:16.000Z",
+          "score": 65,
+          "reasons": [
+            "high_likes",
+            "high_comments",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3857587305813880062",
+          "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+          "timestamp": "2026-03-21T08:04:23.000Z",
+          "score": 52,
+          "reasons": [
+            "recent",
+            "format_diversity",
+            "profile_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3855923679859348271",
+          "url": "https://www.instagram.com/p/DWC_ihDCJMv/",
+          "timestamp": "2026-03-19T01:00:51.000Z",
+          "score": 38,
+          "reasons": [
+            "recent",
+            "format_diversity",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3841697283960721329",
+          "url": "https://www.instagram.com/p/DVQc1NZD8-x/",
+          "timestamp": "2026-02-27T09:54:02.000Z",
+          "score": 36,
+          "reasons": [
+            "recent",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3854589785466135995",
+          "url": "https://www.instagram.com/p/DV-QPzFjuW7/",
+          "timestamp": "2026-03-17T04:48:51.000Z",
+          "score": 27,
+          "reasons": [
+            "recent",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3445973705173574952",
+          "url": "https://www.instagram.com/p/C_SjtPKNSUo/",
+          "timestamp": "2024-08-30T10:02:47.000Z",
+          "score": 27,
+          "reasons": [
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3854599590121462450",
+          "url": "https://www.instagram.com/p/DV-SeeYjlqy/",
+          "timestamp": "2026-03-17T05:08:20.000Z",
+          "score": 26,
+          "reasons": [
+            "recent",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3820510902366639665",
+          "url": "https://www.instagram.com/p/DUFLmx8EhYx/",
+          "timestamp": "2026-01-29T04:20:12.000Z",
+          "score": 25,
+          "reasons": [
+            "recent",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3718687361199797951",
+          "url": "https://www.instagram.com/p/DObbnPbDHa_/",
+          "timestamp": "2025-09-10T16:36:01.000Z",
+          "score": 25,
+          "reasons": [
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3505006736152200199",
+          "url": "https://www.instagram.com/p/DCkSQ5jtAQH/",
+          "timestamp": "2024-11-19T20:49:44.000Z",
+          "score": 22,
+          "reasons": [
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3535207624233722643",
+          "url": "https://www.instagram.com/p/DEPlJqZtCMT/",
+          "timestamp": "2024-12-31T12:53:31.000Z",
+          "score": 21,
+          "reasons": [
+            "profile_signal",
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3306405742276602836",
+          "url": "https://www.instagram.com/p/C3itoEntWvU/",
+          "timestamp": "2024-02-19T20:25:01.000Z",
+          "score": 21,
+          "reasons": [
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3834577256057065335",
+          "url": "https://www.instagram.com/p/DU3J7KrEs93/",
+          "timestamp": "2026-02-17T14:07:32.000Z",
+          "score": 20,
+          "reasons": [
+            "recent",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3379612527283849412",
+          "url": "https://www.instagram.com/p/C7my7AHNsjE/",
+          "timestamp": "2024-05-30T20:36:37.000Z",
+          "score": 20,
+          "reasons": [
+            "audience_signal",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3771990325985436661",
+          "url": "https://www.instagram.com/p/DRYzTd0kmP1/",
+          "timestamp": "2025-11-23T05:38:28.000Z",
+          "score": 16,
+          "reasons": [
+            "recent",
+            "visual_signal"
+          ]
+        },
+        {
+          "postId": "3766571453878406448",
+          "url": "https://www.instagram.com/p/DRFjMf5jI0w/",
+          "timestamp": "2025-11-15T18:40:52.000Z",
+          "score": 16,
+          "reasons": [
+            "format_diversity",
+            "visual_signal"
+          ]
+        }
+      ],
+      "profileSignals": {
+        "publicContacts": [],
+        "publicLinks": [],
+        "platformHandles": [
+          "@markfrommoscow",
+          "@fakeev"
+        ],
+        "professionHints": [],
+        "locationHints": [],
+        "bioKeywords": [
+          "mark",
+          "markfrommoscow",
+          "хобби"
+        ]
+      },
+      "contentClusters": [
+        {
+          "label": "visual_identity",
+          "count": 30,
+          "postIds": [
+            "3443820324911801176",
+            "3857587305813880062",
+            "3855923679859348271",
+            "3841697283960721329",
+            "3854589785466135995",
+            "3445973705173574952",
+            "3854599590121462450",
+            "3820510902366639665"
+          ],
+          "keywords": [
+            "style",
+            "design",
+            "aesthetic",
+            "стиль",
+            "дизайн"
+          ]
+        },
+        {
+          "label": "lifestyle_and_travel",
+          "count": 7,
+          "postIds": [
+            "3857587305813880062",
+            "3505006736152200199",
+            "3771990325985436661",
+            "3766571453878406448",
+            "3616394679634213518",
+            "3515074956779368893",
+            "3196209357997452686"
+          ],
+          "keywords": [
+            "travel",
+            "city",
+            "hotel",
+            "trip",
+            "путешествие",
+            "город"
+          ]
+        },
+        {
+          "label": "work_and_expertise",
+          "count": 2,
+          "postIds": [
+            "3535207624233722643",
+            "3380799624677988952"
+          ],
+          "keywords": [
+            "founder",
+            "startup",
+            "business",
+            "work",
+            "career",
+            "expert",
+            "эксперт",
+            "бизнес"
+          ]
+        },
+        {
+          "label": "commercial_or_ads",
+          "count": 1,
+          "postIds": [
+            "3380799624677988952"
+          ],
+          "keywords": [
+            "ad",
+            "promo",
+            "brand",
+            "sale",
+            "реклама",
+            "скидка",
+            "партнер"
+          ]
+        },
+        {
+          "label": "education_and_guidance",
+          "count": 1,
+          "postIds": [
+            "3548092857757193176"
+          ],
+          "keywords": [
+            "tips",
+            "guide",
+            "howto",
+            "курс",
+            "обучение",
+            "совет"
+          ]
+        },
+        {
+          "label": "community_and_events",
+          "count": 1,
+          "postIds": [
+            "3857587305813880062"
+          ],
+          "keywords": [
+            "event",
+            "team",
+            "meetup",
+            "community",
+            "команда",
+            "мероприятие"
+          ]
+        }
+      ],
+      "audienceSignals": {
+        "frequentCommenters": [
+          {
+            "username": "julivorobyeva",
+            "count": 4
+          },
+          {
+            "username": "fakeev",
+            "count": 4
+          },
+          {
+            "username": "v.rudkovskaya",
+            "count": 2
+          },
+          {
+            "username": "missminaeva",
+            "count": 2
+          },
+          {
+            "username": "sergey_kurbanow",
+            "count": 2
+          },
+          {
+            "username": "aleksandra_czu",
+            "count": 1
+          },
+          {
+            "username": "bogdushin",
+            "count": 1
+          },
+          {
+            "username": "8savik",
+            "count": 1
+          },
+          {
+            "username": "savchenko_olga_igorivna",
+            "count": 1
+          },
+          {
+            "username": "girlsssforyou",
+            "count": 1
+          }
+        ],
+        "repeatedCommentTerms": [
+          {
+            "term": "вас",
+            "count": 2
+          },
+          {
+            "term": "марк",
+            "count": 2
+          },
+          {
+            "term": "100",
+            "count": 1
+          },
+          {
+            "term": "дэбик",
+            "count": 1
+          },
+          {
+            "term": "успех",
+            "count": 1
+          },
+          {
+            "term": "made",
+            "count": 1
+          },
+          {
+            "term": "russia",
+            "count": 1
+          },
+          {
+            "term": "брэд",
+            "count": 1
+          },
+          {
+            "term": "джордж",
+            "count": 1
+          },
+          {
+            "term": "клуни",
+            "count": 1
+          },
+          {
+            "term": "питт",
+            "count": 1
+          },
+          {
+            "term": "забыли",
+            "count": 1
+          }
+        ],
+        "commentDensity": "low",
+        "highCommentPostIds": [
+          "3443820324911801176",
+          "3445973705173574952",
+          "3841697283960721329",
+          "3306405742276602836",
+          "3379612527283849412"
+        ]
+      },
+      "riskSignals": [],
+      "opportunitySignals": [
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3443820324911801176",
+            "3445973705173574952",
+            "3841697283960721329"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C_K6Fbgo2NY/",
+            "https://www.instagram.com/p/C_SjtPKNSUo/",
+            "https://www.instagram.com/p/DVQc1NZD8-x/"
+          ]
+        }
+      ],
+      "modeGuidance": {
+        "mode": "standard",
+        "evidencePriorities": [
+          "recurring themes across selected posts",
+          "audience and comment evidence",
+          "visual/textual patterns",
+          "practical but safe communication recommendations"
+        ],
+        "scoringFocus": [
+          "specificity",
+          "source-backed hypotheses",
+          "actionability",
+          "confidence calibration"
+        ],
+        "cautionRules": [
+          "Avoid personality certainty",
+          "No harassment, doxing, pressure or privacy bypass"
+        ]
+      },
+      "evidenceMap": [
+        {
+          "id": "post:3443820324911801176",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for high_likes, high_comments, audience_signal, visual_signal; score 65.",
+          "confidence": "high",
+          "postIds": [
+            "3443820324911801176"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C_K6Fbgo2NY/"
+          ]
+        },
+        {
+          "id": "post:3857587305813880062",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, format_diversity, profile_signal, visual_signal; score 52.",
+          "confidence": "high",
+          "postIds": [
+            "3857587305813880062"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DWI5zddF6z-/"
+          ]
+        },
+        {
+          "id": "post:3855923679859348271",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, format_diversity, visual_signal; score 38.",
+          "confidence": "high",
+          "postIds": [
+            "3855923679859348271"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DWC_ihDCJMv/"
+          ]
+        },
+        {
+          "id": "post:3841697283960721329",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, audience_signal, visual_signal; score 36.",
+          "confidence": "high",
+          "postIds": [
+            "3841697283960721329"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DVQc1NZD8-x/"
+          ]
+        },
+        {
+          "id": "post:3854589785466135995",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, audience_signal, visual_signal; score 27.",
+          "confidence": "high",
+          "postIds": [
+            "3854589785466135995"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DV-QPzFjuW7/"
+          ]
+        },
+        {
+          "id": "post:3445973705173574952",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for audience_signal, visual_signal; score 27.",
+          "confidence": "high",
+          "postIds": [
+            "3445973705173574952"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C_SjtPKNSUo/"
+          ]
+        },
+        {
+          "id": "post:3854599590121462450",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, visual_signal; score 26.",
+          "confidence": "high",
+          "postIds": [
+            "3854599590121462450"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DV-SeeYjlqy/"
+          ]
+        },
+        {
+          "id": "post:3820510902366639665",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for recent, audience_signal, visual_signal; score 25.",
+          "confidence": "high",
+          "postIds": [
+            "3820510902366639665"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DUFLmx8EhYx/"
+          ]
+        },
+        {
+          "id": "post:3718687361199797951",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for profile_signal, audience_signal, visual_signal; score 25.",
+          "confidence": "high",
+          "postIds": [
+            "3718687361199797951"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DObbnPbDHa_/"
+          ]
+        },
+        {
+          "id": "post:3505006736152200199",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for profile_signal, audience_signal, visual_signal; score 22.",
+          "confidence": "high",
+          "postIds": [
+            "3505006736152200199"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DCkSQ5jtAQH/"
+          ]
+        },
+        {
+          "id": "post:3535207624233722643",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for profile_signal, audience_signal, visual_signal; score 21.",
+          "confidence": "high",
+          "postIds": [
+            "3535207624233722643"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/DEPlJqZtCMT/"
+          ]
+        },
+        {
+          "id": "post:3306405742276602836",
+          "type": "post",
+          "label": "Selected evidence post",
+          "detail": "Selected for audience_signal, visual_signal; score 21.",
+          "confidence": "high",
+          "postIds": [
+            "3306405742276602836"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C3itoEntWvU/"
+          ]
+        },
+        {
+          "id": "cluster:visual_identity",
+          "type": "content_cluster",
+          "label": "visual_identity",
+          "detail": "30 selected posts match keywords: style, design, aesthetic, стиль, дизайн",
+          "confidence": "high",
+          "postIds": [
+            "3443820324911801176",
+            "3857587305813880062",
+            "3855923679859348271",
+            "3841697283960721329",
+            "3854589785466135995",
+            "3445973705173574952",
+            "3854599590121462450",
+            "3820510902366639665"
+          ]
+        },
+        {
+          "id": "cluster:lifestyle_and_travel",
+          "type": "content_cluster",
+          "label": "lifestyle_and_travel",
+          "detail": "7 selected posts match keywords: travel, city, hotel, trip, путешествие, город",
+          "confidence": "high",
+          "postIds": [
+            "3857587305813880062",
+            "3505006736152200199",
+            "3771990325985436661",
+            "3766571453878406448",
+            "3616394679634213518",
+            "3515074956779368893",
+            "3196209357997452686"
+          ]
+        },
+        {
+          "id": "cluster:work_and_expertise",
+          "type": "content_cluster",
+          "label": "work_and_expertise",
+          "detail": "2 selected posts match keywords: founder, startup, business, work, career, expert",
+          "confidence": "medium",
+          "postIds": [
+            "3535207624233722643",
+            "3380799624677988952"
+          ]
+        },
+        {
+          "id": "cluster:commercial_or_ads",
+          "type": "content_cluster",
+          "label": "commercial_or_ads",
+          "detail": "1 selected posts match keywords: ad, promo, brand, sale, реклама, скидка",
+          "confidence": "medium",
+          "postIds": [
+            "3380799624677988952"
+          ]
+        },
+        {
+          "id": "cluster:education_and_guidance",
+          "type": "content_cluster",
+          "label": "education_and_guidance",
+          "detail": "1 selected posts match keywords: tips, guide, howto, курс, обучение, совет",
+          "confidence": "medium",
+          "postIds": [
+            "3548092857757193176"
+          ]
+        },
+        {
+          "id": "cluster:community_and_events",
+          "type": "content_cluster",
+          "label": "community_and_events",
+          "detail": "1 selected posts match keywords: event, team, meetup, community, команда, мероприятие",
+          "confidence": "medium",
+          "postIds": [
+            "3857587305813880062"
+          ]
+        },
+        {
+          "id": "audience:frequent_commenters",
+          "type": "audience",
+          "label": "Recurring commenters",
+          "detail": "julivorobyeva (4), fakeev (4), v.rudkovskaya (2), missminaeva (2), sergey_kurbanow (2), aleksandra_czu (1), bogdushin (1), 8savik (1), savchenko_olga_igorivna (1), girlsssforyou (1)",
+          "confidence": "medium"
+        },
+        {
+          "id": "audience:high_comment_posts",
+          "type": "audience",
+          "label": "High-comment posts",
+          "detail": "low comment density across selected posts.",
+          "confidence": "medium",
+          "postIds": [
+            "3443820324911801176",
+            "3445973705173574952",
+            "3841697283960721329",
+            "3306405742276602836",
+            "3379612527283849412"
+          ]
+        },
+        {
+          "id": "opportunity:conversation_hooks",
+          "type": "opportunity",
+          "label": "Conversation hook posts",
+          "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+          "confidence": "medium",
+          "postIds": [
+            "3443820324911801176",
+            "3445973705173574952",
+            "3841697283960721329"
+          ],
+          "urls": [
+            "https://www.instagram.com/p/C_K6Fbgo2NY/",
+            "https://www.instagram.com/p/C_SjtPKNSUo/",
+            "https://www.instagram.com/p/DVQc1NZD8-x/"
+          ]
+        },
+        {
+          "id": "mode:standard",
+          "type": "mode",
+          "label": "standard priorities",
+          "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+          "confidence": "high"
+        }
+      ]
+    }
+  },
+  "metrics": {
+    "followersCount": 442,
+    "followsCount": 337,
+    "postsCount": 94,
+    "analyzedPosts": 30,
+    "avgLikes": 71.43333333333334,
+    "avgComments": 1.9,
+    "medianLikes": 36,
+    "medianComments": 1,
+    "engagementRate": 16.59125188536953,
+    "frequencyDays": 31.46647310025543,
+    "pinnedPostsCount": 0,
+    "uniqueLocations": [],
+    "uniqueMusic": [],
+    "relatedProfiles": [],
+    "topPostsByLikes": [
+      {
+        "postId": "3443820324911801176",
+        "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+        "likesCount": 1005
+      },
+      {
+        "postId": "3297428190149298259",
+        "url": "https://www.instagram.com/p/C3C0XfqNUhT/",
+        "likesCount": 95
+      },
+      {
+        "postId": "3451883240610487721",
+        "url": "https://www.instagram.com/p/C_njYS6tl2p/",
+        "likesCount": 75
+      }
+    ],
+    "topPostsByComments": [
+      {
+        "postId": "3443820324911801176",
+        "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+        "commentsCount": 21
+      },
+      {
+        "postId": "3445973705173574952",
+        "url": "https://www.instagram.com/p/C_SjtPKNSUo/",
+        "commentsCount": 9
+      },
+      {
+        "postId": "3841697283960721329",
+        "url": "https://www.instagram.com/p/DVQc1NZD8-x/",
+        "commentsCount": 4
+      }
+    ],
+    "postTypeDistribution": {
+      "Sidecar": 13,
+      "Image": 5,
+      "Video": 12
+    },
+    "hashtagFrequency": {
+      "bangkok": 1,
+      "snowbike": 1,
+      "мото": 1,
+      "triumph": 1
+    },
+    "mentionFrequency": {
+      "fakeev": 1
+    },
+    "digitalCircle": [
+      {
+        "username": "fakeev",
+        "type": "mixed",
+        "score": 10.1,
+        "lastInteractionDate": "2025-09-10T16:36:01.000Z",
+        "details": [
+          "mentioned in caption: https://www.instagram.com/p/DObbnPbDHa_/",
+          "commented: https://www.instagram.com/p/C3itoEntWvU/",
+          "tagged in post: https://www.instagram.com/p/C3C0XfqNUhT/",
+          "commented: https://www.instagram.com/p/C3C0XfqNUhT/"
+        ]
+      },
+      {
+        "username": "julivorobyeva",
+        "type": "mixed",
+        "score": 7.3,
+        "lastInteractionDate": "2025-09-10T19:56:08.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DObbnPbDHa_/",
+          "tagged in post: https://www.instagram.com/p/C3itoEntWvU/",
+          "commented: https://www.instagram.com/p/C7my7AHNsjE/"
+        ]
+      },
+      {
+        "username": "antontouch",
+        "type": "commenter",
+        "score": 4.5,
+        "lastInteractionDate": "2026-03-01T07:09:32.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DVQc1NZD8-x/"
+        ]
+      },
+      {
+        "username": "massel.alexius",
+        "type": "commenter",
+        "score": 3,
+        "lastInteractionDate": "2024-08-29T05:41:12.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/C_K6Fbgo2NY/"
+        ]
+      },
+      {
+        "username": "nykytahhh",
+        "type": "commenter",
+        "score": 3,
+        "lastInteractionDate": "2024-08-28T07:17:16.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/C_K6Fbgo2NY/"
+        ]
+      },
+      {
+        "username": "kirill_om",
+        "type": "commenter",
+        "score": 3,
+        "lastInteractionDate": "2026-01-29T06:19:16.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DUFLmx8EhYx/"
+        ]
+      },
+      {
+        "username": "missminaeva",
+        "type": "commenter",
+        "score": 3,
+        "lastInteractionDate": "2024-11-20T13:26:46.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/DCkSQ5jtAQH/"
+        ]
+      },
+      {
+        "username": "lenafakeeva",
+        "type": "commenter",
+        "score": 3,
+        "lastInteractionDate": "2024-02-21T04:26:00.000Z",
+        "details": [
+          "commented: https://www.instagram.com/p/C3itoEntWvU/"
+        ]
+      }
+    ]
+  },
+  "contentQuality": {
+    "score": 100,
+    "findings": [],
+    "dimensions": {
+      "specificity": 100,
+      "practicalValue": 100,
+      "practicalDetail": 100,
+      "confidenceCalibration": 100,
+      "depth": 100,
+      "keySectionDepth": 100,
+      "healthTransparency": 100
+    }
+  },
+  "sourceMap": [
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] caption: Сравнение Сеула с Парижем по стилю, людям и атмосфере (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DUFLmx8EhYx/",
+      "postId": "3820510902366639665",
+      "label": "[3820510902366639665] caption: Положительная динамика отношения к Бангкоку при повторных визитах (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+      "postId": "3443820324911801176",
+      "label": "[3443820324911801176] vision: Винтажный мотоцикл с коляской как центральный объект серии (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] caption: Сравнительный текст о стиле и атмосфере города (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DCkSQ5jtAQH/",
+      "postId": "3505006736152200199",
+      "label": "[3505006736152200199] caption: Развёрнутое сравнение Рима с другими городами (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DRYzTd0kmP1/",
+      "postId": "3771990325985436661",
+      "label": "[3771990325985436661] caption: Описание первого впечатления от Китая через «чистый, технологичный, красивый» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+      "postId": "3443820324911801176",
+      "label": "[3443820324911801176] metrics: 1005 лайков и 21 комментарий — максимальные показатели (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] metrics: 24 лайка и 0 комментариев у недавнего поста (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+      "postId": "3443820324911801176",
+      "label": "[3443820324911801176] comments: Комментарии: 🔥🔥🔥, 💣 и короткие реплики (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_SjtPKNSUo/",
+      "postId": "3445973705173574952",
+      "label": "[3445973705173574952] comments: Комментарии: «17», «👏👏👏», «20💪🏼» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] caption: Подробное, но сдержанное сравнение Сеула и Парижа (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DCkSQ5jtAQH/",
+      "postId": "3505006736152200199",
+      "label": "[3505006736152200199] caption: Текст о Риме с перечислением конкретных качеств (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DEPlJqZtCMT/",
+      "postId": "3535207624233722643",
+      "label": "[3535207624233722643] caption: Упоминание тестирования гипотез и запуска бизнес-проектов (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] caption: Сравнение поведения людей в Сеуле и Париже как основная идея (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C7rA1ittJpY/",
+      "postId": "3380799624677988952",
+      "label": "[3380799624677988952] caption: Единственный пост с упоминанием бренда (NAUTIQUE, QUIKSILVER) (medium)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] caption: Подробное описание впечатлений от Сеула (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DUFLmx8EhYx/",
+      "postId": "3820510902366639665",
+      "label": "[3820510902366639665] caption: Положительная динамика отношения к Бангкоку (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] caption: Сравнение Сеула с Парижем по стилю и поведению людей (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DUFLmx8EhYx/",
+      "postId": "3820510902366639665",
+      "label": "[3820510902366639665] caption: Текст «С каждым разом все больше нравится #bangkok» (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+      "postId": "3443820324911801176",
+      "label": "[3443820324911801176] vision: Винтажный мотоцикл с коляской на улице (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] caption: Текст о стиле и атмосфере Сеула (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] caption: Сравнение Сеула с Парижем (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DUFLmx8EhYx/",
+      "postId": "3820510902366639665",
+      "label": "[3820510902366639665] caption: Динамика впечатлений от Бангкока (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+      "postId": "3443820324911801176",
+      "label": "[3443820324911801176] vision: Винтажный мотоцикл с коляской (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+      "postId": "3443820324911801176",
+      "label": "[3443820324911801176] metrics: Максимальное количество комментариев в выборке (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C7my7AHNsjE/",
+      "postId": "3379612527283849412",
+      "label": "[3379612527283849412] metrics: 4 комментария при теме мотоцикла (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] caption: Детальное сравнение городов (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+      "postId": "3443820324911801176",
+      "label": "[3443820324911801176] metrics: Высокая вовлечённость вокруг мото-темы (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] timestamp: Пост от марта 2026, sidecar (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+      "postId": "3443820324911801176",
+      "label": "[3443820324911801176] type: Sidecar с высокой вовлечённостью (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] comments: 0 комментариев у недавнего поста (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "postId": "3857587305813880062",
+      "label": "[3857587305813880062] caption: Личное наблюдение о городе без коммерческого акцента (high)"
+    },
+    {
+      "url": "https://www.instagram.com/p/DIwA8z3NbqO/",
+      "postId": "3616394679634213518",
+      "label": "[3616394679634213518] caption: Открытие сезона мото без брендовых тегов (high)"
+    }
+  ],
+  "posts": [
+    {
+      "id": "3443820324911801176",
+      "type": "Sidecar",
+      "timestamp": "2024-08-27T10:43:16.000Z",
+      "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+      "likesCount": 1005,
+      "commentsCount": 21,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [
+        "mark.tales"
+      ],
+      "mediaUrls": [
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/653517508_18110453056819315_2223592600611045578_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2gFYivWLI2dSAsSBV171TmMBpXauGx6J_Y3RiY1NkIwE2CL_0RVeQm5umosZ9crwwJQ&_nc_ohc=805_WLSAt-oQ7kNvwFfW_h-&_nc_gid=1hJ69R0covCytsP8oe4Dyw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-xZd7b4mhu3lmbHLaHwxoMyFO_SH3sECLspBCg9B2-Jw&oe=6A319205&_nc_sid=10d13b",
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/657156711_18142685557436670_6317401009036557211_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2gFYivWLI2dSAsSBV171TmMBpXauGx6J_Y3RiY1NkIwE2CL_0RVeQm5umosZ9crwwJQ&_nc_ohc=bXBB6xt7UU0Q7kNvwFCMgxG&_nc_gid=1hJ69R0covCytsP8oe4Dyw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-nKpDqoCX9Yml6uySYifwfMV4JQmv637hdg4rYG_SYQA&oe=6A31888D&_nc_sid=10d13b",
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/669486245_18098841722476110_3132371935584620867_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2gFYivWLI2dSAsSBV171TmMBpXauGx6J_Y3RiY1NkIwE2CL_0RVeQm5umosZ9crwwJQ&_nc_ohc=85o0p0qYo4AQ7kNvwFBAsa1&_nc_gid=1hJ69R0covCytsP8oe4Dyw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-NllMEpDLHCvKXSeVlykRPuwltOv1IiyT4P2nDerletw&oe=6A318FB0&_nc_sid=10d13b",
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/656559640_18104159974718428_3146618620545566635_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=104&_nc_oc=Q6cZ2gFYivWLI2dSAsSBV171TmMBpXauGx6J_Y3RiY1NkIwE2CL_0RVeQm5umosZ9crwwJQ&_nc_ohc=uo-H7V6y_kYQ7kNvwHdAGel&_nc_gid=1hJ69R0covCytsP8oe4Dyw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9o5lWmDUnWd0jlIhT3IaZLFHnV6LHllVnvau5nvarVkA&oe=6A318280&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3857587305813880062",
+      "type": "Sidecar",
+      "timestamp": "2026-03-21T08:04:23.000Z",
+      "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+      "caption": "Исследуя Сеул, постоянно ловил себя на мысли, что он во многом напоминает Париж — и это ощущается буквально во всём.\n\nВ людях, в их стиле, в том, насколько они ухоженные и эстетичные. Иногда они могут показаться немного холодными и даже слегка высокомерными — держатся сдержанно, на дистанции. Но при этом именно в Корее мне чаще всего предлагали помощь, даже когда она мне особо не была нужна: в метро, на улицах, когда я немного терялся. Это одни из самых отзывчивых людей, которых я встречал.\n\nЕсли говорить о сходстве с Парижем, то это, конечно, про стиль. Очень модные, очень ухоженные люди — причём и молодые, и пожилые. Невероятно красивые заведения, концептуальные магазины, сильная культура, насыщенная ночная жизнь и высокий уровень жизни. Цены, кстати, выше, чем в среднем по Азии.\n\nВ общем, Сеул — один из самых крутых городов, куда точно рекомендую попасть и хочу приехать еще раз",
+      "likesCount": 24,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/655865049_18453343273103135_254256252129490417_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGbbU390sOJJbnGN2qwa4RMZTU0C9rxKdwDUfFcYbBpn5xSCNBIGjS5gDhXmLRrG9I&_nc_ohc=F-MQjmSm7qoQ7kNvwGHPce0&_nc_gid=UsrRye9UJuuWy3FAcj7ORA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9ZJgAGFpx_ipL4FKigVO8Qjee_K3lncJT4Q9xdscdJ_A&oe=6A31AAE0&_nc_sid=10d13b",
+        "https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/653425682_18453343291103135_4469280449188461341_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGbbU390sOJJbnGN2qwa4RMZTU0C9rxKdwDUfFcYbBpn5xSCNBIGjS5gDhXmLRrG9I&_nc_ohc=GQa_kkY87rUQ7kNvwEGzM8f&_nc_gid=UsrRye9UJuuWy3FAcj7ORA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-awnBXbrKsmgtJ9G88-1agY0ncPsLBH6kbwbENMiNdYA&oe=6A31A1BC&_nc_sid=10d13b",
+        "https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/654992802_18453343282103135_7282824828053398809_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGbbU390sOJJbnGN2qwa4RMZTU0C9rxKdwDUfFcYbBpn5xSCNBIGjS5gDhXmLRrG9I&_nc_ohc=ZCCRsQqj6SUQ7kNvwHmMqCZ&_nc_gid=UsrRye9UJuuWy3FAcj7ORA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_dBUhPAbxts7Pwgg-z_RrGbtPjoQi6kEp5tEDvh4EoBw&oe=6A31A644&_nc_sid=10d13b",
+        "https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/654744839_18453343303103135_3705695718492103104_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGbbU390sOJJbnGN2qwa4RMZTU0C9rxKdwDUfFcYbBpn5xSCNBIGjS5gDhXmLRrG9I&_nc_ohc=G-8s3WRDxYQQ7kNvwEUJXX5&_nc_gid=UsrRye9UJuuWy3FAcj7ORA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-8AApOcQi-zKaHMVoQzl1v0FZWHV8179plloHeFOPwcg&oe=6A319D0B&_nc_sid=10d13b",
+        "https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/655222236_18453343312103135_1406342571142742175_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGbbU390sOJJbnGN2qwa4RMZTU0C9rxKdwDUfFcYbBpn5xSCNBIGjS5gDhXmLRrG9I&_nc_ohc=IZ8mOhuByVcQ7kNvwEMhXPK&_nc_gid=UsrRye9UJuuWy3FAcj7ORA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-m5i4XEnZ3elDChCJjvLM4XwSUBplet0WJHoxbW2aqvg&oe=6A31876A&_nc_sid=10d13b",
+        "https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/654255534_18453343321103135_1234935355078149716_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGbbU390sOJJbnGN2qwa4RMZTU0C9rxKdwDUfFcYbBpn5xSCNBIGjS5gDhXmLRrG9I&_nc_ohc=8kclDowxqjYQ7kNvwFWmemA&_nc_gid=UsrRye9UJuuWy3FAcj7ORA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-geH__BpVuR0erniRAV-Ze2QAC4pBaAfa7ZiF8mFb1LQ&oe=6A317951&_nc_sid=10d13b",
+        "https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/655991168_18453343336103135_514263307232220720_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGbbU390sOJJbnGN2qwa4RMZTU0C9rxKdwDUfFcYbBpn5xSCNBIGjS5gDhXmLRrG9I&_nc_ohc=WjAqzoPvcR8Q7kNvwEUY2Yw&_nc_gid=UsrRye9UJuuWy3FAcj7ORA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-UAKo0ZEdvA800aQFvdS9FZgVW4YXTfBYzcBKtsbUpkQ&oe=6A317F72&_nc_sid=10d13b",
+        "https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/655252950_18453343345103135_4071171310825105710_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGbbU390sOJJbnGN2qwa4RMZTU0C9rxKdwDUfFcYbBpn5xSCNBIGjS5gDhXmLRrG9I&_nc_ohc=cPxH9QlZvakQ7kNvwEqERNV&_nc_gid=UsrRye9UJuuWy3FAcj7ORA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8u_uPoVek9qUaTtZivtFf95fIqMoSVJhDgAIC_pcOR_w&oe=6A319298&_nc_sid=10d13b",
+        "https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/654757392_18453343354103135_4347629615459582065_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGbbU390sOJJbnGN2qwa4RMZTU0C9rxKdwDUfFcYbBpn5xSCNBIGjS5gDhXmLRrG9I&_nc_ohc=ppLr3G5t69oQ7kNvwGRL1hv&_nc_gid=UsrRye9UJuuWy3FAcj7ORA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_ZGc98Rcu5FOaojFZgNpxjWzMi-gGDZT_wVB5pu2VpLQ&oe=6A319FF9&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3855923679859348271",
+      "type": "Image",
+      "timestamp": "2026-03-19T01:00:51.000Z",
+      "url": "https://www.instagram.com/p/DWC_ihDCJMv/",
+      "caption": "Из каких то поездок забираешь новые эмоции, из каких то - новых друзей. Тут сложилось и то и другое",
+      "likesCount": 38,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-lax3-2.cdninstagram.com/v/t51.82787-15/654654891_18452851948103135_1508035763465215544_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-lax3-2.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gG6-rIcLaBAvye-YHbpNv7KhBHrEBoz9G680xIyG6Jxobwtdp-FDqqo_5Xka5S-ntc&_nc_ohc=KQ8rwERbzxYQ7kNvwHZHAq7&_nc_gid=42xN7-1qxZRjbAJLEMix6Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-OM3zNWFAHBO-Z3g8VcIXniLeNO8DRqhUdgtMxpkQH5g&oe=6A3199AD&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3841697283960721329",
+      "type": "Image",
+      "timestamp": "2026-02-27T09:54:02.000Z",
+      "url": "https://www.instagram.com/p/DVQc1NZD8-x/",
+      "caption": "Тут мне 33…",
+      "likesCount": 34,
+      "commentsCount": 4,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.82787-15/639787497_18449439895103135_7249593684551823955_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFXiQ_CQsyr8IXp9694jtV5VlGcxitxL8XSILNZH5JZ2Ze7bvd3W-VnOXlmSG1wXLg&_nc_ohc=w61Q1aUsqBwQ7kNvwFPeMVB&_nc_gid=RdsAPI2wqwsMtC2aSqMESg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-EAvv7PLCW6E1uVyOC1UVKZxeHwmDXpWj-yAB7QAotQg&oe=6A318781&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3854589785466135995",
+      "type": "Sidecar",
+      "timestamp": "2026-03-17T04:48:51.000Z",
+      "url": "https://www.instagram.com/p/DV-QPzFjuW7/",
+      "likesCount": 34,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-sjc6-1.cdninstagram.com/v/t51.82787-15/653469586_18452487301103135_7029363262416740657_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-sjc6-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gG7f2OKY3zohwL_SsT1LmVFcmqwDTwlKKHaSKmAuHUW3x7Nq2ilyP4AGvILbHiDIPo&_nc_ohc=Gtwfest-6XoQ7kNvwHMz-FK&_nc_gid=z5SQ4uF-2mxo0jr5iEW4OA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9ekDeqZqbEl54pzatQaGFSxF6jGKQU3m5LiDTHPgKU6g&oe=6A317FCB&_nc_sid=10d13b",
+        "https://scontent-sjc6-1.cdninstagram.com/v/t51.82787-15/652082991_18452487310103135_4113329094926110669_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-sjc6-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gG7f2OKY3zohwL_SsT1LmVFcmqwDTwlKKHaSKmAuHUW3x7Nq2ilyP4AGvILbHiDIPo&_nc_ohc=gmn14qLAUHgQ7kNvwHfMXf1&_nc_gid=z5SQ4uF-2mxo0jr5iEW4OA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-62JW3CNPB4yABuoONEdqShFjgqVFqjb7iQ4Zjo1Vc2w&oe=6A319200&_nc_sid=10d13b",
+        "https://scontent-sjc6-1.cdninstagram.com/v/t51.82787-15/651872799_18452487325103135_9004730768036971422_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-sjc6-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gG7f2OKY3zohwL_SsT1LmVFcmqwDTwlKKHaSKmAuHUW3x7Nq2ilyP4AGvILbHiDIPo&_nc_ohc=4V1KNA3oYpsQ7kNvwE-gAaZ&_nc_gid=z5SQ4uF-2mxo0jr5iEW4OA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_KDg1QAc4SXr9meDVxcJCKvFstoG05Ml1XlTCqGck06A&oe=6A3193E4&_nc_sid=10d13b",
+        "https://scontent-sjc6-1.cdninstagram.com/v/t51.82787-15/653100948_18452487343103135_4530553792477677838_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-sjc6-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gG7f2OKY3zohwL_SsT1LmVFcmqwDTwlKKHaSKmAuHUW3x7Nq2ilyP4AGvILbHiDIPo&_nc_ohc=NNHYajHjVGgQ7kNvwFx9oeu&_nc_gid=z5SQ4uF-2mxo0jr5iEW4OA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-wNuq_aynslneMv8EsCGwSAJVdZcce2fE4WmtN_dSgMw&oe=6A31AB2C&_nc_sid=10d13b",
+        "https://scontent-sjc6-1.cdninstagram.com/v/t51.82787-15/651692011_18452487334103135_4453914240045222874_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-sjc6-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gG7f2OKY3zohwL_SsT1LmVFcmqwDTwlKKHaSKmAuHUW3x7Nq2ilyP4AGvILbHiDIPo&_nc_ohc=TR8xAScz6RwQ7kNvwGqSwXZ&_nc_gid=z5SQ4uF-2mxo0jr5iEW4OA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9X3ohYa2Gwz0HlsClPVwWloDq3JM3S9bm2E3cohxMVNQ&oe=6A318BDE&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3445973705173574952",
+      "type": "Video",
+      "timestamp": "2024-08-30T10:02:47.000Z",
+      "url": "https://www.instagram.com/p/C_SjtPKNSUo/",
+      "likesCount": 39,
+      "commentsCount": 9,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://instagram.ftol2-1.fna.fbcdn.net/v/t51.71878-15/505742005_1149642790513256_340132098667580805_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.ftol2-1.fna.fbcdn.net&_nc_cat=108&_nc_oc=Q6cZ2gGTUvkvT4dHXWmHOBBkL8t-Pd6X_N05cIqspY-c1qe10QIj3VVRzK-xdmdQxHTyqtg&_nc_ohc=mRACm9yKGasQ7kNvwEFYBEN&_nc_gid=MW8B-QCVxm91Qchug2yhAA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8qpzja7_0xlDk7jTQ6KMvjszLhHJOB_0_vjx_3_3S01g&oe=6A319456&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3854599590121462450",
+      "type": "Sidecar",
+      "timestamp": "2026-03-17T05:08:20.000Z",
+      "url": "https://www.instagram.com/p/DV-SeeYjlqy/",
+      "likesCount": 24,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/651755113_18452488852103135_2243931065349503167_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHS_ejqLdx4GPWeJcixBR1TVN_Z5NgQsGpwZqZu7wy60GydjUuv2sxkQTkWsmZ5Tu4&_nc_ohc=cp93z-GEoLcQ7kNvwHaFN0x&_nc_gid=VOWke9kMBOyK68r0yKc9_Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-nV5toxgDFHSef2L40qHxe6nZ5CEOt7B54uk27l_ENRA&oe=6A31863D&_nc_sid=10d13b",
+        "https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/650606467_18452488861103135_7388582849222014318_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHS_ejqLdx4GPWeJcixBR1TVN_Z5NgQsGpwZqZu7wy60GydjUuv2sxkQTkWsmZ5Tu4&_nc_ohc=G8Rbju6itSIQ7kNvwGgR_JK&_nc_gid=VOWke9kMBOyK68r0yKc9_Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9uevWqy01O96erA60tbv_o7_nFoK5tQEkjAW-_a0OOBA&oe=6A319A89&_nc_sid=10d13b",
+        "https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/652732646_18452488870103135_1396768992227017180_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHS_ejqLdx4GPWeJcixBR1TVN_Z5NgQsGpwZqZu7wy60GydjUuv2sxkQTkWsmZ5Tu4&_nc_ohc=UfhK9ceEobwQ7kNvwHkzyqU&_nc_gid=VOWke9kMBOyK68r0yKc9_Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_9WvJFg943Q1nDgY2qHra0Lk40f6dtXLQasWb4DXa82A&oe=6A318978&_nc_sid=10d13b",
+        "https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/651317253_18452488879103135_5643722098263628980_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHS_ejqLdx4GPWeJcixBR1TVN_Z5NgQsGpwZqZu7wy60GydjUuv2sxkQTkWsmZ5Tu4&_nc_ohc=6fIluAUAT2QQ7kNvwGHdJlD&_nc_gid=VOWke9kMBOyK68r0yKc9_Q&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-KmpF0qUQtLa3-FHqPkvK9XIfkkJBVog8Td1X39y9Hkw&oe=6A31AAAC&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3820510902366639665",
+      "type": "Sidecar",
+      "timestamp": "2026-01-29T04:20:12.000Z",
+      "url": "https://www.instagram.com/p/DUFLmx8EhYx/",
+      "caption": "С каждым разом все больше нравится #bangkok",
+      "likesCount": 30,
+      "commentsCount": 2,
+      "hashtags": [
+        "bangkok"
+      ],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-xxc1-1.cdninstagram.com/v/t51.82787-15/623854199_18443113669103135_772044190086656595_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-xxc1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFT38PpYZFTaDKsi7t6irZQGEAQrQ714evgcm4Q9Bqyt0Fg0XzEjUszVhznS35fn9Q&_nc_ohc=4I3M-2JiQnoQ7kNvwHzrlMM&_nc_gid=ExC-oX0LcML2Fhh0Rnoijg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_xosz_YXI_I-GHhH4JXM0JoF-4PaK9raGLHg1taH3neQ&oe=6A318AF9&_nc_sid=10d13b",
+        "https://scontent-xxc1-1.cdninstagram.com/v/t51.82787-15/623949265_18443113666103135_1528524212622068347_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-xxc1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFT38PpYZFTaDKsi7t6irZQGEAQrQ714evgcm4Q9Bqyt0Fg0XzEjUszVhznS35fn9Q&_nc_ohc=r1auJbJn3k0Q7kNvwGXZ11Z&_nc_gid=ExC-oX0LcML2Fhh0Rnoijg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8cvSbB4s9mjcNjbBj6lRwkT3Mz5wmtP5cNafUeZ2wlPA&oe=6A31812A&_nc_sid=10d13b",
+        "https://scontent-xxc1-1.cdninstagram.com/v/t51.82787-15/622649164_18443113684103135_3926055255621844514_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-xxc1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFT38PpYZFTaDKsi7t6irZQGEAQrQ714evgcm4Q9Bqyt0Fg0XzEjUszVhznS35fn9Q&_nc_ohc=-LlUimf4omAQ7kNvwFeDa5S&_nc_gid=ExC-oX0LcML2Fhh0Rnoijg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_MGUSehnSX4d7oyuIZdWYtBHtJrTDdJiPAW9Mlrm2NSA&oe=6A319D86&_nc_sid=10d13b",
+        "https://scontent-xxc1-1.cdninstagram.com/v/t51.82787-15/623800817_18443113687103135_5804348458125088537_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-xxc1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFT38PpYZFTaDKsi7t6irZQGEAQrQ714evgcm4Q9Bqyt0Fg0XzEjUszVhznS35fn9Q&_nc_ohc=fQWGVX45slIQ7kNvwEXOo9o&_nc_gid=ExC-oX0LcML2Fhh0Rnoijg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-MB5sZM-Q3GThtAaABBw-9VRtJnku2rpBxJ7UrdyzlxA&oe=6A31AD8D&_nc_sid=10d13b",
+        "https://scontent-xxc1-1.cdninstagram.com/v/t51.82787-15/622719490_18443113696103135_5962869947042122146_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-xxc1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFT38PpYZFTaDKsi7t6irZQGEAQrQ714evgcm4Q9Bqyt0Fg0XzEjUszVhznS35fn9Q&_nc_ohc=MdH81hMVXowQ7kNvwFLrUpP&_nc_gid=ExC-oX0LcML2Fhh0Rnoijg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_izkStbdY_aKE1jmIZbTE7uW6OcvXUEZSV7beH9aCmtw&oe=6A318428&_nc_sid=10d13b",
+        "https://scontent-xxc1-1.cdninstagram.com/v/t51.82787-15/623884029_18443113720103135_1072154204644598554_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-xxc1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFT38PpYZFTaDKsi7t6irZQGEAQrQ714evgcm4Q9Bqyt0Fg0XzEjUszVhznS35fn9Q&_nc_ohc=QXZrjGcBNxgQ7kNvwE3ttrV&_nc_gid=ExC-oX0LcML2Fhh0Rnoijg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_ewYHrFwuHwt55NJ84eH1_jrkt-8NT0Le4xhKcsYFziQ&oe=6A318AEA&_nc_sid=10d13b",
+        "https://scontent-xxc1-1.cdninstagram.com/v/t51.82787-15/623020560_18443113735103135_9111182837379494960_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-xxc1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFT38PpYZFTaDKsi7t6irZQGEAQrQ714evgcm4Q9Bqyt0Fg0XzEjUszVhznS35fn9Q&_nc_ohc=ALxHPe5-DQoQ7kNvwGgNizj&_nc_gid=ExC-oX0LcML2Fhh0Rnoijg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9nxyskP-d4hzXm120wVX1E3Lt-1H-mOCq00637Mg5w0w&oe=6A31ACF8&_nc_sid=10d13b",
+        "https://scontent-xxc1-1.cdninstagram.com/v/t51.82787-15/624209086_18443113750103135_7726987587403631295_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-xxc1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFT38PpYZFTaDKsi7t6irZQGEAQrQ714evgcm4Q9Bqyt0Fg0XzEjUszVhznS35fn9Q&_nc_ohc=IZYDqDT8Po8Q7kNvwF9e5_u&_nc_gid=ExC-oX0LcML2Fhh0Rnoijg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_VJHG-EOTW1n3uW4slkwXZADvtR6Xq1l-wXaog9bRsSA&oe=6A31A7E1&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3718687361199797951",
+      "type": "Video",
+      "timestamp": "2025-09-10T16:36:01.000Z",
+      "url": "https://www.instagram.com/p/DObbnPbDHa_/",
+      "caption": "Проводили лето с @fakeev",
+      "likesCount": 36,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [
+        "fakeev"
+      ],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-atl3-1.cdninstagram.com/v/t51.71878-15/543791840_1075477514791542_6689954887814671644_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2gEacuUYahhSwBh9AlkoAs1FUW1PE5TovZYnOS1Y7rX4Ojr-isP-HiHH4pM6DlFiKLU&_nc_ohc=x5yYRHmACjwQ7kNvwFC-Qnw&_nc_gid=tzSaEiZWND0h5MbuqpHZpQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_Y8t-IVcOKf9jGPAp8-cUDMggR4UbFjkEHrDtiFYazjg&oe=6A317CF7&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3505006736152200199",
+      "type": "Sidecar",
+      "timestamp": "2024-11-19T20:49:44.000Z",
+      "url": "https://www.instagram.com/p/DCkSQ5jtAQH/",
+      "caption": "Кажется у моего любимого города появился конкурент… \n\nРим просто взял все, что я люблю в других местах  и все это совместил - люди вежливые, но без ханжинства или напыщенности. Стильные, но без лого брендов на всю спину. Общительные, но не в соцсетях, а в реальной жизни. Я вообще был в шоке, что в заведениях никто не сидит в телефонах, а все общаются друг с другом по настоящему. Понятия либеральные, но в отличие от соседей имеют границы. Город старый, но не убитый. Расслабленный, но не раздолбайский. \n\nИталия вообще тысячелетиями задает стиль и делает невероятные вещи: мотоциклы, машины, одежду, еду. Мне кажется дело в людях, хочется узнать их поближе. Я точно вернусь сюда, и надеюсь поживу тут подольше.",
+      "likesCount": 46,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/661471703_18088784168244177_4623221529880678970_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2gH7-Ba1mJiyijf0--ON3ix5LG8tovDkn-f7XpXXTDHV3o5Mmy0lsN4ZI5n1zW602RE&_nc_ohc=55WknTU1L0AQ7kNvwEZBbd5&_nc_gid=7Cjr72XXg1bsQyr8C-rz-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8jLtO13VHTb1k0OTGl5QkUMZ6zhXbdG_i0vLbHZXxkAA&oe=6A31A79F&_nc_sid=10d13b",
+        "https://scontent-atl3-1.cdninstagram.com/v/t51.82787-15/655074079_17966767524029367_4652710402723988001_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gH7-Ba1mJiyijf0--ON3ix5LG8tovDkn-f7XpXXTDHV3o5Mmy0lsN4ZI5n1zW602RE&_nc_ohc=Qo58xElxpa8Q7kNvwFuSP7F&_nc_gid=7Cjr72XXg1bsQyr8C-rz-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_whGuPVyjAGTCqmO-v2AATZxThwMueqrFzqsE6G9QlMg&oe=6A31A0FB&_nc_sid=10d13b",
+        "https://scontent-atl3-2.cdninstagram.com/v/t51.82787-15/655957714_18112171555665842_2641731395010180619_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-2.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gH7-Ba1mJiyijf0--ON3ix5LG8tovDkn-f7XpXXTDHV3o5Mmy0lsN4ZI5n1zW602RE&_nc_ohc=slhMNKfduEEQ7kNvwFNHZ6r&_nc_gid=7Cjr72XXg1bsQyr8C-rz-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-AqE-VrvduldxYQR8DkgG_hMxOETFQlhTGMCmtBH5_5w&oe=6A318965&_nc_sid=10d13b",
+        "https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/652798134_17938317057174346_3454726624331307238_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2gH7-Ba1mJiyijf0--ON3ix5LG8tovDkn-f7XpXXTDHV3o5Mmy0lsN4ZI5n1zW602RE&_nc_ohc=tWVUK5F50VUQ7kNvwEFPs1W&_nc_gid=7Cjr72XXg1bsQyr8C-rz-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9R_xpUyllVGtRqmBnrzoYXqovywzdKCuaLqjCqKzZv3Q&oe=6A318C7E&_nc_sid=10d13b",
+        "https://scontent-atl3-1.cdninstagram.com/v/t51.82787-15/650901366_17958719799066087_2325373578383528305_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gH7-Ba1mJiyijf0--ON3ix5LG8tovDkn-f7XpXXTDHV3o5Mmy0lsN4ZI5n1zW602RE&_nc_ohc=CCprEx19oOUQ7kNvwHN4t2o&_nc_gid=7Cjr72XXg1bsQyr8C-rz-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-S2ScCFUESJ_1AERMwtO27Z3Bo_taGVuzPzL6QSOJrLA&oe=6A317C3B&_nc_sid=10d13b",
+        "https://scontent-atl3-2.cdninstagram.com/v/t51.82787-15/656240773_18105797152885980_6469454114443870781_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2gH7-Ba1mJiyijf0--ON3ix5LG8tovDkn-f7XpXXTDHV3o5Mmy0lsN4ZI5n1zW602RE&_nc_ohc=d9qv8ctQ24IQ7kNvwG5keSH&_nc_gid=7Cjr72XXg1bsQyr8C-rz-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_Temc0K_m2AwL28RQR-z5FnSizNH2a9SnsBM9mK_NUaA&oe=6A318E93&_nc_sid=10d13b",
+        "https://scontent-atl3-3.cdninstagram.com/v/t51.2885-15/467640933_18377771278103135_1262666678919073709_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gH7-Ba1mJiyijf0--ON3ix5LG8tovDkn-f7XpXXTDHV3o5Mmy0lsN4ZI5n1zW602RE&_nc_ohc=dKyTu2qIKYIQ7kNvwEIHid_&_nc_gid=7Cjr72XXg1bsQyr8C-rz-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_Sm7ZKISQ4GxiTb5jvoZPI2SScSzvVqOqA2Qo1gZyRaA&oe=6A3185AF&_nc_sid=10d13b",
+        "https://scontent-atl3-3.cdninstagram.com/v/t51.2885-15/467642427_18377771290103135_8897725561303878759_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gH7-Ba1mJiyijf0--ON3ix5LG8tovDkn-f7XpXXTDHV3o5Mmy0lsN4ZI5n1zW602RE&_nc_ohc=CbAvzwq7CjYQ7kNvwEd1VJm&_nc_gid=7Cjr72XXg1bsQyr8C-rz-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9hTvn5spQZGwmHChEgoQoUwHBW5GzXEP2KkKSAGWoFEw&oe=6A317F4B&_nc_sid=10d13b",
+        "https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/656266472_18064359593366637_7949886605940231618_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2gH7-Ba1mJiyijf0--ON3ix5LG8tovDkn-f7XpXXTDHV3o5Mmy0lsN4ZI5n1zW602RE&_nc_ohc=ERibwnd_7YgQ7kNvwEI5Osc&_nc_gid=7Cjr72XXg1bsQyr8C-rz-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8E6ZmuvHunrahN2Bi0vZyChz9_QJENjQJTwWQLQW3ntQ&oe=6A319C10&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3535207624233722643",
+      "type": "Image",
+      "timestamp": "2024-12-31T12:53:31.000Z",
+      "url": "https://www.instagram.com/p/DEPlJqZtCMT/",
+      "caption": "Этот год был для меня не самым легким, но очень интересным. Я протестировал большое количество гипотез, пробовал запускать новые бизнес проекты. Очень многое не получалось и временами просто опускались руки. Но сегодня я чувствую как весь этот опыт осел где то на подсознании и были вынесены важные уроки, и все это обязательно прорастет в новом году. \n\nНо было много того, что получилось: \n -бросил кофе \n-завёл новых друзей  -регулярно тренировался  -съездил Европу  -съездил на Blockchain Life в Дубаи  -купил мотоцикл  -завел телеграмм канал  -сделал чек ап организма  -Прочитал 6 книг \nЗапланировал себе много интересных задач на 2025, посмотрим что удастся реализовать, всем желаю здоровья и достижения поставленных целей",
+      "likesCount": 34,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-iad6-1.cdninstagram.com/v/t51.82787-15/624066329_18031964939581579_4159322387913878097_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-iad6-1.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2gGJnuRz7V10GKcrbkY23WUfVLrZiyqBjWZEjhteppinOvChES8uadSIMc0r0cGirQg&_nc_ohc=iDpWDJQwzYAQ7kNvwHDkzxu&_nc_gid=NouN-ZjoW06eO8yq8AKAqA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-DfKkSC8XVTv3MvmrfeAB-r6F3cSvMCzBvhMdRg2jAtA&oe=6A319A7C&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3306405742276602836",
+      "type": "Image",
+      "timestamp": "2024-02-19T20:25:01.000Z",
+      "url": "https://www.instagram.com/p/C3itoEntWvU/",
+      "caption": "Я всегда был худым, с самого детства, такая, как говорится «генетика». И забавно, когда знакомые, которым нужно сбросить лишний вес говорят : «тебе конечно легко, ты итак худой…» \n\nНо мало кто задумается о таком факте-чтобы мне с моей «удачной генетикой» выглядеть хотябы так как на этой фотке, я тренируюсь 10 лет соблюдая режим и скорее всего это мой максимум мышечной массы в жизни, а каждый раз, когда я хотябы на один месяц перестаю тренироваться и не доедаю белка - меня отбрасывает к такой ужасной форме, что я себя не узнаю в зеркале 😄 \n\nЧасто кажется, что всем вокруг легче чем нам, а нам не так сильно повезло) Я тут поймал себя на мысли, что иногда думаю так про успех окружающих, плохая привычка. У вас есть такое ?",
+      "likesCount": 55,
+      "commentsCount": 4,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [
+        "julivorobyeva"
+      ],
+      "mediaUrls": [
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.82787-15/626671443_18132158467512044_8694802322646401488_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=108&_nc_oc=Q6cZ2gG_OAvTW0rp0rB7O7ZHO0x2lyjGIPDX7bhguhXiWw4NZHyEGnzM_ph2piFP4EYR8Gk&_nc_ohc=9TSiN6-xWx4Q7kNvwGObspc&_nc_gid=athoNDQN1XL29iuBuu9gTQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9RdVgX9tfh1FP0cAKhf7bsxL9BzunvZWOz-LU5EDvvBA&oe=6A317C23&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3834577256057065335",
+      "type": "Sidecar",
+      "timestamp": "2026-02-17T14:07:32.000Z",
+      "url": "https://www.instagram.com/p/DU3J7KrEs93/",
+      "caption": "Каждый раз, как в первый раз ⛰️",
+      "likesCount": 25,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-msp1-1.cdninstagram.com/v/t51.82787-15/632929801_18448040677103135_7251502588996702840_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-msp1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHr7BxYjHIV0ssHwn78pKceajkC7DBYv-O7foIV8FV0cewv_O_FL6hri4PYb5wvdYs&_nc_ohc=CxQpc1ycjlYQ7kNvwHyPs5L&_nc_gid=co_XA7PYbuQsn0VIh8qKVA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af83tnrf2mAeL_oQ7WMk1-Hpy9watZhTwfKj2Ypa5LbPpg&oe=6A31AD2C&_nc_sid=10d13b",
+        "https://scontent-msp1-1.cdninstagram.com/v/t51.82787-15/632090116_18448040680103135_4977996288673291769_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-msp1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHr7BxYjHIV0ssHwn78pKceajkC7DBYv-O7foIV8FV0cewv_O_FL6hri4PYb5wvdYs&_nc_ohc=UEe4e-dOtqcQ7kNvwHPpjpr&_nc_gid=co_XA7PYbuQsn0VIh8qKVA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8s_P2w-5540WketSWokFoPvcPh9RSUxy0H2ASxrLVVvw&oe=6A31AFA8&_nc_sid=10d13b",
+        "https://scontent-msp1-1.cdninstagram.com/v/t51.82787-15/635627095_18448040674103135_6599525791794793297_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-msp1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHr7BxYjHIV0ssHwn78pKceajkC7DBYv-O7foIV8FV0cewv_O_FL6hri4PYb5wvdYs&_nc_ohc=slrILAorsAkQ7kNvwHr86E0&_nc_gid=co_XA7PYbuQsn0VIh8qKVA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-3qYT2soxk5Qj3zR4Y8k3p6QiGEnVaRTlgaO24OF7ZfA&oe=6A3190F8&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3379612527283849412",
+      "type": "Video",
+      "timestamp": "2024-05-30T20:36:37.000Z",
+      "url": "https://www.instagram.com/p/C7my7AHNsjE/",
+      "caption": "Когда наконец доверили серьезную технику 😁🏍️",
+      "likesCount": 20,
+      "commentsCount": 4,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [
+        "rentalbikes.ru"
+      ],
+      "mediaUrls": [
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.71878-15/502817521_2491102834616099_8089198482125080632_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGlLn9hyB9n5lyEI6DzsXxNXvpxbZdFCbzPxh0OX6oIrY4lEpi8b_om_5K5JvCwYgw&_nc_ohc=gq1R839p33YQ7kNvwHyp2sc&_nc_gid=I5hEeShHd_lF5mfkWxNMQg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_BasYWT7dUDJQbwH9yLfKxVaXrFr7I6s84s5L1pVnNfQ&oe=6A3192DD&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3771990325985436661",
+      "type": "Sidecar",
+      "timestamp": "2025-11-23T05:38:28.000Z",
+      "url": "https://www.instagram.com/p/DRYzTd0kmP1/",
+      "caption": "Первый раз в Китае, представлял себе его вообще не так, как есть на самом деле. Чисто, технологично, красиво",
+      "likesCount": 49,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/587805141_18433443691103135_3222720584310770767_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHA1JHQF3dMafoamef0mvp4fDZIDd3BTjBzCizVLaF0etaMEaH-IW-TmYhFTRm_n5c&_nc_ohc=pyYBQf1Hu7sQ7kNvwG9-KP_&_nc_gid=eKoH_eoDtmLV1tkdp1PQ-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8EncF6aH821C5VeEOiW-CDx2uKGg-nav5l7Mnw3_U2rQ&oe=6A31A68D&_nc_sid=10d13b",
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/584396389_18433443709103135_3359335594575455900_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHA1JHQF3dMafoamef0mvp4fDZIDd3BTjBzCizVLaF0etaMEaH-IW-TmYhFTRm_n5c&_nc_ohc=ys4X6nFpf3MQ7kNvwE2Hd-M&_nc_gid=eKoH_eoDtmLV1tkdp1PQ-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8qse_EkmH34wHfVJeXBnzMzrv8JYMBRKXQ3dMBB7VRSQ&oe=6A319DD6&_nc_sid=10d13b",
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/584397847_18433443718103135_8632312774682568798_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHA1JHQF3dMafoamef0mvp4fDZIDd3BTjBzCizVLaF0etaMEaH-IW-TmYhFTRm_n5c&_nc_ohc=AN6Off5TN4cQ7kNvwGtGK2g&_nc_gid=eKoH_eoDtmLV1tkdp1PQ-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9cf8UVuV6ufxHfMkW7Peh8CbKF5R_SL0ytcQQKDL3tNA&oe=6A31AB71&_nc_sid=10d13b",
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/584063499_18433443727103135_5382977064038120033_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHA1JHQF3dMafoamef0mvp4fDZIDd3BTjBzCizVLaF0etaMEaH-IW-TmYhFTRm_n5c&_nc_ohc=S6MXzDHk0owQ7kNvwFRXr1s&_nc_gid=eKoH_eoDtmLV1tkdp1PQ-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8SiujnqgA8q_KswU014gpYWucXZmPTpNFYc0ow-3DNrg&oe=6A31A9B3&_nc_sid=10d13b",
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/587837000_18433443736103135_331927011274439180_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHA1JHQF3dMafoamef0mvp4fDZIDd3BTjBzCizVLaF0etaMEaH-IW-TmYhFTRm_n5c&_nc_ohc=d1vmzgtakVUQ7kNvwHhPxb5&_nc_gid=eKoH_eoDtmLV1tkdp1PQ-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_vv8KX_to9wnAprzvL4tTSoGbJG4W_sIn7-gjl5pMjKA&oe=6A3182B5&_nc_sid=10d13b",
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/587808664_18433443748103135_1384026618815404120_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHA1JHQF3dMafoamef0mvp4fDZIDd3BTjBzCizVLaF0etaMEaH-IW-TmYhFTRm_n5c&_nc_ohc=rUczA69t0LQQ7kNvwHDrWNK&_nc_gid=eKoH_eoDtmLV1tkdp1PQ-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9-RUyHz5WBST3F01puHEtXKpcZNyWpL6Jxb-3az-MjmQ&oe=6A31A30D&_nc_sid=10d13b",
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/587099920_18433443757103135_7213253296519865206_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHA1JHQF3dMafoamef0mvp4fDZIDd3BTjBzCizVLaF0etaMEaH-IW-TmYhFTRm_n5c&_nc_ohc=XRpnSK9hgAoQ7kNvwFBlVr-&_nc_gid=eKoH_eoDtmLV1tkdp1PQ-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af92X7WFCEsrgqbkPcr-FrFXOrTDwkk1Rip-3X6q5z0u_g&oe=6A318B57&_nc_sid=10d13b",
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/587106701_18433443766103135_4734499990479247625_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHA1JHQF3dMafoamef0mvp4fDZIDd3BTjBzCizVLaF0etaMEaH-IW-TmYhFTRm_n5c&_nc_ohc=KWeqmcCIaCUQ7kNvwHApPFJ&_nc_gid=eKoH_eoDtmLV1tkdp1PQ-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8gjygPUXltjpM7bckYs465CRb_sYce9ORwSZymO4ikkQ&oe=6A318118&_nc_sid=10d13b",
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.82787-15/587119741_18433443775103135_6838084733442818271_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHA1JHQF3dMafoamef0mvp4fDZIDd3BTjBzCizVLaF0etaMEaH-IW-TmYhFTRm_n5c&_nc_ohc=qf9sp9l4zSgQ7kNvwGnJIWe&_nc_gid=eKoH_eoDtmLV1tkdp1PQ-w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-psU-v9qu2NpyEuBw_oLDDZEQ-BdO_5T0UxGWFr4rFeg&oe=6A31AEC7&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3766571453878406448",
+      "type": "Video",
+      "timestamp": "2025-11-15T18:40:52.000Z",
+      "url": "https://www.instagram.com/p/DRFjMf5jI0w/",
+      "caption": "Шеньчжень, Китай. Все как в рилсах показывали, я проверил 👌🏻",
+      "likesCount": 30,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-iad3-1.cdninstagram.com/v/t51.71878-15/581803726_25120296490914886_5356606169112604004_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-iad3-1.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2gGL5uQ4VOAkusoAB3S7WHpk5PWBQTGeGemzaz2zXpr-Bp00uUn5ZmJxNOcVpMg08Lw&_nc_ohc=K8R2zh6G6xEQ7kNvwHf2x1n&_nc_gid=NST-5GAolhsguV5WjTOcXg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8pZ4t9QCmTwQzRE-xfkRWE03MfvEcPluVrUIIjS_GpGg&oe=6A318DCD&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3297428190149298259",
+      "type": "Image",
+      "timestamp": "2024-02-07T11:08:13.000Z",
+      "url": "https://www.instagram.com/p/C3C0XfqNUhT/",
+      "caption": "Я убежден, что дружба, как и некоторые другие формы отношений между людьми - это вопрос не только общих интересов или взаимной симпатии. Любые отношения создаются, а не просто случайно находятся. Это, если хотите - вопрос выбора.  Есть такая избитая поговорка: «Между тобой и другим человеком всегда 10 шагов. Если ты прошел 5 и никого не встретил, то разворачивайся и уходи» - звучит немного банально, но что то в этом есть… \n\nДружим уже 20 лет,  и мне кажется, с учетом реалий современных отношений между людьми, это та цифра, которой можно хвастаться",
+      "likesCount": 95,
+      "commentsCount": 2,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [
+        "fakeev"
+      ],
+      "mediaUrls": [
+        "https://scontent-ord5-3.cdninstagram.com/v/t51.82787-15/618577327_17957191947047782_2910336850834410122_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-3.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2gGHQ0-n8vDCvLAKrvHzNBKekmZofl81wNkB1KknOGtrgnF3ngzjuqE5mj7ZEaac5LE&_nc_ohc=qByG3NfKjBIQ7kNvwGUS1MU&_nc_gid=984AODPCx78azU2xdM-tdg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8d7hAlQgkSMVLLAIBj9jrDowzk5F_NXuMqsYcXzO8cgw&oe=6A319EC4&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3291134523298272915",
+      "type": "Video",
+      "timestamp": "2024-01-29T18:46:55.000Z",
+      "url": "https://www.instagram.com/p/C2sdWlpN9aT/",
+      "caption": "На что только не приходится идти, чтобы кататься круглый год 😄 #snowbike",
+      "likesCount": 36,
+      "commentsCount": 2,
+      "hashtags": [
+        "snowbike"
+      ],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://instagram.fhsv1-1.fna.fbcdn.net/v/t51.71878-15/503123282_1463678205043548_8686111035526797600_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fhsv1-1.fna.fbcdn.net&_nc_cat=100&_nc_oc=Q6cZ2gHSAspF7wz2cXhkUz3znQuSOPpo9U2dIne_E9fuBznx07f3dugaTolCPRgFMUXhM-I&_nc_ohc=5LhkzrKyUyYQ7kNvwHZYWEE&_nc_gid=TP3lbsIldESrD31-EP1jQg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-D8EEAYTPt4M1XVBm_-2P0iFqFXgoqWz9hwuhu7isR8w&oe=6A31A184&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3592516392860499656",
+      "type": "Sidecar",
+      "timestamp": "2025-03-20T14:35:48.000Z",
+      "url": "https://www.instagram.com/p/DHbLqAWN77I/",
+      "caption": "Москва такая красивая, пусть будет про это пост",
+      "likesCount": 38,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/485108411_18395584312103135_4859320345706169655_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=gRyenB6aiu4Q7kNvwEwn60-&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_2Kbjb9bz_tA0BHlAd-Cxq4_mS9h9__C8Uf9SXiR7pZQ&oe=6A319226&_nc_sid=10d13b",
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/486048693_18395584327103135_8570780289977349482_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=X70W3nDgoK4Q7kNvwEsYVjM&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8U51NbxLpeSZqegQstVSS8SjqF0oXWToFXaBHXCpBoUQ&oe=6A3190EB&_nc_sid=10d13b",
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/485185690_18395584348103135_6012798419671166222_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=fpVqanIvjt4Q7kNvwH3-vuz&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_IliMUXGeY2TK2CWbCdrOO0JPR3cxD1r9_R0Y2asHCRw&oe=6A319E0C&_nc_sid=10d13b",
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/485021484_18395584360103135_8420396027859341694_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=zfeboSmUeioQ7kNvwHysGAq&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_849LsAmIhw6-WzKmwKwGE99NJTGIBa9Fac1J0rGYVDQ&oe=6A3199AA&_nc_sid=10d13b",
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/485704143_18395584369103135_998730843826292089_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=Sn4nE3IWdpYQ7kNvwGP799e&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8GfZkB9kzerUwflQluy0y1kbVq8SVM5sy4WJJQxco_NQ&oe=6A31AB2D&_nc_sid=10d13b",
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/485242279_18395584384103135_3971925173350513176_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=lkG1M_HHJQMQ7kNvwFrAuTx&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_ML8ENHHKg8PiptT-gn2FB8qaOxlRm9KNA6mbxUoJ8GQ&oe=6A318265&_nc_sid=10d13b",
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/485021486_18395584402103135_2350432345650168946_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=k_pjXkyaz4kQ7kNvwH7QfnC&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-UUJaB4ma142Bk_c5ezxDLSq-NzsnjMErWdV008dK7Yg&oe=6A31A7C8&_nc_sid=10d13b",
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/485175714_18395584411103135_6919987493955265256_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=1IYvXyGksz8Q7kNvwGKqKKg&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af84OKhThFTTVczAvCnhDmi_htNKcZKaN-fl-3YKyk-_dQ&oe=6A318692&_nc_sid=10d13b",
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/485250418_18395584429103135_4361650550398300635_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=KbWqfNsrNt8Q7kNvwFayKtR&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9QA0fbMezGJ1b64TsClayxe8PxgMochN98-E1ul6nRog&oe=6A318F84&_nc_sid=10d13b",
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/485274268_18395584447103135_5177408747655445543_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=9YG9-02kTIIQ7kNvwEjmqbz&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8C6s7m7vfKQ6-g0xH7_ijoXyiiSjyKDdUK_Yy4rcXn_A&oe=6A31AC85&_nc_sid=10d13b",
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/485449151_18395584462103135_7511632848597056266_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=vJnQdGmNpgsQ7kNvwFDv9f5&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-8tWGdkaCnFO3hA0Ogd6mcpv0534LfIAq7ssQjxfEojA&oe=6A318DA3&_nc_sid=10d13b",
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.2885-15/485250415_18395584471103135_5654209442497388106_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFeOnRa3JaswVM4Bo5E-nVlMgcoN1JOWaPH0G8ZgtoqIQpVoSigkSRw3OjyTgcPPsk&_nc_ohc=Uldk4Ea9pM0Q7kNvwG3rBwZ&_nc_gid=QfKHOPIp1y1I_tMa5atKGg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9zB_V42_OhLiiJt5LLA3ytXh_qQtcbIJq4zZ1Gudkbag&oe=6A31A777&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3451883240610487721",
+      "type": "Video",
+      "timestamp": "2024-09-07T13:43:38.000Z",
+      "url": "https://www.instagram.com/p/C_njYS6tl2p/",
+      "caption": "Когда уже все попробовал 😄",
+      "likesCount": 75,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-dfw6-1.cdninstagram.com/v/t51.71878-15/506033117_726457076406654_246643509119731725_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-dfw6-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2gEgPc8eFRT4bCxAUhmojPVD_R727DkJFl09QNspxqvairzLJQQAmnYN7qf3k_wNfKA&_nc_ohc=V3IQNiGI1kYQ7kNvwF3U01h&_nc_gid=sUC6aGgFklHf8qLpGp2X2w&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_DJSELIC01-yHNDSJ7WItPQ--zaVUJRNLd_8hPehH97g&oe=6A31A428&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3616394679634213518",
+      "type": "Video",
+      "timestamp": "2025-04-22T13:18:50.000Z",
+      "url": "https://www.instagram.com/p/DIwA8z3NbqO/",
+      "caption": "Всех с открытием сезона #мото #triumph",
+      "likesCount": 26,
+      "commentsCount": 1,
+      "hashtags": [
+        "мото",
+        "triumph"
+      ],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://instagram.ftpa1-2.fna.fbcdn.net/v/t51.71878-15/491430068_1188679542367370_5797801715811624997_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.ftpa1-2.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2gFxoR3NheGg4Br565SfOhlMzQlnOz_4m_2AOyZvsHkH3h9lz0YbspjTGK9YqrrxOCwmCELoKBeXnSKQmFmlVcGy&_nc_ohc=Ywxg9WMa8swQ7kNvwHkpU_A&_nc_gid=LIhEK44Bt4X0LxNtEih8mw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af95bG_E0h-t9XtBKYmjiwB5696yb6UMWwmruFHBHVCY-A&oe=6A319444&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3515074956779368893",
+      "type": "Video",
+      "timestamp": "2024-12-03T18:17:27.000Z",
+      "url": "https://www.instagram.com/p/DDIDgyttLG9/",
+      "caption": "Bienvenue à Paris ёпте-нате. Было холодно, но красиво",
+      "likesCount": 33,
+      "commentsCount": 1,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-hou1-1.cdninstagram.com/v/t51.2885-15/469291065_18379801171103135_5992523814202921769_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-hou1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGEd_bgYabsRrrwSP_wZyy8sWZM1_KhCJgrVkIMEK1CeBJ6Zq5sy8G5sf1xBfpcfUs&_nc_ohc=tGQO2BE3t4wQ7kNvwHj3z3z&_nc_gid=sTF9-MU2iPEckNsnBOSlqQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_2SJ9q4Z7akWjjU-LNIXhOYykgU_GLZOVYFKjbqRdl_A&oe=6A31907D&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3548092857757193176",
+      "type": "Video",
+      "timestamp": "2025-01-18T07:34:57.000Z",
+      "url": "https://www.instagram.com/p/DE9W6fQt9PY/",
+      "caption": "2024 👋🏻",
+      "likesCount": 41,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://instagram.fbna2-1.fna.fbcdn.net/v/t51.2885-15/474228591_18386502919103135_6177944813811810040_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.fbna2-1.fna.fbcdn.net&_nc_cat=111&_nc_oc=Q6cZ2gF11PEd7iS-bLT9091EcauWNCZrcl0iwSGYK_zPzmWEthofZXzvb9smJBwxfOTwInw&_nc_ohc=-jPzYP_OgmMQ7kNvwGO2Qn0&_nc_gid=NlBUZ7mzVIQ0SDTXKr0nqA&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-0QbAcOOQEx8tbEOCFnWaRZL9ISJ8PxAGCE3DxWBc5UA&oe=6A318F9E&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3514709494144992460",
+      "type": "Video",
+      "timestamp": "2024-12-03T06:14:11.000Z",
+      "url": "https://www.instagram.com/p/DDGwanHNITM/",
+      "caption": "В октябре поучаствовал в автопробеге с ребятами из клуба «хедлайнеры» Горы Рас Эль Хаймы вообще не похожи на привычные для нас. Нет хвойного леса, а только скалы. Как будто в звездных войнах попал на другую планету )",
+      "likesCount": 33,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-atl3-3.cdninstagram.com/v/t51.71878-15/502738051_611514307922564_7912029870648953095_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=108&_nc_oc=Q6cZ2gE5P7k8HfQk29i9nuPulthrGmpj-CURya72BvdBYPqu7FnxlwdP6hDYh4PqRot7Kuw&_nc_ohc=Ga1s2DHBG1oQ7kNvwEfpJbP&_nc_gid=xFja4hKYKChWeTT7FTSDKQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_F8bJSjD9jNHyyl_uTQwV0M7NKbBROVOS0ERHemRCXaQ&oe=6A319854&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3489489191420924679",
+      "type": "Sidecar",
+      "timestamp": "2024-10-29T10:59:09.000Z",
+      "url": "https://www.instagram.com/p/DBtJ-52NZMH/",
+      "caption": "Если захотите слиться с бесконечным-вечным, то есть такие места 😃",
+      "likesCount": 49,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-det1-1.cdninstagram.com/v/t51.82787-15/661724761_18357660553239459_7717319984132433386_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-det1-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGeyiX2vGRszfgVz2p-4kujUlaatpPEWBFlu2kpd05Uh_Y6x-aQmd1C0wrTM8cDP4E&_nc_ohc=z7d-DCMiYoIQ7kNvwG8WsxG&_nc_gid=XuJBKL6FJqnqOth7OM5NqQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-uXa569qJICOFJK3YjrVPwa3qP5bOAQ351Pcift_Jb0A&oe=6A318945&_nc_sid=10d13b",
+        "https://scontent-det1-1.cdninstagram.com/v/t51.82787-15/652880826_18009004961840791_842954564837744400_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-det1-1.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2gGeyiX2vGRszfgVz2p-4kujUlaatpPEWBFlu2kpd05Uh_Y6x-aQmd1C0wrTM8cDP4E&_nc_ohc=8tQE8raaOx4Q7kNvwFeuJzY&_nc_gid=XuJBKL6FJqnqOth7OM5NqQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-zg4avEe9cFgwVECIzlaWSbUR3VZEn6M6G6DtkbVMjug&oe=6A31A9A2&_nc_sid=10d13b",
+        "https://scontent-det1-1.cdninstagram.com/v/t51.82787-15/654689852_18138455842502700_2485775617852731906_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-det1-1.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2gGeyiX2vGRszfgVz2p-4kujUlaatpPEWBFlu2kpd05Uh_Y6x-aQmd1C0wrTM8cDP4E&_nc_ohc=9wGiMzS1Gy8Q7kNvwEITpQ_&_nc_gid=XuJBKL6FJqnqOth7OM5NqQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_f4mRvOFfGUv5ttCbf0tBw4eVoIRPXIGRwqbbT7uIqLg&oe=6A31A1A0&_nc_sid=10d13b",
+        "https://scontent-det1-1.cdninstagram.com/v/t51.82787-15/655032341_18032979008598180_2215502958042102792_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-det1-1.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2gGeyiX2vGRszfgVz2p-4kujUlaatpPEWBFlu2kpd05Uh_Y6x-aQmd1C0wrTM8cDP4E&_nc_ohc=nMwkneCG_RsQ7kNvwGfMVSj&_nc_gid=XuJBKL6FJqnqOth7OM5NqQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-sjY-PMwvzZyhyfspTa0hpPiUPNKDI4B7R9zqWG3FMCQ&oe=6A3184BE&_nc_sid=10d13b",
+        "https://scontent-det1-1.cdninstagram.com/v/t51.82787-15/659178545_18389151538155062_7635419821488378101_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-det1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGeyiX2vGRszfgVz2p-4kujUlaatpPEWBFlu2kpd05Uh_Y6x-aQmd1C0wrTM8cDP4E&_nc_ohc=M20OqyR2ffcQ7kNvwH5r_wG&_nc_gid=XuJBKL6FJqnqOth7OM5NqQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_2GR7YRoCgTw_mGOkt5jcAnTI_3MbLHfJCETj1qaANwg&oe=6A319ABB&_nc_sid=10d13b",
+        "https://scontent-det1-1.cdninstagram.com/v/t51.71878-15/625166430_1549073489690303_4203093201754747551_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-det1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGeyiX2vGRszfgVz2p-4kujUlaatpPEWBFlu2kpd05Uh_Y6x-aQmd1C0wrTM8cDP4E&_nc_ohc=i30ws0WVkD0Q7kNvwGoYRwb&_nc_gid=XuJBKL6FJqnqOth7OM5NqQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-47S3z2_rsk3BEOOP5fAqCABug1gEOucvSaiD_jBjkhA&oe=6A319E8B&_nc_sid=10d13b",
+        "https://scontent-det1-1.cdninstagram.com/v/t51.71878-15/624658362_1454289546285837_5515702734963228463_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-det1-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2gGeyiX2vGRszfgVz2p-4kujUlaatpPEWBFlu2kpd05Uh_Y6x-aQmd1C0wrTM8cDP4E&_nc_ohc=9iZFUl6X7a0Q7kNvwHxYDP8&_nc_gid=XuJBKL6FJqnqOth7OM5NqQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8QOOu3mOQvBjhEfOFh8d_Chf0sMTee3MfK_4-2Bm_MBw&oe=6A318602&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3487302336000686867",
+      "type": "Sidecar",
+      "timestamp": "2024-10-26T10:34:15.000Z",
+      "url": "https://www.instagram.com/p/DBlYv-BtfsT/",
+      "caption": "Hill climb racing",
+      "likesCount": 51,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://instagram.fmem1-2.fna.fbcdn.net/v/t51.82787-15/654474530_18097530496988348_8581349413527949873_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.fmem1-2.fna.fbcdn.net&_nc_cat=108&_nc_oc=Q6cZ2gEpkP11Z5AQpwq4PfCvsUOnvTSE36Wjs59wH-y769LqwDeGRbyIUe6YI-PUR26dq7w&_nc_ohc=WvCOQ_HnuYsQ7kNvwEv5dHo&_nc_gid=Cv_mK5_lmgU6Dg4YN9VZSw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af936bbUffai9vd75R8h5KCsG85u0nRjfyNtBxuYM1Igzw&oe=6A319171&_nc_sid=10d13b",
+        "https://instagram.fmem1-1.fna.fbcdn.net/v/t51.82787-15/669939534_18417220606131756_5229817723184802720_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.fmem1-1.fna.fbcdn.net&_nc_cat=100&_nc_oc=Q6cZ2gEpkP11Z5AQpwq4PfCvsUOnvTSE36Wjs59wH-y769LqwDeGRbyIUe6YI-PUR26dq7w&_nc_ohc=oXHRLeMQ9YwQ7kNvwH4euM1&_nc_gid=Cv_mK5_lmgU6Dg4YN9VZSw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_p9YjwnARw8iAV0jLDuhjcnR7CEZ9xrtu5CrMP6sRv8A&oe=6A31A192&_nc_sid=10d13b",
+        "https://instagram.fmem1-1.fna.fbcdn.net/v/t51.82787-15/643545039_17929838607213738_2534126529947214798_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.fmem1-1.fna.fbcdn.net&_nc_cat=106&_nc_oc=Q6cZ2gEpkP11Z5AQpwq4PfCvsUOnvTSE36Wjs59wH-y769LqwDeGRbyIUe6YI-PUR26dq7w&_nc_ohc=UO79TagzzwkQ7kNvwFwI3Mx&_nc_gid=Cv_mK5_lmgU6Dg4YN9VZSw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8FCWRnyZY0XujqjD44U0zw6u25_i9TcIn2hJbo5dLDSQ&oe=6A318AA9&_nc_sid=10d13b",
+        "https://instagram.fmem1-2.fna.fbcdn.net/v/t51.82787-15/655081702_18131355256550794_2038598060032311834_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.fmem1-2.fna.fbcdn.net&_nc_cat=110&_nc_oc=Q6cZ2gEpkP11Z5AQpwq4PfCvsUOnvTSE36Wjs59wH-y769LqwDeGRbyIUe6YI-PUR26dq7w&_nc_ohc=YT6vvC6GQqEQ7kNvwESeifK&_nc_gid=Cv_mK5_lmgU6Dg4YN9VZSw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8uDFVhZL44ah_u2W1WKz7nzZoba_dlFC8gbjkl6LO0jw&oe=6A318F8F&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3447062884368277805",
+      "type": "Sidecar",
+      "timestamp": "2024-08-31T22:05:39.000Z",
+      "url": "https://www.instagram.com/p/C_WbW4VNGEt/",
+      "caption": "Это было отличное лето 😎",
+      "likesCount": 52,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-lax7-1.cdninstagram.com/v/t51.82787-15/654254210_18131299648542529_4387844612580945030_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax7-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gE5S2jx8uJXvx7I01mrwanxc73tLReEgE4VJ6gkfUPV1xsWNNp6ypXFTqTJV8tYdUE&_nc_ohc=_GLW2u7UJAEQ7kNvwFJZHxm&_nc_gid=DQOkNxZTdolhDkVwHjBJFg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_W40H0QU1vPJZtVT9aQMXcMjNN91KFV2wZRLwekYZivA&oe=6A319782&_nc_sid=10d13b",
+        "https://scontent-lax3-1.cdninstagram.com/v/t51.82787-15/651673962_17981587625972085_568944950448381091_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax3-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2gE5S2jx8uJXvx7I01mrwanxc73tLReEgE4VJ6gkfUPV1xsWNNp6ypXFTqTJV8tYdUE&_nc_ohc=0ipyVvrk2FwQ7kNvwEcvqn7&_nc_gid=DQOkNxZTdolhDkVwHjBJFg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8krbHuMNSSS_6aXEU_rz8hamaPZFPvO6Ta_b7R19InTg&oe=6A31972C&_nc_sid=10d13b",
+        "https://scontent-lax3-2.cdninstagram.com/v/t51.82787-15/655035889_18084627986263167_4783987834804810907_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax3-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gE5S2jx8uJXvx7I01mrwanxc73tLReEgE4VJ6gkfUPV1xsWNNp6ypXFTqTJV8tYdUE&_nc_ohc=fBlXCB8fSlsQ7kNvwFmkRAx&_nc_gid=DQOkNxZTdolhDkVwHjBJFg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_ndTjLD8hAllo8XnBe8oGfKjWs1LYdppxJtPEaCGm9XA&oe=6A318A74&_nc_sid=10d13b",
+        "https://scontent-lax7-1.cdninstagram.com/v/t51.82787-15/669894982_18094539188276197_5819335293778621482_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax7-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gE5S2jx8uJXvx7I01mrwanxc73tLReEgE4VJ6gkfUPV1xsWNNp6ypXFTqTJV8tYdUE&_nc_ohc=VzAvoJaRzhgQ7kNvwENDVnO&_nc_gid=DQOkNxZTdolhDkVwHjBJFg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8ZexZq3QorY45lXYlQFc3PC-_7OGjknQp-GIGQUGGTAA&oe=6A318945&_nc_sid=10d13b",
+        "https://scontent-lax3-2.cdninstagram.com/v/t51.82787-15/655372464_18075645053567747_3876504473911005332_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax3-2.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gE5S2jx8uJXvx7I01mrwanxc73tLReEgE4VJ6gkfUPV1xsWNNp6ypXFTqTJV8tYdUE&_nc_ohc=kS_Mp9rxCuoQ7kNvwGINwnr&_nc_gid=DQOkNxZTdolhDkVwHjBJFg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9hl1kmWjym-wJDkryJxuttGs-wn4b_FRaH604D8058zA&oe=6A317BA0&_nc_sid=10d13b",
+        "https://scontent-lax3-1.cdninstagram.com/v/t51.82787-15/656965328_18109565935826553_748058717661227714_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-lax3-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2gE5S2jx8uJXvx7I01mrwanxc73tLReEgE4VJ6gkfUPV1xsWNNp6ypXFTqTJV8tYdUE&_nc_ohc=I9eqUXV049MQ7kNvwF6Aagv&_nc_gid=DQOkNxZTdolhDkVwHjBJFg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8oetzTWTpei55upn0rwrevkbvJPFClawTFJWYHm4I3_A&oe=6A31914B&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3380799624677988952",
+      "type": "Video",
+      "timestamp": "2024-06-01T11:56:05.000Z",
+      "url": "https://www.instagram.com/p/C7rA1ittJpY/",
+      "caption": "Ну что лето, погнали? 🤙🏻🌊☀️",
+      "likesCount": 35,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-atl3-3.cdninstagram.com/v/t51.71878-15/502023716_1765521407715811_1051026366139959575_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2gEChC0ZT7QKolcKEruo7_TPmasgb-KnLDhyfD6bza-_OXVzr5AwL2NWvCQPZCBVLds&_nc_ohc=7xum6INh9aoQ7kNvwGX8hqD&_nc_gid=7jXD8xZp7kg6PapG-McLGw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af9DtM-4wdb0nUY5Uy-HRmf-DFiuFrms-rLeLGxt-oisbQ&oe=6A319660&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3196209357997452686",
+      "type": "Sidecar",
+      "timestamp": "2023-09-20T19:24:28.000Z",
+      "url": "https://www.instagram.com/p/CxbN3oTN62O/",
+      "caption": "Красная поляна в Сочи - это как Чангу на Бали, очень похожие люди, заведения и вообще атмосфера",
+      "likesCount": 39,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://scontent-ord5-1.cdninstagram.com/v/t51.82787-15/641302028_17955143427073568_7323259198892548006_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-1.cdninstagram.com&_nc_cat=108&_nc_oc=Q6cZ2gHRIo5w-55VAq53_FyeidTabFV3R0jmRGviBG51lwUfUWFBieMY8-GY6imS5qIDiQQ&_nc_ohc=Z2FfU9RoWrwQ7kNvwHFccNs&_nc_gid=SSJ8kPoTzDriDFJNdXldRQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_jE-lJudIsFI-7wqQQvzWqV79bGSXqQUclEhjQRw8ZkA&oe=6A31AB9D&_nc_sid=10d13b",
+        "https://scontent-ord5-3.cdninstagram.com/v/t51.82787-15/653088747_18101717353899091_3787908329399436038_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-3.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2gHRIo5w-55VAq53_FyeidTabFV3R0jmRGviBG51lwUfUWFBieMY8-GY6imS5qIDiQQ&_nc_ohc=NV6zP8Z5r84Q7kNvwEZQxz4&_nc_gid=SSJ8kPoTzDriDFJNdXldRQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af8WvKALZCzGv-F4Rj4LtpPu_5xzYmd8TX3IZQaxAupSGg&oe=6A317953&_nc_sid=10d13b",
+        "https://scontent-ord5-2.cdninstagram.com/v/t51.82787-15/649539191_17939259669012041_5744202954728346878_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-2.cdninstagram.com&_nc_cat=105&_nc_oc=Q6cZ2gHRIo5w-55VAq53_FyeidTabFV3R0jmRGviBG51lwUfUWFBieMY8-GY6imS5qIDiQQ&_nc_ohc=GUHvlwF1CSIQ7kNvwGbgfs8&_nc_gid=SSJ8kPoTzDriDFJNdXldRQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-5OOcwBodRV-BVbbgpIft3fmD0NI1K421ic84pq5Jlgg&oe=6A3195E2&_nc_sid=10d13b",
+        "https://scontent-ord5-3.cdninstagram.com/v/t51.82787-15/654878178_18196021996345783_1863946829266275463_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-3.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2gHRIo5w-55VAq53_FyeidTabFV3R0jmRGviBG51lwUfUWFBieMY8-GY6imS5qIDiQQ&_nc_ohc=A_hkio4nI-YQ7kNvwEFhnXq&_nc_gid=SSJ8kPoTzDriDFJNdXldRQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af-ji40pStJNfaOngjDFQ1bKdAfglKwIn0VZWZIYAI1oMg&oe=6A319279&_nc_sid=10d13b",
+        "https://scontent-ord5-2.cdninstagram.com/v/t51.82787-15/656278178_18110027605762431_3864410194831858378_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-ord5-2.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gHRIo5w-55VAq53_FyeidTabFV3R0jmRGviBG51lwUfUWFBieMY8-GY6imS5qIDiQQ&_nc_ohc=CYjSPccrXWgQ7kNvwHOlipm&_nc_gid=SSJ8kPoTzDriDFJNdXldRQ&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_h0-9lBP1ak8Y6L3d4Av0xSs5EG7nSUgs7jS7CyZ0myw&oe=6A31938A&_nc_sid=10d13b"
+      ]
+    },
+    {
+      "id": "3582206709616354530",
+      "type": "Video",
+      "timestamp": "2025-03-06T09:12:50.000Z",
+      "url": "https://www.instagram.com/p/DG2jgXmtCTi/",
+      "likesCount": 17,
+      "commentsCount": 0,
+      "hashtags": [],
+      "mentions": [],
+      "isPinned": false,
+      "taggedUsers": [],
+      "mediaUrls": [
+        "https://instagram.fcae1-1.fna.fbcdn.net/v/t51.2885-15/483063721_18393069544103135_8242960194825836213_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.fcae1-1.fna.fbcdn.net&_nc_cat=111&_nc_oc=Q6cZ2gEhNtggzJOhRCc6wAr5HwaFtOXG5iCC3vx0vkUoHykGzj2cDhbKHe6Vxfoejw2kFSQ&_nc_ohc=neHnJPFPCCIQ7kNvwFOij5Q&_nc_gid=T-7kYD4JFIunxn3-LtIEvw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af_dStAGDQXJLE7z15inu_X0L3AsoahStDYIvNe4YdVMPQ&oe=6A318AE7&_nc_sid=10d13b"
+      ]
+    }
+  ],
+  "vision": [
+    {
+      "postId": "3443820324911801176",
+      "status": "completed",
+      "description": "[Image ID: 3443820324911801176]\n- Visible fact: Two men are seen with a vintage-style motorcycle with a sidecar.\n- Visible fact: In the first image, the motorcycle is on a street, with a black Mercedes-Benz G-Class behind it.\n- Visible fact: The second image shows the men on the motorcycle, with one man gesturing with his fist.\n- Visible fact: The third image is in black and white, showing the two men standing next to the parked motorcycle.\n- Visible fact: One man is sitting on the motorcycle, and the other is leaning against the sidecar.\n- Visible fact: The motorcycle is olive green in color.\n- Visible fact: Both men are wearing sunglasses in all images.\n- Visible fact: They are dressed in light-colored shirts; one wears shorts and the other wears jeans.\n- Setting: Urban street scene with buildings and trees.\n- Objects/signals: Motorcycle with sidecar, Mercedes-Benz G-Class, Sunglasses, Buildings, Trees, Street, Fence, Scooter\n- Text in image: HAPPY END\n- Text (verbatim): HAPPY END\n- Visual style: Outdoor photography, One image is black and white, Candid and posed shots\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3857587305813880062",
+      "status": "completed",
+      "description": "[Image ID: 3857587305813880062]\n- Visible fact: The first image shows a traditional Korean building with a tiled roof, partially obscured by trees with pink blossoms, and a mountain in the background under an overcast sky.\n- Visible fact: The second image features a person in traditional Korean attire, including a blue robe, black hat, and a black face covering, holding a large white and yellow flag with a tiger design, standing against a stone wall.\n- Visible fact: The third image depicts a bustling scene at the entrance of a traditional Korean palace or temple, with many people, some in traditional hanbok, and a prominent gate with colorful decorations and text.\n- Visible fact: The architectural style across all images suggests a historical or cultural site, likely in Korea.\n- Visible fact: The weather appears overcast or hazy in the first image, while the second and third images suggest brighter, possibly sunny, conditions.\n- Setting: Traditional Korean palace or temple grounds\n- Objects/signals: Traditional Korean buildings, Tiled roofs, Trees with pink blossoms, Mountain, Person in traditional Korean attire, Flag with tiger design, Stone wall, Palace gate, Crowd of people, Sign\n- Text in image: 門禮興 | 나오는문 | EXIT | 출구 | No Smoking Area\n- Text (verbatim): 門禮興 | 나오는문 | EXIT | 출구 | No Smoking Area\n- Visual style: Architectural photography, Cultural photography, Outdoor photography, Detailed shots of traditional elements\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3855923679859348271",
+      "status": "completed",
+      "description": "[Image ID: 3855923679859348271]\n- Visible fact: Six men are posing for a group photo outdoors.\n- Visible fact: The men are standing on the edge of a paved road next to a field of orange flowers.\n- Visible fact: In the background, there are palm trees, houses, and a large mountain under a cloudy sky.\n- Visible fact: One man in a black tank top and olive pants is wearing a black 'alo' baseball cap.\n- Visible fact: Another man in a black long-sleeved shirt and white pants is holding a black helmet.\n- Visible fact: Several men are making hand gestures, including a thumbs-up and finger hearts.\n- Setting: Rural outdoor landscape with a mountain and palm trees\n- Objects/signals: men, road, field of flowers, palm trees, houses, mountain, cloudy sky, baseball cap, helmet, sunglasses\n- Text in image: alo\n- Text (verbatim): alo\n- Visual style: Outdoor photography, Group portrait, Natural lighting",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3841697283960721329",
+      "status": "completed",
+      "description": "[Image ID: 3841697283960721329]\n- Visible fact: A man is standing shirtless, holding a yellow weight plate.\n- Visible fact: He is wearing black shorts with white trim, white socks with a black logo, and white sneakers.\n- Visible fact: He has white wireless earbuds in his ears and a red smartwatch on his left wrist.\n- Visible fact: The background is a wall covered with various weight plates in black, green, and yellow colors.\n- Visible fact: The weight plates have 'BOSS' written on them along with their weight in kilograms.\n- Setting: gym or fitness studio\n- Objects/signals: man, weight plates, shorts, socks, sneakers, wireless earbuds, smartwatch\n- Text in image: BOSS | 5 KG | 10 KG | 15 KG | 20 KG | FIV\n- Text (verbatim): KG | 20 | BOSS | 15 | FIV | 10 | 5\n- Visual style: full body shot, gym aesthetic, direct flash photography",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3854589785466135995",
+      "status": "completed",
+      "description": "[Image ID: 3854589785466135995]\n- Visible fact: A person is standing on a wooden platform built around trees, overlooking a mountainous landscape.\n- Visible fact: The sky is cloudy with hues of orange and blue, suggesting either sunrise or sunset.\n- Visible fact: In the first image, the person is looking down at a small object in their hands.\n- Visible fact: In the second image, the person is sitting on the edge of the wooden platform, looking towards the left.\n- Visible fact: In the third image, the person is walking on the platform between two tree trunks, looking down.\n- Visible fact: The person is wearing a light-colored long-sleeved shirt, dark pants, and sneakers in all images.\n- Setting: mountain overlook with a wooden platform\n- Objects/signals: person, wooden platform, trees, mountains, sky, clouds, stairs\n- Visual style: outdoor photography, natural light, wide shot, silhouette effect\n- Uncertainty: The exact time of day (sunrise or sunset).; The specific location of the mountains.\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3445973705173574952",
+      "status": "completed",
+      "description": "[Image ID: 3445973705173574952]\n- Visible fact: A person is performing a pull-up on an outdoor calisthenics rig.\n- Visible fact: The person is shirtless and wearing dark blue shorts and black athletic shoes.\n- Visible fact: The calisthenics rig is black with red accents.\n- Visible fact: In the background, there are red brick buildings with multiple windows.\n- Visible fact: A white car is visible parked behind the calisthenics rig.\n- Visible fact: The sky is clear and blue.\n- Setting: Outdoor calisthenics park in an urban environment\n- Objects/signals: person, calisthenics rig, shorts, athletic shoes, brick buildings, windows, car, sky\n- Visual style: Dynamic angle, shot from below, Bright, natural lighting",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3854599590121462450",
+      "status": "completed",
+      "description": "[Image ID: 3854599590121462450]\n- Visible fact: The first image shows a dense forest with a mountain in the background, partially obscured by mist.\n- Visible fact: A narrow, unpaved path winds through a grassy area in the foreground of the first image.\n- Visible fact: The second image features dark-tiled rooftops in the foreground, with lush green foliage and a tree with bright orange flowers.\n- Visible fact: A misty mountain range is visible in the background of the second image.\n- Visible fact: The third image shows a man standing in a grassy field, wearing a dark long-sleeved shirt and dark pants.\n- Visible fact: Misty mountains and trees are in the background of the third image.\n- Setting: mountainous forest\n- Objects/signals: forest, mountain, mist, path, grass, rooftops, foliage, tree with orange flowers, man\n- Visual style: natural lighting, outdoor photography, muted color palette in the first and third images, contrast between dark greens and bright orange in the second image\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3820510902366639665",
+      "status": "completed",
+      "description": "[Image ID: 3820510902366639665]\n- Visible fact: Image 1 shows a building with a large mural on its side, illuminated by string lights at night.\n- Visible fact: The mural depicts a stylized character with large glasses and red lips, holding a spray can, surrounded by colorful patterns.\n- Visible fact: Image 2 features a street scene at night with a white SUV parked in front of a building adorned with red Chinese lanterns.\n- Visible fact: The building in Image 2 has ornate architectural details above its windows.\n- Visible fact: Image 3 shows two individuals, a man and a woman, smiling at the camera in front of a brightly colored, cartoon-style mural.\n- Visible fact: The mural in Image 3 includes a blue sign with Thai script and the word \"CENTRAL\" in English.\n- Visible fact: All images are taken at night or during the day with a dark filter, suggesting an urban setting.\n- Setting: Urban street at night / daytime with dark filter\n- Objects/signals: Building, Mural, String lights, Motorcycles, White SUV, Chinese lanterns, Street sign\n- Text in image: Image 1: TAKABB, 500 1933, @JOKERBKK | Image 2: LUCKY WALL, MONEY COME, MONEY GO | Image 3: CENTRAL, ไทยแลนด์\n- Text (verbatim): TAKABB | แก้ไอน้ำดำ | 500 | 1933 | @JOKERBKK | LUCKY WALL | MONEY COME | MONEY GO\n- Visual style: Night photography, Street photography, Vibrant murals, Architectural details\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3718687361199797951",
+      "status": "completed",
+      "description": "[Image ID: 3718687361199797951]\n- Visible fact: A person wearing a helmet and a blue and purple jacket is riding a black motorcycle.\n- Visible fact: The motorcycle has gold-colored front forks and a small windscreen.\n- Visible fact: The image is taken from inside a vehicle, with the red side mirror of the vehicle visible in the foreground.\n- Visible fact: In the background, there are buildings, trees with autumn foliage, and a body of water with a decorative railing.\n- Visible fact: The sky is clear and bright.\n- Setting: Outdoor urban environment, possibly a riverside or lakeside road.\n- Objects/signals: motorcycle, person, helmet, jacket, vehicle interior, side mirror, buildings, trees, body of water, railing\n- Visual style: Daylight photography, Shot from inside a car, Clear weather",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3505006736152200199",
+      "status": "completed",
+      "description": "[Image ID: 3505006736152200199] This post contains three images.\n\nImage 1:\nA man in a blue jacket, purple hoodie, dark pants, and white sneakers walks on a cobblestone street. The street is lined with multi-story buildings in shades of orange, pink, and yellow, with dark brown window shutters. Some buildings have small plants on balconies or ledges. There are green plants in pots on the street level. A scooter is parked on the right side of the street in the background. A street sign is visible on the right, and a building number \"3\" is on the left.\n\nImage 2:\nA narrow cobblestone alleyway is shown, with tall buildings on both sides. The buildings are mostly orange-brown and covered in graffiti. Several scooters and a white van are parked along the left side of the alley. A tree with green leaves is visible in the middle distance. The sky above is blue with white clouds.\n\nImage 3:\nThe interior of a large, ornate church or cathedral is depicted. The ceiling is a high dome with painted frescoes and gilded architectural details. A bright light shines from a window at the top of the dome. Below the dome, there are large paintings on the walls, and an altar area with candles and religious figures. Wooden pews are arranged in rows facing the altar. Text is visible on a band around the dome, including \"REPARARET + BANDREAS RESPOND\".\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3535207624233722643",
+      "status": "completed",
+      "description": "[Image ID: 3535207624233722643]\n- Visible fact: A person is standing on a snow-covered street.\n- Visible fact: The person is wearing a blue puffer jacket, dark pants, and white sneakers.\n- Visible fact: Snowflakes are visible in the air and on the person's clothing.\n- Visible fact: Trees covered in snow line the street.\n- Visible fact: A street sign is visible on the right side of the image.\n- Visible fact: Buildings with windows are visible in the background on the left.\n- Visible fact: A road with cars is visible in the background.\n- Setting: snowy urban street\n- Objects/signals: person, snow, puffer jacket, pants, sneakers, trees, street sign, buildings, road, cars\n- Visual style: full body shot, outdoor photography, winter aesthetic",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3306405742276602836",
+      "status": "completed",
+      "description": "[Image ID: 3306405742276602836]\n- Visible fact: A man and a woman are taking a mirror selfie in what appears to be a gym.\n- Visible fact: The woman is wearing an orange sports bra and black leggings.\n- Visible fact: The man is shirtless, wearing dark blue sweatpants and athletic shoes.\n- Visible fact: Both individuals are looking at the phone held by the woman.\n- Visible fact: Various gym equipment is visible in the background, including weight machines and a Pilates reformer.\n- Visible fact: The gym has dark grey walls with a section of bright yellow wall.\n- Setting: gym\n- Objects/signals: mirror, smartphone, gym equipment, weight machines, Pilates reformer, sports bra, leggings, sweatpants, athletic shoes\n- Visual style: mirror selfie, indoor lighting, gym aesthetic",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3834577256057065335",
+      "status": "completed",
+      "description": "[Image ID: 3834577256057065335]\n- Visible fact: The first image shows a mountain with a faint plume of smoke or mist at its peak, under a cloudy sky with hints of orange and pink from a sunrise or sunset.\n- Visible fact: A single bird is visible flying in the upper right portion of the first image.\n- Visible fact: The foreground of the first image is dominated by lush green trees and vegetation, with some mist or fog in the valley.\n- Visible fact: The second image features a mountain range silhouetted against a vibrant orange and yellow sky, indicating either sunrise or sunset.\n- Visible fact: Mist or clouds partially obscure the mountains in the second image, creating a layered effect.\n- Visible fact: The third image focuses on a valley with a body of water, possibly a lake, nestled between mountains.\n- Visible fact: The sky in the third image is a striking orange and yellow, suggesting a sunrise or sunset, with dark clouds overhead.\n- Visible fact: All three images depict mountainous landscapes with dramatic skies, suggesting a consistent theme of natural beauty at dawn or dusk.\n- Setting: Mountainous landscape at sunrise or sunset\n- Objects/signals: Mountain, Sky, Clouds, Trees, Vegetation, Bird, Mist, Fog, Body of water\n- Visual style: Landscape photography, Dramatic lighting, Silhouettes, Natural color palette, High contrast\n- Uncertainty: The exact location of the mountains is not specified.; Whether the time of day is sunrise or sunset is not explicitly stated, though suggested by the colors.\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3379612527283849412",
+      "status": "completed",
+      "description": "[Image ID: 3379612527283849412]\n- Visible fact: A person wearing a black full-face helmet, a white t-shirt, and grey jeans is operating a large orange and black floor cleaning machine.\n- Visible fact: The person is seated on the machine, holding onto the controls.\n- Visible fact: The floor cleaning machine has an orange seat and a black body with visible wheels and a cleaning brush underneath.\n- Visible fact: The setting appears to be an indoor parking garage or a similar industrial space with concrete floors and exposed pipes/conduits on the ceiling.\n- Visible fact: A security camera is visible on a white pillar in the background.\n- Visible fact: A yellow circular sticker is visible on the white pillar.\n- Setting: indoor parking garage or industrial space\n- Objects/signals: person, full-face helmet, t-shirt, jeans, floor cleaning machine, security camera, pillar, pipes/conduits, yellow sticker\n- Visual style: dynamic shot with motion blur on the floor, suggesting movement, natural lighting, medium shot",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3771990325985436661",
+      "status": "completed",
+      "description": "[Image ID: 3771990325985436661]\n- Visible fact: Image 1 shows a person eating noodles with chopsticks at an outdoor table, with traditional Chinese architecture and modern buildings in the background.\n- Visible fact: Image 2 depicts a street scene with traditional Chinese buildings adorned with red lanterns and lush pink flowers, with people walking along a canal.\n- Visible fact: Image 3 displays a multi-lane highway with cars, leading towards a skyline of modern skyscrapers under a blue sky with clouds.\n- Visible fact: The images collectively show a contrast between traditional and modern aspects of a city.\n- Setting: Urban environment in China, featuring both historical and contemporary cityscapes.\n- Objects/signals: Noodles, Chopsticks, Red lanterns, Skyscrapers, Cars, Traditional Chinese architecture, Modern buildings, Flowers, Highway, Canal\n- Text in image: 潮汕风味 | 古厝 | 潮汕 | 风味\n- Text (verbatim): 潮汕风味 | 古厝 | 潮汕 | 风味\n- Visual style: Daylight photography, Clear and vibrant colors, Mix of close-up and wide shots, Focus on architectural details and urban landscapes\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3766571453878406448",
+      "status": "completed",
+      "description": "[Image ID: 3766571453878406448]\n- Visible fact: The image shows a city street at night, illuminated by artificial lights.\n- Visible fact: Tall buildings with illuminated facades dominate the background, some featuring purple and pink light patterns.\n- Visible fact: There are vehicles on the road, including a black van and a white car.\n- Visible fact: Pedestrians are visible on the sidewalks.\n- Visible fact: Streetlights are present along the road.\n- Visible fact: A blue road sign with white text is visible on the right side of the street.\n- Setting: city street at night\n- Objects/signals: buildings, vehicles, pedestrians, streetlights, road sign, road markings\n- Text in image: 金田路 | 深南大道\n- Text (verbatim): 金田路 | 深南大道\n- Visual style: night photography, urban aesthetic, vertical composition, vibrant artificial lighting",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3297428190149298259",
+      "status": "completed",
+      "description": "[Image ID: 3297428190149298259]\n- Visible fact: Two men are standing side-by-side on a paved surface next to a white sports car.\n- Visible fact: Both men are wearing black t-shirts with the text \"GORNAYA POLYANA\" printed in white.\n- Visible fact: The man on the left is wearing black pants and light grey sneakers.\n- Visible fact: The man on the right is wearing blue sweatpants and multi-colored sneakers.\n- Visible fact: Both men are wearing sunglasses.\n- Visible fact: There are other cars parked in the background, including a grey sedan and a white SUV with an orange accent.\n- Visible fact: Trees and buildings are visible in the background.\n- Setting: Outdoor urban street or parking area\n- Objects/signals: Two men, Black t-shirts, Sunglasses, Black pants, Blue sweatpants, Sneakers, White sports car, Grey sedan, White SUV, Trees\n- Text in image: GORNAYA POLYANA | M129BE 799 | M709KT 797\n- Text (verbatim): GORNAYA POLYANA | GORNAYA POLYANA | M129BE 799 | M709KT 797\n- Visual style: Outdoor photography, Casual attire, Daylight",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3291134523298272915",
+      "status": "completed",
+      "description": "[Image ID: 3291134523298272915]\n- Visible fact: A person wearing a black helmet with goggles and a camouflage jacket is riding a snow bike.\n- Visible fact: The snow bike is red, black, and white, with a green ski replacing the front wheel.\n- Visible fact: The bike has 'ROCKER' written on the front fairing.\n- Visible fact: The person is wearing red and white boots.\n- Visible fact: The background shows snow-covered trees, indicating a winter environment.\n- Visible fact: Snow is being kicked up by the snow bike, suggesting movement and speed.\n- Setting: Snowy forest or trail\n- Objects/signals: person, helmet, goggles, camouflage jacket, snow bike, ski (front of bike), snow, trees, boots\n- Text in image: ROCKER | 100%\n- Text (verbatim): ROCKER | 100%\n- Visual style: Dynamic shot with motion blur in the background, Close-up on the rider and snow bike, Bright, natural lighting",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3592516392860499656",
+      "status": "completed",
+      "description": "[Image ID: 3592516392860499656]\n- Visible fact: The first image shows a cityscape at sunset with buildings and a smoking chimney.\n- Visible fact: The second image features a large white building with a prominent orange and blue sign.\n- Visible fact: The third image displays a large grey building with a Russian flag on top, under a dramatic sky.\n- Visible fact: All three images depict architectural structures in an urban environment.\n- Visible fact: The sky in the first and third images shows warm, golden and orange hues, suggesting either sunrise or sunset.\n- Visible fact: The second image is taken during daytime with a clear blue sky.\n- Setting: cityscape\n- Objects/signals: buildings, chimney, smoke, sign, cars, Russian flag, streetlights, trees\n- Text in image: ЦУМ | TSUM MOSCOW | ГОСУДАРСТВЕННАЯ ДУМА\n- Text (verbatim): ЦУМ | TSUM MOSCOW | ГОСУДАРСТВЕННАЯ ДУМА\n- Visual style: high angle shot, architectural photography, urban photography, golden hour lighting\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3451883240610487721",
+      "status": "completed",
+      "description": "[Image ID: 3451883240610487721]\n- Visible fact: A man is standing next to a vintage military-style motorcycle.\n- Visible fact: The motorcycle is olive green with chrome accents.\n- Visible fact: The man is wearing a light-colored button-up shirt over a white t-shirt, dark pants, and sunglasses.\n- Visible fact: The background features a building with red brick walls and large windows.\n- Visible fact: There are stairs with metal railings behind the motorcycle and the man.\n- Visible fact: The scene appears to be outdoors on a sunny day, with shadows visible on the ground.\n- Setting: Outdoor urban environment, possibly near a building entrance or facade.\n- Objects/signals: man, motorcycle, building, red brick wall, windows, stairs, metal railings, sunglasses, paved ground\n- Visual style: Full body shot, Outdoor lighting, Clear focus on the man and motorcycle",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3616394679634213518",
+      "status": "completed",
+      "description": "[Image ID: 3616394679634213518]\n- Visible fact: The image shows a first-person perspective from a motorcycle on a wide city street.\n- Visible fact: The street is lined with multi-story buildings on both sides.\n- Visible fact: There are other vehicles visible on the road, including cars.\n- Visible fact: The sky is clear and blue with a few small clouds.\n- Visible fact: The motorcycle's handlebars, dashboard, and mirrors are visible in the foreground.\n- Visible fact: The dashboard shows a speedometer and other indicators.\n- Setting: city street\n- Objects/signals: motorcycle, handlebars, dashboard, speedometer, mirrors, city buildings, cars, road markings, sky, clouds\n- Visual style: first-person perspective, wide-angle shot, clear daylight",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3515074956779368893",
+      "status": "completed",
+      "description": "[Image ID: 3515074956779368893]\n- Visible fact: The image shows a street scene with a prominent tree in the foreground.\n- Visible fact: A multi-story building with ornate balconies and windows is visible behind the tree.\n- Visible fact: There are people walking on the sidewalk and crossing the street.\n- Visible fact: Traffic signs are present at a street corner.\n- Visible fact: The sky is partly cloudy.\n- Visible fact: The building has a rounded corner design.\n- Setting: City street in Paris\n- Objects/signals: tree, building, balconies, windows, street, sidewalk, people, traffic signs, street lamp, stroller\n- Text in image: TALPLAN OPERA | SAUF | STOP\n- Text (verbatim): TALPLAN OPERA | SAUF | STOP\n- Visual style: Daylight photography, Outdoor scene, Vertical composition",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3548092857757193176",
+      "status": "completed",
+      "description": "[Image ID: 3548092857757193176]\n- Visible fact: A person is playing golf on a green course.\n- Visible fact: The person is wearing a light green polo shirt, dark trousers, and dark shoes.\n- Visible fact: They are wearing sunglasses.\n- Visible fact: The person is holding a golf club and is in the process of putting.\n- Visible fact: A yellow golf ball is on the green near the person's feet.\n- Visible fact: Two red flags on poles are visible in the background on the golf course.\n- Visible fact: The background consists of a dense forest with green and some autumnal colored trees under a clear blue sky.\n- Setting: golf course\n- Objects/signals: person, golf club, golf ball, polo shirt, trousers, shoes, sunglasses, red flags, trees, sky\n- Visual style: outdoor photography, bright lighting, natural colors",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3514709494144992460",
+      "status": "completed",
+      "description": "[Image ID: 3514709494144992460]\n- Visible fact: A winding road with multiple cars is visible, set against a backdrop of arid, rocky mountains.\n- Visible fact: The road has clear yellow double lines and white dashed lines, indicating multiple lanes.\n- Visible fact: Several cars are driving on the road, including black, white, and silver vehicles, and one yellow sports car is visible in the distance.\n- Visible fact: The mountains are light brown and beige, with visible rock formations and sparse vegetation.\n- Visible fact: A black and white striped pole is visible on the side of the road in the foreground.\n- Setting: Mountain road in an arid, rocky landscape\n- Objects/signals: cars, road, mountains, rock formations, striped pole, guardrail\n- Visual style: Aerial perspective, Daylight photography, High angle shot, Natural lighting",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3489489191420924679",
+      "status": "completed",
+      "description": "[Image ID: 3489489191420924679]\n- Visible fact: The first image shows a desert landscape with power lines and utility poles extending into the distance under a blue sky with white clouds.\n- Visible fact: The second image captures a vast desert dune landscape at sunset, with soft orange and pink hues in the sky.\n- Visible fact: The third image features a person sandboarding down a dune, with other vehicles and dunes visible in the background.\n- Visible fact: All three images depict a desert environment with sand dunes as a prominent feature.\n- Visible fact: The sky color changes from bright blue with white clouds in the first image to a sunset palette in the second and third images.\n- Setting: desert\n- Objects/signals: sand dunes, utility poles, power lines, tree, clouds, sandboard, person, vehicles\n- Visual style: outdoor photography, landscape photography, action shot\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3487302336000686867",
+      "status": "completed",
+      "description": "[Image ID: 3487302336000686867]\n- Visible fact: Image 1 shows a winding mountain road with multiple cars driving on it, viewed from above.\n- Visible fact: Image 2 features a hazy mountain landscape with the sun visible in the sky.\n- Visible fact: Image 3 displays a silver Tesla Cybertruck parked on the side of a road next to a rocky mountain, with a person standing near the front of the vehicle.\n- Visible fact: The Cybertruck in Image 3 has a license plate with the text \"BB 73727\" and \"CONNECT APP\" visible.\n- Visible fact: All images depict a mountainous, outdoor setting under a bright sky, suggesting daytime.\n- Visible fact: The overall visual theme across the images is a journey through a mountain landscape, featuring vehicles.\n- Setting: Mountainous landscape with a road\n- Objects/signals: Cars, Mountain road, Mountains, Sun, Tesla Cybertruck, License plate, Person\n- Text (verbatim): BB | 73727 | CONNECT APP\n- Visual style: Outdoor photography, Landscape orientation for Image 1 and 2, portrait for Image 3, Natural lighting, Hazy atmosphere in Image 2\n- Uncertainty: The exact location of the mountains is not specified.; The specific models of all cars in Image 1 are not identifiable.; The identity of the person in Image 3 is not discernible.\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3447062884368277805",
+      "status": "completed",
+      "description": "[Image ID: 3447062884368277805]\n- Visible fact: Image 1 shows a man holding a small dog and drinking from a bottle, with a woman in the background looking at her phone.\n- Visible fact: Image 2 features a person walking away from the camera on a street with a modern building and a colorful sunset sky.\n- Visible fact: Image 3 displays a row of food trucks at dusk, with a bridge illuminated in the background.\n- Setting: Outdoor leisure and urban environments\n- Objects/signals: man, dog, bottle, woman, phone, modern building, food trucks, bridge, street, sunset\n- Text in image: happiness is the best form of health | BROOKLYN PIZZA | Eat Drink Music\n- Text (verbatim): happiness is the best form of health | BROOKLYN PIZZA | Eat Drink Music\n- Visual style: Outdoor photography, Daylight and dusk lighting, Focus on people and architecture\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3380799624677988952",
+      "status": "completed",
+      "description": "[Image ID: 3380799624677988952]\n- Visible fact: A person is standing on a boat, wearing a black wetsuit unzipped to reveal a red bikini top underneath.\n- Visible fact: The person's eyes are closed, and their face is tilted slightly upwards towards the sky.\n- Visible fact: The boat has white and black seating with red accents.\n- Visible fact: There are speakers mounted on the boat's frame, with the brand name \"NAUTIQUE\" visible.\n- Visible fact: The wetsuit has the brand name \"QUIKSILVER\" on the left sleeve.\n- Visible fact: Water with a wake is visible behind the boat, suggesting it is moving.\n- Visible fact: Green trees and what appear to be construction cranes are visible in the background on the shore.\n- Visible fact: The sky is blue with some clouds.\n- Setting: On a boat on a body of water, likely a river or lake, near a shore with trees and distant construction.\n- Objects/signals: person, boat, wetsuit, bikini top, speakers, water, trees, cranes, sky\n- Text in image: NAUTIQUE | QUIKSILVER\n- Text (verbatim): NAUTIQUE | QUIKSILVER\n- Visual style: Outdoor lighting, Bright and clear weather, Action shot",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3196209357997452686",
+      "status": "completed",
+      "description": "[Image ID: 3196209357997452686]\n- Visible fact: Image 1 shows a rustic wooden cabin with peeling blue paint and yellow window shutters, nestled among green and yellow-leafed trees.\n- Visible fact: Image 2 features a DJ playing music in a dimly lit venue, with large illuminated cubes spelling out \"JOE\" overhead.\n- Visible fact: Image 3 displays a scenic mountain landscape with lush green and reddish-brown foliage in the foreground, under a bright blue sky with white clouds.\n- Visible fact: The first image has a dark, moody aesthetic, while the third image is bright and vibrant.\n- Visible fact: All images depict outdoor or semi-outdoor settings, suggesting a connection to nature or a relaxed environment.\n- Visible fact: The second image includes a surfboard and potted plants, contributing to a casual, possibly beach-themed, atmosphere.\n- Setting: A mix of rustic outdoor, nightlife venue, and scenic mountain landscape.\n- Objects/signals: wooden cabin, trees, DJ setup, illuminated cubes, surfboard, potted plants, mountains, foliage, decorative lantern, string lights\n- Text in image: JOE | KENDA | SPITFIRE\n- Text (verbatim): JOE | KENDA | SPITFIRE\n- Visual style: Rustic, Nightlife, Scenic, Natural light, Artificial lighting, Detailed textures\n[Images analyzed: 3/3]",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    },
+    {
+      "postId": "3582206709616354530",
+      "status": "completed",
+      "description": "[Image ID: 3582206709616354530]\n- Visible fact: A person with brown, curly hair is seen from behind, wearing black ear protection and glasses.\n- Visible fact: They are holding a black firearm with both hands, aiming forward.\n- Visible fact: The firearm has a red dot sight mounted on top, with \"HOLOSUN\" visible on its side.\n- Visible fact: The person is wearing a purple hooded sweatshirt.\n- Visible fact: In the background, there is a shooting range with targets visible.\n- Visible fact: The targets are octagonal, yellow, and framed in red.\n- Visible fact: The wall behind the targets is grey with some red and black markings.\n- Visible fact: There are circular vents or lights on the grey wall above the targets.\n- Setting: indoor shooting range\n- Objects/signals: person, ear protection, glasses, firearm, red dot sight, hooded sweatshirt, shooting targets, wall, vents/lights\n- Text (verbatim): HOLOSUN\n- Visual style: close-up shot, focus on the person and firearm, shallow depth of field",
+      "model": "google/gemini-2.5-flash",
+      "promptVersion": "vision.detail.v3"
+    }
+  ],
+  "analysisContext": {
+    "selectedPostIds": [
+      "3443820324911801176",
+      "3857587305813880062",
+      "3855923679859348271",
+      "3841697283960721329",
+      "3854589785466135995",
+      "3445973705173574952",
+      "3854599590121462450",
+      "3820510902366639665",
+      "3718687361199797951",
+      "3505006736152200199",
+      "3535207624233722643",
+      "3306405742276602836",
+      "3834577256057065335",
+      "3379612527283849412",
+      "3771990325985436661",
+      "3766571453878406448",
+      "3297428190149298259",
+      "3291134523298272915",
+      "3592516392860499656",
+      "3451883240610487721",
+      "3616394679634213518",
+      "3515074956779368893",
+      "3548092857757193176",
+      "3514709494144992460",
+      "3489489191420924679",
+      "3487302336000686867",
+      "3447062884368277805",
+      "3380799624677988952",
+      "3196209357997452686",
+      "3582206709616354530"
+    ],
+    "postSelection": [
+      {
+        "postId": "3443820324911801176",
+        "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+        "timestamp": "2024-08-27T10:43:16.000Z",
+        "score": 65,
+        "reasons": [
+          "high_likes",
+          "high_comments",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3857587305813880062",
+        "url": "https://www.instagram.com/p/DWI5zddF6z-/",
+        "timestamp": "2026-03-21T08:04:23.000Z",
+        "score": 52,
+        "reasons": [
+          "recent",
+          "format_diversity",
+          "profile_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3855923679859348271",
+        "url": "https://www.instagram.com/p/DWC_ihDCJMv/",
+        "timestamp": "2026-03-19T01:00:51.000Z",
+        "score": 38,
+        "reasons": [
+          "recent",
+          "format_diversity",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3841697283960721329",
+        "url": "https://www.instagram.com/p/DVQc1NZD8-x/",
+        "timestamp": "2026-02-27T09:54:02.000Z",
+        "score": 36,
+        "reasons": [
+          "recent",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3854589785466135995",
+        "url": "https://www.instagram.com/p/DV-QPzFjuW7/",
+        "timestamp": "2026-03-17T04:48:51.000Z",
+        "score": 27,
+        "reasons": [
+          "recent",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3445973705173574952",
+        "url": "https://www.instagram.com/p/C_SjtPKNSUo/",
+        "timestamp": "2024-08-30T10:02:47.000Z",
+        "score": 27,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3854599590121462450",
+        "url": "https://www.instagram.com/p/DV-SeeYjlqy/",
+        "timestamp": "2026-03-17T05:08:20.000Z",
+        "score": 26,
+        "reasons": [
+          "recent",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3820510902366639665",
+        "url": "https://www.instagram.com/p/DUFLmx8EhYx/",
+        "timestamp": "2026-01-29T04:20:12.000Z",
+        "score": 25,
+        "reasons": [
+          "recent",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3718687361199797951",
+        "url": "https://www.instagram.com/p/DObbnPbDHa_/",
+        "timestamp": "2025-09-10T16:36:01.000Z",
+        "score": 25,
+        "reasons": [
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3505006736152200199",
+        "url": "https://www.instagram.com/p/DCkSQ5jtAQH/",
+        "timestamp": "2024-11-19T20:49:44.000Z",
+        "score": 22,
+        "reasons": [
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3535207624233722643",
+        "url": "https://www.instagram.com/p/DEPlJqZtCMT/",
+        "timestamp": "2024-12-31T12:53:31.000Z",
+        "score": 21,
+        "reasons": [
+          "profile_signal",
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3306405742276602836",
+        "url": "https://www.instagram.com/p/C3itoEntWvU/",
+        "timestamp": "2024-02-19T20:25:01.000Z",
+        "score": 21,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3834577256057065335",
+        "url": "https://www.instagram.com/p/DU3J7KrEs93/",
+        "timestamp": "2026-02-17T14:07:32.000Z",
+        "score": 20,
+        "reasons": [
+          "recent",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3379612527283849412",
+        "url": "https://www.instagram.com/p/C7my7AHNsjE/",
+        "timestamp": "2024-05-30T20:36:37.000Z",
+        "score": 20,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3771990325985436661",
+        "url": "https://www.instagram.com/p/DRYzTd0kmP1/",
+        "timestamp": "2025-11-23T05:38:28.000Z",
+        "score": 16,
+        "reasons": [
+          "recent",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3766571453878406448",
+        "url": "https://www.instagram.com/p/DRFjMf5jI0w/",
+        "timestamp": "2025-11-15T18:40:52.000Z",
+        "score": 16,
+        "reasons": [
+          "format_diversity",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3297428190149298259",
+        "url": "https://www.instagram.com/p/C3C0XfqNUhT/",
+        "timestamp": "2024-02-07T11:08:13.000Z",
+        "score": 15,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3291134523298272915",
+        "url": "https://www.instagram.com/p/C2sdWlpN9aT/",
+        "timestamp": "2024-01-29T18:46:55.000Z",
+        "score": 13,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3592516392860499656",
+        "url": "https://www.instagram.com/p/DHbLqAWN77I/",
+        "timestamp": "2025-03-20T14:35:48.000Z",
+        "score": 10,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3451883240610487721",
+        "url": "https://www.instagram.com/p/C_njYS6tl2p/",
+        "timestamp": "2024-09-07T13:43:38.000Z",
+        "score": 10,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3616394679634213518",
+        "url": "https://www.instagram.com/p/DIwA8z3NbqO/",
+        "timestamp": "2025-04-22T13:18:50.000Z",
+        "score": 9,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3515074956779368893",
+        "url": "https://www.instagram.com/p/DDIDgyttLG9/",
+        "timestamp": "2024-12-03T18:17:27.000Z",
+        "score": 9,
+        "reasons": [
+          "audience_signal",
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3548092857757193176",
+        "url": "https://www.instagram.com/p/DE9W6fQt9PY/",
+        "timestamp": "2025-01-18T07:34:57.000Z",
+        "score": 6,
+        "reasons": [
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3514709494144992460",
+        "url": "https://www.instagram.com/p/DDGwanHNITM/",
+        "timestamp": "2024-12-03T06:14:11.000Z",
+        "score": 6,
+        "reasons": [
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3489489191420924679",
+        "url": "https://www.instagram.com/p/DBtJ-52NZMH/",
+        "timestamp": "2024-10-29T10:59:09.000Z",
+        "score": 6,
+        "reasons": [
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3487302336000686867",
+        "url": "https://www.instagram.com/p/DBlYv-BtfsT/",
+        "timestamp": "2024-10-26T10:34:15.000Z",
+        "score": 6,
+        "reasons": [
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3447062884368277805",
+        "url": "https://www.instagram.com/p/C_WbW4VNGEt/",
+        "timestamp": "2024-08-31T22:05:39.000Z",
+        "score": 6,
+        "reasons": [
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3380799624677988952",
+        "url": "https://www.instagram.com/p/C7rA1ittJpY/",
+        "timestamp": "2024-06-01T11:56:05.000Z",
+        "score": 6,
+        "reasons": [
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3196209357997452686",
+        "url": "https://www.instagram.com/p/CxbN3oTN62O/",
+        "timestamp": "2023-09-20T19:24:28.000Z",
+        "score": 6,
+        "reasons": [
+          "visual_signal"
+        ]
+      },
+      {
+        "postId": "3582206709616354530",
+        "url": "https://www.instagram.com/p/DG2jgXmtCTi/",
+        "timestamp": "2025-03-06T09:12:50.000Z",
+        "score": 5,
+        "reasons": [
+          "visual_signal"
+        ]
+      }
+    ],
+    "profileSignals": {
+      "publicContacts": [],
+      "publicLinks": [],
+      "platformHandles": [
+        "@markfrommoscow",
+        "@fakeev"
+      ],
+      "professionHints": [],
+      "locationHints": [],
+      "bioKeywords": [
+        "mark",
+        "markfrommoscow",
+        "хобби"
+      ]
+    },
+    "contentClusters": [
+      {
+        "label": "visual_identity",
+        "count": 30,
+        "postIds": [
+          "3443820324911801176",
+          "3857587305813880062",
+          "3855923679859348271",
+          "3841697283960721329",
+          "3854589785466135995",
+          "3445973705173574952",
+          "3854599590121462450",
+          "3820510902366639665"
+        ],
+        "keywords": [
+          "style",
+          "design",
+          "aesthetic",
+          "стиль",
+          "дизайн"
+        ]
+      },
+      {
+        "label": "lifestyle_and_travel",
+        "count": 7,
+        "postIds": [
+          "3857587305813880062",
+          "3505006736152200199",
+          "3771990325985436661",
+          "3766571453878406448",
+          "3616394679634213518",
+          "3515074956779368893",
+          "3196209357997452686"
+        ],
+        "keywords": [
+          "travel",
+          "city",
+          "hotel",
+          "trip",
+          "путешествие",
+          "город"
+        ]
+      },
+      {
+        "label": "work_and_expertise",
+        "count": 2,
+        "postIds": [
+          "3535207624233722643",
+          "3380799624677988952"
+        ],
+        "keywords": [
+          "founder",
+          "startup",
+          "business",
+          "work",
+          "career",
+          "expert",
+          "эксперт",
+          "бизнес"
+        ]
+      },
+      {
+        "label": "commercial_or_ads",
+        "count": 1,
+        "postIds": [
+          "3380799624677988952"
+        ],
+        "keywords": [
+          "ad",
+          "promo",
+          "brand",
+          "sale",
+          "реклама",
+          "скидка",
+          "партнер"
+        ]
+      },
+      {
+        "label": "education_and_guidance",
+        "count": 1,
+        "postIds": [
+          "3548092857757193176"
+        ],
+        "keywords": [
+          "tips",
+          "guide",
+          "howto",
+          "курс",
+          "обучение",
+          "совет"
+        ]
+      },
+      {
+        "label": "community_and_events",
+        "count": 1,
+        "postIds": [
+          "3857587305813880062"
+        ],
+        "keywords": [
+          "event",
+          "team",
+          "meetup",
+          "community",
+          "команда",
+          "мероприятие"
+        ]
+      }
+    ],
+    "audienceSignals": {
+      "frequentCommenters": [
+        {
+          "username": "julivorobyeva",
+          "count": 4
+        },
+        {
+          "username": "fakeev",
+          "count": 4
+        },
+        {
+          "username": "v.rudkovskaya",
+          "count": 2
+        },
+        {
+          "username": "missminaeva",
+          "count": 2
+        },
+        {
+          "username": "sergey_kurbanow",
+          "count": 2
+        },
+        {
+          "username": "aleksandra_czu",
+          "count": 1
+        },
+        {
+          "username": "bogdushin",
+          "count": 1
+        },
+        {
+          "username": "8savik",
+          "count": 1
+        },
+        {
+          "username": "savchenko_olga_igorivna",
+          "count": 1
+        },
+        {
+          "username": "girlsssforyou",
+          "count": 1
+        }
+      ],
+      "repeatedCommentTerms": [
+        {
+          "term": "вас",
+          "count": 2
+        },
+        {
+          "term": "марк",
+          "count": 2
+        },
+        {
+          "term": "100",
+          "count": 1
+        },
+        {
+          "term": "дэбик",
+          "count": 1
+        },
+        {
+          "term": "успех",
+          "count": 1
+        },
+        {
+          "term": "made",
+          "count": 1
+        },
+        {
+          "term": "russia",
+          "count": 1
+        },
+        {
+          "term": "брэд",
+          "count": 1
+        },
+        {
+          "term": "джордж",
+          "count": 1
+        },
+        {
+          "term": "клуни",
+          "count": 1
+        },
+        {
+          "term": "питт",
+          "count": 1
+        },
+        {
+          "term": "забыли",
+          "count": 1
+        }
+      ],
+      "commentDensity": "low",
+      "highCommentPostIds": [
+        "3443820324911801176",
+        "3445973705173574952",
+        "3841697283960721329",
+        "3306405742276602836",
+        "3379612527283849412"
+      ]
+    },
+    "riskSignals": [],
+    "opportunitySignals": [
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3443820324911801176",
+          "3445973705173574952",
+          "3841697283960721329"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "https://www.instagram.com/p/C_SjtPKNSUo/",
+          "https://www.instagram.com/p/DVQc1NZD8-x/"
+        ]
+      }
+    ],
+    "modeGuidance": {
+      "mode": "standard",
+      "evidencePriorities": [
+        "recurring themes across selected posts",
+        "audience and comment evidence",
+        "visual/textual patterns",
+        "practical but safe communication recommendations"
+      ],
+      "scoringFocus": [
+        "specificity",
+        "source-backed hypotheses",
+        "actionability",
+        "confidence calibration"
+      ],
+      "cautionRules": [
+        "Avoid personality certainty",
+        "No harassment, doxing, pressure or privacy bypass"
+      ]
+    },
+    "evidenceMap": [
+      {
+        "id": "post:3443820324911801176",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for high_likes, high_comments, audience_signal, visual_signal; score 65.",
+        "confidence": "high",
+        "postIds": [
+          "3443820324911801176"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C_K6Fbgo2NY/"
+        ]
+      },
+      {
+        "id": "post:3857587305813880062",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, format_diversity, profile_signal, visual_signal; score 52.",
+        "confidence": "high",
+        "postIds": [
+          "3857587305813880062"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DWI5zddF6z-/"
+        ]
+      },
+      {
+        "id": "post:3855923679859348271",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, format_diversity, visual_signal; score 38.",
+        "confidence": "high",
+        "postIds": [
+          "3855923679859348271"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DWC_ihDCJMv/"
+        ]
+      },
+      {
+        "id": "post:3841697283960721329",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, audience_signal, visual_signal; score 36.",
+        "confidence": "high",
+        "postIds": [
+          "3841697283960721329"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DVQc1NZD8-x/"
+        ]
+      },
+      {
+        "id": "post:3854589785466135995",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, audience_signal, visual_signal; score 27.",
+        "confidence": "high",
+        "postIds": [
+          "3854589785466135995"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DV-QPzFjuW7/"
+        ]
+      },
+      {
+        "id": "post:3445973705173574952",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for audience_signal, visual_signal; score 27.",
+        "confidence": "high",
+        "postIds": [
+          "3445973705173574952"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C_SjtPKNSUo/"
+        ]
+      },
+      {
+        "id": "post:3854599590121462450",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, visual_signal; score 26.",
+        "confidence": "high",
+        "postIds": [
+          "3854599590121462450"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DV-SeeYjlqy/"
+        ]
+      },
+      {
+        "id": "post:3820510902366639665",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for recent, audience_signal, visual_signal; score 25.",
+        "confidence": "high",
+        "postIds": [
+          "3820510902366639665"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DUFLmx8EhYx/"
+        ]
+      },
+      {
+        "id": "post:3718687361199797951",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for profile_signal, audience_signal, visual_signal; score 25.",
+        "confidence": "high",
+        "postIds": [
+          "3718687361199797951"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DObbnPbDHa_/"
+        ]
+      },
+      {
+        "id": "post:3505006736152200199",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for profile_signal, audience_signal, visual_signal; score 22.",
+        "confidence": "high",
+        "postIds": [
+          "3505006736152200199"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DCkSQ5jtAQH/"
+        ]
+      },
+      {
+        "id": "post:3535207624233722643",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for profile_signal, audience_signal, visual_signal; score 21.",
+        "confidence": "high",
+        "postIds": [
+          "3535207624233722643"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/DEPlJqZtCMT/"
+        ]
+      },
+      {
+        "id": "post:3306405742276602836",
+        "type": "post",
+        "label": "Selected evidence post",
+        "detail": "Selected for audience_signal, visual_signal; score 21.",
+        "confidence": "high",
+        "postIds": [
+          "3306405742276602836"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C3itoEntWvU/"
+        ]
+      },
+      {
+        "id": "cluster:visual_identity",
+        "type": "content_cluster",
+        "label": "visual_identity",
+        "detail": "30 selected posts match keywords: style, design, aesthetic, стиль, дизайн",
+        "confidence": "high",
+        "postIds": [
+          "3443820324911801176",
+          "3857587305813880062",
+          "3855923679859348271",
+          "3841697283960721329",
+          "3854589785466135995",
+          "3445973705173574952",
+          "3854599590121462450",
+          "3820510902366639665"
+        ]
+      },
+      {
+        "id": "cluster:lifestyle_and_travel",
+        "type": "content_cluster",
+        "label": "lifestyle_and_travel",
+        "detail": "7 selected posts match keywords: travel, city, hotel, trip, путешествие, город",
+        "confidence": "high",
+        "postIds": [
+          "3857587305813880062",
+          "3505006736152200199",
+          "3771990325985436661",
+          "3766571453878406448",
+          "3616394679634213518",
+          "3515074956779368893",
+          "3196209357997452686"
+        ]
+      },
+      {
+        "id": "cluster:work_and_expertise",
+        "type": "content_cluster",
+        "label": "work_and_expertise",
+        "detail": "2 selected posts match keywords: founder, startup, business, work, career, expert",
+        "confidence": "medium",
+        "postIds": [
+          "3535207624233722643",
+          "3380799624677988952"
+        ]
+      },
+      {
+        "id": "cluster:commercial_or_ads",
+        "type": "content_cluster",
+        "label": "commercial_or_ads",
+        "detail": "1 selected posts match keywords: ad, promo, brand, sale, реклама, скидка",
+        "confidence": "medium",
+        "postIds": [
+          "3380799624677988952"
+        ]
+      },
+      {
+        "id": "cluster:education_and_guidance",
+        "type": "content_cluster",
+        "label": "education_and_guidance",
+        "detail": "1 selected posts match keywords: tips, guide, howto, курс, обучение, совет",
+        "confidence": "medium",
+        "postIds": [
+          "3548092857757193176"
+        ]
+      },
+      {
+        "id": "cluster:community_and_events",
+        "type": "content_cluster",
+        "label": "community_and_events",
+        "detail": "1 selected posts match keywords: event, team, meetup, community, команда, мероприятие",
+        "confidence": "medium",
+        "postIds": [
+          "3857587305813880062"
+        ]
+      },
+      {
+        "id": "audience:frequent_commenters",
+        "type": "audience",
+        "label": "Recurring commenters",
+        "detail": "julivorobyeva (4), fakeev (4), v.rudkovskaya (2), missminaeva (2), sergey_kurbanow (2), aleksandra_czu (1), bogdushin (1), 8savik (1), savchenko_olga_igorivna (1), girlsssforyou (1)",
+        "confidence": "medium"
+      },
+      {
+        "id": "audience:high_comment_posts",
+        "type": "audience",
+        "label": "High-comment posts",
+        "detail": "low comment density across selected posts.",
+        "confidence": "medium",
+        "postIds": [
+          "3443820324911801176",
+          "3445973705173574952",
+          "3841697283960721329",
+          "3306405742276602836",
+          "3379612527283849412"
+        ]
+      },
+      {
+        "id": "opportunity:conversation_hooks",
+        "type": "opportunity",
+        "label": "Conversation hook posts",
+        "detail": "High-comment posts are better candidates for safe, context-aware conversation hooks.",
+        "confidence": "medium",
+        "postIds": [
+          "3443820324911801176",
+          "3445973705173574952",
+          "3841697283960721329"
+        ],
+        "urls": [
+          "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "https://www.instagram.com/p/C_SjtPKNSUo/",
+          "https://www.instagram.com/p/DVQc1NZD8-x/"
+        ]
+      },
+      {
+        "id": "mode:standard",
+        "type": "mode",
+        "label": "standard priorities",
+        "detail": "recurring themes across selected posts; audience and comment evidence; visual/textual patterns; practical but safe communication recommendations",
+        "confidence": "high"
+      }
+    ]
+  }
+}

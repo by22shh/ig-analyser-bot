@@ -9,6 +9,7 @@ import { telegramRateLimit } from "./middleware/rate-limit.js";
 import { subscriptionGate } from "./middleware/subscription-gate.js";
 import { updateDedup } from "./middleware/update-dedup.js";
 import { userContext } from "./middleware/user-context.js";
+import { t } from "./locales/index.js";
 
 export function createBot(services: Services): Bot<MyContext> {
   const token = env.TELEGRAM_BOT_TOKEN || "000000:test";
@@ -27,9 +28,9 @@ export function createBot(services: Services): Bot<MyContext> {
   bot.use(subscriptionGate);
   registerHandlers(bot);
 
-  bot.catch((err) => {
+  bot.catch(async (err) => {
     captureException(err.error, { updateId: err.ctx.update.update_id });
-    services.prisma.auditLog
+    await services.prisma.auditLog
       .create({
         data: {
           action: "telegram_error",
@@ -38,6 +39,16 @@ export function createBot(services: Services): Bot<MyContext> {
         }
       })
       .catch(() => undefined);
+    const message = t(err.ctx.user?.language).genericError();
+    try {
+      if (err.ctx.callbackQuery) {
+        await err.ctx.answerCallbackQuery({ text: message.slice(0, 180), show_alert: true });
+        return;
+      }
+      await err.ctx.reply(message, { parse_mode: "HTML" });
+    } catch {
+      // User may have blocked the bot or the original update may not allow replies.
+    }
   });
 
   return bot;

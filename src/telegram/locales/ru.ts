@@ -7,21 +7,22 @@ import type { ReportMetrics, ReportSummaryView } from "../../modules/reports/typ
 export const ru = {
   brand: env.BRAND_NAME,
   buttons: {
-    miniApp: "🚀 Открыть Mini App",
+    miniApp: "🚀 Открыть приложение",
     analyze: "🔎 Анализ профиля",
     photo: "🖼 Поиск по фото",
     history: "🗂 История",
     profile: "👤 Профиль",
     credits: "💎 Пополнить кредиты",
     capabilities: "✨ Что я умею",
-    channel: "📢 Группа",
+    help: "ℹ️ Как пользоваться",
+    channel: "📢 Наш канал",
     support: "🛟 Поддержка",
     settings: "⚙️ Настройки",
     admin: "🛠 Админка",
     terms: "☑️ Правила",
-    back: "⬅️ Назад",
-    cancel: "✖️ Отменить",
-    menu: "🏠 В меню",
+    back: "← Назад",
+    cancel: "❌ Отменить",
+    menu: "← В меню",
     accept: "✅ Принимаю правила",
     decline: "❌ Отказаться",
     subscribe: "📢 Подписаться",
@@ -38,7 +39,9 @@ export const ru = {
     markdown: "📝 Markdown",
     chat: "💬 Задать вопрос",
     sources: "🔗 Источники",
-    repeat: "🔁 Повторить анализ",
+    repeat: "🔄 Повторить анализ",
+    moreQuestion: "💬 Ещё вопрос",
+    toReport: "📌 К отчёту",
     confirmDelete: "🗑 Да, удалить навсегда",
     openInstagram: "🔗 Открыть в Instagram",
     prevSection: "◀️ Пред.",
@@ -90,17 +93,41 @@ export const ru = {
     grantedUnits: number;
     language: string;
     photoSearchEnabled?: boolean;
+    influencerEnabled?: boolean;
+    hrEnabled?: boolean;
+    osintEnabled?: boolean;
     welcomeBonusCredits?: number;
   }): string {
     const photoLine = input.photoSearchEnabled ? "• найти возможный профиль по фото\n" : "";
-    const photoTariff = input.photoSearchEnabled ? " · фото 1" : "";
+    const modes = [
+      "стандарт",
+      input.influencerEnabled ? "блогер" : "",
+      input.hrEnabled ? "HR" : "",
+      input.osintEnabled ? "OSINT по доступу" : ""
+    ].filter(Boolean);
+    const premiumTariff = [
+      input.influencerEnabled ? "блогер" : "",
+      input.hrEnabled ? "HR" : ""
+    ].filter(Boolean);
+    const tariffs = [
+      "стандарт 1",
+      premiumTariff.length ? `${premiumTariff.join("/")} 2` : "",
+      input.osintEnabled ? "OSINT 3" : "",
+      input.photoSearchEnabled ? "фото 1" : ""
+    ].filter(Boolean);
+    const bought = input.purchasedUnits
+      ? `🛒 Куплено: <b>${formatCredits(input.purchasedUnits)}</b>\n`
+      : "";
+    const granted = input.grantedUnits
+      ? `🎁 Промо/выдано: <b>${formatCredits(input.grantedUnits)}</b>\n`
+      : "";
     const bonusLine =
       input.welcomeBonusCredits && input.welcomeBonusCredits > 0
         ? `🎁 <b>Вам начислен бонус: ${formatCredits(input.welcomeBonusCredits * 100)} 💎</b> — первого отчёта хватит бесплатно.\n\n`
         : "";
     return (
       bonusLine +
-      "👁 <b>Разбор публичного Instagram-профиля</b>\n\n" +
+      `👁 <b>${escapeHtml(this.brand)}</b> — разбор публичного Instagram-профиля.\n\n` +
       "🤝 Готовитесь к встрече, партнёрству или деловому контакту?\n" +
       "🕵️ Нужно аккуратно проверить публичный контекст профиля?\n" +
       "📣 Оцениваете автора, кандидата или личный бренд по открытым данным?\n\n" +
@@ -111,7 +138,11 @@ export const ru = {
       "• практические выводы для HR, блогинга или личной стратегии\n" +
       photoLine +
       "• PDF/Markdown и чат по готовому отчёту\n\n" +
-      `💎 Баланс: <b>${formatCredits(input.totalUnits)}</b> · тарифы: стандарт 1 · блогер/HR 2${photoTariff}\n` +
+      `💎 Кредиты: <b>${formatCredits(input.totalUnits)}</b>\n` +
+      bought +
+      granted +
+      `🧭 Режимы: <b>${escapeHtml(modes.join(" · "))}</b>\n` +
+      `💳 Тарифы: ${escapeHtml(tariffs.join(" · "))}\n` +
       `🌐 Язык отчёта: <b>${escapeHtml(input.language)}</b>\n\n` +
       "Начните с кнопки «Анализ профиля»."
     );
@@ -119,11 +150,15 @@ export const ru = {
   capabilities(): string {
     return (
       `✨ <b>Что умеет ${escapeHtml(this.brand)}</b>\n\n` +
-      "• Собирает публичные посты и метаданные профиля.\n" +
-      "• Анализирует до 30 последних постов, визуальные паттерны и карту окружения (Digital Circle).\n" +
-      "• Даёт краткий вывод в Telegram, подробные секции и экспорт в PDF/Markdown/HTML.\n" +
-      "• Позволяет задавать вопросы по готовому отчёту.\n\n" +
-      "<b>Тарифы:</b> стандарт 1 💎 · блогер/HR 2 💎 · OSINT 3 💎 · фото 1 💎 · вопрос в чате 0.05 💎\n\n" +
+      "Я превращаю открытые Instagram-данные в аккуратный аналитический отчёт.\n\n" +
+      "🔎 <b>Анализ профиля</b>\n" +
+      "<blockquote>Посты, метаданные, визуальные паттерны, темы, ритм публикаций и карта окружения Digital Circle.</blockquote>\n\n" +
+      "🖼 <b>Поиск по фото</b>\n" +
+      "<blockquote>Если включён и у вас есть право на изображение, показываю возможные Instagram-кандидаты. Это не доказательство личности.</blockquote>\n\n" +
+      "📄 <b>Результат</b>\n" +
+      "<blockquote>Краткий вывод в Telegram, подробные секции, PDF/Markdown/HTML и чат по готовому отчёту.</blockquote>\n\n" +
+      "💎 <b>Тарифы</b>\n" +
+      "<blockquote>Стандарт — 1💎\nБлогер/HR — 2💎\nOSINT — 3💎\nФото — 1💎\nВопрос по отчёту — 0.05💎</blockquote>\n\n" +
       `${escapeHtml(this.brand)} не анализирует закрытые профили и не помогает с преследованием, доксингом или давлением.`
     );
   },
@@ -139,14 +174,21 @@ export const ru = {
     retentionDays: number;
   }): string {
     return (
-      `👤 <b>Профиль:</b> ${escapeHtml(input.name)}\n` +
-      `🆔 Telegram ID: <code>${escapeHtml(input.telegramId)}</code>\n` +
-      `🌐 Язык: <b>${escapeHtml(input.language)}</b>\n\n` +
-      `💎 <b>Кредиты: ${formatCredits(input.totalUnits)}</b>\n` +
-      `• куплено: ${formatCredits(input.purchasedUnits)}\n` +
-      `• выдано/промо: ${formatCredits(input.grantedUnits)}\n\n` +
-      `📚 Отчётов: <b>${input.completedReports}</b>\n` +
-      `⏳ Активных задач: <b>${input.activeJobs}</b>\n` +
+      "👤 <b>Профиль</b>\n" +
+      `<b>${escapeHtml(input.name)}</b> · ID <code>${escapeHtml(input.telegramId)}</code>\n\n` +
+      "<blockquote>" +
+      `🌐 <b>${escapeHtml(input.language)}</b>\n` +
+      "Язык интерфейса и отчётов" +
+      "</blockquote>\n\n" +
+      "<blockquote>" +
+      `💎 Кредиты: <b>${formatCredits(input.totalUnits)}</b>\n` +
+      `🛒 Куплено: <b>${formatCredits(input.purchasedUnits)}</b>\n` +
+      `🎁 Выдано/промо: <b>${formatCredits(input.grantedUnits)}</b>` +
+      "</blockquote>\n\n" +
+      "<blockquote>" +
+      "📚 <b>Отчёты</b>\n" +
+      `Готовых: <b>${input.completedReports}</b> · активных задач: <b>${input.activeJobs}</b>` +
+      "</blockquote>\n\n" +
       `🧹 Хранение отчётов: <b>${input.retentionDays} дн.</b>`
     );
   },
@@ -337,14 +379,27 @@ export const ru = {
   },
   paywallIntro(testMode: boolean): string {
     const badge = testMode ? "🧪 <b>Тестовый режим оплаты</b>\n\n" : "";
-    return `${badge}💎 <b>Пополнение кредитов</b>\n\nВыберите способ оплаты. Основной способ в Telegram — Stars.`;
+    return (
+      `${badge}💎 <b>Пополнение кредитов</b>\n\n` +
+      "Кредитами оплачиваются анализы, поиск по фото и вопросы по готовому отчёту. " +
+      "Основной способ в Telegram — <b>Stars</b>.\n\n" +
+      "Выберите способ оплаты:"
+    );
   },
   starsIntro(): string {
-    return "⭐ <b>Оплата через Telegram Stars</b>\n\nВыберите пакет. Кредиты начислятся автоматически после оплаты.";
+    return (
+      "⭐ <b>Оплата через Telegram Stars</b>\n\n" +
+      "Выберите пакет: в кнопке указаны <b>кредиты</b> и цена в звёздах. " +
+      "Кредиты начислятся автоматически после оплаты."
+    );
   },
   yookassaIntro(testMode: boolean): string {
     const badge = testMode ? "🧪 <b>Тестовый режим YooKassa</b>\n\n" : "";
-    return `${badge}💳 <b>Оплата картой или СБП</b>\n\nВыберите пакет. После оплаты на странице YooKassa кредиты начислятся автоматически.`;
+    return (
+      `${badge}💳 <b>Оплата картой или СБП</b>\n\n` +
+      "Выберите пакет: в кнопке указаны <b>кредиты</b> и цена в рублях. " +
+      "После оплаты на странице YooKassa кредиты начислятся автоматически."
+    );
   },
   askReceiptEmail(): string {
     return (
@@ -495,12 +550,22 @@ export const ru = {
       ? `\n🔒 <a href="${escapeHtml(privacyUrl)}">Политика конфиденциальности</a>`
       : "";
     return (
-      "ℹ️ <b>Помощь</b>\n\n" +
-      "<b>Анализ профиля.</b> Нажмите «Анализ профиля» и пришлите публичный @username (можно просто отправить username в чат). Выберите режим, подтвердите стоимость — придут краткий вывод, секции и PDF/Markdown.\n" +
-      "<b>Поиск по фото.</b> Если включён — ищет возможные профили по изображению (нужно право на фото).\n" +
-      "<b>Чат по отчёту.</b> Откройте отчёт → «Задать вопрос» и спросите по публичным данным.\n" +
-      "<b>История.</b> Готовые отчёты и экспорт всегда доступны в «Истории».\n\n" +
-      `${escapeHtml(this.brand)} не анализирует закрытые профили и не помогает с преследованием, доксингом или обходом приватности. Для удаления данных используйте /delete_me.` +
+      "ℹ️ <b>Как пользоваться</b>\n\n" +
+      "Короткая инструкция для безопасного анализа публичного профиля.\n\n" +
+      "<b>Поэтапная инструкция:</b>\n\n" +
+      "<blockquote>1. <b>Запустите анализ</b>\n" +
+      "Нажмите «Анализ профиля» или просто пришлите публичный @username / ссылку.</blockquote>\n\n" +
+      "<blockquote>2. <b>Выберите режим</b>\n" +
+      "Стандартный, блогерский аудит, HR-контекст или OSINT по отдельному доступу.</blockquote>\n\n" +
+      "<blockquote>3. <b>Подтвердите стоимость</b>\n" +
+      "Бот покажет режим, цель и цену в кредитах до запуска.</blockquote>\n\n" +
+      "<blockquote>4. <b>Получите результат</b>\n" +
+      "Краткий вывод придёт в Telegram, подробности доступны в секциях, PDF/Markdown и чате по отчёту.</blockquote>\n\n" +
+      "💡 <b>Полезно знать</b>\n" +
+      "<blockquote>• Анализируются только публичные данные.\n" +
+      "• Поиск по фото требует права использовать изображение.\n" +
+      "• Выводы — это сигналы и гипотезы, их нужно проверять.\n" +
+      "• Удалить данные можно командой /delete_me.</blockquote>" +
       support +
       terms +
       privacy
@@ -518,7 +583,7 @@ export const ru = {
     );
   },
   cancelled(): string {
-    return "✖️ Отменено. Текущий шаг сброшен — вы в меню.";
+    return "❌ Отменено. Текущий шаг сброшен. Чем ещё помочь?";
   },
   deleteMeWarning(): string {
     return "⚠️ <b>Удаление аккаунта</b>\n\nЭто действие необратимо: профиль, все отчёты и рабочие данные будут удалены или анонимизированы, а оставшиеся кредиты сгорят. Финансовые записи сохраняются согласно требованиям учёта.\n\nПродолжить?";

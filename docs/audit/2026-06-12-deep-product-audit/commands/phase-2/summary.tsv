@@ -1,0 +1,4 @@
+0	1s	DATABASE_URL=postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot DIRECT_URL=postgresql://ig_analyser:ig_analyser@localhost:5432/ig_analyser_bot pnpm exec prisma validate	docs/audit/2026-06-12-deep-product-audit/commands/phase-2/01.log
+0	1s	pnpm exec vitest run tests/unit/retry.test.ts tests/unit/postgres-workers.test.ts tests/unit/worker-lease-guard.test.ts tests/unit/credits-release.test.ts tests/unit/user-service-race.test.ts tests/integration/credits.service.test.ts	docs/audit/2026-06-12-deep-product-audit/commands/phase-2/02.log
+0	5s	pnpm typecheck	docs/audit/2026-06-12-deep-product-audit/commands/phase-2/03.log
+0	2s	pnpm lint	docs/audit/2026-06-12-deep-product-audit/commands/phase-2/04.log

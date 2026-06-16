@@ -1,5 +1,6 @@
 import { escapeHtml } from "../../telegram/formatters/html.js";
 import type { StrategicReportView } from "./types.js";
+import { stripSectionMarkers } from "./user-facing-text.js";
 
 export function renderReportMarkdown(report: StrategicReportView): string {
   const lines = [
@@ -10,10 +11,10 @@ export function renderReportMarkdown(report: StrategicReportView): string {
     "",
     "## Summary",
     ...(report.summary.executiveSummary
-      ? ["", "### Executive Summary", report.summary.executiveSummary, ""]
+      ? ["", "### Executive Summary", stripSectionMarkers(report.summary.executiveSummary), ""]
       : []),
-    ...report.summary.bullets.map((item) => `- ${item}`),
-    ...markdownWarnings(report.summary.warnings),
+    ...report.summary.bullets.map((item) => `- ${stripSectionMarkers(item)}`),
+    ...markdownWarnings(report.summary.warnings.map(stripSectionMarkers)),
     "",
     "## Analysis Health",
     ...markdownAnalysisHealth(report),
@@ -30,7 +31,12 @@ export function renderReportMarkdown(report: StrategicReportView): string {
     ""
   ];
   for (const section of report.sections) {
-    lines.push(`## ${section.title}`, "", section.content, "");
+    lines.push(
+      `## ${stripSectionMarkers(section.title)}`,
+      "",
+      stripSectionMarkers(section.content),
+      ""
+    );
     if (section.sources.length) {
       lines.push("Sources:");
       for (const source of section.sources)
@@ -50,8 +56,8 @@ export function renderReportHtml(report: StrategicReportView): string {
     .map(
       (section) => `
         <section>
-          <h2>${escapeHtml(section.title)}</h2>
-          <p>${escapeHtml(section.content).replaceAll("\n", "<br>")}</p>
+          <h2>${escapeHtml(stripSectionMarkers(section.title))}</h2>
+          <p>${escapeHtml(stripSectionMarkers(section.content)).replaceAll("\n", "<br>")}</p>
           ${
             section.sources.length
               ? `<ul>${section.sources.map((source) => `<li>${escapeHtml(source.label)} ${renderHtmlSourceTarget(source)}</li>`).join("")}</ul>`
@@ -83,11 +89,11 @@ export function renderReportHtml(report: StrategicReportView): string {
   <h2>Summary</h2>
   ${
     report.summary.executiveSummary
-      ? `<h3>Executive Summary</h3><p>${escapeHtml(report.summary.executiveSummary)}</p>`
+      ? `<h3>Executive Summary</h3><p>${escapeHtml(stripSectionMarkers(report.summary.executiveSummary))}</p>`
       : ""
   }
-  <ul>${report.summary.bullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-  ${renderHtmlWarnings(report.summary.warnings)}
+  <ul>${report.summary.bullets.map((item) => `<li>${escapeHtml(stripSectionMarkers(item))}</li>`).join("")}</ul>
+  ${renderHtmlWarnings(report.summary.warnings.map(stripSectionMarkers))}
   <h2>Analysis Health</h2>
   ${renderHtmlAnalysisHealth(report)}
   <h2>Metrics</h2>

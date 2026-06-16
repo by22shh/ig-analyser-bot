@@ -46,7 +46,7 @@ Leave external provider secrets empty to use mock adapters. Mock mode still uses
 The audit requires modeled provider costs:
 
 ```bash
-ECON_STANDARD_REPORT_COST_P75_RUB=55 \
+ECON_STANDARD_REPORT_COST_P75_RUB=50 \
 ECON_PHOTO_SEARCH_COST_P75_RUB=20 \
 ECON_CHAT_MESSAGE_COST_P75_RUB=2 \
 ECON_APIFY_PROFILE_COST_RUB=12 \
@@ -57,3 +57,4 @@ pnpm audit-economics
 ```
 
 If any public mode or payment package fails the `3x` guardrail, the command exits non-zero.
+`ECON_STANDARD_REPORT_COST_P75_RUB` is the provider/report p75 cost before support reserve; `audit-economics` adds `ECON_SUPPORT_RESERVE_RUB` separately.

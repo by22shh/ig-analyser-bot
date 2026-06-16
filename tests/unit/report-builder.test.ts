@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { reportQualityUsageEvents } from "../../src/modules/analysis/quality-telemetry.js";
 import { buildStrategicReport } from "../../src/modules/analysis/report-builder.js";
 import type { InstagramPost, InstagramProfile } from "../../src/modules/instagram/types.js";
 import type { LlmProvider } from "../../src/modules/llm/types.js";
@@ -81,9 +82,21 @@ describe("buildStrategicReport", () => {
       expect.arrayContaining([expect.stringContaining("Content quality flags")])
     );
     expect(report.summary.deliveryHealth?.status).toBe("limited");
+    expect(report.summary.repairTelemetry).toMatchObject({
+      initialRepairAttempted: true,
+      initialRepairAccepted: true
+    });
+    expect(report.summary.qualityTelemetry).toMatchObject({
+      repairInitialAttempted: true,
+      repairInitialSucceeded: true,
+      repairAttempted: true,
+      repairSucceeded: true,
+      repairFailed: false
+    });
     expect(report.summary.evidence?.selectedPostIds).toEqual(["p1"]);
     expect(report.analysisContext?.evidenceMap.length).toBeGreaterThan(0);
     expect(report.promptVersion).toBe("report.repair");
+    expect(report.rawText).not.toContain("[[SECTION]]");
   });
 
   it("triggers repair on a forbidden inference even when all sections exist", async () => {
@@ -412,7 +425,8 @@ describe("buildStrategicReport", () => {
         ])
       })
     );
-    expect(report.rawText).toContain("[[SECTION]]\nГотовые фразы для входа в диалог");
+    expect(report.rawText).toContain("Готовые фразы для входа в диалог");
+    expect(report.rawText).not.toContain("[[SECTION]]");
     expect(report.rawText).toContain("Вердикт: профиль дает достаточно публичных сигналов");
     expect(report.promptVersion).toBe("report.repair");
   });
@@ -599,6 +613,33 @@ describe("buildStrategicReport", () => {
 
     expect(repairReport).toHaveBeenCalledTimes(2);
     expect(report.summary.deliveryHealth?.status).toBe("failed_quality");
+    expect(report.summary.qualityTelemetry).toMatchObject({
+      failedQuality: true,
+      repairAttempted: true,
+      repairFailed: true
+    });
+    expect(
+      reportQualityUsageEvents({
+        userId: "user-1",
+        analysisJobId: "job-1",
+        model: report.model,
+        telemetry: report.summary.qualityTelemetry
+      })
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          provider: "analysis_quality",
+          operation: "report_quality_gate",
+          status: "failed",
+          errorCode: "FAILED_QUALITY"
+        }),
+        expect.objectContaining({
+          operation: "report_repair_initial",
+          status: "failed",
+          errorCode: "REPAIR_NOT_ACCEPTED"
+        })
+      ])
+    );
     expect(report.summary.deliveryHealth?.reasons).toEqual(
       expect.arrayContaining([expect.stringContaining("high_findings")])
     );
@@ -761,6 +802,155 @@ describe("buildStrategicReport", () => {
     expect(report.summary.contentQuality?.score).toBeTypeOf("number");
     expect(report.summary.contentQuality?.dimensions.practicalDetail).toBeTypeOf("number");
     expect(Array.isArray(report.summary.contentQuality?.findings)).toBe(true);
+  });
+
+  it("keeps large-profile low-evidence warnings prominent and records low-evidence telemetry", async () => {
+    const posts: InstagramPost[] = Array.from({ length: 30 }, (_, index) => ({
+      id: `p${index + 1}`,
+      type: "Image",
+      caption: `public city post ${index + 1}`,
+      hashtags: [],
+      mentions: [],
+      likesCount: 20 + index,
+      commentsCount: 1,
+      latestComments: [],
+      timestamp: new Date(Date.UTC(2026, 0, index + 1)).toISOString(),
+      url: `https://www.instagram.com/p/p${index + 1}/`,
+      isPinned: false,
+      childPosts: [],
+      taggedUsers: []
+    }));
+    const profile: InstagramProfile = {
+      username: "largeprofile",
+      followersCount: 57_000,
+      followsCount: 900,
+      postsCount: 1087,
+      isVerified: false,
+      relatedProfiles: [],
+      posts
+    };
+    const llm: LlmProvider = {
+      analyzeVision: vi.fn(async () => []),
+      generateReport: vi.fn(async () => ({
+        rawText: fullReportRaw(),
+        model: "reasoning",
+        promptVersion: "report"
+      })),
+      chat: vi.fn()
+    };
+
+    const report = await buildStrategicReport({ mode: "standard", language: "ru", profile, llm });
+    const warnings = report.summary.warnings.join("\n");
+
+    expect(report.summary.analysisHealth?.sampleCoverageLevel).toBe("very_low");
+    expect(report.summary.qualityTelemetry).toMatchObject({
+      lowEvidence: true,
+      veryLowEvidence: true,
+      lowEvidenceLevel: "very_low"
+    });
+    expect(report.summary.executiveSummary).toContain("30/1087");
+    expect(warnings).toContain("покрытие выборки 2.8%");
+    expect(warnings).toContain("не весь профиль");
+    expect(report.sections.map((section) => section.content).join("\n")).toContain(
+      "Confidence: medium"
+    );
+    expect(
+      reportQualityUsageEvents({
+        userId: "user-1",
+        analysisJobId: "job-1",
+        model: report.model,
+        telemetry: report.summary.qualityTelemetry
+      })
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          operation: "report_low_evidence_flag",
+          status: "success",
+          errorCode: "VERY_LOW_EVIDENCE"
+        })
+      ])
+    );
+  });
+
+  it("uses 100+ metadata posts while keeping vision capped to selected visual posts", async () => {
+    const posts: InstagramPost[] = Array.from({ length: 120 }, (_, index) => ({
+      id: `p${index + 1}`,
+      type: index % 4 === 0 ? "Sidecar" : "Image",
+      caption: `public city post ${index + 1} with travel caption and useful comments`,
+      hashtags: index % 5 === 0 ? ["travel"] : [],
+      mentions: [],
+      likesCount: 20 + index,
+      commentsCount: index % 7,
+      latestComments:
+        index % 10 === 0
+          ? [
+              {
+                ownerUsername: "viewer",
+                text: "Где это место?",
+                timestamp: "2026-06-01T01:00:00Z"
+              },
+              {
+                ownerUsername: "alice",
+                text: "Это центр города",
+                timestamp: "2026-06-01T02:00:00Z",
+                isAuthor: true
+              }
+            ]
+          : [],
+      timestamp: new Date(Date.UTC(2026, 0, index + 1)).toISOString(),
+      url: `https://www.instagram.com/p/p${index + 1}/`,
+      displayUrl: `https://example.com/${index + 1}.jpg`,
+      mediaUrls: [`https://example.com/${index + 1}.jpg`],
+      isPinned: index === 0,
+      childPosts: [],
+      taggedUsers: []
+    }));
+    const profile: InstagramProfile = {
+      username: "alice",
+      followersCount: 1000,
+      followsCount: 300,
+      postsCount: 240,
+      isVerified: false,
+      relatedProfiles: [],
+      posts
+    };
+    let visionInputPostCount = 0;
+    let generateInput: Parameters<LlmProvider["generateReport"]>[0] | undefined;
+    const analyzeVision = vi.fn(async (input: Parameters<LlmProvider["analyzeVision"]>[0]) => {
+      visionInputPostCount = input.posts.length;
+      return input.posts.map((post) => ({
+        postId: post.id,
+        status: "completed" as const,
+        description: `[Image ID: ${post.id}] public city image with travel context and visible location detail`,
+        model: "vision",
+        promptVersion: "vision"
+      }));
+    });
+    const generateReport = vi.fn(async (input: Parameters<LlmProvider["generateReport"]>[0]) => {
+      generateInput = input;
+      return {
+        rawText: fullReportRaw(),
+        model: "reasoning",
+        promptVersion: "report"
+      };
+    });
+    const llm: LlmProvider = {
+      analyzeVision,
+      generateReport,
+      chat: vi.fn()
+    };
+
+    const report = await buildStrategicReport({ mode: "standard", language: "ru", profile, llm });
+
+    expect(visionInputPostCount).toBe(30);
+    expect(generateInput?.posts).toHaveLength(120);
+    expect(generateInput?.evidencePack?.profile.metadataPosts).toBe(120);
+    expect(generateInput?.evidencePack?.profile.visualPosts).toBe(30);
+    expect(generateInput?.evidencePack?.profile.authorReplyCount).toBeGreaterThan(0);
+    expect(report.summary.analysisHealth?.metadataPosts).toBe(120);
+    expect(report.summary.analysisHealth?.visualPosts).toBe(30);
+    expect(report.evidencePack?.postEvidence.length).toBeGreaterThan(0);
+    expect(report.vision).toHaveLength(30);
   });
 });
 

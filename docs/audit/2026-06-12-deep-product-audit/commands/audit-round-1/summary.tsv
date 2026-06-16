@@ -1,0 +1,3 @@
+01	ci	0	docs/audit/2026-06-12-deep-product-audit/commands/audit-round-1/01-ci.log
+02	eval-golden	0	docs/audit/2026-06-12-deep-product-audit/commands/audit-round-1/02-eval-golden.log
+03	prisma-validate	0	docs/audit/2026-06-12-deep-product-audit/commands/audit-round-1/03-prisma-validate.log

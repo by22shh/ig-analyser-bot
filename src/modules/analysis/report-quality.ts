@@ -249,6 +249,13 @@ function sampleCoverageQualityFinding(metrics?: ReportMetrics): SectionQualityFi
       detail: `${metrics.analyzedPosts}/${metrics.postsCount} posts analyzed (${percent}%). Report should frame findings as selected-post signals.`
     };
   }
+  if (coverage < 0.35) {
+    return {
+      id: "report:partial_sample_coverage",
+      severity: "low",
+      detail: `${metrics.analyzedPosts}/${metrics.postsCount} posts analyzed (${percent}%). Top-level summary should mention partial coverage.`
+    };
+  }
   return undefined;
 }
 
@@ -277,7 +284,8 @@ function normalize(value: string): string {
 }
 
 function hasInternalOperationalLeak(sections: ReportSectionView[]): boolean {
-  return INTERNAL_OPERATIONAL_REPORT_RE.test(sections.map((section) => section.content).join("\n"));
+  const text = stripUrls(sections.map((section) => section.content).join("\n"));
+  return INTERNAL_OPERATIONAL_REPORT_RE.test(text) || INTERNAL_OPERATIONAL_CI_RE.test(text);
 }
 
 function hasInternalSchemaLeak(sections: ReportSectionView[]): boolean {
@@ -285,10 +293,16 @@ function hasInternalSchemaLeak(sections: ReportSectionView[]): boolean {
 }
 
 const INTERNAL_OPERATIONAL_REPORT_RE =
-  /\b(?:prod(?:uction)?[-\s]?e2e|e2e|ci|smoke\s+test|deploy(?:ment)?|pipeline|production\s+(?:eval(?:uation)?|test|smoke)|end-to-end\s+(?:eval(?:uation)?|test|smoke))\b|(?:пайплайн|депло[йя]|прод(?:овый|е)?\s+тест|сквозн(?:ой|ого)\s+тест)/iu;
+  /\b(?:prod(?:uction)?[-\s]?e2e|e2e|smoke\s+test|deploy(?:ment)?|pipeline|production\s+(?:eval(?:uation)?|test|smoke)|end-to-end\s+(?:eval(?:uation)?|test|smoke))\b|(?:пайплайн|депло[йя]|прод(?:овый|е)?\s+тест|сквозн(?:ой|ого)\s+тест)/iu;
+
+const INTERNAL_OPERATIONAL_CI_RE = /\bCI\b/u;
 
 const INTERNAL_SCHEMA_TERM_RE =
   /\b(?:analysisContext|evidenceMap|contentClusters|profileSignals|audienceSignals|riskSignals|opportunitySignals|sourceCatalog|postIds)\b/u;
+
+function stripUrls(value: string): string {
+  return value.replace(/https?:\/\/\S+/giu, " ");
+}
 
 function wordCount(value: string): number {
   return value.match(/[\p{L}\p{N}]{2,}/gu)?.length ?? 0;

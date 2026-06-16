@@ -1,0 +1,3 @@
+0	3s	pnpm exec vitest run tests/unit/telegram-webhook.test.ts tests/unit/analysis-start.test.ts tests/unit/analysis-keyboard.test.ts tests/unit/payments-keyboard.test.ts tests/unit/mini-app-api.test.ts tests/unit/mini-app-auth.test.ts tests/snapshots/messages.test.ts	docs/audit/2026-06-12-deep-product-audit/commands/phase-3/01.log
+0	4s	pnpm typecheck	docs/audit/2026-06-12-deep-product-audit/commands/phase-3/02.log
+0	3s	pnpm lint	docs/audit/2026-06-12-deep-product-audit/commands/phase-3/03.log

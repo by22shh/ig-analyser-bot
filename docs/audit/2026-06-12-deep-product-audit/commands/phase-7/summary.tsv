@@ -1,0 +1,6 @@
+01	audit-economics-defaults	0	docs/audit/2026-06-12-deep-product-audit/commands/phase-7/01.log
+02	targeted-economics-ops	0	docs/audit/2026-06-12-deep-product-audit/commands/phase-7/02.log
+03	build	0	docs/audit/2026-06-12-deep-product-audit/commands/phase-7/03.log
+04	typecheck	0	docs/audit/2026-06-12-deep-product-audit/commands/phase-7/04.log
+05	lint	0	docs/audit/2026-06-12-deep-product-audit/commands/phase-7/05.log
+06	support-reserve-scenario	0	docs/audit/2026-06-12-deep-product-audit/commands/phase-7/06-support-reserve-scenario.log

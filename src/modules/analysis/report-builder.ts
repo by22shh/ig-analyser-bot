@@ -10,14 +10,17 @@ import {
 import type { LlmProvider } from "../llm/types.js";
 import { computeReportMetrics } from "../reports/metrics.js";
 import { parseReportSections, validateRequiredSections } from "../reports/parser.js";
+import { stripSectionMarkers } from "../reports/user-facing-text.js";
 import type {
   ReportAnalysisHealth,
   ReportDeliveryHealth,
+  ReportRepairTelemetry,
   ReportSource,
   ReportSectionView,
   StrategicReportView,
   VisionAnalysisItemView
 } from "../reports/types.js";
+import { buildEvidencePack } from "./evidence-pack.js";
 import {
   contentQualityFindingsNeedRepair,
   evaluateReportContentQuality,
@@ -25,6 +28,7 @@ import {
   type ContentQualityRubric
 } from "./content-quality.js";
 import { analysisContextDigest, buildAnalysisContext, selectAnalysisPosts } from "./context.js";
+import { buildReportQualityTelemetry } from "./quality-telemetry.js";
 import {
   evaluateReportQuality,
   qualityFindingsNeedRepair,
@@ -66,22 +70,41 @@ export async function buildStrategicReport(input: {
   goal?: string;
   vision?: VisionAnalysisItemView[];
 }): Promise<StrategicReportView> {
-  const selection = selectAnalysisPosts(input.profile.posts, {
+  const metadataSelection = selectAnalysisPosts(input.profile.posts, {
+    limit: env.ANALYSIS_METADATA_POST_LIMIT ?? 120
+  });
+  const posts = metadataSelection.posts;
+  const visualSelection = selectAnalysisPosts(posts, {
     limit: env.ANALYSIS_POST_LIMIT ?? 30
   });
-  const posts = selection.posts;
-  const selectedPostIds = new Set(posts.map((post) => post.id));
+  const visualPosts = visualSelection.posts.slice(0, env.ANALYSIS_MAX_IMAGES_ANALYZED ?? 30);
+  const visualPostIds = new Set(visualPosts.map((post) => post.id));
   const profile = { ...input.profile, posts };
-  const analyzedVision = input.vision ?? (await input.llm.analyzeVision({ profile, posts }));
-  const vision = analyzedVision.filter((item) => selectedPostIds.has(item.postId));
+  const analyzedVision =
+    input.vision ??
+    (await input.llm.analyzeVision({
+      profile: { ...profile, posts: visualPosts },
+      posts: visualPosts
+    }));
+  const vision = analyzedVision.filter((item) => visualPostIds.has(item.postId));
   const metrics = computeReportMetrics(profile, posts);
   const analysisContext = buildAnalysisContext({
     mode: input.mode,
     profile,
     posts,
-    selection,
+    selection: metadataSelection,
     metrics,
     vision
+  });
+  const evidencePack = buildEvidencePack({
+    mode: input.mode,
+    profile,
+    posts,
+    visualPosts,
+    selection: metadataSelection,
+    metrics,
+    vision,
+    analysisContext
   });
   let generated = await input.llm.generateReport({
     mode: input.mode,
@@ -91,6 +114,7 @@ export async function buildStrategicReport(input: {
     vision,
     metrics,
     analysisContext,
+    evidencePack,
     targetPosition: input.targetPosition,
     goal: input.goal
   });
@@ -112,7 +136,13 @@ export async function buildStrategicReport(input: {
     metrics,
     analysisContext
   });
-  const analysisHealth = buildReportAnalysisHealth(metrics, vision, posts);
+  const analysisHealth = buildReportAnalysisHealth(
+    metrics,
+    vision,
+    posts,
+    visualPosts,
+    analysisContext
+  );
   const healthWarnings = analysisHealthWarnings(input.language, analysisHealth);
   let contentQualitySummary = evaluateReportContentQuality({
     sections,
@@ -125,14 +155,17 @@ export async function buildStrategicReport(input: {
     metrics
   });
 
-  if (
-    (missing.length ||
-      shouldRepairSources(sections, weakSourceSections) ||
-      groundingFindings.length ||
-      qualityFindingsNeedRepair(qualitySummary.findings) ||
-      contentQualityFindingsNeedRepair(contentQualitySummary.findings)) &&
-    input.llm.repairReport
-  ) {
+  const initialRepairReasons = repairReasons({
+    missing,
+    weakSourceSections,
+    groundingFindings,
+    qualityFindings: qualitySummary.findings,
+    contentQualityFindings: contentQualitySummary.findings
+  });
+  let initialRepairAttempted = false;
+  let initialRepairAccepted = false;
+  if (initialRepairReasons.length && input.llm.repairReport) {
+    initialRepairAttempted = true;
     const repaired = await input.llm
       .repairReport({
         mode: input.mode,
@@ -142,6 +175,7 @@ export async function buildStrategicReport(input: {
         vision,
         metrics,
         analysisContext,
+        evidencePack,
         targetPosition: input.targetPosition,
         goal: input.goal,
         rawText: generated.rawText,
@@ -191,6 +225,7 @@ export async function buildStrategicReport(input: {
           contentQualitySummary
         )
       ) {
+        initialRepairAccepted = true;
         generated = repaired;
         sections = repairedSections;
         missing = repairedMissing;
@@ -216,6 +251,8 @@ export async function buildStrategicReport(input: {
   });
 
   let targetedRepairAttempted = false;
+  let targetedRepairAccepted = false;
+  const deliveryGateBeforeTargeted = compactDeliveryGate(finalCandidate.deliveryGate);
   if (!finalCandidate.deliveryGate.passed && input.llm.repairReport) {
     targetedRepairAttempted = true;
     const targeted = await input.llm
@@ -227,6 +264,7 @@ export async function buildStrategicReport(input: {
         vision,
         metrics,
         analysisContext,
+        evidencePack,
         targetPosition: input.targetPosition,
         goal: input.goal,
         rawText: finalCandidate.rawText,
@@ -258,11 +296,24 @@ export async function buildStrategicReport(input: {
         analysisContext
       });
       if (deliveryIssueScore(targetedCandidate) < deliveryIssueScore(finalCandidate)) {
+        targetedRepairAccepted = true;
         generated = targeted;
         finalCandidate = targetedCandidate;
       }
     }
   }
+  const repairTelemetry: ReportRepairTelemetry = {
+    initialRepairAttempted,
+    initialRepairAccepted,
+    initialRepairReasons,
+    targetedRepairAttempted,
+    targetedRepairAccepted,
+    targetedRepairReasons: targetedRepairAttempted ? deliveryGateBeforeTargeted.reasons : [],
+    deliveryGateBeforeTargeted: targetedRepairAttempted ? deliveryGateBeforeTargeted : undefined,
+    deliveryGateAfterTargeted: targetedRepairAttempted
+      ? compactDeliveryGate(finalCandidate.deliveryGate)
+      : undefined
+  };
 
   const qualityWarning = renderQualityWarning(finalCandidate.quality);
   const contentQualityWarning = renderContentQualityWarning(finalCandidate.contentQuality);
@@ -270,9 +321,17 @@ export async function buildStrategicReport(input: {
     finalCandidate.deliveryGate,
     finalCandidate.quality,
     finalCandidate.contentQuality,
+    initialRepairAccepted || targetedRepairAccepted,
     targetedRepairAttempted,
     Boolean(input.llm.repairReport)
   );
+  const qualityTelemetry = buildReportQualityTelemetry({
+    analysisHealth,
+    deliveryHealth,
+    repairTelemetry,
+    quality: finalCandidate.quality,
+    contentQuality: finalCandidate.contentQuality
+  });
   const deliveryWarning = renderDeliveryHealthWarning(deliveryHealth, input.language);
 
   return {
@@ -300,9 +359,12 @@ export async function buildStrategicReport(input: {
       ],
       analysisHealth,
       deliveryHealth,
+      repairTelemetry,
+      qualityTelemetry,
       quality: finalCandidate.quality,
       contentQuality: finalCandidate.contentQuality,
-      evidence: analysisContextDigest(analysisContext)
+      evidence: analysisContextDigest(analysisContext),
+      evidencePack
     },
     metrics,
     sourceMap: finalCandidate.sourceMap,
@@ -311,6 +373,7 @@ export async function buildStrategicReport(input: {
     profile,
     posts,
     vision,
+    evidencePack,
     analysisContext
   };
 }
@@ -441,6 +504,7 @@ function buildDeliveryHealth(
   gate: DeliveryGate,
   quality: ReturnType<typeof evaluateReportQuality>,
   contentQuality: ContentQualityRubric,
+  repairAccepted: boolean,
   targetedRepairAttempted: boolean,
   repairAvailable: boolean
 ): ReportDeliveryHealth {
@@ -460,7 +524,7 @@ function buildDeliveryHealth(
     qualityScore: quality.score,
     contentQualityScore: contentQuality.score,
     sourceCoverage: gate.sourceCoverage,
-    repaired: targetedRepairAttempted
+    repaired: repairAccepted
   };
 }
 
@@ -510,6 +574,39 @@ function deliveryIssueScore(candidate: FinalReportCandidate): number {
     Math.max(0, DELIVERY_MIN_QUALITY_SCORE - candidate.quality.score) +
     Math.max(0, DELIVERY_MIN_CONTENT_QUALITY_SCORE - candidate.contentQuality.score)
   );
+}
+
+function compactDeliveryGate(
+  gate: DeliveryGate
+): NonNullable<ReportRepairTelemetry["deliveryGateBeforeTargeted"]> {
+  return {
+    passed: gate.passed,
+    hardBlockers: gate.hardBlockers,
+    reasons: gate.reasons,
+    sourceCoverage: gate.sourceCoverage
+  };
+}
+
+function repairReasons(input: {
+  missing: string[];
+  weakSourceSections: string[];
+  groundingFindings: GroundingFinding[];
+  qualityFindings: SectionQualityFinding[];
+  contentQualityFindings: ContentQualityRubric["findings"];
+}): string[] {
+  const reasons: string[] = [];
+  if (input.missing.length) reasons.push(`missing_sections:${input.missing.join(", ")}`);
+  if (input.weakSourceSections.length) {
+    reasons.push(`weak_sources:${input.weakSourceSections.join(", ")}`);
+  }
+  if (input.groundingFindings.length) reasons.push(`grounding:${input.groundingFindings.length}`);
+  if (qualityFindingsNeedRepair(input.qualityFindings)) {
+    reasons.push(`quality:${input.qualityFindings.length}`);
+  }
+  if (contentQualityFindingsNeedRepair(input.contentQualityFindings)) {
+    reasons.push(`content_quality:${input.contentQualityFindings.length}`);
+  }
+  return reasons;
 }
 
 function contentQualityTargetSections(
@@ -644,7 +741,7 @@ function renderSectionsRawText(sections: ReportSectionView[]): string {
         section.sources.length && !/\nEvidence\s*:/iu.test(content)
           ? `\n\nEvidence:\n${section.sources.map(renderSourceLine).join("\n")}`
           : "";
-      return `[[SECTION]]\n${section.title}\n${content}${evidence}`;
+      return `## ${section.title}\n\n${content}${evidence}`;
     })
     .join("\n\n");
 }
@@ -672,7 +769,7 @@ function sanitizeSectionSources(
 }
 
 function sanitizeRawText(rawText: string, sourceCatalog: SourceCatalogEntry[]): string {
-  return removeUnknownSourceUrls(rawText, sourceCatalogUrlMap(sourceCatalog));
+  return stripSectionMarkers(removeUnknownSourceUrls(rawText, sourceCatalogUrlMap(sourceCatalog)));
 }
 
 function sanitizeSummaryBullets(bullets: string[], sourceCatalog: SourceCatalogEntry[]): string[] {
@@ -752,11 +849,17 @@ function summaryBulletsFor(
 function buildReportAnalysisHealth(
   metrics: { analyzedPosts: number; postsCount: number },
   vision: VisionAnalysisItemView[],
-  posts: Array<{ latestComments: Array<{ text: string }> }>
+  posts: Array<{ latestComments: Array<{ text: string; isAuthor?: boolean }> }>,
+  visualPosts: Array<unknown>,
+  analysisContext: { audienceSignals: { authorReplyCount: number; authorReplyPostIds: string[] } }
 ): ReportAnalysisHealth {
   const sampleCoveragePercent =
     metrics.postsCount > 0
       ? Math.round((metrics.analyzedPosts / metrics.postsCount) * 1000) / 10
+      : undefined;
+  const visualCoveragePercent =
+    metrics.postsCount > 0
+      ? Math.round((visualPosts.length / metrics.postsCount) * 1000) / 10
       : undefined;
   const visionTotal = vision.length;
   const visionCompleted = vision.filter((item) => item.status === "completed").length;
@@ -770,8 +873,12 @@ function buildReportAnalysisHealth(
   return {
     formatLabel: reportFormatLabel(metrics.analyzedPosts, metrics.postsCount),
     analyzedPosts: metrics.analyzedPosts,
+    metadataPosts: metrics.analyzedPosts,
+    visualPosts: visualPosts.length,
     postsCount: metrics.postsCount,
     sampleCoveragePercent,
+    metadataCoveragePercent: sampleCoveragePercent,
+    visualCoveragePercent,
     sampleCoverageLevel: sampleCoverageLevel(sampleCoveragePercent),
     visionCompleted,
     visionTotal,
@@ -782,15 +889,16 @@ function buildReportAnalysisHealth(
     commentCoveragePercent: metrics.analyzedPosts
       ? Math.round((postsWithCommentText / metrics.analyzedPosts) * 1000) / 10
       : undefined,
-    commentTextCount
+    commentTextCount,
+    postsWithAuthorReplies: analysisContext.audienceSignals.authorReplyPostIds.length,
+    authorReplyCount: analysisContext.audienceSignals.authorReplyCount
   };
 }
 
 function reportFormatLabel(analyzedPosts: number, postsCount: number): string {
   if (postsCount <= analyzedPosts) return "near-full public-post read";
   if (postsCount > 0 && analyzedPosts / postsCount >= 0.8) return "near-full public-post read";
-  if (postsCount > analyzedPosts && analyzedPosts === 30) return "recent 30-post read";
-  if (postsCount > analyzedPosts) return `recent ${analyzedPosts}-post read`;
+  if (postsCount > analyzedPosts) return `${analyzedPosts}-post metadata read`;
   return "public-post read";
 }
 
@@ -814,6 +922,13 @@ function analysisHealthWarnings(language: Locale, health: ReportAnalysisHealth):
         : `Report format: ${health.formatLabel}; sample coverage ${health.sampleCoveragePercent ?? 0}% (${health.analyzedPosts}/${health.postsCount}). Findings describe selected public posts, not the whole profile.`
     );
   }
+  if (health.sampleCoverageLevel === "partial") {
+    warnings.push(
+      language === "ru"
+        ? `Частичное покрытие профиля: metadata ${health.metadataPosts}/${health.postsCount} (${health.metadataCoveragePercent ?? 0}%), vision ${health.visualPosts}/${health.postsCount} (${health.visualCoveragePercent ?? 0}%). Выводы надёжнее по повторяющимся публичным темам, слабее по редким событиям.`
+        : `Partial profile coverage: metadata ${health.metadataPosts}/${health.postsCount} (${health.metadataCoveragePercent ?? 0}%), vision ${health.visualPosts}/${health.postsCount} (${health.visualCoveragePercent ?? 0}%). Findings are stronger for recurring public themes and weaker for rare events.`
+    );
+  }
   if (health.visionTotal > 0 && health.visionCompleted < health.visionTotal) {
     warnings.push(
       language === "ru"
@@ -833,7 +948,7 @@ function buildExecutiveSummary(
   if (language === "ru") {
     return [
       `Что это значит: это ${health.formatLabel} по публичным данным Instagram.`,
-      `Покрытие: ${health.analyzedPosts}/${health.postsCount} постов (${health.sampleCoveragePercent ?? 0}%), vision ${health.visionCompleted}/${health.visionTotal}, покрытие комментариев ${health.postsWithCommentText}/${health.analyzedPosts} (${health.commentCoveragePercent ?? 0}%), текстовых комментариев: ${health.commentTextCount}.`,
+      `Покрытие: metadata ${health.metadataPosts}/${health.postsCount} (${health.metadataCoveragePercent ?? 0}%), vision ${health.visionCompleted}/${health.visionTotal}, постов с комментариями ${health.postsWithCommentText}/${health.metadataPosts} (${health.commentCoveragePercent ?? 0}%), текстовых комментариев: ${health.commentTextCount}, ответов автора: ${health.authorReplyCount}.`,
       first ? `Главный сигнал: ${first}` : undefined
     ]
       .filter(Boolean)
@@ -841,7 +956,7 @@ function buildExecutiveSummary(
   }
   return [
     `What this means: this is a ${health.formatLabel} from public Instagram data.`,
-    `Coverage: ${health.analyzedPosts}/${health.postsCount} posts (${health.sampleCoveragePercent ?? 0}%), vision ${health.visionCompleted}/${health.visionTotal}, comment coverage ${health.postsWithCommentText}/${health.analyzedPosts} (${health.commentCoveragePercent ?? 0}%), comment texts: ${health.commentTextCount}.`,
+    `Coverage: metadata ${health.metadataPosts}/${health.postsCount} (${health.metadataCoveragePercent ?? 0}%), vision ${health.visionCompleted}/${health.visionTotal}, comment coverage ${health.postsWithCommentText}/${health.metadataPosts} (${health.commentCoveragePercent ?? 0}%), comment texts: ${health.commentTextCount}, author replies: ${health.authorReplyCount}.`,
     first ? `Main signal: ${first}` : undefined
   ]
     .filter(Boolean)
@@ -913,14 +1028,6 @@ const INTERNAL_SUMMARY_REPLACEMENTS_EN: Array<[RegExp, string]> = [
 
 function weakSourceSectionTitles(sections: Array<{ title: string; sources: unknown[] }>): string[] {
   return sections.filter((section) => !section.sources.length).map((section) => section.title);
-}
-
-function shouldRepairSources(
-  sections: Array<{ sources: unknown[] }>,
-  weakSourceSections: string[]
-): boolean {
-  if (!sections.length) return false;
-  return weakSourceSections.length > 0;
 }
 
 function reportIssueScore(

@@ -1,6 +1,8 @@
 import type { AnalysisMode } from "../../telegram/constants.js";
 import type { AnalysisContext, AnalysisContextDigest } from "../analysis/context.js";
 import type { ContentQualityRubric } from "../analysis/content-quality.js";
+import type { EvidencePack } from "../analysis/evidence-pack.js";
+import type { ReportQualityTelemetry } from "../analysis/quality-telemetry.js";
 import type { ReportQualitySummary } from "../analysis/report-quality.js";
 import type { InstagramPost, InstagramProfile } from "../instagram/types.js";
 
@@ -60,8 +62,12 @@ export type DigitalCircleItem = {
 export type ReportAnalysisHealth = {
   formatLabel: string;
   analyzedPosts: number;
+  metadataPosts: number;
+  visualPosts: number;
   postsCount: number;
   sampleCoveragePercent?: number;
+  metadataCoveragePercent?: number;
+  visualCoveragePercent?: number;
   sampleCoverageLevel: "unknown" | "very_low" | "low" | "partial" | "broad" | "near_full";
   visionCompleted: number;
   visionTotal: number;
@@ -69,6 +75,8 @@ export type ReportAnalysisHealth = {
   postsWithCommentText: number;
   commentCoveragePercent?: number;
   commentTextCount: number;
+  postsWithAuthorReplies: number;
+  authorReplyCount: number;
 };
 
 export type ReportDeliveryHealthStatus = "ready" | "limited" | "needs_repair" | "failed_quality";
@@ -82,15 +90,39 @@ export type ReportDeliveryHealth = {
   repaired: boolean;
 };
 
+export type ReportRepairTelemetry = {
+  initialRepairAttempted: boolean;
+  initialRepairAccepted: boolean;
+  initialRepairReasons: string[];
+  targetedRepairAttempted: boolean;
+  targetedRepairAccepted: boolean;
+  targetedRepairReasons: string[];
+  deliveryGateBeforeTargeted?: {
+    passed: boolean;
+    hardBlockers: boolean;
+    reasons: string[];
+    sourceCoverage: string;
+  };
+  deliveryGateAfterTargeted?: {
+    passed: boolean;
+    hardBlockers: boolean;
+    reasons: string[];
+    sourceCoverage: string;
+  };
+};
+
 export type ReportSummaryView = {
   executiveSummary?: string;
   bullets: string[];
   warnings: string[];
   analysisHealth?: ReportAnalysisHealth;
   deliveryHealth?: ReportDeliveryHealth;
+  repairTelemetry?: ReportRepairTelemetry;
+  qualityTelemetry?: ReportQualityTelemetry;
   quality?: ReportQualitySummary;
   contentQuality?: ContentQualityRubric;
   evidence?: AnalysisContextDigest;
+  evidencePack?: EvidencePack;
 };
 
 export type StrategicReportView = {
@@ -107,5 +139,6 @@ export type StrategicReportView = {
   profile: InstagramProfile;
   posts: InstagramPost[];
   vision: VisionAnalysisItemView[];
+  evidencePack?: EvidencePack;
   analysisContext?: AnalysisContext;
 };

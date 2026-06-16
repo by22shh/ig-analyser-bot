@@ -1,3 +1,5 @@
+import { stripSectionMarkers, stripSectionMarkersFromJson } from "../reports/user-facing-text.js";
+
 type StoredReportSection = {
   title: string;
   content: string;
@@ -29,10 +31,12 @@ export function buildReportChatContext(report: StoredReportForChat): string {
         .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
         .map((section) => ({
           title: section.title,
-          content: truncate(section.content, 1800),
+          content: truncate(stripSectionMarkers(section.content), 1800),
           sources: limitArray(section.sources, 10)
         })),
-      rawTextExcerpt: report.sections?.length ? undefined : truncate(report.rawText, 5000)
+      rawTextExcerpt: report.sections?.length
+        ? undefined
+        : truncate(stripSectionMarkers(report.rawText ?? ""), 5000)
     },
     null,
     2
@@ -51,9 +55,15 @@ function normalizeSummary(summary: unknown): unknown {
   };
   return {
     executiveSummary:
-      typeof value.executiveSummary === "string" ? value.executiveSummary.slice(0, 1200) : "",
-    bullets: Array.isArray(value.bullets) ? value.bullets.slice(0, 8) : [],
-    warnings: Array.isArray(value.warnings) ? value.warnings.slice(0, 8) : [],
+      typeof value.executiveSummary === "string"
+        ? stripSectionMarkers(value.executiveSummary).slice(0, 1200)
+        : "",
+    bullets: Array.isArray(value.bullets)
+      ? value.bullets.slice(0, 8).map(stripSectionMarkersFromJson)
+      : [],
+    warnings: Array.isArray(value.warnings)
+      ? value.warnings.slice(0, 8).map(stripSectionMarkersFromJson)
+      : [],
     analysisHealth: value.analysisHealth,
     quality: value.quality,
     evidence: value.evidence

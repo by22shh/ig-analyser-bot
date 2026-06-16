@@ -1,0 +1,1529 @@
+[
+  {
+    "username": "evachkaaaaa",
+    "status": "completed",
+    "followersCount": 1285,
+    "followsCount": 632,
+    "postsCount": 141,
+    "fetchedPosts": 120,
+    "reportSections": 17,
+    "requiredSections": 17,
+    "qualityScore": 100,
+    "qualityFindings": 0,
+    "contentQuality": {
+      "score": 100,
+      "findings": [],
+      "dimensions": {
+        "specificity": 100,
+        "practicalValue": 100,
+        "practicalDetail": 100,
+        "confidenceCalibration": 100,
+        "depth": 100,
+        "keySectionDepth": 100,
+        "healthTransparency": 100
+      }
+    },
+    "deliveryHealth": {
+      "status": "ready",
+      "reasons": [],
+      "qualityScore": 100,
+      "contentQualityScore": 100,
+      "sourceCoverage": "17/17",
+      "repaired": true
+    },
+    "repairTelemetry": {
+      "initialRepairAttempted": true,
+      "initialRepairAccepted": true,
+      "initialRepairReasons": [
+        "grounding:11",
+        "quality:1",
+        "content_quality:1"
+      ],
+      "targetedRepairAttempted": false,
+      "targetedRepairAccepted": false,
+      "targetedRepairReasons": []
+    },
+    "evidencePackProfile": {
+      "username": "evachkaaaaa",
+      "postsCount": 141,
+      "metadataPosts": 120,
+      "visualPosts": 30,
+      "metadataCoveragePercent": 85.1,
+      "visualCoveragePercent": 21.3,
+      "commentTextCount": 502,
+      "postsWithCommentText": 107,
+      "authorReplyCount": 16,
+      "postsWithAuthorReplies": 14
+    },
+    "sourceCoverage": "17/17",
+    "warnings": [],
+    "metrics": {
+      "followersCount": 1285,
+      "followsCount": 632,
+      "postsCount": 141,
+      "analyzedPosts": 120,
+      "avgLikes": 88.625,
+      "avgComments": 10.633333333333333,
+      "medianLikes": 0,
+      "medianComments": 6.5,
+      "engagementRate": 7.724383916990922,
+      "frequencyDays": 20.407701816837847,
+      "pinnedPostsCount": 0,
+      "uniqueLocations": [],
+      "uniqueMusic": [],
+      "relatedProfiles": [],
+      "topPostsByLikes": [
+        {
+          "postId": "2436993011593691796",
+          "url": "https://www.instagram.com/p/CHR8Dt4JsKU/",
+          "likesCount": 420
+        },
+        {
+          "postId": "2397268385124971860",
+          "url": "https://www.instagram.com/p/CFEzuUepfVU/",
+          "likesCount": 405
+        },
+        {
+          "postId": "2326786841080380010",
+          "url": "https://www.instagram.com/p/CBKaE3apjpq/",
+          "likesCount": 394
+        }
+      ],
+      "topPostsByComments": [
+        {
+          "postId": "2326786841080380010",
+          "url": "https://www.instagram.com/p/CBKaE3apjpq/",
+          "commentsCount": 52
+        },
+        {
+          "postId": "2340085287694506706",
+          "url": "https://www.instagram.com/p/CB5pyu9JhrS/",
+          "commentsCount": 48
+        },
+        {
+          "postId": "2580764521059039922",
+          "url": "https://www.instagram.com/p/CPQt6iOp7qy/",
+          "commentsCount": 43
+        }
+      ],
+      "postTypeDistribution": {
+        "Sidecar": 73,
+        "Image": 27,
+        "Video": 20
+      },
+      "hashtagFrequency": {
+        "люблюцелуюобнимаю": 1
+      },
+      "mentionFrequency": {},
+      "digitalCircle": [
+        {
+          "username": "kurbatova__lubov",
+          "type": "commenter",
+          "score": 42.2,
+          "lastInteractionDate": "2025-01-03T09:49:48.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CCBcsfvphBQ/",
+            "commented: https://www.instagram.com/p/CBw72-TpaBg/",
+            "commented: https://www.instagram.com/p/CVx0GvysYcj/",
+            "commented: https://www.instagram.com/p/CVx0GvysYcj/"
+          ]
+        },
+        {
+          "username": "elllv.m",
+          "type": "mixed",
+          "score": 38.2,
+          "lastInteractionDate": "2024-04-29T18:13:12.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CBw72-TpaBg/",
+            "commented: https://www.instagram.com/p/CEOlBF-pfDT/",
+            "commented: https://www.instagram.com/p/CCxUqEWpaOL/",
+            "tagged in post: https://www.instagram.com/p/B3kGcuppIzY/"
+          ]
+        },
+        {
+          "username": "_prokopenkooo_i",
+          "type": "commenter",
+          "score": 24.4,
+          "lastInteractionDate": "2020-03-20T12:47:00.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/B99F9ZEpH-K/",
+            "commented: https://www.instagram.com/p/B6Sly-fJG7N/",
+            "commented: https://www.instagram.com/p/BzpWym7JLDY/",
+            "commented: https://www.instagram.com/p/Bz5dMWHJYvQ/"
+          ]
+        },
+        {
+          "username": "jkaruk",
+          "type": "commenter",
+          "score": 20.6,
+          "lastInteractionDate": "2021-06-11T02:46:42.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CB5pyu9JhrS/",
+            "commented: https://www.instagram.com/p/CEgVzyOpkgY/",
+            "commented: https://www.instagram.com/p/B99F9ZEpH-K/",
+            "commented: https://www.instagram.com/p/CEjxNY0prO0/"
+          ]
+        },
+        {
+          "username": "acnetu",
+          "type": "commenter",
+          "score": 16.7,
+          "lastInteractionDate": "2022-08-20T08:37:24.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CHR8Dt4JsKU/",
+            "commented: https://www.instagram.com/p/CET-8XVpDcv/",
+            "commented: https://www.instagram.com/p/CfZLFY8NA9q/",
+            "commented: https://www.instagram.com/p/CW0bA8XAyzH/"
+          ]
+        },
+        {
+          "username": "nacer__kha",
+          "type": "commenter",
+          "score": 15.5,
+          "lastInteractionDate": "2021-07-17T13:44:21.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CCBcsfvphBQ/",
+            "commented: https://www.instagram.com/p/CBw72-TpaBg/",
+            "commented: https://www.instagram.com/p/CBsyaLzpK8z/",
+            "commented: https://www.instagram.com/p/B2dgFQ_pvX9/"
+          ]
+        },
+        {
+          "username": "lenvsss",
+          "type": "commenter",
+          "score": 15.5,
+          "lastInteractionDate": "2021-05-25T08:14:45.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CEgVzyOpkgY/",
+            "commented: https://www.instagram.com/p/CADN3smJdj8/",
+            "commented: https://www.instagram.com/p/CPQt6iOp7qy/",
+            "commented: https://www.instagram.com/p/CET-8XVpDcv/"
+          ]
+        },
+        {
+          "username": "dvismagilov",
+          "type": "commenter",
+          "score": 14.5,
+          "lastInteractionDate": "2025-04-24T13:37:53.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CRy7LI8pS9M/",
+            "commented: https://www.instagram.com/p/Bz5dMWHJYvQ/",
+            "commented: https://www.instagram.com/p/DI0ntTnINiu/",
+            "commented: https://www.instagram.com/p/DGU_EX8v2Co/"
+          ]
+        }
+      ]
+    },
+    "vision": {
+      "completed": 30
+    },
+    "promptVersion": "report.standard.v7.repair",
+    "model": "x-ai/grok-4.3",
+    "qa": {
+      "promptLeakMatches": [],
+      "internalSchemaMatches": [],
+      "rawVisionJsonItems": 0,
+      "shortCompletedVision": 0,
+      "missingSourceSections": []
+    }
+  },
+  {
+    "username": "missstaccyy",
+    "status": "completed",
+    "followersCount": 587,
+    "followsCount": 325,
+    "postsCount": 23,
+    "fetchedPosts": 22,
+    "reportSections": 17,
+    "requiredSections": 17,
+    "qualityScore": 100,
+    "qualityFindings": 0,
+    "contentQuality": {
+      "score": 100,
+      "findings": [],
+      "dimensions": {
+        "specificity": 100,
+        "practicalValue": 100,
+        "practicalDetail": 100,
+        "confidenceCalibration": 100,
+        "depth": 100,
+        "keySectionDepth": 100,
+        "healthTransparency": 100
+      }
+    },
+    "deliveryHealth": {
+      "status": "ready",
+      "reasons": [],
+      "qualityScore": 100,
+      "contentQualityScore": 100,
+      "sourceCoverage": "17/17",
+      "repaired": true
+    },
+    "repairTelemetry": {
+      "initialRepairAttempted": true,
+      "initialRepairAccepted": false,
+      "initialRepairReasons": [
+        "grounding:1",
+        "content_quality:1"
+      ],
+      "targetedRepairAttempted": true,
+      "targetedRepairAccepted": true,
+      "targetedRepairReasons": [
+        "content_quality_score:84<85"
+      ],
+      "deliveryGateBeforeTargeted": {
+        "passed": false,
+        "hardBlockers": false,
+        "reasons": [
+          "content_quality_score:84<85"
+        ],
+        "sourceCoverage": "17/17"
+      },
+      "deliveryGateAfterTargeted": {
+        "passed": true,
+        "hardBlockers": false,
+        "reasons": [],
+        "sourceCoverage": "17/17"
+      }
+    },
+    "evidencePackProfile": {
+      "username": "missstaccyy",
+      "postsCount": 23,
+      "metadataPosts": 22,
+      "visualPosts": 22,
+      "metadataCoveragePercent": 95.7,
+      "visualCoveragePercent": 95.7,
+      "commentTextCount": 65,
+      "postsWithCommentText": 16,
+      "authorReplyCount": 7,
+      "postsWithAuthorReplies": 7
+    },
+    "sourceCoverage": "17/17",
+    "warnings": [],
+    "metrics": {
+      "followersCount": 587,
+      "followsCount": 325,
+      "postsCount": 23,
+      "analyzedPosts": 22,
+      "avgLikes": 128.77272727272728,
+      "avgComments": 4.454545454545454,
+      "medianLikes": 127.5,
+      "medianComments": 3,
+      "engagementRate": 22.696298590676783,
+      "frequencyDays": 84.90445932539683,
+      "pinnedPostsCount": 0,
+      "uniqueLocations": [],
+      "uniqueMusic": [],
+      "relatedProfiles": [],
+      "topPostsByLikes": [
+        {
+          "postId": "2610197762335423711",
+          "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+          "likesCount": 231
+        },
+        {
+          "postId": "3016385021446816176",
+          "url": "https://www.instagram.com/p/CncWjINJYGw/",
+          "likesCount": 194
+        },
+        {
+          "postId": "3396791555811926473",
+          "url": "https://www.instagram.com/p/C8j0-xMN2HJ/",
+          "likesCount": 180
+        }
+      ],
+      "topPostsByComments": [
+        {
+          "postId": "2610197762335423711",
+          "url": "https://www.instagram.com/p/CQ5SQkRhbzf/",
+          "commentsCount": 20
+        },
+        {
+          "postId": "3766373022051794113",
+          "url": "https://www.instagram.com/p/DRE2E73AvzB/",
+          "commentsCount": 14
+        },
+        {
+          "postId": "3016385021446816176",
+          "url": "https://www.instagram.com/p/CncWjINJYGw/",
+          "commentsCount": 12
+        }
+      ],
+      "postTypeDistribution": {
+        "Sidecar": 13,
+        "Image": 8,
+        "Video": 1
+      },
+      "hashtagFrequency": {},
+      "mentionFrequency": {},
+      "digitalCircle": [
+        {
+          "username": "zhelez.nat",
+          "type": "commenter",
+          "score": 11.4,
+          "lastInteractionDate": "2026-04-19T09:32:54.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DRE2E73AvzB/",
+            "commented: https://www.instagram.com/p/DXTqFCUguYX/",
+            "commented: https://www.instagram.com/p/CncWjINJYGw/",
+            "commented: https://www.instagram.com/p/CozMaxluthG/"
+          ]
+        },
+        {
+          "username": "lizarulka_",
+          "type": "commenter",
+          "score": 9.9,
+          "lastInteractionDate": "2026-05-22T14:04:28.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DXTqFCUguYX/",
+            "commented: https://www.instagram.com/p/DYoWjpJGpDW/",
+            "commented: https://www.instagram.com/p/CncWjINJYGw/",
+            "commented: https://www.instagram.com/p/C-fGtFitMc-/"
+          ]
+        },
+        {
+          "username": "biyayws",
+          "type": "commenter",
+          "score": 7.2,
+          "lastInteractionDate": "2026-04-19T09:41:40.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DRE2E73AvzB/",
+            "commented: https://www.instagram.com/p/DXTqFCUguYX/",
+            "commented: https://www.instagram.com/p/DFEBC1NCa1V/"
+          ]
+        },
+        {
+          "username": "lumicowik",
+          "type": "commenter",
+          "score": 3.5,
+          "lastInteractionDate": "2025-01-20T21:49:09.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DFEBC1NCa1V/",
+            "commented: https://www.instagram.com/p/C5VeMbnttVW/"
+          ]
+        },
+        {
+          "username": "kldvrnn",
+          "type": "commenter",
+          "score": 3,
+          "lastInteractionDate": "2025-11-15T18:34:47.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DRE2E73AvzB/"
+          ]
+        },
+        {
+          "username": "mariaaakle",
+          "type": "commenter",
+          "score": 3,
+          "lastInteractionDate": "2021-07-04T08:06:33.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CQ5SQkRhbzf/"
+          ]
+        },
+        {
+          "username": "tolchinskaya_s",
+          "type": "commenter",
+          "score": 3,
+          "lastInteractionDate": "2026-04-19T09:08:11.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DXTqFCUguYX/"
+          ]
+        },
+        {
+          "username": "abraham_rodri1698",
+          "type": "commenter",
+          "score": 3,
+          "lastInteractionDate": "2025-09-15T17:36:40.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DOoaWsekYrL/"
+          ]
+        }
+      ]
+    },
+    "vision": {
+      "completed": 22
+    },
+    "promptVersion": "report.standard.v7.repair",
+    "model": "x-ai/grok-4.3",
+    "qa": {
+      "promptLeakMatches": [],
+      "internalSchemaMatches": [],
+      "rawVisionJsonItems": 0,
+      "shortCompletedVision": 0,
+      "missingSourceSections": []
+    }
+  },
+  {
+    "username": "_daria.bers_",
+    "status": "completed",
+    "followersCount": 750,
+    "followsCount": 586,
+    "postsCount": 118,
+    "fetchedPosts": 118,
+    "reportSections": 17,
+    "requiredSections": 17,
+    "qualityScore": 100,
+    "qualityFindings": 0,
+    "contentQuality": {
+      "score": 96,
+      "findings": [],
+      "dimensions": {
+        "specificity": 100,
+        "practicalValue": 100,
+        "practicalDetail": 80,
+        "confidenceCalibration": 100,
+        "depth": 100,
+        "keySectionDepth": 91,
+        "healthTransparency": 100
+      }
+    },
+    "deliveryHealth": {
+      "status": "ready",
+      "reasons": [],
+      "qualityScore": 100,
+      "contentQualityScore": 96,
+      "sourceCoverage": "17/17",
+      "repaired": true
+    },
+    "repairTelemetry": {
+      "initialRepairAttempted": true,
+      "initialRepairAccepted": false,
+      "initialRepairReasons": [
+        "content_quality:2"
+      ],
+      "targetedRepairAttempted": true,
+      "targetedRepairAccepted": true,
+      "targetedRepairReasons": [
+        "content_quality_score:77<85"
+      ],
+      "deliveryGateBeforeTargeted": {
+        "passed": false,
+        "hardBlockers": false,
+        "reasons": [
+          "content_quality_score:77<85"
+        ],
+        "sourceCoverage": "17/17"
+      },
+      "deliveryGateAfterTargeted": {
+        "passed": true,
+        "hardBlockers": false,
+        "reasons": [],
+        "sourceCoverage": "17/17"
+      }
+    },
+    "evidencePackProfile": {
+      "username": "_daria.bers_",
+      "postsCount": 118,
+      "metadataPosts": 118,
+      "visualPosts": 30,
+      "metadataCoveragePercent": 100,
+      "visualCoveragePercent": 25.4,
+      "commentTextCount": 333,
+      "postsWithCommentText": 91,
+      "authorReplyCount": 16,
+      "postsWithAuthorReplies": 12
+    },
+    "sourceCoverage": "17/17",
+    "warnings": [],
+    "metrics": {
+      "followersCount": 750,
+      "followsCount": 586,
+      "postsCount": 118,
+      "analyzedPosts": 118,
+      "avgLikes": 121.46610169491525,
+      "avgComments": 3.788135593220339,
+      "medianLikes": 109,
+      "medianComments": 2,
+      "engagementRate": 16.700564971751415,
+      "frequencyDays": 33.37625563865147,
+      "pinnedPostsCount": 0,
+      "uniqueLocations": [],
+      "uniqueMusic": [],
+      "relatedProfiles": [],
+      "topPostsByLikes": [
+        {
+          "postId": "2089272578133025835",
+          "url": "https://www.instagram.com/p/Bz-llcilWQr/",
+          "likesCount": 287
+        },
+        {
+          "postId": "2458642899103362552",
+          "url": "https://www.instagram.com/p/CIe2rC2l634/",
+          "likesCount": 257
+        },
+        {
+          "postId": "1486944503897475091",
+          "url": "https://www.instagram.com/p/BSisCXrh0gT/",
+          "likesCount": 249
+        }
+      ],
+      "topPostsByComments": [
+        {
+          "postId": "2674326905357320852",
+          "url": "https://www.instagram.com/p/CUdHia3F8KU/",
+          "commentsCount": 21
+        },
+        {
+          "postId": "2445064295976430707",
+          "url": "https://www.instagram.com/p/CHunQXOqmxz/",
+          "commentsCount": 19
+        },
+        {
+          "postId": "3902718743121788092",
+          "url": "https://www.instagram.com/p/DYpPgT2CHy8/",
+          "commentsCount": 18
+        }
+      ],
+      "postTypeDistribution": {
+        "Sidecar": 84,
+        "Video": 11,
+        "Image": 23
+      },
+      "hashtagFrequency": {
+        "2014": 1,
+        "cover": 2,
+        "music": 5,
+        "singer": 2,
+        "singing": 2,
+        "song": 5,
+        "love": 18,
+        "instagood": 7,
+        "sing": 1,
+        "fun": 13,
+        "art": 1,
+        "piano": 1,
+        "voice": 1,
+        "nsu": 1,
+        "efnsu": 1,
+        "friends": 6,
+        "travel": 11,
+        "traveling": 10,
+        "travelgram": 10,
+        "travelling": 10,
+        "travelingram": 9,
+        "traveler": 9,
+        "travelphotography": 10,
+        "traveller": 8,
+        "travels": 8,
+        "traveltheworld": 8,
+        "travelblog": 8,
+        "vacation": 9,
+        "vacations": 8,
+        "vacationtime": 8,
+        "spring": 1,
+        "springbreak": 1,
+        "springbreakers": 1,
+        "springtime": 1,
+        "spring2017": 1,
+        "springishere": 1,
+        "springfashion": 1,
+        "instaspring": 1,
+        "instagramanet": 21,
+        "instatag": 20,
+        "blossom": 1,
+        "blossoms": 1,
+        "flower": 1,
+        "flowers": 1,
+        "весна": 1,
+        "весна2017": 1,
+        "веснапришла": 1,
+        "веснавесна": 1,
+        "инстаграманет": 1,
+        "инстатаг": 1,
+        "веснавгороде": 1,
+        "весналето": 1,
+        "весналето2017": 1,
+        "веснаидет": 1,
+        "веснавдуше": 1,
+        "веснааа": 1,
+        "веснакрасна": 1,
+        "веснаидетвеснедорогу": 1,
+        "веснатакаявесна": 1,
+        "beach": 4,
+        "beachlife": 4,
+        "beachday": 4,
+        "beachbum": 4,
+        "beachtime": 4,
+        "sun": 5,
+        "tan": 4,
+        "tanning": 4,
+        "tanned": 4,
+        "nature": 5,
+        "water": 5,
+        "watercolor": 4,
+        "ocean": 4,
+        "lake": 4,
+        "sea": 5,
+        "waves": 4,
+        "wave": 4,
+        "photooftheday": 15,
+        "beautiful": 10,
+        "sky": 6,
+        "clouds": 5,
+        "sand": 4,
+        "reflection": 4,
+        "amazing": 8,
+        "beauty": 6,
+        "shore": 3,
+        "любовь": 2,
+        "москва": 1,
+        "санктпетербург": 2,
+        "me": 10,
+        "tbt": 9,
+        "cute": 6,
+        "follow": 6,
+        "followme": 10,
+        "happy": 7,
+        "selfie": 11,
+        "picoftheday": 9,
+        "selfies": 2,
+        "selfiesunday": 2,
+        "selfietime": 2,
+        "selfienation": 2,
+        "selfiesaturday": 2,
+        "snow": 1,
+        "merrychristmas": 1,
+        "happynewyear": 1,
+        "newyearseve": 1,
+        "newyearsday": 1,
+        "newyear": 1,
+        "newyears": 1,
+        "musica": 3,
+        "musician": 3,
+        "instamusic": 3,
+        "musical": 3,
+        "bestsong": 3,
+        "goodmusic": 3,
+        "musicvideo": 3,
+        "musicislife": 3,
+        "musicians": 3,
+        "musiclife": 3,
+        "musicfestival": 3,
+        "musicismylife": 3,
+        "musiclover": 3,
+        "songs": 3,
+        "songwriter": 3,
+        "songoftheday": 3,
+        "songlyrics": 3,
+        "melody": 3,
+        "hiphop": 3,
+        "rnb": 3,
+        "pop": 3,
+        "rap": 3,
+        "dubstep": 3,
+        "electro": 3,
+        "summer": 16,
+        "sunset": 2,
+        "эф": 1,
+        "нгу": 1,
+        "друзья": 1,
+        "лето": 2,
+        "family": 1,
+        "france": 1,
+        "vacation2018": 4,
+        "vacation2019": 4,
+        "instatravel": 8,
+        "instatraveling": 7,
+        "instatrip": 7,
+        "touris": 6,
+        "tourist": 6,
+        "tourism": 6,
+        "tourists": 6,
+        "mytravelgram": 6,
+        "trip": 6,
+        "visiting": 6,
+        "vacation2017": 2,
+        "stpetersburg": 2,
+        "instadaily": 7,
+        "smile": 9,
+        "swag": 7,
+        "instalike": 6,
+        "igers": 6,
+        "follow4follow": 5,
+        "tflers": 5,
+        "selfiee": 1,
+        "selfiequeen": 1,
+        "selfiesfordays": 1,
+        "selfiestick": 1,
+        "fashion": 4,
+        "bestoftheday": 4,
+        "sho": 1,
+        "summertime": 1,
+        "summer2021": 1,
+        "summernights": 1,
+        "summerfun": 1,
+        "summerdays": 1,
+        "summerweather": 1,
+        "summerbody": 1,
+        "summertimeshine": 1,
+        "chill": 1,
+        "like4like": 5,
+        "baikal": 1,
+        "rain": 1,
+        "vacation2020": 1,
+        "elf": 1,
+        "helloween": 1,
+        "море": 1,
+        "sunsets": 1,
+        "sunset_madness": 1,
+        "sunrise": 1,
+        "sunrise_sunsets_aroundworld": 1,
+        "instasun": 1,
+        "instasunsets": 1,
+        "skyporn": 2,
+        "cloudporn": 2,
+        "horizon": 1,
+        "night": 1,
+        "morning": 1,
+        "instasky": 1,
+        "all_sunsets": 1,
+        "warm": 1,
+        "view": 1,
+        "pretty": 1,
+        "vision": 1,
+        "hot": 1,
+        "instafood": 1,
+        "food": 1,
+        "foodporn": 1,
+        "foodie": 1,
+        "foodgasm": 1,
+        "foodpics": 1,
+        "foodpic": 1,
+        "foodstagram": 1,
+        "foods": 1,
+        "foodphotography": 1,
+        "foodies": 1,
+        "foodlover": 1,
+        "foodforthought": 1,
+        "foodisfuel": 1,
+        "foodblogger": 1,
+        "foodcoma": 1,
+        "foodgram": 1,
+        "fooddiary": 1,
+        "foodblog": 1,
+        "foodlovers": 1,
+        "foodart": 1,
+        "foodspotting": 1,
+        "foodshare": 1,
+        "foodlove": 1,
+        "yum": 1,
+        "hungry": 1,
+        "eat": 1,
+        "likeforlike": 3,
+        "l4l": 3,
+        "зима": 1,
+        "зимаблизко": 1,
+        "шерегеш": 1,
+        "отдых": 1,
+        "лыжи": 1,
+        "небо": 1,
+        "горы": 1,
+        "радость": 1,
+        "жизньпрекрасна": 1,
+        "зимниирадости": 1,
+        "прощайосень": 1,
+        "winter": 1,
+        "winteriscoming": 1,
+        "sheregesh": 1,
+        "ski": 1,
+        "mountains": 1,
+        "weekend": 1,
+        "lifeisbeautiful": 1,
+        "lifeinwinter": 1,
+        "goodbyeautumn": 1,
+        "фото": 1,
+        "чб": 1,
+        "черныйибелый": 1,
+        "холод": 1,
+        "осень": 1,
+        "шляпа": 1,
+        "чудесныйдень": 1,
+        "улыбка": 1,
+        "я": 1,
+        "девушка": 1,
+        "новосибирск": 1,
+        "nsk": 1,
+        "photo": 1,
+        "bw": 1,
+        "blackandwhite": 1,
+        "cold": 1,
+        "bag": 1,
+        "goodday": 1,
+        "l": 1,
+        "gerl": 1,
+        "magic": 2,
+        "meandmylife": 1,
+        "cloud": 1,
+        "cloudy": 1,
+        "cloud9": 1,
+        "cloudchaser": 1,
+        "cloudchasing": 1,
+        "cloud_skye": 1,
+        "cloudscape": 1,
+        "cloudyday": 1,
+        "cloudstagram": 1,
+        "cloudchasers": 1,
+        "cloudlife": 1,
+        "cloudnine": 1,
+        "cloudlovers": 1,
+        "cloudsporn": 1,
+        "clouds_of_our_world": 1,
+        "cloudysky": 1,
+        "instacloud": 1,
+        "instaclouds": 1,
+        "skyline": 1,
+        "skylovers": 1,
+        "skyscraper": 1,
+        "skywatcher": 1,
+        "skyviewers": 1,
+        "дубай": 1,
+        "путишествие": 1,
+        "оаэ": 1,
+        "вода": 1,
+        "небоскребы": 1,
+        "чудо": 1,
+        "dubai": 1,
+        "trevalling": 1,
+        "uae": 1,
+        "skybildings": 1,
+        "followbyfollow": 1,
+        "happyforeveryone": 1
+      },
+      "mentionFrequency": {
+        "gelyausoltseva": 1,
+        "kodaline": 1,
+        "bahman_nata": 1,
+        "alekseyberseneff": 1,
+        "irinaboykova_о)": 1,
+        "mayrka": 1,
+        "nikitina.nv": 2,
+        "velena_kuzmenko": 1,
+        "nikitina.nv💛": 1,
+        "algracheva": 1,
+        "elenalyubaeva": 1,
+        "luneva_pa.doc": 1,
+        "a.azhbakov": 1,
+        "ll_west": 1,
+        "-ω": 1
+      },
+      "digitalCircle": [
+        {
+          "username": "m.beresneva",
+          "type": "mixed",
+          "score": 56,
+          "lastInteractionDate": "2025-12-01T08:03:21.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/Bz-llcilWQr/",
+            "commented: https://www.instagram.com/p/BSisCXrh0gT/",
+            "tagged in post: https://www.instagram.com/p/CgvtIbOFcYZ/",
+            "commented: https://www.instagram.com/p/CgvtIbOFcYZ/"
+          ]
+        },
+        {
+          "username": "_katub_",
+          "type": "mixed",
+          "score": 42.55,
+          "lastInteractionDate": "2026-05-22T15:13:40.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DYpMixcCKdX/",
+            "commented: https://www.instagram.com/p/BlSzJ3XAWcn/",
+            "commented: https://www.instagram.com/p/CIe2rC2l634/",
+            "tagged in post: https://www.instagram.com/p/CftVa0BNUTf/"
+          ]
+        },
+        {
+          "username": "titovetselina",
+          "type": "commenter",
+          "score": 29.6,
+          "lastInteractionDate": "2026-05-22T17:22:34.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DYpPgT2CHy8/",
+            "commented: https://www.instagram.com/p/CgvtIbOFcYZ/",
+            "commented: https://www.instagram.com/p/BWRZP78hemA/",
+            "commented: https://www.instagram.com/p/CvJ206aNPki/"
+          ]
+        },
+        {
+          "username": "juliana_lo_",
+          "type": "mixed",
+          "score": 22.8,
+          "lastInteractionDate": "2026-05-22T20:15:56.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DYpPgT2CHy8/",
+            "commented: https://www.instagram.com/p/Bz-llcilWQr/",
+            "commented: https://www.instagram.com/p/DYpMixcCKdX/",
+            "commented: https://www.instagram.com/p/CIe2rC2l634/"
+          ]
+        },
+        {
+          "username": "lammarya",
+          "type": "mixed",
+          "score": 19.7,
+          "lastInteractionDate": "2025-02-24T14:09:12.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CkGAOEvNRNL/",
+            "tagged in post: https://www.instagram.com/p/CftVa0BNUTf/",
+            "commented: https://www.instagram.com/p/C8bIAWWtX_C/",
+            "commented: https://www.instagram.com/p/DGcMenPzeHH/"
+          ]
+        },
+        {
+          "username": "tuckersasha",
+          "type": "mixed",
+          "score": 17.4,
+          "lastInteractionDate": "2026-05-22T14:32:30.000Z",
+          "details": [
+            "tagged in post: https://www.instagram.com/p/DYpPgT2CHy8/",
+            "commented: https://www.instagram.com/p/DYpMixcCKdX/",
+            "commented: https://www.instagram.com/p/DYpMixcCKdX/",
+            "commented: https://www.instagram.com/p/DYkQkNPiNuu/"
+          ]
+        },
+        {
+          "username": "nikitina.nv",
+          "type": "mixed",
+          "score": 17,
+          "lastInteractionDate": "2023-08-15T08:36:59.000Z",
+          "details": [
+            "mentioned in caption: https://www.instagram.com/p/CkGAOEvNRNL/",
+            "tagged in post: https://www.instagram.com/p/Cv9XJzaNRzP/",
+            "tagged in post: https://www.instagram.com/p/CkgKfPAt077/",
+            "mentioned in caption: https://www.instagram.com/p/Cv9S4Y3tXVk/"
+          ]
+        },
+        {
+          "username": "labunets.av",
+          "type": "mixed",
+          "score": 14.9,
+          "lastInteractionDate": "2025-09-14T13:06:09.000Z",
+          "details": [
+            "tagged in post: https://www.instagram.com/p/CgvtIbOFcYZ/",
+            "commented: https://www.instagram.com/p/CgvtIbOFcYZ/",
+            "tagged in post: https://www.instagram.com/p/CftVa0BNUTf/",
+            "commented: https://www.instagram.com/p/DGcMenPzeHH/"
+          ]
+        }
+      ]
+    },
+    "vision": {
+      "completed": 30
+    },
+    "promptVersion": "report.standard.v7.repair",
+    "model": "x-ai/grok-4.3",
+    "qa": {
+      "promptLeakMatches": [],
+      "internalSchemaMatches": [],
+      "rawVisionJsonItems": 0,
+      "shortCompletedVision": 0,
+      "missingSourceSections": []
+    }
+  },
+  {
+    "username": "fakeev",
+    "status": "completed",
+    "followersCount": 57690,
+    "followsCount": 980,
+    "postsCount": 1087,
+    "fetchedPosts": 120,
+    "reportSections": 17,
+    "requiredSections": 17,
+    "qualityScore": 99,
+    "qualityFindings": 1,
+    "contentQuality": {
+      "score": 86,
+      "findings": [
+        {
+          "id": "content:weak_practical_detail",
+          "severity": "medium",
+          "detail": "Practical/action sections need more concrete next steps, hooks, or examples: Коммуникационные рекомендации, Общая оценка ценности профиля."
+        }
+      ],
+      "dimensions": {
+        "specificity": 100,
+        "practicalValue": 100,
+        "practicalDetail": 60,
+        "confidenceCalibration": 100,
+        "depth": 100,
+        "keySectionDepth": 82,
+        "healthTransparency": 100
+      }
+    },
+    "deliveryHealth": {
+      "status": "ready",
+      "reasons": [],
+      "qualityScore": 99,
+      "contentQualityScore": 86,
+      "sourceCoverage": "17/17",
+      "repaired": true
+    },
+    "repairTelemetry": {
+      "initialRepairAttempted": true,
+      "initialRepairAccepted": true,
+      "initialRepairReasons": [
+        "content_quality:2"
+      ],
+      "targetedRepairAttempted": false,
+      "targetedRepairAccepted": false,
+      "targetedRepairReasons": []
+    },
+    "evidencePackProfile": {
+      "username": "fakeev",
+      "postsCount": 1087,
+      "metadataPosts": 120,
+      "visualPosts": 30,
+      "metadataCoveragePercent": 11,
+      "visualCoveragePercent": 2.8,
+      "commentTextCount": 820,
+      "postsWithCommentText": 117,
+      "authorReplyCount": 8,
+      "postsWithAuthorReplies": 8
+    },
+    "sourceCoverage": "17/17",
+    "warnings": [
+      "Частичное покрытие профиля: metadata 120/1087 (11%), vision 30/1087 (2.8%). Выводы надёжнее по повторяющимся публичным темам, слабее по редким событиям.",
+      "Content quality flags: score 86/100, 1 medium/high findings"
+    ],
+    "metrics": {
+      "followersCount": 57690,
+      "followsCount": 980,
+      "postsCount": 1087,
+      "analyzedPosts": 120,
+      "avgLikes": 1297.3916666666667,
+      "avgComments": 25.941666666666666,
+      "medianLikes": 576.5,
+      "medianComments": 14,
+      "engagementRate": 2.29386953255908,
+      "frequencyDays": 22.078943355119826,
+      "pinnedPostsCount": 3,
+      "uniqueLocations": [],
+      "uniqueMusic": [],
+      "relatedProfiles": [
+        "maria_mishina17",
+        "nazarow_ivan",
+        "fedanov",
+        "srebniy",
+        "amanzhol_rysmendiyev.kz",
+        "n.yudaev",
+        "alex_mlv",
+        "igor_kripta",
+        "unicornlab.in",
+        "raspopin_ol",
+        "aleksundeer13",
+        "yura.pokalchuk",
+        "tigr3883",
+        "_anjelika_fokina_",
+        "vova_goroh",
+        "vladimir_krainev",
+        "den_donald",
+        "vlad.bermuda",
+        "rimashev13",
+        "ignatbond",
+        "kirill__rusin",
+        "krasnobaaev",
+        "eshmuratov_r",
+        "fyodor_novikoff",
+        "maers_one",
+        "stepan_invest",
+        "abc_alfavit"
+      ],
+      "topPostsByLikes": [
+        {
+          "postId": "3193738830706614147",
+          "url": "https://www.instagram.com/p/CxScIudo5-D/",
+          "likesCount": 55381
+        },
+        {
+          "postId": "3103872375555385637",
+          "url": "https://www.instagram.com/p/CsTK3sFIGkl/",
+          "likesCount": 7405
+        },
+        {
+          "postId": "3297322861502466793",
+          "url": "https://www.instagram.com/p/C3CcawtoQrp/",
+          "likesCount": 2952
+        }
+      ],
+      "topPostsByComments": [
+        {
+          "postId": "2315394106551501971",
+          "url": "https://www.instagram.com/p/CAh7qwkCQST/",
+          "commentsCount": 162
+        },
+        {
+          "postId": "3172083294719810062",
+          "url": "https://www.instagram.com/p/CwFgPM7uZoO/",
+          "commentsCount": 160
+        },
+        {
+          "postId": "3297322861502466793",
+          "url": "https://www.instagram.com/p/C3CcawtoQrp/",
+          "commentsCount": 153
+        }
+      ],
+      "postTypeDistribution": {
+        "Image": 88,
+        "Sidecar": 10,
+        "Video": 22
+      },
+      "hashtagFrequency": {
+        "blockchainlife.": 1,
+        "делайновое": 1,
+        "nofilters": 1,
+        "bali": 1,
+        "москва": 1,
+        "лондон": 1,
+        "dubai": 1,
+        "физтех": 1,
+        "стартап": 1,
+        "италия": 1,
+        "волгоград": 1
+      },
+      "mentionFrequency": {
+        "serkhitrov": 1,
+        "morgen_shtern": 1,
+        "fakeev": 6,
+        "mikhail_pvx": 1,
+        "mark.tales": 1,
+        "nailio": 1
+      },
+      "digitalCircle": [
+        {
+          "username": "alex_mosendz",
+          "type": "commenter",
+          "score": 18.4,
+          "lastInteractionDate": "2021-06-13T04:25:57.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CNK4auKI15G/",
+            "commented: https://www.instagram.com/p/CCneJOOiESx/",
+            "commented: https://www.instagram.com/p/CNbp40EJwsP/",
+            "commented: https://www.instagram.com/p/CH2HNmSAlG_/"
+          ]
+        },
+        {
+          "username": "dbogdanovv",
+          "type": "commenter",
+          "score": 15.3,
+          "lastInteractionDate": "2024-09-01T17:26:42.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CxScIudo5-D/",
+            "commented: https://www.instagram.com/p/B8P4h5mglCi/",
+            "commented: https://www.instagram.com/p/B8uBuLZgrB4/",
+            "commented: https://www.instagram.com/p/C_YV_THImgM/"
+          ]
+        },
+        {
+          "username": "varentsov_vadim",
+          "type": "commenter",
+          "score": 14.5,
+          "lastInteractionDate": "2020-04-03T11:10:21.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/B-ffyg-Jrej/",
+            "commented: https://www.instagram.com/p/B9LubiHi73R/",
+            "commented: https://www.instagram.com/p/B8afpr6gIg0/",
+            "commented: https://www.instagram.com/p/B8afpr6gIg0/"
+          ]
+        },
+        {
+          "username": "s.gralnik",
+          "type": "commenter",
+          "score": 14.2,
+          "lastInteractionDate": "2026-02-05T15:05:16.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DUYGjpCk5Wj/",
+            "commented: https://www.instagram.com/p/DJE_VMFokJo/",
+            "commented: https://www.instagram.com/p/CgbT7ZZIQLV/",
+            "commented: https://www.instagram.com/p/B8P4h5mglCi/"
+          ]
+        },
+        {
+          "username": "pppggggg5",
+          "type": "commenter",
+          "score": 12,
+          "lastInteractionDate": "2020-10-06T07:52:10.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/B9LubiHi73R/",
+            "commented: https://www.instagram.com/p/CAPaneECFVq/",
+            "commented: https://www.instagram.com/p/CERH-dVCoRT/",
+            "commented: https://www.instagram.com/p/CCvKtrOichX/"
+          ]
+        },
+        {
+          "username": "serge_investor",
+          "type": "commenter",
+          "score": 12,
+          "lastInteractionDate": "2020-05-03T09:08:03.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/B_t743qibfd/",
+            "commented: https://www.instagram.com/p/B7PVZdaABE6/",
+            "commented: https://www.instagram.com/p/B7PVZdaABE6/",
+            "commented: https://www.instagram.com/p/B7PVZdaABE6/"
+          ]
+        },
+        {
+          "username": "danila.invest",
+          "type": "commenter",
+          "score": 11.7,
+          "lastInteractionDate": "2026-02-05T13:35:31.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DSVQf_5DGOU/",
+            "commented: https://www.instagram.com/p/DUYGjpCk5Wj/",
+            "commented: https://www.instagram.com/p/C24G-8oo_5j/",
+            "commented: https://www.instagram.com/p/DQOHUdQjMCj/"
+          ]
+        },
+        {
+          "username": "you_can_improvise",
+          "type": "commenter",
+          "score": 11.5,
+          "lastInteractionDate": "2020-11-13T20:14:59.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/B44zXOxCRWW/",
+            "commented: https://www.instagram.com/p/B44zXOxCRWW/",
+            "commented: https://www.instagram.com/p/CBqMiPMCzWW/",
+            "commented: https://www.instagram.com/p/CAPaneECFVq/"
+          ]
+        }
+      ]
+    },
+    "vision": {
+      "completed": 30
+    },
+    "promptVersion": "report.standard.v7.repair",
+    "model": "x-ai/grok-4.3",
+    "qa": {
+      "promptLeakMatches": [],
+      "internalSchemaMatches": [],
+      "rawVisionJsonItems": 0,
+      "shortCompletedVision": 0,
+      "missingSourceSections": []
+    }
+  },
+  {
+    "username": "mark.tales",
+    "status": "completed",
+    "followersCount": 442,
+    "followsCount": 337,
+    "postsCount": 94,
+    "fetchedPosts": 74,
+    "reportSections": 17,
+    "requiredSections": 17,
+    "qualityScore": 100,
+    "qualityFindings": 0,
+    "contentQuality": {
+      "score": 98,
+      "findings": [],
+      "dimensions": {
+        "specificity": 100,
+        "practicalValue": 100,
+        "practicalDetail": 100,
+        "confidenceCalibration": 100,
+        "depth": 100,
+        "keySectionDepth": 100,
+        "healthTransparency": 100
+      }
+    },
+    "deliveryHealth": {
+      "status": "ready",
+      "reasons": [],
+      "qualityScore": 100,
+      "contentQualityScore": 98,
+      "sourceCoverage": "17/17",
+      "repaired": true
+    },
+    "repairTelemetry": {
+      "initialRepairAttempted": true,
+      "initialRepairAccepted": true,
+      "initialRepairReasons": [
+        "grounding:4",
+        "content_quality:2"
+      ],
+      "targetedRepairAttempted": false,
+      "targetedRepairAccepted": false,
+      "targetedRepairReasons": []
+    },
+    "evidencePackProfile": {
+      "username": "mark.tales",
+      "postsCount": 94,
+      "metadataPosts": 74,
+      "visualPosts": 30,
+      "metadataCoveragePercent": 78.7,
+      "visualCoveragePercent": 31.9,
+      "commentTextCount": 96,
+      "postsWithCommentText": 41,
+      "authorReplyCount": 6,
+      "postsWithAuthorReplies": 5
+    },
+    "sourceCoverage": "17/17",
+    "warnings": [],
+    "metrics": {
+      "followersCount": 442,
+      "followsCount": 337,
+      "postsCount": 94,
+      "analyzedPosts": 74,
+      "avgLikes": 51.78378378378378,
+      "avgComments": 1.5135135135135136,
+      "medianLikes": 33.5,
+      "medianComments": 1,
+      "engagementRate": 12.058212058212058,
+      "frequencyDays": 26.226299942922374,
+      "pinnedPostsCount": 0,
+      "uniqueLocations": [],
+      "uniqueMusic": [],
+      "relatedProfiles": [],
+      "topPostsByLikes": [
+        {
+          "postId": "3443820324911801176",
+          "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "likesCount": 1005
+        },
+        {
+          "postId": "2873648554003019138",
+          "url": "https://www.instagram.com/p/CfhQCJ2qjWC/",
+          "likesCount": 343
+        },
+        {
+          "postId": "3297428190149298259",
+          "url": "https://www.instagram.com/p/C3C0XfqNUhT/",
+          "likesCount": 95
+        }
+      ],
+      "topPostsByComments": [
+        {
+          "postId": "3443820324911801176",
+          "url": "https://www.instagram.com/p/C_K6Fbgo2NY/",
+          "commentsCount": 21
+        },
+        {
+          "postId": "3445973705173574952",
+          "url": "https://www.instagram.com/p/C_SjtPKNSUo/",
+          "commentsCount": 9
+        },
+        {
+          "postId": "2935979425724569037",
+          "url": "https://www.instagram.com/p/Ci-sbtyKxXN/",
+          "commentsCount": 8
+        }
+      ],
+      "postTypeDistribution": {
+        "Sidecar": 25,
+        "Image": 21,
+        "Video": 28
+      },
+      "hashtagFrequency": {
+        "2020": 1,
+        "bangkok": 1,
+        "snowbike": 1,
+        "мото": 1,
+        "triumph": 2,
+        "боеваяподруга": 1
+      },
+      "mentionFrequency": {
+        "fakeev": 1,
+        "ig.r_kapitonov": 1
+      },
+      "digitalCircle": [
+        {
+          "username": "fakeev",
+          "type": "mixed",
+          "score": 23.8,
+          "lastInteractionDate": "2025-09-10T16:36:01.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CjvXzoAIe1I/",
+            "commented: https://www.instagram.com/p/CR4DMDaM_ln/",
+            "commented: https://www.instagram.com/p/Ci-sbtyKxXN/",
+            "mentioned in caption: https://www.instagram.com/p/DObbnPbDHa_/"
+          ]
+        },
+        {
+          "username": "astaduryan",
+          "type": "commenter",
+          "score": 16.3,
+          "lastInteractionDate": "2024-08-30T12:35:17.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/C_SjtPKNSUo/",
+            "commented: https://www.instagram.com/p/Cs_84l1tb58/",
+            "commented: https://www.instagram.com/p/CnzS_j7pQkP/",
+            "commented: https://www.instagram.com/p/CgtrZ6DKt3J/"
+          ]
+        },
+        {
+          "username": "julivorobyeva",
+          "type": "mixed",
+          "score": 14.5,
+          "lastInteractionDate": "2025-09-10T19:56:08.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/DObbnPbDHa_/",
+            "tagged in post: https://www.instagram.com/p/CVI2HUqjDlY/",
+            "tagged in post: https://www.instagram.com/p/C3itoEntWvU/",
+            "commented: https://www.instagram.com/p/C7my7AHNsjE/"
+          ]
+        },
+        {
+          "username": "dimasklemin",
+          "type": "commenter",
+          "score": 8,
+          "lastInteractionDate": "2024-02-20T18:20:57.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CR4DMDaM_ln/",
+            "commented: https://www.instagram.com/p/CVI2HUqjDlY/",
+            "commented: https://www.instagram.com/p/C3itoEntWvU/"
+          ]
+        },
+        {
+          "username": "v.rudkovskaya",
+          "type": "commenter",
+          "score": 6.8,
+          "lastInteractionDate": "2024-12-04T07:27:00.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/Cs_84l1tb58/",
+            "commented: https://www.instagram.com/p/CtHxw1ZtYcH/",
+            "commented: https://www.instagram.com/p/DDIDgyttLG9/"
+          ]
+        },
+        {
+          "username": "ig.r_kapitonov",
+          "type": "mixed",
+          "score": 6.5,
+          "lastInteractionDate": "2022-12-17T06:33:34.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CmQOMZmBhLl/",
+            "tagged in post: https://www.instagram.com/p/CfoReceq9xz/",
+            "mentioned in caption: https://www.instagram.com/p/CfoReceq9xz/"
+          ]
+        },
+        {
+          "username": "tkeks",
+          "type": "commenter",
+          "score": 6,
+          "lastInteractionDate": "2024-05-31T05:24:06.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/CgbWSnUK0ua/",
+            "commented: https://www.instagram.com/p/C7my7AHNsjE/"
+          ]
+        },
+        {
+          "username": "missminaeva",
+          "type": "commenter",
+          "score": 6,
+          "lastInteractionDate": "2024-11-20T13:26:46.000Z",
+          "details": [
+            "commented: https://www.instagram.com/p/Ci-sbtyKxXN/",
+            "commented: https://www.instagram.com/p/DCkSQ5jtAQH/"
+          ]
+        }
+      ]
+    },
+    "vision": {
+      "completed": 30
+    },
+    "promptVersion": "report.standard.v7.repair",
+    "model": "x-ai/grok-4.3",
+    "qa": {
+      "promptLeakMatches": [],
+      "internalSchemaMatches": [],
+      "rawVisionJsonItems": 0,
+      "shortCompletedVision": 0,
+      "missingSourceSections": []
+    }
+  }
+]

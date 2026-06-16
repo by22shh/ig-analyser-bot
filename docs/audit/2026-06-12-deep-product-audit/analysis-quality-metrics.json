@@ -1,0 +1,144 @@
+{
+  "generatedAt": "2026-06-12T15:15:05.993Z",
+  "goldenContract": {
+    "path": "docs/eval/golden-instagram-standard.json",
+    "requiredSections": 17,
+    "minSourceCoveragePercent": 100,
+    "minVisionCompletionPercent": 95,
+    "maxPromptLeakMatches": 0,
+    "minQualityScore": 90,
+    "minContentQualityScore": 85,
+    "profiles": ["evachkaaaaa", "missstaccyy", "_daria.bers_", "fakeev", "mark.tales"]
+  },
+  "goldenEvalCommand": {
+    "command": "pnpm eval-golden",
+    "exitCode": 0,
+    "log": "docs/audit/2026-06-12-deep-product-audit/commands/phase-4/01.log",
+    "summary": "Golden eval passed for 5 profiles in docs/research/2026-06-12-instagram-profile-eval-current-code-live"
+  },
+  "currentCodeLive": {
+    "path": "docs/research/2026-06-12-instagram-profile-eval-current-code-live",
+    "profiles": 5,
+    "completed": 5,
+    "failed": 0,
+    "sectionsOk": 5,
+    "sourceCoverage17of17": 5,
+    "deliveryReady": 5,
+    "minQualityScore": 99,
+    "avgQualityScore": 99.8,
+    "minContentQualityScore": 86,
+    "avgContentQualityScore": 96,
+    "minFetchedPosts": 22,
+    "avgFetchedPosts": 90.8,
+    "profilesWithWarnings": ["fakeev"],
+    "repairedProfiles": ["evachkaaaaa", "missstaccyy", "_daria.bers_", "fakeev", "mark.tales"],
+    "promptLeakScan": {
+      "userFacingFilesScanned": 5,
+      "rawModelFilesScanned": 5,
+      "userFacingMatches": [],
+      "rawModelSectionMarkers": 85
+    }
+  },
+  "flyProductionLive": {
+    "path": "docs/research/2026-06-12-instagram-profile-eval-fly-live-codex-current",
+    "profiles": 5,
+    "completed": 5,
+    "failed": 0,
+    "sectionsOk": 5,
+    "sourceCoverage17of17": 5,
+    "deliveryReady": 5,
+    "minQualityScore": 93,
+    "avgQualityScore": 98.6,
+    "minContentQualityScore": 96,
+    "avgContentQualityScore": 98.6,
+    "minFetchedPosts": 22,
+    "avgFetchedPosts": 28.4,
+    "profilesWithWarnings": ["fakeev"],
+    "repairedProfiles": ["fakeev"],
+    "promptLeakScan": {
+      "userFacingFilesScanned": 5,
+      "rawModelFilesScanned": 5,
+      "userFacingMatches": [],
+      "rawModelSectionMarkers": 85
+    }
+  },
+  "localVsFlyDivergence": [
+    {
+      "username": "evachkaaaaa",
+      "flyFetchedPosts": 30,
+      "currentFetchedPosts": 120,
+      "fetchedPostsDelta": 90,
+      "flyQuality": 100,
+      "currentQuality": 100,
+      "flyContentQuality": 96,
+      "currentContentQuality": 100,
+      "flyDeliveryHealth": "ready",
+      "currentDeliveryHealth": "ready",
+      "flySourceCoverage": "17/17",
+      "currentSourceCoverage": "17/17"
+    },
+    {
+      "username": "missstaccyy",
+      "flyFetchedPosts": 22,
+      "currentFetchedPosts": 22,
+      "fetchedPostsDelta": 0,
+      "flyQuality": 100,
+      "currentQuality": 100,
+      "flyContentQuality": 97,
+      "currentContentQuality": 100,
+      "flyDeliveryHealth": "ready",
+      "currentDeliveryHealth": "ready",
+      "flySourceCoverage": "17/17",
+      "currentSourceCoverage": "17/17"
+    },
+    {
+      "username": "_daria.bers_",
+      "flyFetchedPosts": 30,
+      "currentFetchedPosts": 118,
+      "fetchedPostsDelta": 88,
+      "flyQuality": 100,
+      "currentQuality": 100,
+      "flyContentQuality": 100,
+      "currentContentQuality": 96,
+      "flyDeliveryHealth": "ready",
+      "currentDeliveryHealth": "ready",
+      "flySourceCoverage": "17/17",
+      "currentSourceCoverage": "17/17"
+    },
+    {
+      "username": "fakeev",
+      "flyFetchedPosts": 30,
+      "currentFetchedPosts": 120,
+      "fetchedPostsDelta": 90,
+      "flyQuality": 93,
+      "currentQuality": 99,
+      "flyContentQuality": 100,
+      "currentContentQuality": 86,
+      "flyDeliveryHealth": "ready",
+      "currentDeliveryHealth": "ready",
+      "flySourceCoverage": "17/17",
+      "currentSourceCoverage": "17/17"
+    },
+    {
+      "username": "mark.tales",
+      "flyFetchedPosts": 30,
+      "currentFetchedPosts": 74,
+      "fetchedPostsDelta": 44,
+      "flyQuality": 100,
+      "currentQuality": 100,
+      "flyContentQuality": 100,
+      "currentContentQuality": 98,
+      "flyDeliveryHealth": "ready",
+      "currentDeliveryHealth": "ready",
+      "flySourceCoverage": "17/17",
+      "currentSourceCoverage": "17/17"
+    }
+  ],
+  "targetedTests": {
+    "command": "targeted report quality vitest suite",
+    "exitCode": 0,
+    "filesPassed": 8,
+    "testsPassed": 73,
+    "log": "docs/audit/2026-06-12-deep-product-audit/commands/phase-4/02.log"
+  }
+}

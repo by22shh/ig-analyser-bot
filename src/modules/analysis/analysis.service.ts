@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@prisma/client";
+import { Prisma, type PrismaClient } from "@prisma/client";
 import { env } from "../../config/env.js";
 import type { AnalysisMode, Locale } from "../../telegram/constants.js";
 import { MODE_COST_UNITS } from "../billing/packages.js";
@@ -16,7 +16,13 @@ export type StartAnalysisInput = {
   targetPosition?: string;
   goal?: string;
   idempotencyKey: string;
+  source?: "telegram" | "mini_app" | "analysis_service";
+  requestId?: string;
+  lawfulBasisAccepted?: boolean;
+  lawfulBasisVersion?: string;
 };
+
+export const OSINT_LAWFUL_BASIS_VERSION = "osint-lawful-basis-2026-06-13";
 
 export class AnalysisService {
   constructor(
@@ -25,12 +31,22 @@ export class AnalysisService {
   ) {}
 
   async startAnalysis(input: StartAnalysisInput) {
+    if (input.mode === "osint_compliance" && input.lawfulBasisAccepted !== true) {
+      throw new Error("OSINT_LAWFUL_BASIS_REQUIRED");
+    }
     const username = normalizeInstagramUsername(input.username);
     const costCreditUnits = MODE_COST_UNITS[input.mode];
     const existing = await this.prisma.analysisJob.findUnique({
       where: { idempotencyKey: input.idempotencyKey }
     });
-    if (existing) return analysisStartResult(existing, true);
+    if (existing) {
+      await this.ensureOsintLawfulBasisAudit(this.prisma, input, {
+        id: existing.id,
+        mode: existing.mode,
+        createdAt: existing.createdAt
+      });
+      return analysisStartResult(existing, true);
+    }
 
     let job: Awaited<ReturnType<typeof this.prisma.analysisJob.create>> | undefined;
     let reserved: Awaited<ReturnType<CreditsService["reserve"]>> | undefined;
@@ -61,6 +77,11 @@ export class AnalysisService {
         const linkedJob = await tx.analysisJob.update({
           where: { id: analysisJob.id },
           data: { reservedTransactionId: reserve.id }
+        });
+        await this.ensureOsintLawfulBasisAudit(tx, input, {
+          id: linkedJob.id,
+          mode: linkedJob.mode,
+          createdAt: linkedJob.createdAt
         });
         return { job: linkedJob, reserved: reserve };
       });
@@ -104,6 +125,44 @@ export class AnalysisService {
       }
       throw error;
     }
+  }
+
+  private async ensureOsintLawfulBasisAudit(
+    client: Pick<PrismaClient | Prisma.TransactionClient, "auditLog">,
+    input: StartAnalysisInput,
+    job: { id: string; mode: string; createdAt: Date }
+  ): Promise<void> {
+    if (job.mode !== "osint_compliance") return;
+    const existing = await client.auditLog.findFirst({
+      where: {
+        action: "osint_lawful_basis_accepted",
+        entityType: "analysis_job",
+        entityId: job.id
+      },
+      select: { id: true }
+    });
+    if (existing) return;
+    const timestamp = new Date();
+    await client.auditLog.create({
+      data: {
+        actorUserId: input.userId,
+        targetUserId: input.userId,
+        action: "osint_lawful_basis_accepted",
+        entityType: "analysis_job",
+        entityId: job.id,
+        metadata: {
+          userId: input.userId,
+          analysisJobId: job.id,
+          mode: job.mode,
+          source: input.source ?? "analysis_service",
+          requestId: input.requestId ?? null,
+          timestamp: timestamp.toISOString(),
+          lawfulBasisVersion: input.lawfulBasisVersion ?? OSINT_LAWFUL_BASIS_VERSION,
+          lawfulBasisAccepted: true,
+          jobCreatedAt: job.createdAt.toISOString()
+        } satisfies Prisma.InputJsonObject
+      }
+    });
   }
 
   async updateProgress(jobId: string, stage: string, current = 0, total = 0) {

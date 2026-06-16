@@ -796,7 +796,13 @@ export class PaymentService {
 
   async handleYooKassaWebhook(input: { event: string; object: any; raw: Prisma.InputJsonValue }) {
     const providerObjectId = input.object?.id;
-    if (!providerObjectId) return { accepted: false, processed: false };
+    if (!providerObjectId) {
+      return {
+        accepted: false,
+        processed: false,
+        errorCode: "PAYMENT_PROVIDER_OBJECT_MISSING"
+      };
+    }
     const event = await this.prisma.paymentEvent
       .create({
         data: {
@@ -829,19 +835,81 @@ export class PaymentService {
       });
       return { accepted: true, processed: false };
     }
+
+    return this.reconcileYooKassaPayment({
+      providerPaymentId: providerObjectId,
+      eventId: event.id,
+      source: "webhook"
+    });
+  }
+
+  async reconcilePendingYooKassaPayments(
+    input: { limit?: number; olderThanMinutes?: number } = {}
+  ) {
+    const limit = Math.min(Math.max(input.limit ?? 50, 1), 200);
+    const olderThan = new Date(Date.now() - (input.olderThanMinutes ?? 10) * 60_000);
+    const orders = await this.prisma.paymentOrder.findMany({
+      where: {
+        provider: "yookassa",
+        status: "pending_payment",
+        providerPaymentId: { not: null },
+        createdAt: { lte: olderThan }
+      },
+      select: { id: true, providerPaymentId: true },
+      orderBy: { createdAt: "asc" },
+      take: limit
+    });
+    const results = [];
+    for (const order of orders) {
+      if (!order.providerPaymentId) continue;
+      results.push(
+        await this.reconcileYooKassaPayment({
+          providerPaymentId: order.providerPaymentId,
+          source: "poll"
+        })
+      );
+    }
+    return {
+      checked: orders.length,
+      processed: results.filter((item) => item.processed).length,
+      failed: results.filter((item) => item.errorCode != null).length,
+      results
+    };
+  }
+
+  async reconcileYooKassaPayment(input: {
+    providerPaymentId?: string | null;
+    eventId?: string;
+    source?: "webhook" | "poll" | "operator";
+  }) {
+    const providerObjectId = input.providerPaymentId?.trim();
+    if (!providerObjectId) {
+      return {
+        accepted: false,
+        processed: false,
+        errorCode: "PAYMENT_PROVIDER_OBJECT_MISSING"
+      };
+    }
     const payment = await this.yookassa.getPayment(providerObjectId);
     const metadataOrderId = yookassaOrderIdFrom(payment);
     if (!payment.paid || payment.status !== "succeeded") {
-      await this.prisma.paymentEvent.update({
-        where: { id: event.id },
-        data: { processingStatus: "ignored", processedAt: new Date() }
+      return this.markYooKassaPaymentNotPaid({
+        providerObjectId,
+        payment,
+        metadataOrderId,
+        eventId: input.eventId
       });
-      return { accepted: true, processed: false };
     }
+
     return this.prisma.$transaction(async (tx) => {
-      await tx.$queryRaw`SELECT id FROM payment_events WHERE id = CAST(${event.id} AS uuid) FOR UPDATE`;
-      const lockedEvent = await tx.paymentEvent.findUniqueOrThrow({ where: { id: event.id } });
-      if (lockedEvent.processingStatus === "processed") return { accepted: true, processed: false };
+      if (input.eventId) {
+        await tx.$queryRaw`SELECT id FROM payment_events WHERE id = CAST(${input.eventId} AS uuid) FOR UPDATE`;
+        const lockedEvent = await tx.paymentEvent.findUniqueOrThrow({
+          where: { id: input.eventId }
+        });
+        if (lockedEvent.processingStatus === "processed")
+          return { accepted: true, processed: false };
+      }
 
       const orderLocks = await tx.$queryRaw<
         Array<{ id: string }>
@@ -854,15 +922,17 @@ export class PaymentService {
         orderId = metadataOrderLocks[0]?.id;
       }
       if (!orderId) {
-        await tx.paymentEvent.update({
-          where: { id: event.id },
-          data: {
-            processingStatus: "failed",
-            errorCode: "PAYMENT_ORDER_NOT_FOUND",
-            processedAt: new Date()
-          }
-        });
-        return { accepted: true, processed: false };
+        if (input.eventId) {
+          await tx.paymentEvent.update({
+            where: { id: input.eventId },
+            data: {
+              processingStatus: "failed",
+              errorCode: "PAYMENT_ORDER_NOT_FOUND",
+              processedAt: new Date()
+            }
+          });
+        }
+        return { accepted: true, processed: false, errorCode: "PAYMENT_ORDER_NOT_FOUND" };
       }
       const order = await tx.paymentOrder.findUniqueOrThrow({
         where: { id: orderId },
@@ -872,74 +942,71 @@ export class PaymentService {
         order.provider !== "yookassa" ||
         (order.providerPaymentId && order.providerPaymentId !== providerObjectId)
       ) {
-        await tx.paymentEvent.update({
-          where: { id: event.id },
-          data: {
-            paymentOrderId: order.id,
-            processingStatus: "failed",
-            errorCode: "PAYMENT_PROVIDER_MISMATCH",
-            processedAt: new Date()
-          }
-        });
-        return { accepted: true, processed: false, orderId: order.id };
+        if (input.eventId) {
+          await tx.paymentEvent.update({
+            where: { id: input.eventId },
+            data: {
+              paymentOrderId: order.id,
+              processingStatus: "failed",
+              errorCode: "PAYMENT_PROVIDER_MISMATCH",
+              processedAt: new Date()
+            }
+          });
+        }
+        return {
+          accepted: true,
+          processed: false,
+          orderId: order.id,
+          errorCode: "PAYMENT_PROVIDER_MISMATCH"
+        };
       }
       if (order.status === "paid") {
-        await tx.yooKassaPayment.upsert({
-          where: { paymentOrderId: order.id },
-          create: {
-            paymentOrderId: order.id,
-            yookassaPaymentId: payment.id,
-            status: payment.status,
-            paid: payment.paid,
-            amountMinor: payment.amountMinor,
-            currency: payment.currency,
-            refundable: payment.refundable,
-            test: payment.test,
-            metadata: payment.metadata as never,
-            raw: payment.raw as never
-          },
-          update: {
-            yookassaPaymentId: payment.id,
-            status: payment.status,
-            paid: payment.paid,
-            amountMinor: payment.amountMinor,
-            currency: payment.currency,
-            refundable: payment.refundable,
-            test: payment.test,
-            metadata: payment.metadata as never,
-            raw: payment.raw as never
-          }
-        });
-        await tx.paymentEvent.update({
-          where: { id: event.id },
-          data: { paymentOrderId: order.id, processingStatus: "processed", processedAt: new Date() }
-        });
+        await this.upsertYooKassaPayment(tx, order.id, payment);
+        if (input.eventId) {
+          await tx.paymentEvent.update({
+            where: { id: input.eventId },
+            data: {
+              paymentOrderId: order.id,
+              processingStatus: "processed",
+              processedAt: new Date()
+            }
+          });
+        }
         return { accepted: true, processed: false, orderId: order.id };
       }
       if (order.amountMinor !== payment.amountMinor || order.currency !== payment.currency) {
-        await tx.paymentEvent.update({
-          where: { id: event.id },
-          data: {
-            paymentOrderId: order.id,
-            processingStatus: "failed",
-            errorCode: "PAYMENT_AMOUNT_MISMATCH",
-            processedAt: new Date()
-          }
-        });
-        return { accepted: true, processed: false, orderId: order.id };
+        if (input.eventId) {
+          await tx.paymentEvent.update({
+            where: { id: input.eventId },
+            data: {
+              paymentOrderId: order.id,
+              processingStatus: "failed",
+              errorCode: "PAYMENT_AMOUNT_MISMATCH",
+              processedAt: new Date()
+            }
+          });
+        }
+        return {
+          accepted: true,
+          processed: false,
+          orderId: order.id,
+          errorCode: "PAYMENT_AMOUNT_MISMATCH"
+        };
       }
       const metadataMismatch = yookassaOrderMetadataMismatch(payment, order);
       if (metadataMismatch) {
-        await tx.paymentEvent.update({
-          where: { id: event.id },
-          data: {
-            paymentOrderId: order.id,
-            processingStatus: "failed",
-            errorCode: metadataMismatch,
-            processedAt: new Date()
-          }
-        });
-        return { accepted: true, processed: false, orderId: order.id };
+        if (input.eventId) {
+          await tx.paymentEvent.update({
+            where: { id: input.eventId },
+            data: {
+              paymentOrderId: order.id,
+              processingStatus: "failed",
+              errorCode: metadataMismatch,
+              processedAt: new Date()
+            }
+          });
+        }
+        return { accepted: true, processed: false, orderId: order.id, errorCode: metadataMismatch };
       }
 
       await tx.creditAccount.upsert({
@@ -960,39 +1027,14 @@ export class PaymentService {
           balanceAfterUnits: account.balanceUnits,
           provider: "yookassa",
           providerPaymentId: providerObjectId,
-          metadata: { orderId: order.id }
+          metadata: { orderId: order.id, source: input.source ?? "reconciliation" }
         }
       });
       await tx.paymentOrder.update({
         where: { id: order.id },
         data: { status: "paid", providerPaymentId: providerObjectId, paidAt: new Date() }
       });
-      await tx.yooKassaPayment.upsert({
-        where: { paymentOrderId: order.id },
-        create: {
-          paymentOrderId: order.id,
-          yookassaPaymentId: payment.id,
-          status: payment.status,
-          paid: payment.paid,
-          amountMinor: payment.amountMinor,
-          currency: payment.currency,
-          refundable: payment.refundable,
-          test: payment.test,
-          metadata: payment.metadata as never,
-          raw: payment.raw as never
-        },
-        update: {
-          yookassaPaymentId: payment.id,
-          status: payment.status,
-          paid: payment.paid,
-          amountMinor: payment.amountMinor,
-          currency: payment.currency,
-          refundable: payment.refundable,
-          test: payment.test,
-          metadata: payment.metadata as never,
-          raw: payment.raw as never
-        }
-      });
+      await this.upsertYooKassaPayment(tx, order.id, payment);
       await tx.fiscalReceipt.updateMany({
         where: {
           paymentOrderId: order.id,
@@ -1002,16 +1044,134 @@ export class PaymentService {
         },
         data: { status: "succeeded", raw: payment.raw as never }
       });
-      await tx.paymentEvent.update({
-        where: { id: event.id },
-        data: { paymentOrderId: order.id, processingStatus: "processed", processedAt: new Date() }
-      });
+      if (input.eventId) {
+        await tx.paymentEvent.update({
+          where: { id: input.eventId },
+          data: {
+            paymentOrderId: order.id,
+            processingStatus: "processed",
+            processedAt: new Date()
+          }
+        });
+      }
       return {
         accepted: true,
         processed: true,
         orderId: order.id,
         creditsUnitsGranted: order.creditsUnits
       };
+    });
+  }
+
+  private async markYooKassaPaymentNotPaid(input: {
+    providerObjectId: string;
+    payment: {
+      id: string;
+      status: string;
+      paid: boolean;
+      amountMinor: number;
+      currency: "RUB";
+      refundable: boolean;
+      test: boolean;
+      metadata?: Record<string, string>;
+      raw?: unknown;
+    };
+    metadataOrderId?: string;
+    eventId?: string;
+  }) {
+    return this.prisma.$transaction(async (tx) => {
+      const orderLocks = await tx.$queryRaw<
+        Array<{ id: string }>
+      >`SELECT id FROM payment_orders WHERE "providerPaymentId" = ${input.providerObjectId} FOR UPDATE`;
+      let orderId = orderLocks[0]?.id;
+      if (!orderId && input.metadataOrderId) {
+        const metadataOrderLocks = await tx.$queryRaw<
+          Array<{ id: string }>
+        >`SELECT id FROM payment_orders WHERE id = CAST(${input.metadataOrderId} AS uuid) FOR UPDATE`;
+        orderId = metadataOrderLocks[0]?.id;
+      }
+      if (!orderId) {
+        if (input.eventId) {
+          await tx.paymentEvent.update({
+            where: { id: input.eventId },
+            data: {
+              processingStatus: "failed",
+              errorCode: "PAYMENT_ORDER_NOT_FOUND",
+              processedAt: new Date()
+            }
+          });
+        }
+        return { accepted: true, processed: false, errorCode: "PAYMENT_ORDER_NOT_FOUND" };
+      }
+      const order = await tx.paymentOrder.findUniqueOrThrow({ where: { id: orderId } });
+      await this.upsertYooKassaPayment(tx, order.id, input.payment);
+      const shouldCancel =
+        input.payment.status === "canceled" && order.status === "pending_payment";
+      if (shouldCancel) {
+        await tx.paymentOrder.update({
+          where: { id: order.id },
+          data: { status: "payment_canceled", providerPaymentId: input.providerObjectId }
+        });
+      }
+      if (input.eventId) {
+        await tx.paymentEvent.update({
+          where: { id: input.eventId },
+          data: {
+            paymentOrderId: order.id,
+            processingStatus: "ignored",
+            processedAt: new Date()
+          }
+        });
+      }
+      return {
+        accepted: true,
+        processed: false,
+        orderId: order.id,
+        status: shouldCancel ? "payment_canceled" : input.payment.status
+      };
+    });
+  }
+
+  private async upsertYooKassaPayment(
+    tx: Prisma.TransactionClient,
+    orderId: string,
+    payment: {
+      id: string;
+      status: string;
+      paid: boolean;
+      amountMinor: number;
+      currency: "RUB";
+      refundable: boolean;
+      test: boolean;
+      metadata?: Record<string, string>;
+      raw?: unknown;
+    }
+  ) {
+    await tx.yooKassaPayment.upsert({
+      where: { paymentOrderId: orderId },
+      create: {
+        paymentOrderId: orderId,
+        yookassaPaymentId: payment.id,
+        status: payment.status,
+        paid: payment.paid,
+        amountMinor: payment.amountMinor,
+        currency: payment.currency,
+        refundable: payment.refundable,
+        test: payment.test,
+        metadata: payment.metadata as never,
+        raw: payment.raw as never
+      },
+      update: {
+        yookassaPaymentId: payment.id,
+        status: payment.status,
+        paid: payment.paid,
+        amountMinor: payment.amountMinor,
+        currency: payment.currency,
+        refundable: payment.refundable,
+        test: payment.test,
+        metadata: payment.metadata as never,
+        raw: payment.raw as never
+      }
     });
   }
 

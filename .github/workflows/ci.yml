@@ -13,7 +13,7 @@ jobs:
       DIRECT_URL: postgresql://zreti:zreti@localhost:5432/zreti_bot
       REDIS_URL: redis://localhost:6379/0
       TELEGRAM_BOT_TOKEN: "000:test"
-      ECON_STANDARD_REPORT_COST_P75_RUB: "55"
+      ECON_STANDARD_REPORT_COST_P75_RUB: "50"
       ECON_PHOTO_SEARCH_COST_P75_RUB: "20"
       ECON_CHAT_MESSAGE_COST_P75_RUB: "2"
       ECON_APIFY_PROFILE_COST_RUB: "12"
@@ -63,12 +63,17 @@ jobs:
       # --exit-code: empty diff = 0 (pass), non-empty = 2 (fail).
       - name: Check migration drift
         run: pnpm exec prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma --exit-code
+      - name: Run PostgreSQL integration tests
+        run: pnpm test:integration:db
       - run: pnpm run ci
 
   deploy:
     runs-on: ubuntu-latest
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://ig-analyser-bot.fly.dev
     concurrency:
       group: fly-deploy-main
       cancel-in-progress: true

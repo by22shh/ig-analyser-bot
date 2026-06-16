@@ -1,0 +1,5 @@
+01	integration-targeted	0-local-skip	docs/audit/2026-06-12-fix-all-problems/commands/phase-3/01-integration-targeted.log
+02	prisma-validate-with-env	0	docs/audit/2026-06-12-fix-all-problems/commands/phase-3/02-prisma-validate.log
+03	typecheck	0	docs/audit/2026-06-12-fix-all-problems/commands/phase-3/03-typecheck.log
+04	lint	0	docs/audit/2026-06-12-fix-all-problems/commands/phase-3/04-lint.log
+05	package-script	0-local-skip	docs/audit/2026-06-12-fix-all-problems/commands/phase-3/05-package-script.log

@@ -410,6 +410,7 @@ p {
 .chip strong,
 .chip span {
   display: block;
+  overflow-wrap: anywhere;
 }
 
 .chip strong {
@@ -448,6 +449,8 @@ p {
   padding: 0 14px;
   font-weight: 700;
   text-decoration: none;
+  text-align: center;
+  white-space: normal;
 }
 
 .button.secondary {
@@ -495,6 +498,11 @@ p {
   gap: 8px;
   align-items: center;
   justify-content: space-between;
+  min-width: 0;
+}
+
+.item-head > div {
+  min-width: 0;
 }
 
 .item-title {
@@ -508,11 +516,14 @@ p {
 .item-meta {
   color: var(--muted);
   font-size: 12px;
+  overflow-wrap: anywhere;
 }
 
 .badge {
   display: inline-grid;
   place-items: center;
+  flex: 0 1 auto;
+  max-width: 54%;
   min-height: 24px;
   border-radius: 6px;
   background: color-mix(in srgb, var(--accent) 13%, var(--surface));
@@ -520,6 +531,8 @@ p {
   padding: 0 8px;
   font-size: 11px;
   font-weight: 800;
+  overflow-wrap: anywhere;
+  text-align: center;
 }
 
 .badge.success {
@@ -544,6 +557,94 @@ p {
   height: 100%;
   border-radius: 4px;
   background: linear-gradient(90deg, var(--accent), var(--success));
+}
+
+.w-0 {
+  width: 0%;
+}
+
+.w-5 {
+  width: 5%;
+}
+
+.w-10 {
+  width: 10%;
+}
+
+.w-15 {
+  width: 15%;
+}
+
+.w-20 {
+  width: 20%;
+}
+
+.w-25 {
+  width: 25%;
+}
+
+.w-30 {
+  width: 30%;
+}
+
+.w-35 {
+  width: 35%;
+}
+
+.w-40 {
+  width: 40%;
+}
+
+.w-45 {
+  width: 45%;
+}
+
+.w-50 {
+  width: 50%;
+}
+
+.w-55 {
+  width: 55%;
+}
+
+.w-60 {
+  width: 60%;
+}
+
+.w-65 {
+  width: 65%;
+}
+
+.w-70 {
+  width: 70%;
+}
+
+.w-75 {
+  width: 75%;
+}
+
+.w-80 {
+  width: 80%;
+}
+
+.w-85 {
+  width: 85%;
+}
+
+.w-86 {
+  width: 86%;
+}
+
+.w-90 {
+  width: 90%;
+}
+
+.w-95 {
+  width: 95%;
+}
+
+.w-100 {
+  width: 100%;
 }
 
 .section-body {
@@ -606,11 +707,60 @@ p {
   text-align: center;
 }
 
+.empty-state {
+  gap: 6px;
+}
+
+.empty-state strong {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
 .empty-state p,
 .loading-state p,
 .gate p {
   max-width: 420px;
   margin-bottom: 0;
+}
+
+.notice {
+  display: grid;
+  gap: 6px;
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--border));
+}
+
+.notice strong {
+  line-height: 1.25;
+}
+
+.notice p {
+  margin: 0;
+}
+
+.notice.pending,
+.notice.warning {
+  border-color: color-mix(in srgb, var(--warning) 36%, var(--border));
+}
+
+.notice.pending strong,
+.notice.warning strong {
+  color: var(--warning);
+}
+
+.notice.success {
+  border-color: color-mix(in srgb, var(--success) 34%, var(--border));
+}
+
+.notice.success strong {
+  color: var(--success);
+}
+
+.notice.error {
+  border-color: color-mix(in srgb, var(--danger) 36%, var(--border));
+}
+
+.notice.error strong {
+  color: var(--danger);
 }
 
 .loader {

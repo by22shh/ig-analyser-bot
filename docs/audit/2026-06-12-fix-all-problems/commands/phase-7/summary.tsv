@@ -1,0 +1,5 @@
+command	exit_code	log
+vitest-provider-contract-smoke	0	vitest-provider-contract-smoke.log
+smoke-staging-dry-run	0	smoke-staging-dry-run.log
+typecheck	0	typecheck.log
+lint	0	lint.log

@@ -19,13 +19,15 @@ export function mainMenuKeyboard(messages: LocaleMessages, isAdmin = false): Inl
     .text(messages.buttons.credits, CB.PAYWALL)
     .text(messages.buttons.settings, CB.SETTINGS)
     .row()
-    .text(messages.buttons.capabilities, "cap")
-    .row();
+    .text(messages.buttons.capabilities, CB.CAPABILITIES)
+    .text(messages.buttons.help, CB.HELP);
 
+  const hasLinks = Boolean(env.CHANNEL_URL || env.SUPPORT_URL);
+  if (hasLinks) kb.row();
   if (env.CHANNEL_URL) kb.url(messages.buttons.channel, env.CHANNEL_URL);
-  if (env.SUPPORT_URL) kb.text(messages.buttons.support, "help");
+  if (env.SUPPORT_URL) kb.url(messages.buttons.support, env.SUPPORT_URL);
   if (isAdmin) {
-    if (env.CHANNEL_URL || env.SUPPORT_URL) kb.row();
+    kb.row();
     kb.text(messages.buttons.admin, CB.ADMIN);
   }
   return kb;
@@ -38,6 +40,8 @@ export function backMenuKeyboard(messages: LocaleMessages): InlineKeyboard {
 export function profileKeyboard(messages: LocaleMessages): InlineKeyboard {
   return new InlineKeyboard()
     .text(messages.buttons.credits, CB.PAYWALL)
+    .text(messages.buttons.history, CB.HISTORY)
+    .row()
     .text(messages.buttons.settings, CB.SETTINGS)
     .row()
     .text(messages.buttons.menu, CB.BACK_MAIN);
@@ -68,8 +72,9 @@ export function subscriptionGateKeyboard(messages: LocaleMessages): InlineKeyboa
 }
 
 export function helpKeyboard(messages: LocaleMessages): InlineKeyboard {
-  const kb = new InlineKeyboard().text(messages.buttons.capabilities, "cap").row();
-  kb.url(messages.buttons.terms, env.TOS_URL);
+  const kb = new InlineKeyboard().text(messages.buttons.capabilities, CB.CAPABILITIES);
+  if (env.SUPPORT_URL) kb.row().url(messages.buttons.support, env.SUPPORT_URL);
+  if (env.TOS_URL) kb.row().url(messages.buttons.terms, env.TOS_URL);
   if (env.CHANNEL_URL) kb.row().url(messages.buttons.channel, env.CHANNEL_URL);
   return kb.row().text(messages.buttons.menu, CB.BACK_MAIN);
 }

@@ -12,23 +12,11 @@ await services.payments.ensureCatalog();
 const bot = createBot(services);
 const app = createApp({ services, bot });
 
-// Register the Telegram "/" command menu so the bot's commands are discoverable.
-// Guarded by a real token: the dev fallback token would 404 against the API.
-if (env.TELEGRAM_BOT_TOKEN) {
-  await configureCommands(bot);
-}
-
-if (env.TELEGRAM_USE_LONG_POLLING) {
-  bot.start();
-  logger.info("telegram_long_polling_started");
-} else if (env.TELEGRAM_WEBHOOK_URL && env.TELEGRAM_BOT_TOKEN) {
-  await setupTelegramWebhook(bot, env.TELEGRAM_WEBHOOK_URL, env.TELEGRAM_WEBHOOK_SECRET);
-  logger.info({ url: env.TELEGRAM_WEBHOOK_URL }, "telegram_webhook_set");
-}
-
 const port = env.PORT ?? 3000;
 await app.listen({ port, host: "0.0.0.0" });
 logger.info({ port }, "server_started");
+
+void startTelegramRuntime();
 
 let shuttingDown = false;
 async function shutdown(signal: string) {
@@ -50,3 +38,52 @@ async function shutdown(signal: string) {
 
 process.on("SIGTERM", () => void shutdown("SIGTERM"));
 process.on("SIGINT", () => void shutdown("SIGINT"));
+
+async function startTelegramRuntime(): Promise<void> {
+  if (env.TELEGRAM_USE_LONG_POLLING) {
+    void bot.start().catch((error) => logger.error({ error }, "telegram_long_polling_failed"));
+    logger.info("telegram_long_polling_started");
+    return;
+  }
+
+  if (!env.TELEGRAM_BOT_TOKEN) return;
+
+  await runTelegramStartupTask("telegram_configure_commands", () => configureCommands(bot));
+
+  if (env.TELEGRAM_WEBHOOK_URL) {
+    await runTelegramStartupTask("telegram_setup_webhook", async () => {
+      await setupTelegramWebhook(bot, env.TELEGRAM_WEBHOOK_URL, env.TELEGRAM_WEBHOOK_SECRET);
+      logger.info({ url: env.TELEGRAM_WEBHOOK_URL }, "telegram_webhook_set");
+    });
+  }
+}
+
+async function runTelegramStartupTask(name: string, task: () => Promise<void>): Promise<void> {
+  try {
+    await withStartupTimeout(task(), 15_000, name);
+  } catch (error) {
+    logger.warn({ error }, `${name}_failed`);
+  }
+}
+
+async function withStartupTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  name: string
+): Promise<T> {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<never>((_, reject) => {
+        timeout = setTimeout(
+          () => reject(new Error(`${name} timed out after ${timeoutMs}ms`)),
+          timeoutMs
+        );
+        timeout.unref?.();
+      })
+    ]);
+  } finally {
+    if (timeout) clearTimeout(timeout);
+  }
+}
